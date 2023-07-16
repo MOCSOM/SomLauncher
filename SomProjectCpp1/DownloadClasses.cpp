@@ -668,7 +668,7 @@ wchar_t* DDIC::TempFile::_get_default_tempdir()
     is successful, the test file is deleted.  To prevent denial of
     service, the name of the test file must be randomized.
     */
-    wchar_t* namer;// = DDIC::TempFile::_RandomNameSequence();
+    //wchar_t* namer;// = DDIC::TempFile::_RandomNameSequence();
     System::Collections::Generic::List<System::String^>^ dirlist;// = DDIC::TempFile::_candidate_tempdir_list();
 
     for each (System::String^ dir in dirlist)
