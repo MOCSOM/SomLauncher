@@ -17,7 +17,13 @@ void SomLauncherMainWin::MainForm::start_minecraft_params()
 	System::String^ java = "";
 	System::String^ core = "";
 	System::String^ version = "";
-	pin_ptr<const wchar_t> path_wch_java = PtrToStringChars(DDIC::Download::Files::_get_java_path(JoinA({ getenv("APPDATA"), ".SomSomSom" })) + "\\" + "bin" + "\\" + "java.exe");
+
+	char* appdata = nullptr;
+    size_t appdata_sz = 0;
+
+    _dupenv_s(&appdata, &appdata_sz, "APPDATA");
+
+	pin_ptr<const wchar_t> path_wch_java = PtrToStringChars(DDIC::Download::Files::_get_java_path(JoinA({ appdata, ".SomSomSom" })) + "\\" + "bin" + "\\" + "java.exe");
 
 	MCCL::Option::MinecraftOptions options;
 	options.customResolution = false;

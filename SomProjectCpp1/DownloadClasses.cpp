@@ -563,13 +563,25 @@ System::String^ DDIC::Download::Java::expand_user(System::String^ path)
     if (! path->IsNullOrEmpty(path) && path[0] == '~') {
         //assert(path.size() == 1 || path[1] == '/');  // or other error handling
         //_dupenv_s(,"HOME")
-        char const* home = getenv("HOME");
-        if (home || ((home = getenv("USERPROFILE")))) {
+
+		char* home = nullptr;
+        size_t home_sz = 0;
+
+        _dupenv_s(&home, &home_sz, "HOME");
+
+		//home.compare(profile)
+        if (home || (_dupenv_s(&home, &home_sz, "USERPROFILE"))) {
             path = path->Replace(path, System::String(home).ToString());
         }
         else {
-            char const* hdrive = getenv("HOMEDRIVE"), 
-                *hpath = getenv("HOMEPATH");
+			size_t hdrive_sz = 0;
+			size_t hpath_sz = 0;
+            char* hdrive;
+            char* hpath;
+
+            _dupenv_s(&hdrive, &hdrive_sz, "HOMEDRIVE");
+			_dupenv_s(&hpath, &hpath_sz, "HOMEPATH");
+
             //assert(hdrive);  // or other error handling
             //assert(hpath);
 
@@ -669,7 +681,7 @@ wchar_t* DDIC::TempFile::_get_default_tempdir()
     service, the name of the test file must be randomized.
     */
     //wchar_t* namer;// = DDIC::TempFile::_RandomNameSequence();
-    System::Collections::Generic::List<System::String^>^ dirlist;// = DDIC::TempFile::_candidate_tempdir_list();
+    System::Collections::Generic::List<System::String^>^ dirlist = nullptr;// = DDIC::TempFile::_candidate_tempdir_list();
 
     for each (System::String^ dir in dirlist)
     {
