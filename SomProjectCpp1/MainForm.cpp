@@ -91,13 +91,20 @@ System::Void SomLauncherMainWin::MainForm::test_Click(System::Object^ sender, Sy
 
 System::Void SomLauncherMainWin::MainForm::panel_toppanel_hover_MouseEnter(System::Object^ sender, System::EventArgs^ e)
 {
+	this->tableLayoutPanel_menu->Capture = true;
+
 	animationtoppanel(is_down_table_menu, 1);
+
+
 }
 
 System::Void SomLauncherMainWin::MainForm::panel_toppanel_hover_MouseLeave(System::Object^ sender, System::EventArgs^ e)
 {
+	this->tableLayoutPanel_menu->Capture = false;
+
 	animationtoppanel(is_down_table_menu, 2);
 	
+
 	/*Invoke(gcnew System::Action<int>(this, &MainForm::animationtoppanel), is_down_table_menu, 2);
 	
 	this->Invoke(gcnew System::Action(this, &SomLauncherMainWin::MainForm::animationtoppanel), is_down_table_menu, 2);

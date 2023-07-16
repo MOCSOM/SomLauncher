@@ -17,7 +17,6 @@
 #pragma comment(lib, "User32.lib")
 
 #include "CallbackDict.h"
-//#include "Additionals.h"
 
 #if defined(_WIN32) || defined(_WIN64)
 #define OS L"windows"

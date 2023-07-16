@@ -32,24 +32,24 @@ namespace MCCL {
 			MinecraftOptions() {}
 			~MinecraftOptions() {}
 
-			wchar_t* username = NULL;
-			wchar_t* uuid = NULL;
-			wchar_t* token = NULL;
-			wchar_t* executablePath = NULL;
-			wchar_t* jvmArguments = NULL;
-			wchar_t* launcherName = NULL;
-			wchar_t* launcherVersion = NULL;
-			wchar_t* gameDirectory = NULL;
-			bool	 demo = NULL;
-			bool	 customResolution = NULL;
-			wchar_t* resolutionWidth = NULL;
-			wchar_t* resolutionHeight = NULL;
-			wchar_t* server = NULL;
-			wchar_t* port = NULL;
-			wchar_t* nativesDirectory = NULL;
+			wchar_t* username            = NULL;
+			wchar_t* uuid                = NULL;
+			wchar_t* token               = NULL;
+			wchar_t* executablePath      = NULL;
+			wchar_t* jvmArguments        = NULL;
+			wchar_t* launcherName        = NULL;
+			wchar_t* launcherVersion     = NULL;
+			wchar_t* gameDirectory       = NULL;
+			bool	 demo                = NULL;
+			bool	 customResolution    = NULL;
+			wchar_t* resolutionWidth     = NULL;
+			wchar_t* resolutionHeight    = NULL;
+			wchar_t* server              = NULL;
+			wchar_t* port                = NULL;
+			wchar_t* nativesDirectory    = NULL;
 			bool	 enableLoggingConfig = NULL;
-			wchar_t* classpath = NULL;
-			wchar_t* NULLES = NULL;
+			wchar_t* classpath           = NULL;
+			wchar_t* NULLES              = NULL;
 			
 			// get (поле, стандарт)
 			wchar_t*& get(wchar_t* param, wchar_t* writ = NULL);

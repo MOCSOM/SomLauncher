@@ -60,4 +60,7 @@
       <Filter>Исходные файлы</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="TODO_List.md" />
+  </ItemGroup>
 </Project>
