@@ -1,9 +1,9 @@
-#ifndef MAINFORM_H_     // equivalently, #if !defined HEADER_H_
+п»ї#ifndef MAINFORM_H_     // equivalently, #if !defined HEADER_H_
 #define MAINFORM_H_
 
 #include "Minecraftus.h"
 //#include "Json.h"
-//#include "SomDict.h" //TODO бля
+//#include "SomDict.h" //TODO Р±Р»СЏ
 #include "DownloadClasses.h"
 #include "CallbackDict.h"
 #include "ChangeServerForm.h"
@@ -20,22 +20,16 @@ namespace SomLauncherMainWin {
 	using namespace System::Drawing;*/
 
 	/// <summary>
-	/// Сводка для MainForm
+	/// РЎРІРѕРґРєР° РґР»СЏ MainForm
 	/// </summary>
 	public ref class MainForm : public System::Windows::Forms::Form
 	{
 	public:
-		MainForm(void)
-		{
-			InitializeComponent();
-			//
-			//TODO: добавьте код конструктора
-			//
-		}
+		MainForm(void);
 
 	protected:
 		/// <summary>
-		/// Освободить все используемые ресурсы.
+		/// РћСЃРІРѕР±РѕРґРёС‚СЊ РІСЃРµ РёСЃРїРѕР»СЊР·СѓРµРјС‹Рµ СЂРµСЃСѓСЂСЃС‹.
 		/// </summary>
 		~MainForm()
 		{
@@ -125,14 +119,14 @@ namespace SomLauncherMainWin {
 
 	private:
 		/// <summary>
-		/// Обязательная переменная конструктора.
+		/// РћР±СЏР·Р°С‚РµР»СЊРЅР°СЏ РїРµСЂРµРјРµРЅРЅР°СЏ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂР°.
 		/// </summary>
 		System::ComponentModel::Container ^components;
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
-		/// Требуемый метод для поддержки конструктора — не изменяйте 
-		/// содержимое этого метода с помощью редактора кода.
+		/// РўСЂРµР±СѓРµРјС‹Р№ РјРµС‚РѕРґ РґР»СЏ РїРѕРґРґРµСЂР¶РєРё РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂР° вЂ” РЅРµ РёР·РјРµРЅСЏР№С‚Рµ 
+		/// СЃРѕРґРµСЂР¶РёРјРѕРµ СЌС‚РѕРіРѕ РјРµС‚РѕРґР° СЃ РїРѕРјРѕС‰СЊСЋ СЂРµРґР°РєС‚РѕСЂР° РєРѕРґР°.
 		/// </summary>
 		void InitializeComponent(void)
 		{
@@ -975,6 +969,9 @@ namespace SomLauncherMainWin {
 
 		void start_minecraft_params();
 		void install_run_minecraft(System::String^ version, System::String^ loader_mame, System::String^ loader_version, System::String^ java, System::String^ mcdir, MCCL::Option::MinecraftOptions options);
+
+		bool IsConfigExist();
+		void CreateConfig();
 
 
 private: System::Void test_Click(System::Object^ sender, System::EventArgs^ e);

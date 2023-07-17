@@ -107,3 +107,20 @@ void SomLauncherMainWin::MainForm::install_run_minecraft(System::String^ version
 
 	MCCL::start_minecraft(L"", command);
 }
+
+bool SomLauncherMainWin::MainForm::IsConfigExist()
+{
+	if (System::IO::File::Exists(this->config_path))
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+void SomLauncherMainWin::MainForm::CreateConfig()
+{
+	System::IO::File::Copy("SOMCONFIG.json", this->config_path, true);
+}

@@ -1,4 +1,4 @@
-#ifndef JSON_H_     // equivalently, #if !defined HEADER_H_
+п»ї#ifndef JSON_H_     // equivalently, #if !defined HEADER_H_
 #define JSON_H_
 
 #include <cliext/map>
@@ -14,7 +14,7 @@
 
 #include "DownloadClasses.h"
 
-//Классы для обработки и парсинга файла json
+//РљР»Р°СЃСЃС‹ РґР»СЏ РѕР±СЂР°Р±РѕС‚РєРё Рё РїР°СЂСЃРёРЅРіР° С„Р°Р№Р»Р° json
 namespace Json {
 	public enum struct JsonTypes
 	{
@@ -44,9 +44,9 @@ namespace Json {
 		virtual Json::JsonValue^ operator=(int^ value) { return nullptr; }
 		virtual Json::JsonValue^ operator+(Json::JsonValue^ value) { return nullptr; }
 
-		virtual cliext::map<System::String^, Json::JsonValue^>% get_value();
+		virtual cliext::map<System::String^, Json::JsonValue^> get_value();
 		virtual System::Collections::Generic::List<Json::JsonValue^>% get_value_list();
-		virtual Json::JsonValue^% get_value(System::String^ key) { return this; }
+		virtual Json::JsonValue^ get_value(System::String^ key) { return this; }
 		virtual System::String^ to_string() { return ""; }
 		virtual wchar_t* to_stringW() { return nullptr; }
 		virtual System::String^ _as_string() { return ""; }
@@ -161,7 +161,7 @@ namespace Json {
 		int get_size() { return _values.Count; }
 
 		System::Collections::Generic::List<Json::JsonValue^>% get_value_list() override;
-		Json::JsonValue^% get_value(System::String^ key) override;
+		Json::JsonValue^ get_value(System::String^ key) override;
 
 
 		JsonValue^ operator[](int index) override { return _values[index]; }
@@ -194,8 +194,8 @@ namespace Json {
 		void Print() override;
 
 		Json::JsonValue^ _FindValueInJsonValue(Json::JsonValue^ jsonValue, System::String^ key);
-		Json::JsonValue^% get_value(System::String^ key) override;
-		cliext::map<System::String^, Json::JsonValue^>% get_value() override;
+		Json::JsonValue^ get_value(System::String^ key) override;
+		cliext::map<System::String^, Json::JsonValue^> get_value() override;
 		System::String^ get_pair(System::String^ key);
 		bool is_exist(System::String^ key) override;
 		void add_value(Microsoft::VisualC::StlClr::GenericPair<System::String^, Json::JsonValue^>^ value) override;

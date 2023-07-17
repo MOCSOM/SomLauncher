@@ -1,4 +1,4 @@
-#ifndef DWLD_H_     // equivalently, #if !defined HEADER_H_
+﻿#ifndef DWLD_H_     // equivalently, #if !defined HEADER_H_
 #define DWLD_H_
 
 #include <windows.h>
@@ -56,7 +56,7 @@
 #define _ZIP L".zip"
 #define _SEVEN_ZIP L".7z"
 
-#define GetTempPath System::IO::Path::GetTempPath
+//#define GetTempPath System::IO::Path::GetTempPath
 
 #define DownloadFile DDIC::Download::Files::download_file
 
@@ -85,7 +85,7 @@ namespace DDIC {
 				wchar_t* impl = L"hotspot",
 				bool jre = false);
 
-			wchar_t*& get_download_url(
+			wchar_t* get_download_url(
 				/*wchar_t*& uru,*/
 				wchar_t* version,
 				wchar_t* operating_system = OS,

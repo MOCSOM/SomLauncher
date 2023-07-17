@@ -1,4 +1,4 @@
-#include "Json.h"
+п»ї#include "Json.h"
 
 //#include <cliext/vector>
 #include <cliext/map>
@@ -51,7 +51,7 @@ System::Collections::Generic::List<Json::JsonValue^>% Json::JsonArray::get_value
 	return _values;
 }
 
-Json::JsonValue^% Json::JsonArray::get_value(System::String^ key)
+Json::JsonValue^ Json::JsonArray::get_value(System::String^ key)
 {
 	for each (auto value in _values) {
 		Json::JsonValue^ result = FindValueInJsonValue(value, key);
@@ -200,7 +200,7 @@ Json::JsonValue^ Json::JsonObject::_FindValueInJsonValue(Json::JsonValue^ jsonVa
 	return this;
 }
 
-Json::JsonValue^% Json::JsonObject::get_value(System::String^ key)
+Json::JsonValue^ Json::JsonObject::get_value(System::String^ key)
 {
 	if (!_values[key])
 	{
@@ -215,7 +215,7 @@ Json::JsonValue^% Json::JsonObject::get_value(System::String^ key)
 	return _values[key];
 }
 
-cliext::map<System::String^, Json::JsonValue^>% Json::JsonObject::get_value()
+cliext::map<System::String^, Json::JsonValue^> Json::JsonObject::get_value()
 {
 	return _values;
 }
@@ -223,7 +223,7 @@ cliext::map<System::String^, Json::JsonValue^>% Json::JsonObject::get_value()
 System::String^ Json::JsonObject::get_pair(System::String^ key)
 {
 	throw gcnew System::NotImplementedException();
-	// TODO: вставьте здесь оператор return
+	// TODO: РІСЃС‚Р°РІСЊС‚Рµ Р·РґРµСЃСЊ РѕРїРµСЂР°С‚РѕСЂ return
 }
 
 bool Json::JsonObject::is_exist(System::String^ key)
@@ -641,7 +641,7 @@ Json::JsonValue^ Json::JsonString::operator=(Json::JsonValue^ value)
 	return this;
 }
 
-cliext::map<System::String^, Json::JsonValue^>% Json::JsonValue::get_value()
+cliext::map<System::String^, Json::JsonValue^> Json::JsonValue::get_value()
 {
 	return cliext::map<System::String^, Json::JsonValue^>();
 }

@@ -1,11 +1,11 @@
-#include "Minecraftus.h"
+п»ї#include "Minecraftus.h"
 
 
 
 
-wchar_t*& MCCL::Option::MinecraftOptions::get(wchar_t* param, wchar_t* writ)
+wchar_t* MCCL::Option::MinecraftOptions::get(wchar_t* param, wchar_t* writ)
 {
-    //16 полей
+    //16 РїРѕР»РµР№
     /*wchar_t* username;
     wchar_t* uuid;
     wchar_t* token;
@@ -23,339 +23,94 @@ wchar_t*& MCCL::Option::MinecraftOptions::get(wchar_t* param, wchar_t* writ)
     wchar_t* nativesDirectory;
     bool	 enableLoggingConfig;*/
 
+    wchar_t* field = nullptr;
+
     if (System::String(param) == System::String(L"username"))
-    {
-        if (writ == NULL)
-        {
-            return this->username;
-        }
-        else if (this->username == NULL)
-        {
-            this->username = writ;
-            return this->username;
-        }
-        else
-        {
-            return this->username;
-        }
-    }
+        field = this->username;
     else if (System::String(param) == System::String(L"uuid"))
-    {
-        if (writ == NULL)
-        {
-            return this->uuid;
-        }
-        else if (this->uuid == NULL)
-        {
-            this->uuid = writ;
-            return this->uuid;
-        }
-        else
-        {
-            return this->uuid;
-        }
-    }
+        field = this->uuid;
     else if (System::String(param) == System::String(L"token"))
-    {
-        if (writ == NULL)
-        {
-            return this->token;
-        }
-        else if (this->token == NULL)
-        {
-            this->token = writ;
-            return this->token;
-        }
-        else
-        {
-            return this->token;
-        }
-    }
+        field = this->token;
     else if (System::String(param) == System::String(L"executablePath"))
-    {
-        if (writ == NULL)
-        {
-            return this->executablePath;
-        }
-        else if (this->executablePath == NULL)
-        {
-            this->executablePath = writ;
-            return this->executablePath;
-        }
-        else
-        {
-            return this->executablePath;
-        }
-    }
+        field = this->executablePath;
     else if (System::String(param) == System::String(L"jvmArguments"))
-    {
-        if (writ == NULL)
-        {
-            return this->jvmArguments;
-        }
-        else if (this->jvmArguments == NULL)
-        {
-            this->jvmArguments = writ;
-            return this->jvmArguments;
-        }
-        else
-        {
-            return this->jvmArguments;
-        }
-    }
+        field = this->jvmArguments;
     else if (System::String(param) == System::String(L"launcherName"))
-    {
-        if (writ == NULL)
-        {
-            return this->launcherName;
-        }
-        else if (this->uuid == NULL)
-        {
-            this->launcherName = writ;
-            return this->launcherName;
-        }
-        else
-        {
-            return this->launcherName;
-        }
-    }
+        field = this->launcherName;
     else if (System::String(param) == System::String(L"launcherVersion"))
-    {
-        if (writ == NULL)
-        {
-            return this->launcherVersion;
-        }
-        else if (this->launcherVersion == NULL)
-        {
-            this->launcherVersion = writ;
-            return this->launcherVersion;
-        }
-        else
-        {
-            return this->launcherVersion;
-        }
-    }
+        field = this->launcherVersion;
     else if (System::String(param) == System::String(L"gameDirectory"))
-    {
-        if (writ == NULL)
-        {
-            return this->gameDirectory;
-        }
-        else if (this->gameDirectory == NULL)
-        {
-            this->gameDirectory = writ;
-            return this->gameDirectory;
-        }
-        else
-        {
-            return this->gameDirectory;
-        }
-    }
+        field = this->gameDirectory;
     else if (System::String(param) == System::String(L"resolutionWidth"))
-    {
-        if (writ == NULL)
-        {
-            return this->resolutionWidth;
-        }
-        else if (this->resolutionWidth == NULL)
-        {
-            this->resolutionWidth = writ;
-            return this->resolutionWidth;
-        }
-        else
-        {
-            return this->resolutionWidth;
-        }
-    }
+        field = this->resolutionWidth;
     else if (System::String(param) == System::String(L"resolutionHeight"))
-    {
-        if (writ == NULL)
-        {
-            return this->resolutionHeight;
-        }
-        else if (this->resolutionHeight == NULL)
-        {
-            this->resolutionHeight = writ;
-            return this->resolutionHeight;
-        }
-        else
-        {
-            return this->resolutionHeight;
-        }
-    }
+        field = this->resolutionHeight;
     else if (System::String(param) == System::String(L"server"))
-    {
-        if (writ == NULL)
-        {
-            return this->server;
-        }
-        else if (this->server == NULL)
-        {
-            this->server = writ;
-            return this->server;
-        }
-        else
-        {
-            return this->server;
-        }
-    }
+        field = this->server;
     else if (System::String(param) == System::String(L"port"))
-    {
-        if (writ == NULL)
-        {
-            return this->port;
-        }
-        else if (this->port == NULL)
-        {
-            this->port = writ;
-            return this->port;
-        }
-        else
-        {
-            return this->port;
-        }
-    }
+        field = this->port;
     else if (System::String(param) == System::String(L"nativesDirectory"))
+        field = this->nativesDirectory;
+    else
+        return this->NULLES;
+
+    if (writ == nullptr)
     {
-        if (writ == NULL)
-        {
-            return this->nativesDirectory;
-        }
-        else if (this->nativesDirectory == NULL)
-        {
-            this->nativesDirectory = writ;
-            return this->nativesDirectory;
-        }
-        else
-        {
-            return this->nativesDirectory;
-        }
+        return field;
+    }
+    else if (field == nullptr)
+    {
+        field = writ;
+        return field;
     }
     else
     {
-        return this->NULLES;
+        return field;
     }
 }
 
 bool MCCL::Option::MinecraftOptions::get(wchar_t* param, bool writ, int a)
 {
+    bool field = nullptr;
+
     if (System::String(param) == System::String(L"demo"))
-    {
-        if (writ == NULL)
-        {
-            return this->demo;
-        }
-        else if (this->demo == NULL)
-        {
-            this->demo = writ;
-            return this->demo;
-        }
-        else
-        {
-            return this->demo;
-        }
-    }
+        field = &this->demo;
     else if (System::String(param) == System::String(L"customResolution"))
-    {
-        if (writ == NULL)
-        {
-            return this->customResolution;
-        }
-        else if (this->customResolution == NULL)
-        {
-            this->customResolution = writ;
-            return this->customResolution;
-        }
-        else
-        {
-            return this->customResolution;
-        }
-    }
+        field = &this->customResolution;
     else if (System::String(param) == System::String(L"enableLoggingConfig"))
-    {
-        if (writ == NULL)
-        {
-            return this->enableLoggingConfig;
-        }
-        else if (this->enableLoggingConfig == NULL)
-        {
-            this->enableLoggingConfig = writ;
-            return this->enableLoggingConfig;
-        }
-        else
-        {
-            return this->enableLoggingConfig;
-        }
-    }
+        field = &this->enableLoggingConfig;
     else
-    {
-        return nullptr;
-    }
+        return false;
+
+    if (!writ)
+        return field;
+
+    if (field)
+        return field;
+
+    field = writ;
+    return field;
 }
+
 
 bool MCCL::Option::MinecraftOptions::is_exist(wchar_t* param)
 {
-    if (param == L"username")
-    {
-        return true;
-    }
-    else if (param == L"uuid")
-    {
-        return true;
-    }
-    else if (param == L"token")
-    {
-        return true;
-    }
-    else if (param == L"executablePath")
-    {
-        return true;
-    }
-    else if (param == L"jvmArguments")
-    {
-        return true;
-    }
-    else if (param == L"launcherName")
-    {
-        return true;
-    }
-    else if (param == L"launcherVersion")
-    {
-        return true;
-    }
-    else if (param == L"gameDirectory")
-    {
-        return true;
-    }
-    else if (param == L"resolutionWidth")
-    {
-        return true;
-    }
-    else if (param == L"resolutionHeight")
-    {
-        return true;
-    }
-    else if (param == L"server")
-    {
-        return true;
-    }
-    else if (param == L"port")
-    {
-        return true;
-    }
-    else if (param == L"nativesDirectory")
-    {
-        return true;
-    }
-    if (param == L"demo")
-    {
-        return true;
-    }
-    else if (param == L"customResolution")
-    {
-        return true;
-    }
-    else if (param == L"enableLoggingConfig")
+    if (System::String(param) == System::String(L"username") ||
+        System::String(param) == System::String(L"uuid") ||
+        System::String(param) == System::String(L"token") ||
+        System::String(param) == System::String(L"executablePath") ||
+        System::String(param) == System::String(L"jvmArguments") ||
+        System::String(param) == System::String(L"launcherName") ||
+        System::String(param) == System::String(L"launcherVersion") ||
+        System::String(param) == System::String(L"gameDirectory") ||
+        System::String(param) == System::String(L"resolutionWidth") ||
+        System::String(param) == System::String(L"resolutionHeight") ||
+        System::String(param) == System::String(L"server") ||
+        System::String(param) == System::String(L"port") ||
+        System::String(param) == System::String(L"nativesDirectory") ||
+        System::String(param) == System::String(L"demo") ||
+        System::String(param) == System::String(L"customResolution") ||
+        System::String(param) == System::String(L"enableLoggingConfig"))
     {
         return true;
     }
@@ -591,8 +346,8 @@ wchar_t* MCCL::get_minecraft_command__(wchar_t* version, wchar_t* minecraft_dire
         command = StrDogW(command, L" ");
     }
 
-    //The argument for the logger file (Неработает т к false)
-    // TODO теперь работает передлать get
+    //The argument for the logger file (РќРµСЂР°Р±РѕС‚Р°РµС‚ С‚ Рє false)
+    // TODO С‚РµРїРµСЂСЊ СЂР°Р±РѕС‚Р°РµС‚ РїРµСЂРµРґР»Р°С‚СЊ get
     /* 
     if options.get("enableLoggingConfig", False):
         if "logging" in data:
@@ -1073,7 +828,7 @@ bool MCCL::install_libraries(Json::JsonValue^ data, wchar_t* path, CallbackNull 
     /*
     Install all libraries
     */
-    // TODO вызов callback для управление вывода
+    // TODO РІС‹Р·РѕРІ callback РґР»СЏ СѓРїСЂР°РІР»РµРЅРёРµ РІС‹РІРѕРґР°
     
     for each (auto var in data->get_value("libraries")->get_value_list())
     {
@@ -1473,7 +1228,7 @@ bool MCCL::Forge::install_forge_version(wchar_t* versionid, wchar_t* path, Callb
             array<unsigned char>^ f;
             f->Resize(f, 50000);
 
-            var->Open()->Read(f, 0, 50000); //FIXME 50000 символов передлать в динамическиое вычисление кол-во символов
+            var->Open()->Read(f, 0, 50000); //FIXME 50000 СЃРёРјРІРѕР»РѕРІ РїРµСЂРµРґР»Р°С‚СЊ РІ РґРёРЅР°РјРёС‡РµСЃРєРёРѕРµ РІС‹С‡РёСЃР»РµРЅРёРµ РєРѕР»-РІРѕ СЃРёРјРІРѕР»РѕРІ
 
             System::Text::Encoding^ enc = System::Text::Encoding::UTF8;
             System::String^ json_str = enc->GetString(f);
@@ -1537,7 +1292,7 @@ bool MCCL::Forge::extract_file(System::IO::Compression::ZipArchive^ handler, wch
     {
         if (!CreateDirectoryW(wch, NULL))
         {
-            // Обработка ошибки создания директории
+            // РћР±СЂР°Р±РѕС‚РєР° РѕС€РёР±РєРё СЃРѕР·РґР°РЅРёСЏ РґРёСЂРµРєС‚РѕСЂРёРё
             int error = GetLastError();
             //System::Console::WriteLine(error);
         }

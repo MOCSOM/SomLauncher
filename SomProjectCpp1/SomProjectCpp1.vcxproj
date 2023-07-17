@@ -161,6 +161,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="DATA.json" />
+    <None Include="SERVERS.json" />
+    <None Include="SOMCONFIG.json" />
     <None Include="TODO_List.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

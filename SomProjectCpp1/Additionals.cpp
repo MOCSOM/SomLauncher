@@ -7,261 +7,193 @@ wchar_t* Additionals::Convectors::ConvertStringToWcharPtr(System::String^ str)
     return wcharPtr;
 }
 
-wchar_t*& Additionals::String::strdogW(wchar_t* ref_str, wchar_t* str_to_add)
+wchar_t* Additionals::String::strdogW(wchar_t* ref_str, wchar_t* str_to_add)
 {
-    int ref_size = 0, to_add_size = 0;
-
-
-    if (ref_str == NULL)
+	if (ref_str == NULL || ref_str[0] == L'\0')
     {
-        for (int i = 0; str_to_add[i] != '\0'; i++)
-        {
-            to_add_size = i + 1;
-        }
-        goto skipcount;
-    }
-    for (int i = 0; ref_str[i] != '\0'; i++)
-    {
-        ref_size = i + 1;
-    }
-    for (int i = 0; str_to_add[i] != '\0'; i++)
-    {
-        to_add_size = i + 1;
+        wchar_t* new_str_temp = _wcsdup(str_to_add);
+        return new_str_temp;
     }
 
-    skipcount:
-    wchar_t* new_str_temp = new wchar_t[ref_size + to_add_size + 4];
-    if (ref_str == NULL || ref_str[0] == '\0' )
+    size_t ref_size = wcslen(ref_str);
+    size_t to_add_size = wcslen(str_to_add);
+
+    wchar_t* new_str = new wchar_t[ref_size + to_add_size + 1];
+
+    wcscpy_s(new_str, ref_size + to_add_size + 1, ref_str);
+    wcscat_s(new_str, ref_size + to_add_size + 1, str_to_add);
+
+    return new_str;
+}
+
+wchar_t* Additionals::String::strdogW(const wchar_t* ref_str, wchar_t* str_to_add)
+{
+	if (ref_str == NULL || ref_str[0] == L'\0')
     {
-        for (int j = 0; str_to_add[j] != '\0'; j++)
+        wchar_t* new_str_temp = _wcsdup(str_to_add);
+        return new_str_temp;
+    }
+
+    size_t ref_size = wcslen(ref_str);
+    size_t to_add_size = wcslen(str_to_add);
+
+    wchar_t* new_str = new wchar_t[ref_size + to_add_size + 1];
+
+    wcscpy_s(new_str, ref_size + to_add_size + 1, ref_str);
+    wcscat_s(new_str, ref_size + to_add_size + 1, str_to_add);
+
+    return new_str;
+}
+
+wchar_t* Additionals::String::strdogW(wchar_t* ref_str, const wchar_t* str_to_add)
+{
+	if (ref_str == NULL || ref_str[0] == L'\0')
+    {
+        wchar_t* new_str_temp = _wcsdup(str_to_add);
+        return new_str_temp;
+    }
+
+    size_t ref_size = wcslen(ref_str);
+    size_t to_add_size = wcslen(str_to_add);
+
+    wchar_t* new_str = new wchar_t[ref_size + to_add_size + 1];
+
+    wcscpy_s(new_str, ref_size + to_add_size + 1, ref_str);
+    wcscat_s(new_str, ref_size + to_add_size + 1, str_to_add);
+
+    return new_str;
+}
+
+wchar_t* Additionals::String::strdogW(const wchar_t* ref_str, const wchar_t* str_to_add)
+{
+	if (ref_str == NULL || ref_str[0] == L'\0')
+    {
+        wchar_t* new_str_temp = _wcsdup(str_to_add);
+        return new_str_temp;
+    }
+
+    size_t ref_size = wcslen(ref_str);
+    size_t to_add_size = wcslen(str_to_add);
+
+    wchar_t* new_str = new wchar_t[ref_size + to_add_size + 1];
+
+    wcscpy_s(new_str, ref_size + to_add_size + 1, ref_str);
+    wcscat_s(new_str, ref_size + to_add_size + 1, str_to_add);
+
+    return new_str;
+}
+
+wchar_t* Additionals::String::strdogWA(wchar_t* ref_str, char* str_to_add)
+{
+    size_t ref_size = wcslen(ref_str);
+    size_t to_add_size = strlen(str_to_add);
+    wchar_t* new_str_temp = nullptr;
+
+    if (ref_str == nullptr || ref_str[0] == L'\0')
+    {
+        new_str_temp = new wchar_t[to_add_size + 1];
+        for (size_t j = 0; j < to_add_size; j++)
         {
-            new_str_temp[j] = str_to_add[j];
+            new_str_temp[j] = static_cast<wchar_t>(str_to_add[j]);
         }
+        new_str_temp[to_add_size] = L'\0';
+        return new_str_temp;
     }
-    if (ref_str == NULL)
-    {
-        goto skip;
-    }
-    for (int i = 0; ref_str[i] != '\0'; i++)
-    {
-        if (ref_str[i+1] == '\0')
-        {
-            ref_size = i + 1;
-            for (int l = 0; ref_str[l] != '\0'; l++)
-            {
-                new_str_temp[l] = ref_str[l];
-            }
-            for (int j = 0; str_to_add[j] != '\0'; j++)
-            {
-                new_str_temp[i+1+j] = str_to_add[j];
-            }
-            
-        }
-    }
-    skip:
-    /*if (ref_size == 0 || to_add_size == 0)
-    {
-        return ref_str;
-    }*/
-    wchar_t* new_str = new wchar_t[ref_size + to_add_size];
-    for (int i = 0; i < ref_size + to_add_size; i++)
-    {
-        new_str[i] = new_str_temp[i];
-    }
-    new_str[ref_size + to_add_size] = '\0';
+
+    size_t total_size = ref_size + to_add_size;
+    wchar_t* new_str = new wchar_t[total_size + 1];
     
-    delete[]new_str_temp;
-    return new_str; ////FIXME утечка памяти
+    wcscpy_s(new_str, total_size + 1, ref_str);
+    for (size_t j = 0; j < to_add_size; j++)
+    {
+        new_str[ref_size + j] = static_cast<wchar_t>(str_to_add[j]);
+    }
+    new_str[total_size] = L'\0';
+    
+    return new_str;
 }
 
-wchar_t*& Additionals::String::strdogWA(wchar_t* ref_str, char* str_to_add)
+wchar_t* Additionals::String::strdogAW(char* ref_str, wchar_t* str_to_add)
 {
-    int ref_size = 0, to_add_size = 0;
-    wchar_t* new_str_temp = new wchar_t[100];
-    if (ref_str == NULL || ref_str[0] == '\0')
+    if (ref_str == nullptr || ref_str[0] == '\0')
     {
-        for (int j = 0; str_to_add[j] != '\0'; j++)
+        size_t to_add_size = wcslen(str_to_add);
+        wchar_t* new_str = new wchar_t[to_add_size + 1];
+        for (size_t j = 0; j < to_add_size; j++)
         {
-            new_str_temp[j] = str_to_add[j];
-            if (str_to_add[j + 1] == '\0')
-            {
-                to_add_size = j + 1;
-            }
+            new_str[j] = str_to_add[j];
         }
+        new_str[to_add_size] = L'\0';
+        return new_str;
     }
-    if (ref_str == NULL)
-    {
-        goto skip;
-    }
-    for (int i = 0; ref_str[i] != '\0'; i++)
-    {
-        if (ref_str[i + 1] == '\0')
-        {
-            ref_size = i + 1;
-            for (int l = 0; ref_str[l] != '\0'; l++)
-            {
-                new_str_temp[l] = ref_str[l];
-            }
-            for (int j = 0; str_to_add[j] != '\0'; j++)
-            {
-                new_str_temp[i + 1 + j] = str_to_add[j];
-                if (str_to_add[j + 1] == '\0')
-                {
-                    to_add_size = j + 1;
-                }
-            }
 
-        }
-    }
-    skip:
-    /*if (ref_size == 1 || to_add_size == 1)
-    {
-        return ref_str;
-    }*/
-    wchar_t* new_str = new wchar_t[ref_size + to_add_size];
-    for (int i = 0; i < ref_size + to_add_size; i++)
-    {
-        new_str[i] = new_str_temp[i];
-    }
-    new_str[ref_size + to_add_size] = '\0';
+    size_t ref_size = strlen(ref_str);
+    size_t to_add_size = wcslen(str_to_add);
+    wchar_t* new_str = new wchar_t[ref_size + to_add_size + 1];
 
-    delete[]new_str_temp;
-    return new_str; //FIXME утечка памяти
+    wcscpy_s(new_str, ref_size + to_add_size + 1, reinterpret_cast<const wchar_t*>(ref_str));
+    wcscat_s(new_str, ref_size + to_add_size + 1, str_to_add);
+
+
+    return new_str;
 }
 
-wchar_t*& Additionals::String::strdogAW(char* ref_str, wchar_t* str_to_add)
+wchar_t* Additionals::String::strdogA(char* ref_str, char* str_to_add)
 {
-    int ref_size = 0, to_add_size = 0;
-    wchar_t* new_str_temp = new wchar_t[100];
-    if (ref_str == NULL || ref_str[0] == '\0')
+    if (ref_str == nullptr || ref_str[0] == '\0')
     {
-        for (int j = 0; str_to_add[j] != '\0'; j++)
+        size_t to_add_size = strlen(str_to_add);
+        wchar_t* new_str = new wchar_t[to_add_size + 1];
+        for (size_t j = 0; j < to_add_size; ++j)
         {
-            new_str_temp[j] = str_to_add[j];
-            if (str_to_add[j + 1] == '\0')
-            {
-                to_add_size = j + 1;
-            }
+            new_str[j] = static_cast<wchar_t>(str_to_add[j]);
         }
+        new_str[to_add_size] = L'\0';
+        return new_str;
     }
-    if (ref_str == NULL)
-    {
-        goto skip;
-    }
-    for (int i = 0; ref_str[i] != '\0'; i++)
-    {
-        if (ref_str[i + 1] == '\0')
-        {
-            ref_size = i + 1;
-            for (int l = 0; ref_str[l] != '\0'; l++)
-            {
-                new_str_temp[l] = ref_str[l];
-            }
-            for (int j = 0; str_to_add[j] != '\0'; j++)
-            {
-                new_str_temp[i + 1 + j] = str_to_add[j];
-                if (str_to_add[j + 1] == '\0')
-                {
-                    to_add_size = j + 1;
-                }
-            }
 
-        }
-    }
-    skip:
-    /*if (ref_size == 0 || to_add_size == 0)
-    {
-        return ref_str;
-    }*/
-    wchar_t* new_str = new wchar_t[ref_size + to_add_size];
-    for (int i = 0; i < ref_size + to_add_size; i++)
-    {
-        new_str[i] = new_str_temp[i];
-    }
-    new_str[ref_size + to_add_size] = '\0';
+    size_t ref_size = strlen(ref_str);
+    size_t to_add_size = strlen(str_to_add);
+    wchar_t* new_str = new wchar_t[ref_size + to_add_size + 1];
 
-    delete[]new_str_temp;
-    return new_str; //FIXME утечка памяти
+    for (size_t i = 0; i < ref_size; ++i)
+    {
+        new_str[i] = static_cast<wchar_t>(ref_str[i]);
+    }
+
+    for (size_t j = 0; j < to_add_size; ++j)
+    {
+        new_str[ref_size + j] = static_cast<wchar_t>(str_to_add[j]);
+    }
+    new_str[ref_size + to_add_size] = L'\0';
+
+    return new_str;
 }
 
-wchar_t*& Additionals::String::strdogA(char* ref_str, char* str_to_add)
+wchar_t* Additionals::String::strdogW(std::initializer_list<wchar_t*> list)
 {
-    int ref_size = 0, to_add_size = 0;
-    wchar_t* new_str_temp = new wchar_t[100];
-    if (ref_str == NULL || ref_str[0] == '\0')
+    wchar_t* path = nullptr;
+    bool isFirst = true;
+    
+    for (const wchar_t* elem : list)
     {
-        for (int j = 0; str_to_add[j] != '\0'; j++)
+        if (isFirst)
         {
-            new_str_temp[j] = str_to_add[j];
-            if (str_to_add[j + 1] == '\0')
-            {
-                to_add_size = j + 1;
-            }
+            path = const_cast<wchar_t*>(elem);
+            isFirst = false;
+        }
+        else
+        {
+            wchar_t* temp = StrDogW(path, elem);
+            delete[] path;
+            path = temp;
         }
     }
-    if (ref_str == NULL)
-    {
-        goto skip;
-    }
-    for (int i = 0; ref_str[i] != '\0'; ++i)
-    {
-        if (ref_str[i + 1] == '\0')
-        {
-            ref_size = i + 1;
-            for (int l = 0; ref_str[l] != '\0'; ++l)
-            {
-                new_str_temp[l] = ref_str[l];
-            }
-            for (int j = 0; str_to_add[j] != '\0'; ++j)
-            {
-                new_str_temp[i + 1 + j] = str_to_add[j];
-                if (str_to_add[j + 1] == '\0')
-                {
-                    to_add_size = j + 1;
-                }
-            }
-
-        }
-    }
-    skip:
-    /*if (ref_size == 0 || to_add_size == 0)
-    {
-        return ref_str;
-    }*/
-    wchar_t* new_str = new wchar_t[ref_size + to_add_size];
-    for (int i = 0; i < ref_size + to_add_size; ++i)
-    {
-        new_str[i] = new_str_temp[i];
-    }
-    new_str[ref_size + to_add_size] = '\0';
-
-    delete[]new_str_temp;
-    return new_str; //FIXME утечка памяти
-}
-
-wchar_t*& Additionals::String::strdogW(std::initializer_list<wchar_t*> list)
-{
-    wchar_t* path = NULL;
-    int i = 0;
-    for (wchar_t* elem : list)
-    {
-        /*if (path == NULL)
-        {
-            path = elem;
-        }*/
-        if (i == 0)
-        {
-            path = elem;
-            ++i;
-            continue;
-        }
-        path = StrDogW(path, elem);
-        ++i;
-    }
+    
     return path;
 }
 
-wchar_t*& Additionals::Path::joinW(std::initializer_list<wchar_t*> list)
+wchar_t* Additionals::Path::joinW(std::initializer_list<wchar_t*> list)
 {
     wchar_t* path = NULL;
     int i = 0;
@@ -284,7 +216,7 @@ wchar_t*& Additionals::Path::joinW(std::initializer_list<wchar_t*> list)
     return path;
 }
 
-wchar_t*& Additionals::Path::joinA(std::initializer_list<char*> list)
+wchar_t* Additionals::Path::joinA(std::initializer_list<char*> list)
 {
     wchar_t* path = NULL;
     int i = 0;

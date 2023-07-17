@@ -1,4 +1,4 @@
-#ifndef MINECRAFTUS_H_     // equivalently, #if !defined HEADER_H_
+п»ї#ifndef MINECRAFTUS_H_     // equivalently, #if !defined HEADER_H_
 #define MINECRAFTUS_H_
 
 
@@ -9,21 +9,7 @@
 #include <initializer_list>
 //#include <stdio.h>
 
-#if defined(_WIN32) || defined(_WIN64)
-#define OS L"Windows"
-#elif defined(__APPLE__)
-#define OS L"Darwin"
-#elif defined(__unix__) || defined(__unix)
-#define OS L"Linux"
-#else
-#error unsupported platform
-#endif
 
-#if defined(_WIN64) || defined(__x86_64__) || defined(__ppc64__)
-#define ARCH L"x64"
-#else
-#define ARCH L"x86"
-#endif
 
 namespace MCCL {
 
@@ -52,8 +38,8 @@ namespace MCCL {
 			wchar_t* classpath           = NULL;
 			wchar_t* NULLES              = NULL;
 			
-			// get (поле, стандарт)
-			wchar_t*& get(wchar_t* param, wchar_t* writ = NULL);
+			// get (РїРѕР»Рµ, СЃС‚Р°РЅРґР°СЂС‚)
+			wchar_t* get(wchar_t* param, wchar_t* writ = NULL);
 			bool get(wchar_t* param, bool writ = NULL, int a = 7);
 			bool is_exist(wchar_t* param);
 		};

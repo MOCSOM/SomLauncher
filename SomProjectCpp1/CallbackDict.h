@@ -1,4 +1,4 @@
-#ifndef CBD_H_     // equivalently, #if !defined HEADER_H_
+﻿#ifndef CBD_H_     // equivalently, #if !defined HEADER_H_
 #define CBD_H_
 
 #include <windows.h>

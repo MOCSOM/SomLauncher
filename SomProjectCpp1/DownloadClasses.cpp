@@ -1,4 +1,4 @@
-#include "DownloadClasses.h"
+п»ї#include "DownloadClasses.h"
 
 
 
@@ -25,7 +25,7 @@ wchar_t* DDIC::Download::Files::download_file(wchar_t* s_url, wchar_t* d_file, C
     {
         if (!CreateDirectoryW(wch, NULL))
         {
-            // Обработка ошибки создания директории
+            // РћР±СЂР°Р±РѕС‚РєР° РѕС€РёР±РєРё СЃРѕР·РґР°РЅРёСЏ РґРёСЂРµРєС‚РѕСЂРёРё
             int error = GetLastError();
             //System::Console::WriteLine(System::String(().ToString());
             //System::Console::WriteLine(error);
@@ -148,7 +148,7 @@ wchar_t* DDIC::Download::Java::install(wchar_t* version, wchar_t* path, wchar_t*
     pin_ptr<const wchar_t> path_wch = PtrToStringChars(path2 + L"\\.zip");
     pin_ptr<const wchar_t> path_wch_norm = PtrToStringChars(path2);
 
-    wchar_t* jdk_file = NULL;
+    wchar_t* jdk_file = nullptr;
     CallbackDict callback;
     
     try
@@ -156,7 +156,7 @@ wchar_t* DDIC::Download::Java::install(wchar_t* version, wchar_t* path, wchar_t*
         jdk_file = DownloadFile(url, const_cast<wchar_t*>(path_wch), callback);
         if (jdk_file == NULL)
         {
-            return L"error 105: file not download";
+            return _wcsdup(L"error 105: file not download");
         }
         wchar_t* jdk_ext = _get_normalized_compressed_file_ext(jdk_file);
         wchar_t* jdk_dir = _decompress_archive(jdk_file, jdk_ext, const_cast<wchar_t*>(path_wch_norm));
@@ -165,19 +165,14 @@ wchar_t* DDIC::Download::Java::install(wchar_t* version, wchar_t* path, wchar_t*
     }
     finally
     {
-        if (jdk_file != NULL)
+        if (jdk_file != nullptr)
         {
-            char fifa[100];
-            int size_fifa = 0;
-            for (int i = 0; jdk_file[i] != L'\0'; i++)
+            System::String^ fifa;
+            for (size_t i = 0; jdk_file[i] != L'\0'; ++i)
             {
-                fifa[i] = jdk_file[i];
-                size_fifa = i;
+                fifa += jdk_file[i];
             }
-            fifa[size_fifa + 1] = '\0';
-            bool del = DeleteFileW(jdk_file); //FIXME не удаляет файл
-            //int del = 0;
-            //del = std::remove(fifa);
+            bool del = DeleteFileW(Additionals::Convectors::ConvertStringToWcharPtr(fifa));
             System::Console::Write("Deleted archive status: ");
             System::Console::WriteLine(del);
         }
@@ -185,7 +180,7 @@ wchar_t* DDIC::Download::Java::install(wchar_t* version, wchar_t* path, wchar_t*
     }
 }
 
-wchar_t*& DDIC::Download::Java::get_download_url(/*wchar_t*& url,*/wchar_t* version, wchar_t* operating_system, wchar_t* arch, wchar_t* impl, bool jre)
+wchar_t* DDIC::Download::Java::get_download_url(/*wchar_t*& url,*/wchar_t* version, wchar_t* operating_system, wchar_t* arch, wchar_t* impl, bool jre)
 {
     version = normalize_version(version);
     if(jre) {
@@ -264,7 +259,7 @@ wchar_t* DDIC::Download::Java::_decompress_archive(wchar_t* repo_root, wchar_t* 
     {
         if (System::IO::Directory::Exists(destination_str))
         {
-            return destination_folder; //TODO переписывание архива
+            return destination_folder; //TODO РїРµСЂРµРїРёСЃС‹РІР°РЅРёРµ Р°СЂС…РёРІР°
         }
 
         System::IO::Compression::ZipArchive^ zArchive = System::IO::Compression::ZipFile::OpenRead(repo_root_str);
@@ -285,7 +280,7 @@ wchar_t* DDIC::Download::Java::_decompress_archive(wchar_t* repo_root, wchar_t* 
 
 bool DDIC::Download::Java::check_system_verison_java(wchar_t* version)
 {
-    //TODO Проверка текущей версии java
+    //TODO РџСЂРѕРІРµСЂРєР° С‚РµРєСѓС‰РµР№ РІРµСЂСЃРёРё java
     return false;
 }
 

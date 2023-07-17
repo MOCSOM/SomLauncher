@@ -67,6 +67,15 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <None Include="SOMCONFIG.json">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="DATA.json">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="SERVERS.json">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
     <None Include="TODO_List.md" />
   </ItemGroup>
 </Project>

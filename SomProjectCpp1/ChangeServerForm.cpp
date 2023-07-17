@@ -1,4 +1,4 @@
-#include "ChangeServerForm.h"
+ï»¿#include "ChangeServerForm.h"
 
 System::String^ SomLauncherMainWin::ChangeServerForm::get_value_serv()
 {
@@ -51,7 +51,7 @@ System::Void SomLauncherMainWin::ChangeServerForm::checkedListBox_changeserv_Ite
  
 System::Void SomLauncherMainWin::ChangeServerForm::checkedListBox_changeserv_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e)
 {
-    /* Ïðåâðàùåíèå â radio bottom */
+    /* ÐŸÑ€ÐµÐ²Ñ€Ð°Ñ‰ÐµÐ½Ð¸Ðµ Ð² radio bottom */
     int index = this->checkedListBox_changeserv->SelectedIndex;
     int count = this->checkedListBox_changeserv->Items->Count;
     for (int i = 0; i < count; i++)

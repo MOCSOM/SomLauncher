@@ -3,6 +3,10 @@
 
 #include <vcclr.h>
 #include <initializer_list>
+#include <cwchar>
+#include <stdlib.h>     // for _countof
+#include <errno.h>  // for return values
+#include <cstring>
 
 #define StrDogWA Additionals::String::strdogWA
 #define StrDogW Additionals::String::strdogW
@@ -18,17 +22,21 @@ namespace Additionals {
 	}
 
 	namespace String {
-		wchar_t*& strdogW(wchar_t* ref_str, wchar_t* str_to_add);
-		wchar_t*& strdogWA(wchar_t* ref_str, char* str_to_add);
-		wchar_t*& strdogAW(char* ref_str, wchar_t* str_to_add);
-		wchar_t*& strdogA(char* ref_str, char* str_to_add);
+		wchar_t* strdogW(wchar_t* ref_str, wchar_t* str_to_add);
+		wchar_t* strdogW(const wchar_t* ref_str, wchar_t* str_to_add);
+		wchar_t* strdogW(wchar_t* ref_str, const wchar_t* str_to_add);
+		wchar_t* strdogW(const wchar_t* ref_str, const wchar_t* str_to_add);
 
-		wchar_t*& strdogW(std::initializer_list<wchar_t*> list);
+		wchar_t* strdogWA(wchar_t* ref_str, char* str_to_add);
+		wchar_t* strdogAW(char* ref_str, wchar_t* str_to_add);
+		wchar_t* strdogA(char* ref_str, char* str_to_add);
+
+		wchar_t* strdogW(std::initializer_list<wchar_t*> list);
 	}
 
 	namespace Path {
-		wchar_t*& joinW(std::initializer_list<wchar_t*> list);
-		wchar_t*& joinA(std::initializer_list<char*> list);
+		wchar_t* joinW(std::initializer_list<wchar_t*> list);
+		wchar_t* joinA(std::initializer_list<char*> list);
 	}
 
 	namespace TempFile {

@@ -2,6 +2,17 @@
 
 
 
+SomLauncherMainWin::MainForm::MainForm(void)
+{
+	InitializeComponent();
+	
+	if (!IsConfigExist())
+	{
+		CreateConfig();
+		System::Console::WriteLine("Config created in " + this->config_path);
+	}
+}
+
 void SomLauncherMainWin::MainForm::animationtoppanel(bool expect, int anim)
 {
 	if (expect == true && anim == 1)
