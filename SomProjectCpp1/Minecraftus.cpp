@@ -1454,7 +1454,7 @@ bool MCCL::Forge::install_forge_version(wchar_t* versionid, wchar_t* path, Callb
     pin_ptr<const wchar_t> wch_rand = PtrToStringChars(rand);
 
     wchar_t* FORGE_DOWNLOAD_URL = StrDogW({ L"https://files.minecraftforge.net/maven/net/minecraftforge/forge/", versionid, L"/forge-", versionid, L"-installer.jar" });
-    wchar_t* temp_file_path = StrDogW({ DDIC::TempFile::get_tempdir_SYSTEM(), StrDogW({L"forge-installer-", const_cast<wchar_t*>(wch_rand), L".tmp"}) });
+    wchar_t* temp_file_path = StrDogW({ Additionals::TempFile::get_tempdir_SYSTEM(), StrDogW({L"forge-installer-", const_cast<wchar_t*>(wch_rand), L".tmp"}) });
     if (DownloadFile(FORGE_DOWNLOAD_URL, temp_file_path, callback) == nullptr)
     {
         System::Console::Write("Version Not Found");
@@ -1503,7 +1503,7 @@ bool MCCL::Forge::install_forge_version(wchar_t* versionid, wchar_t* path, Callb
     extract_file(zArchive, StrDogW({ L"maven/net/minecraftforge/forge/", versionid, L"/forge-", versionid, L"-universal.jar" }), JoinW({ forge_lib_path, StrDogW({L"forge-", versionid, L"-universal.jar"}) }));
 
     // Extract the client.lzma
-    wchar_t* lzma_path = StrDogW({ DDIC::TempFile::get_tempdir_SYSTEM(), StrDogW({ L"lzma-", const_cast<wchar_t*>(wch_rand), L".tmp" }) });
+    wchar_t* lzma_path = StrDogW({ Additionals::TempFile::get_tempdir_SYSTEM(), StrDogW({ L"lzma-", const_cast<wchar_t*>(wch_rand), L".tmp" }) });
 
     extract_file(zArchive, L"data/client.lzma", lzma_path);
     
@@ -1643,7 +1643,7 @@ bool MCCL::Forge::forge_processors(Json::JsonValue^ data, wchar_t* minecraft_dir
             argument_vars["{" + var->first + "}"]->operator=(var->second["client"]);
         }
     }
-    wchar_t* root_path = JoinW({ DDIC::TempFile::get_tempdir_SYSTEM(), StrDogW(L"forge-root-", const_cast<wchar_t*>(wch_rand)) });
+    wchar_t* root_path = JoinW({ Additionals::TempFile::get_tempdir_SYSTEM(), StrDogW(L"forge-root-", const_cast<wchar_t*>(wch_rand)) });
 
     argument_vars["{INSTALLER}"]->operator=(System::String(installer_path).ToString());
     argument_vars["{BINPATCH}"]->operator=(System::String(lzma_path).ToString());

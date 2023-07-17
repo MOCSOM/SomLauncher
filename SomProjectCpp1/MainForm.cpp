@@ -41,7 +41,7 @@ void SomLauncherMainWin::MainForm::animationtoppanel(bool expect, int anim)
 
 void SomLauncherMainWin::MainForm::create_form_changeserv()
 {
-	SomLauncherMainWin::ChangeServerForm^ form_serv = gcnew SomLauncherMainWin::ChangeServerForm(System::String(config_path).ToString());
+	SomLauncherMainWin::ChangeServerForm^ form_serv = gcnew SomLauncherMainWin::ChangeServerForm(config_path);
 	form_serv->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 	form_serv->ShowDialog();
 

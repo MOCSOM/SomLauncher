@@ -129,6 +129,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Additionals.cpp" />
     <ClCompile Include="CallbackDict.cpp" />
     <ClCompile Include="ChangeServerForm.cpp" />
     <ClCompile Include="DownloadClasses.cpp" />
@@ -139,6 +140,7 @@
     <ClCompile Include="Minecraftus.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Additionals.h" />
     <ClInclude Include="CallbackDict.h" />
     <ClInclude Include="ChangeServerForm.h">
       <FileType>CppForm</FileType>

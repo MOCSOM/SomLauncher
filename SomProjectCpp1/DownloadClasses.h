@@ -17,6 +17,7 @@
 #pragma comment(lib, "User32.lib")
 
 #include "CallbackDict.h"
+#include "Additionals.h"
 
 #if defined(_WIN32) || defined(_WIN64)
 #define OS L"windows"
@@ -55,35 +56,12 @@
 #define _ZIP L".zip"
 #define _SEVEN_ZIP L".7z"
 
-#define StrDogWA DDIC::strdogWA
-#define StrDogW DDIC::strdogW
-#define StrDogAW DDIC::strdogAW
-#define StrDogA DDIC::strdogA
-#define JoinW DDIC::Path::joinW
-#define JoinA DDIC::Path::joinA
-
 #define GetTempPath System::IO::Path::GetTempPath
 
 #define DownloadFile DDIC::Download::Files::download_file
 
 namespace DDIC {
-	wchar_t*& strdogW(wchar_t* ref_str, wchar_t* str_to_add);
-	wchar_t*& strdogWA(wchar_t* ref_str, char* str_to_add);
-	wchar_t*& strdogAW(char* ref_str, wchar_t* str_to_add);
-	wchar_t*& strdogA(char* ref_str, char* str_to_add);
-
-	wchar_t*& strdogW(std::initializer_list<wchar_t*> list);
-
-	namespace Path {
-		wchar_t*& joinW(std::initializer_list<wchar_t*> list);
-		wchar_t*& joinA(std::initializer_list<char*> list);
-	}
-
-	namespace TempFile {
-		wchar_t* get_tempdir();
-		wchar_t* get_tempdir_SYSTEM();
-		wchar_t* _get_default_tempdir();
-	}
+	
 
 	namespace Download {
 		namespace Files {

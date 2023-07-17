@@ -7,6 +7,7 @@
 #include "DownloadClasses.h"
 #include "CallbackDict.h"
 #include "ChangeServerForm.h"
+#include "Additionals.h"
 #include <Windows.h>
 
 namespace SomLauncherMainWin {
@@ -954,12 +955,13 @@ namespace SomLauncherMainWin {
 		//SomLauncherMainWin::ChangeServerForm^ form_serv = gcnew SomLauncherMainWin::ChangeServerForm();
 
 	private:
-		wchar_t* minecraft_core_dir_path = JoinA({ getenv("APPDATA"), ".SomSomSom" });
-		wchar_t* config_path = JoinW({ minecraft_core_dir_path, L"SOMCONFIG.json" });
-		wchar_t* launcher_name = L"SomLauncher";
-		wchar_t* launcher_version = L"2.0";
-		wchar_t* username = NULL;
-		wchar_t* servers_json = JoinW({ minecraft_core_dir_path, L"SERVERS.json" });
+		
+		System::String^ minecraft_core_dir_path = System::String(JoinA({ getenv("APPDATA"), ".SomSomSom" })).ToString();
+		System::String^ config_path = System::String::Join("\\", minecraft_core_dir_path, "SOMCONFIG.json");
+		System::String^ launcher_name = L"SomLauncher";
+		System::String^ launcher_version = L"2.0";
+		System::String^ username = nullptr;
+		System::String^ servers_json = System::String::Join("\\", minecraft_core_dir_path, "SERVERS.json" );
 
 	private:
 		bool win_is_small = true;

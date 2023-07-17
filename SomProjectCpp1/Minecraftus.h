@@ -5,6 +5,7 @@
 #include "DownloadClasses.h"
 #include "CallbackDict.h"
 #include "Json.h"
+#include "Additionals.h"
 #include <initializer_list>
 //#include <stdio.h>
 
