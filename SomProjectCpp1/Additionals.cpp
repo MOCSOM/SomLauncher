@@ -15,6 +15,12 @@ wchar_t* Additionals::String::strdogW(wchar_t* ref_str, wchar_t* str_to_add)
         return new_str_temp;
     }
 
+    if (str_to_add == NULL || str_to_add[0] == L'\0')
+    {
+		wchar_t* new_str_temp = _wcsdup(ref_str);
+        return new_str_temp;
+    }
+
     size_t ref_size = wcslen(ref_str);
     size_t to_add_size = wcslen(str_to_add);
 
@@ -31,6 +37,12 @@ wchar_t* Additionals::String::strdogW(const wchar_t* ref_str, wchar_t* str_to_ad
 	if (ref_str == NULL || ref_str[0] == L'\0')
     {
         wchar_t* new_str_temp = _wcsdup(str_to_add);
+        return new_str_temp;
+    }
+
+	if (str_to_add == NULL || str_to_add[0] == L'\0')
+    {
+		wchar_t* new_str_temp = _wcsdup(ref_str);
         return new_str_temp;
     }
 
@@ -53,6 +65,12 @@ wchar_t* Additionals::String::strdogW(wchar_t* ref_str, const wchar_t* str_to_ad
         return new_str_temp;
     }
 
+	if (str_to_add == NULL || str_to_add[0] == L'\0')
+    {
+		wchar_t* new_str_temp = _wcsdup(ref_str);
+        return new_str_temp;
+    }
+
     size_t ref_size = wcslen(ref_str);
     size_t to_add_size = wcslen(str_to_add);
 
@@ -69,6 +87,12 @@ wchar_t* Additionals::String::strdogW(const wchar_t* ref_str, const wchar_t* str
 	if (ref_str == NULL || ref_str[0] == L'\0')
     {
         wchar_t* new_str_temp = _wcsdup(str_to_add);
+        return new_str_temp;
+    }
+
+	if (str_to_add == NULL || str_to_add[0] == L'\0')
+    {
+		wchar_t* new_str_temp = _wcsdup(ref_str);
         return new_str_temp;
     }
 
@@ -184,9 +208,9 @@ wchar_t* Additionals::String::strdogW(std::initializer_list<wchar_t*> list)
         }
         else
         {
-            wchar_t* temp = StrDogW(path, elem);
-            delete[] path;
-            path = temp;
+            //wchar_t* temp = StrDogW(path, elem);
+            //delete[] path;
+            path = StrDogW(path, elem);
         }
     }
     

@@ -90,8 +90,8 @@ void SomLauncherMainWin::MainForm::install_run_minecraft(System::String^ version
 
 	if (loader_mame == "forge" || loader_mame == "Forge")
 	{
-		launch_version = version + '-' + loader_mame + '-' + loader_version;
-		install_version = version + '-' + loader_version;
+		launch_version = version + "-" + loader_mame + "-" + loader_version;
+		install_version = version + "-" + loader_version;
 	}
 	else if (loader_mame == "fabric" || loader_mame == "Fabric")
 	{
