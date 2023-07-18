@@ -10,11 +10,11 @@ System::Void SomLauncherMainWin::ChangeServerForm::ChangeServerForm_Paint(System
     this->checkedListBox_changeserv->Items->Clear();
     Json::JsonParcer json_serv;
     auto json_parce = json_serv.ParseFile("SERVERS.json");
-    auto parce_config = json_serv.ParseFile(config_path);
+    auto parce_config = json_serv.ParseFile(this->config_path);
 
     for (int i = 0; i < json_parce["servers"]->get_count(); ++i)
     {
-        this->checkedListBox_changeserv->Items->Add(json_parce["servers"][i]->to_string(), false);
+        this->checkedListBox_changeserv->Items->Add(json_parce["servers"][i]["name"]->to_string(), false);
     }
 
     if (this->checkedListBox_changeserv->CheckedItems->ToString() == "")

@@ -14,6 +14,8 @@
 
 #include "DownloadClasses.h"
 
+#define IS_SKIP_COMMENTS true
+
 //Классы для обработки и парсинга файла json
 namespace Json {
 	public enum struct JsonTypes
@@ -233,4 +235,4 @@ namespace Json {
 	};
 }
 
-#endif // JSON_H_
+#endif // !JSON_H_
