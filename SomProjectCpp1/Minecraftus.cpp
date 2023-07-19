@@ -3,7 +3,7 @@
 
 
 
-wchar_t* MCCL::Option::MinecraftOptions::get(wchar_t* param, wchar_t* writ)
+wchar_t* MinecraftCpp::option::MinecraftOptions::get(wchar_t* param, wchar_t* writ)
 {
     //16 полей
     /*wchar_t* username;
@@ -69,7 +69,7 @@ wchar_t* MCCL::Option::MinecraftOptions::get(wchar_t* param, wchar_t* writ)
     }
 }
 
-bool MCCL::Option::MinecraftOptions::get(wchar_t* param, bool writ, int a)
+bool MinecraftCpp::option::MinecraftOptions::get(wchar_t* param, bool writ, int a)
 {
     bool field = nullptr;
 
@@ -93,7 +93,7 @@ bool MCCL::Option::MinecraftOptions::get(wchar_t* param, bool writ, int a)
 }
 
 
-bool MCCL::Option::MinecraftOptions::is_exist(wchar_t* param)
+bool MinecraftCpp::option::MinecraftOptions::is_exist(wchar_t* param)
 {
     if (System::String(param) == System::String(L"username") ||
         System::String(param) == System::String(L"uuid") ||
@@ -121,7 +121,7 @@ bool MCCL::Option::MinecraftOptions::is_exist(wchar_t* param)
 }
 
 
-bool MCCL::install_minecraft_version(wchar_t* versionid, wchar_t* minecraft_directory, CallbackNull callback)
+bool MinecraftCpp::install_minecraft_version(wchar_t* versionid, wchar_t* minecraft_directory, CallbackNull callback)
 {
     /*
     Install a Minecraft Version. Fore more Information take a look at the documentation"
@@ -163,7 +163,7 @@ bool MCCL::install_minecraft_version(wchar_t* versionid, wchar_t* minecraft_dire
 	return false;
 }
 
-bool MCCL::do_version_install(wchar_t* versionid, wchar_t* path, CallbackNull callback, wchar_t* url)
+bool MinecraftCpp::do_version_install(wchar_t* versionid, wchar_t* path, CallbackNull callback, wchar_t* url)
 {
     /*
     Install the given version
@@ -179,7 +179,7 @@ bool MCCL::do_version_install(wchar_t* versionid, wchar_t* path, CallbackNull ca
     }
     auto versiondata = json_verid.ParseFile(System::String(path_ver_json).ToString());
 
-    // For Forge
+    // For forge
     if (versiondata->is_exist("inheritsFrom"))
     {
         install_minecraft_version(versiondata->get_value("inheritsFrom")->to_stringW(), path);
@@ -220,11 +220,11 @@ bool MCCL::do_version_install(wchar_t* versionid, wchar_t* path, CallbackNull ca
     return true;
 }
 
-Json::JsonValue^ MCCL::inherit_json(Json::JsonValue^ original_data, wchar_t* path)
+Json::JsonValue^ MinecraftCpp::inherit_json(Json::JsonValue^ original_data, wchar_t* path)
 {
     /*
     Implement the inheritsFrom function
-    See https://github.com/tomsik68/mclauncher-api/wiki/Version-Inheritance-&-Forge
+    See https://github.com/tomsik68/mclauncher-api/wiki/Version-Inheritance-&-forge
     */
     auto inherit_version = original_data->get_value("inheritsFrom");
 
@@ -263,7 +263,7 @@ Json::JsonValue^ MCCL::inherit_json(Json::JsonValue^ original_data, wchar_t* pat
     return new_data;
 }
 
-wchar_t* MCCL::get_minecraft_command__(wchar_t* version, wchar_t* minecraft_directory, MCCL::Option::MinecraftOptions options)
+wchar_t* MinecraftCpp::get_minecraft_command__(wchar_t* version, wchar_t* minecraft_directory, MinecraftCpp::option::MinecraftOptions options)
 {
     /*
     Returns a command for launching Minecraft.For more information take a look at the documentation.
@@ -280,11 +280,11 @@ wchar_t* MCCL::get_minecraft_command__(wchar_t* version, wchar_t* minecraft_dire
 
     if (data->is_exist("inheritsFrom"))
     {
-        data = MCCL::inherit_json(data, minecraft_directory);
+        data = MinecraftCpp::inherit_json(data, minecraft_directory);
     }
     options.nativesDirectory = options.get(L"nativesDirectory", JoinW({ minecraft_directory, L"versions", data["id"]->to_stringW(), L"natives" }));
     //options.nativesDirectory = JoinW({ minecraft_directory, L"versions", data["id"]->to_stringW(), L"natives" });
-    options.classpath = MCCL::get_libraries(data, minecraft_directory);
+    options.classpath = MinecraftCpp::get_libraries(data, minecraft_directory);
 
     wchar_t* command = NULL;
 
@@ -296,7 +296,7 @@ wchar_t* MCCL::get_minecraft_command__(wchar_t* version, wchar_t* minecraft_dire
     }
     else if (data->is_exist(L"javaVersion"))
     {
-        wchar_t* java_path = MCCL::get_executable_path(data["javaVersion"]["component"]->to_stringW(), minecraft_directory);
+        wchar_t* java_path = MinecraftCpp::get_executable_path(data["javaVersion"]["component"]->to_stringW(), minecraft_directory);
         if (java_path == nullptr)
         {
             command = StrDogW(command, L"java");
@@ -324,7 +324,7 @@ wchar_t* MCCL::get_minecraft_command__(wchar_t* version, wchar_t* minecraft_dire
     {
         if (data->get_value("arguments")->is_exist("jvm"))
         {
-            command = StrDogW(command, MCCL::get_arguments(data["arguments"]["jvm"], data, minecraft_directory, options));
+            command = StrDogW(command, MinecraftCpp::get_arguments(data["arguments"]["jvm"], data, minecraft_directory, options));
             command = StrDogW(command, L" ");
         }
         else
@@ -362,12 +362,12 @@ wchar_t* MCCL::get_minecraft_command__(wchar_t* version, wchar_t* minecraft_dire
     if (data->is_exist("minecraftArguments"))
     {
         // For older versions
-        command = StrDogW(command, MCCL::get_arguments_string(data, minecraft_directory, options));
+        command = StrDogW(command, MinecraftCpp::get_arguments_string(data, minecraft_directory, options));
         command = StrDogW(command, L" ");
     }
     else
     {
-        command = StrDogW(command, MCCL::get_arguments(data->get_value("arguments")->get_value("game"), data, minecraft_directory, options));
+        command = StrDogW(command, MinecraftCpp::get_arguments(data->get_value("arguments")->get_value("game"), data, minecraft_directory, options));
         command = StrDogW(command, L" ");
     }
 
@@ -388,26 +388,26 @@ wchar_t* MCCL::get_minecraft_command__(wchar_t* version, wchar_t* minecraft_dire
     return command;
 }
 
-wchar_t* MCCL::get_libraries(Json::JsonValue^ data, wchar_t* path)
+wchar_t* MinecraftCpp::get_libraries(Json::JsonValue^ data, wchar_t* path)
 {
     /*
     Returns the argument with all libs that come after -cp
     */
-    wchar_t* classpath_seperator = MCCL::get_classpath_separator();
+    wchar_t* classpath_seperator = MinecraftCpp::get_classpath_separator();
     wchar_t* libstr = L"";
     wchar_t* native = L"";
-    MCCL::Option::MinecraftOptions empty;
+    MinecraftCpp::option::MinecraftOptions empty;
     int debug = 0;
     if (data["libraries"]->get_count() == 1)
     {
         for each (auto var in data->get_value("libraries")[0]->get_value_list())
         {
-            if (!(MCCL::parse_rule_list(var, L"rules", empty)))
+            if (!(MinecraftCpp::parse_rule_list(var, L"rules", empty)))
             {
                 continue;
             }
-            libstr = StrDogW(libstr, StrDogW(MCCL::get_library_path(var->get_value("name")->to_stringW(), path), classpath_seperator));
-            native = MCCL::get_natives(var);
+            libstr = StrDogW(libstr, StrDogW(MinecraftCpp::get_library_path(var->get_value("name")->to_stringW(), path), classpath_seperator));
+            native = MinecraftCpp::get_natives(var);
             if (System::String(native) != System::String(L""))
             {
                 if (var->is_exist("downloads"))
@@ -416,7 +416,7 @@ wchar_t* MCCL::get_libraries(Json::JsonValue^ data, wchar_t* path)
                 }
                 else
                 {
-                    libstr = StrDogW(libstr, StrDogW(MCCL::get_library_path(StrDogW(var->get_value("name")->to_stringW(), StrDogW(L"-", native)), path), classpath_seperator));
+                    libstr = StrDogW(libstr, StrDogW(MinecraftCpp::get_library_path(StrDogW(var->get_value("name")->to_stringW(), StrDogW(L"-", native)), path), classpath_seperator));
                 }
             }
         }
@@ -434,12 +434,12 @@ wchar_t* MCCL::get_libraries(Json::JsonValue^ data, wchar_t* path)
     {
         for each (auto var in data->get_value("libraries")->get_value_list())
         {
-            if (!(MCCL::parse_rule_list(var, L"rules", empty)))
+            if (!(MinecraftCpp::parse_rule_list(var, L"rules", empty)))
             {
                 continue;
             }
-            libstr = StrDogW(libstr, StrDogW(MCCL::get_library_path(var->get_value("name")->to_stringW(), path), classpath_seperator));
-            native = MCCL::get_natives(var);
+            libstr = StrDogW(libstr, StrDogW(MinecraftCpp::get_library_path(var->get_value("name")->to_stringW(), path), classpath_seperator));
+            native = MinecraftCpp::get_natives(var);
             if (System::String(native) != System::String(L""))
             {
                 if (var->is_exist("downloads"))
@@ -448,7 +448,7 @@ wchar_t* MCCL::get_libraries(Json::JsonValue^ data, wchar_t* path)
                 }
                 else
                 {
-                    libstr = StrDogW(libstr, StrDogW(MCCL::get_library_path(StrDogW(var->get_value("name")->to_stringW(), StrDogW(L"-", native)), path), classpath_seperator));
+                    libstr = StrDogW(libstr, StrDogW(MinecraftCpp::get_library_path(StrDogW(var->get_value("name")->to_stringW(), StrDogW(L"-", native)), path), classpath_seperator));
                 }
             }
         }
@@ -467,7 +467,7 @@ wchar_t* MCCL::get_libraries(Json::JsonValue^ data, wchar_t* path)
     return libstr;
 }
 
-bool MCCL::start_minecraft(wchar_t* java_path, wchar_t* args)
+bool MinecraftCpp::start_minecraft(wchar_t* java_path, wchar_t* args)
 {    
     wchar_t* path;
 
@@ -505,7 +505,7 @@ bool MCCL::start_minecraft(wchar_t* java_path, wchar_t* args)
     return _wsystem(path);
 }
 
-wchar_t* MCCL::get_classpath_separator()
+wchar_t* MinecraftCpp::get_classpath_separator()
 {
     /*
     Returns the classpath seperator for the current os
@@ -520,7 +520,7 @@ wchar_t* MCCL::get_classpath_separator()
     }
 }
 
-bool MCCL::parse_rule_list(Json::JsonValue^ data, wchar_t* rule_string, MCCL::Option::MinecraftOptions options)
+bool MinecraftCpp::parse_rule_list(Json::JsonValue^ data, wchar_t* rule_string, MinecraftCpp::option::MinecraftOptions options)
 {
     /*
     Parse a list of rules
@@ -531,7 +531,7 @@ bool MCCL::parse_rule_list(Json::JsonValue^ data, wchar_t* rule_string, MCCL::Op
     }
     for each (auto var in data->get_value(System::String(rule_string).ToString())->get_value_list())
     {
-        if (!MCCL::parse_single_rule(var, options))
+        if (!MinecraftCpp::parse_single_rule(var, options))
         {
             return false;
         }
@@ -539,7 +539,7 @@ bool MCCL::parse_rule_list(Json::JsonValue^ data, wchar_t* rule_string, MCCL::Op
     return true;
 }
 
-bool MCCL::parse_single_rule(Json::JsonValue^ rule, MCCL::Option::MinecraftOptions options)
+bool MinecraftCpp::parse_single_rule(Json::JsonValue^ rule, MinecraftCpp::option::MinecraftOptions options)
 {
     /*
     Parse a single rule from the versions.json
@@ -605,7 +605,7 @@ bool MCCL::parse_single_rule(Json::JsonValue^ rule, MCCL::Option::MinecraftOptio
     return !returnvalue;
 }
 
-wchar_t* MCCL::get_library_path(wchar_t* name, wchar_t* path)
+wchar_t* MinecraftCpp::get_library_path(wchar_t* name, wchar_t* path)
 {
     /*
     Returns the path from a libname
@@ -665,7 +665,7 @@ wchar_t* MCCL::get_library_path(wchar_t* name, wchar_t* path)
     return libpath;
 }
 
-wchar_t* MCCL::get_natives(Json::JsonValue^ data)
+wchar_t* MinecraftCpp::get_natives(Json::JsonValue^ data)
 {
     /*
     Returns the native part from the json data
@@ -725,7 +725,7 @@ wchar_t* MCCL::get_natives(Json::JsonValue^ data)
     }   
 }
 
-wchar_t* MCCL::_get_jvm_platform_string()
+wchar_t* MinecraftCpp::_get_jvm_platform_string()
 {
     /*
     Get the name that is used the identify the platform
@@ -759,7 +759,7 @@ wchar_t* MCCL::_get_jvm_platform_string()
     return L"";
 }
 
-wchar_t* MCCL::replace_arguments(System::String^ argstr, Json::JsonValue^ versionData, wchar_t* path, MCCL::Option::MinecraftOptions options)
+wchar_t* MinecraftCpp::replace_arguments(System::String^ argstr, Json::JsonValue^ versionData, wchar_t* path, MinecraftCpp::option::MinecraftOptions options)
 {
     /*
     Replace all 20 placeholder in arguments with the needed value
@@ -783,13 +783,13 @@ wchar_t* MCCL::replace_arguments(System::String^ argstr, Json::JsonValue^ versio
     argstr = argstr->Replace("${game_assets}", System::String(JoinW({ path, L"assets", L"virtual", L"legacy" })).ToString());
     argstr = argstr->Replace("${auth_session}", System::String(options.get(L"token", L"{token}")).ToString());
     argstr = argstr->Replace("${library_directory}", System::String(JoinW({ path, L"libraries" })).ToString());
-    argstr = argstr->Replace("${classpath_separator}", System::String(MCCL::get_classpath_separator()).ToString());
+    argstr = argstr->Replace("${classpath_separator}", System::String(MinecraftCpp::get_classpath_separator()).ToString());
 
     pin_ptr<const wchar_t> wch_argstr = PtrToStringChars(argstr);
     return const_cast<wchar_t*>(wch_argstr);
 }
 
-wchar_t* MCCL::get_executable_path(wchar_t* jvm_version, wchar_t* minecraft_directory)
+wchar_t* MinecraftCpp::get_executable_path(wchar_t* jvm_version, wchar_t* minecraft_directory)
 {
     /*
     Returns the path to the executable. Returns None if none is found.
@@ -824,7 +824,7 @@ wchar_t* MCCL::get_executable_path(wchar_t* jvm_version, wchar_t* minecraft_dire
     return nullptr;
 }
 
-bool MCCL::install_libraries(Json::JsonValue^ data, wchar_t* path, CallbackNull callback)
+bool MinecraftCpp::install_libraries(Json::JsonValue^ data, wchar_t* path, CallbackNull callback)
 {
     /*
     Install all libraries
@@ -833,9 +833,9 @@ bool MCCL::install_libraries(Json::JsonValue^ data, wchar_t* path, CallbackNull 
     
     for each (auto var in data->get_value("libraries")->get_value_list())
     {
-        MCCL::Option::MinecraftOptions empty;
+        MinecraftCpp::option::MinecraftOptions empty;
         // Check, if the rules allow this lib for the current system
-        if (!MCCL::parse_rule_list(var, L"rules", empty))
+        if (!MinecraftCpp::parse_rule_list(var, L"rules", empty))
         {
             continue;
         }
@@ -925,7 +925,7 @@ bool MCCL::install_libraries(Json::JsonValue^ data, wchar_t* path, CallbackNull 
     return true;
 }
 
-bool MCCL::extract_natives_file(wchar_t* filename, wchar_t* extract_path, Json::JsonValue^ extract_data)
+bool MinecraftCpp::extract_natives_file(wchar_t* filename, wchar_t* extract_path, Json::JsonValue^ extract_data)
 {
     /*
     Unpack natives
@@ -968,7 +968,7 @@ bool MCCL::extract_natives_file(wchar_t* filename, wchar_t* extract_path, Json::
     return true;
 }
 
-bool MCCL::install_assets(Json::JsonValue^ data, wchar_t* path, CallbackNull callback)
+bool MinecraftCpp::install_assets(Json::JsonValue^ data, wchar_t* path, CallbackNull callback)
 {
     /*
     Install all assets
@@ -1015,7 +1015,7 @@ bool MCCL::install_assets(Json::JsonValue^ data, wchar_t* path, CallbackNull cal
     return true;
 }
 
-bool MCCL::install_jvm_runtime(wchar_t* jvm_version, wchar_t* minecraft_directory, CallbackNull callback)
+bool MinecraftCpp::install_jvm_runtime(wchar_t* jvm_version, wchar_t* minecraft_directory, CallbackNull callback)
 {
     /*
     Installs the given jvm runtime. callback is the same dict as in the install module.
@@ -1089,7 +1089,7 @@ bool MCCL::install_jvm_runtime(wchar_t* jvm_version, wchar_t* minecraft_director
     return true;
 }
 
-wchar_t* MCCL::get_arguments(Json::JsonValue^ data, Json::JsonValue^ versionData, wchar_t* path, MCCL::Option::MinecraftOptions options)
+wchar_t* MinecraftCpp::get_arguments(Json::JsonValue^ data, Json::JsonValue^ versionData, wchar_t* path, MinecraftCpp::option::MinecraftOptions options)
 {
     /*
     Returns all arguments from the version.json
@@ -1112,7 +1112,7 @@ wchar_t* MCCL::get_arguments(Json::JsonValue^ data, Json::JsonValue^ versionData
             // var could be the argument
             if (var->get_type() == Json::JsonTypes::String)
             {
-                arglist = StrDogW(arglist, MCCL::replace_arguments(var->to_string(), versionData, path, options));
+                arglist = StrDogW(arglist, MinecraftCpp::replace_arguments(var->to_string(), versionData, path, options));
                 arglist = StrDogW(arglist, L" ");
             }
             else
@@ -1120,7 +1120,7 @@ wchar_t* MCCL::get_arguments(Json::JsonValue^ data, Json::JsonValue^ versionData
                 // Sometimes  var["value"] is the argument
                 if (var["value"]->get_type() == Json::JsonTypes::String)
                 {
-                    arglist = StrDogW(arglist, MCCL::replace_arguments(var["value"]->to_string(), versionData, path, options));
+                    arglist = StrDogW(arglist, MinecraftCpp::replace_arguments(var["value"]->to_string(), versionData, path, options));
                     arglist = StrDogW(arglist, L" ");
                 }
                 // Sometimes var["value"] is a list of arguments
@@ -1153,7 +1153,7 @@ wchar_t* MCCL::get_arguments(Json::JsonValue^ data, Json::JsonValue^ versionData
             // var could be the argument
             if (var.Value->get_type() == Json::JsonTypes::String)
             {
-                arglist = StrDogW(arglist, MCCL::replace_arguments(var.Value->to_string(), versionData, path, options));
+                arglist = StrDogW(arglist, MinecraftCpp::replace_arguments(var.Value->to_string(), versionData, path, options));
                 arglist = StrDogW(arglist, L" ");
             }
             else
@@ -1161,7 +1161,7 @@ wchar_t* MCCL::get_arguments(Json::JsonValue^ data, Json::JsonValue^ versionData
                 // Sometimes  var["value"] is the argument
                 if (var.Value->operator[]("value")->get_type() == Json::JsonTypes::String)
                 {
-                    arglist = StrDogW(arglist, MCCL::replace_arguments(var.Value->operator[]("value")->to_string(), versionData, path, options));
+                    arglist = StrDogW(arglist, MinecraftCpp::replace_arguments(var.Value->operator[]("value")->to_string(), versionData, path, options));
                     arglist = StrDogW(arglist, L" ");
                 }
                 // Sometimes var["value"] is a list of arguments
@@ -1181,7 +1181,7 @@ wchar_t* MCCL::get_arguments(Json::JsonValue^ data, Json::JsonValue^ versionData
     return arglist;
 }
 
-wchar_t* MCCL::get_arguments_string(Json::JsonValue^ versionData, wchar_t* path, MCCL::Option::MinecraftOptions options)
+wchar_t* MinecraftCpp::get_arguments_string(Json::JsonValue^ versionData, wchar_t* path, MinecraftCpp::option::MinecraftOptions options)
 {
     /*
     Turns the argument string from the version.json into a list
@@ -1216,7 +1216,7 @@ wchar_t* MCCL::get_arguments_string(Json::JsonValue^ versionData, wchar_t* path,
     return arglist;
 }
 
-bool MCCL::Forge::install_forge_version(wchar_t* versionid, wchar_t* path, CallbackNull callback, wchar_t* java)
+bool MinecraftCpp::forge::install_forge_version(wchar_t* versionid, wchar_t* path, CallbackNull callback, wchar_t* java)
 {
     /*
     Installs a forge version. Fore more information look at the documentation.
@@ -1242,7 +1242,7 @@ bool MCCL::Forge::install_forge_version(wchar_t* versionid, wchar_t* path, Callb
     {
         if (var->FullName == "install_profile.json")
         {
-            array<unsigned char>^ f;
+            array<unsigned char>^ f = nullptr;
             f->Resize(f, 50000);
 
             var->Open()->Read(f, 0, 50000); //FIXME 50000 символов передлать в динамическиое вычисление кол-во символов
@@ -1298,7 +1298,7 @@ bool MCCL::Forge::install_forge_version(wchar_t* versionid, wchar_t* path, Callb
     return true;
 }
 
-bool MCCL::Forge::extract_file(System::IO::Compression::ZipArchive^ handler, wchar_t* zip_path, wchar_t* extract_path)
+bool MinecraftCpp::forge::extract_file(System::IO::Compression::ZipArchive^ handler, wchar_t* zip_path, wchar_t* extract_path)
 {
     /*
     Extract a file from a zip handler into the given path
@@ -1326,7 +1326,7 @@ bool MCCL::Forge::extract_file(System::IO::Compression::ZipArchive^ handler, wch
     return true;
 }
 
-System::String^ MCCL::Forge::get_data_library_path(wchar_t* libname, wchar_t* path)
+System::String^ MinecraftCpp::forge::get_data_library_path(wchar_t* libname, wchar_t* path)
 {
     /*
     Turns the libname into a path
@@ -1374,7 +1374,7 @@ System::String^ MCCL::Forge::get_data_library_path(wchar_t* libname, wchar_t* pa
     return System::String(libpath).ToString();
 }
 
-wchar_t* MCCL::Forge::get_jar_mainclass(wchar_t* path)
+wchar_t* MinecraftCpp::forge::get_jar_mainclass(wchar_t* path)
 {
     /*
     Returns the mainclass of a given jar
@@ -1391,7 +1391,7 @@ wchar_t* MCCL::Forge::get_jar_mainclass(wchar_t* path)
     return nullptr;
 }
 
-bool MCCL::Forge::forge_processors(Json::JsonValue^ data, wchar_t* minecraft_directory, wchar_t* lzma_path, wchar_t* installer_path, CallbackNull callback, wchar_t* java)
+bool MinecraftCpp::forge::forge_processors(Json::JsonValue^ data, wchar_t* minecraft_directory, wchar_t* lzma_path, wchar_t* installer_path, CallbackNull callback, wchar_t* java)
 {
     /*
     Run the processors of the install_profile.json
@@ -1500,7 +1500,7 @@ bool MCCL::Forge::forge_processors(Json::JsonValue^ data, wchar_t* minecraft_dir
     return true;
 }
 
-bool MCCL::ModPacks::install_mod_pack(wchar_t* versionid, wchar_t* path, CallbackNull callback)
+bool MinecraftCpp::modpacks::install_mod_pack(wchar_t* versionid, wchar_t* path, CallbackNull callback)
 {
 
     return false;

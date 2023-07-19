@@ -8,6 +8,8 @@
 #include <errno.h>  // for return values
 #include <cstring>
 
+#undef GetTempPath
+
 #define StrDogWA Additionals::String::strdogWA
 #define StrDogW Additionals::String::strdogW
 #define StrDogAW Additionals::String::strdogAW

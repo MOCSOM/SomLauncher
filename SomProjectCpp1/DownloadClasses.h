@@ -56,8 +56,6 @@
 #define _ZIP L".zip"
 #define _SEVEN_ZIP L".7z"
 
-//#define GetTempPath System::IO::Path::GetTempPath
-
 #define DownloadFile DDIC::Download::Files::download_file
 
 namespace DDIC {

@@ -11,9 +11,10 @@
 
 
 
-namespace MCCL {
-
-	namespace Option {
+namespace MinecraftCpp 
+{
+	namespace option 
+	{
 		struct MinecraftOptions
 		{
 			MinecraftOptions() {}
@@ -49,22 +50,24 @@ namespace MCCL {
 	wchar_t* get_minecraft_command__(
 		wchar_t* version,
 		wchar_t* minecraft_directory,
-		MCCL::Option::MinecraftOptions options);
+		MinecraftCpp::option::MinecraftOptions options);
 
 	bool start_minecraft(wchar_t* java_path = NULL, wchar_t* args = NULL);
 	wchar_t* get_classpath_separator();
-	bool parse_single_rule(Json::JsonValue^ rule, MCCL::Option::MinecraftOptions options);
-	bool parse_rule_list(Json::JsonValue^ data, wchar_t* rule_string, MCCL::Option::MinecraftOptions options);
+	bool parse_single_rule(Json::JsonValue^ rule, MinecraftCpp::option::MinecraftOptions options);
+	bool parse_rule_list(Json::JsonValue^ data, wchar_t* rule_string, MinecraftCpp::option::MinecraftOptions options);
 	wchar_t* get_library_path(wchar_t* name, wchar_t* path);
 	wchar_t* get_natives(Json::JsonValue^ data);
 	wchar_t* _get_jvm_platform_string();
-	wchar_t* replace_arguments(System::String^ argstr, Json::JsonValue^ versionData, wchar_t* path, MCCL::Option::MinecraftOptions options);
+	wchar_t* replace_arguments(System::String^ argstr, Json::JsonValue^ versionData, wchar_t* path, MinecraftCpp::option::MinecraftOptions options);
 	wchar_t* get_executable_path(wchar_t* jvm_version, wchar_t* minecraft_directory);
 	bool install_libraries(Json::JsonValue^ data, wchar_t* path, CallbackNull callback);
 	bool extract_natives_file(wchar_t* filename, wchar_t* extract_path, Json::JsonValue^ extract_data);
 	bool install_assets(Json::JsonValue^ data, wchar_t* path, CallbackNull callback);
 	bool install_jvm_runtime(wchar_t* jvm_version, wchar_t* minecraft_directory, CallbackNull callback = CallbackNull());
-	namespace Forge {
+
+	namespace forge 
+	{
 		bool install_forge_version(wchar_t* versionid, wchar_t* path, CallbackNull callback = CallbackNull(), wchar_t* java = NULL);
 		bool extract_file(System::IO::Compression::ZipArchive^ handler, wchar_t* zip_path, wchar_t* extract_path);
 		System::String^ get_data_library_path(wchar_t* libname, wchar_t* path);
@@ -83,12 +86,12 @@ namespace MCCL {
 		Json::JsonValue^ data,
 		Json::JsonValue^ versionData,
 		wchar_t* path,
-		MCCL::Option::MinecraftOptions options);
+		MinecraftCpp::option::MinecraftOptions options);
 
 	wchar_t* get_arguments_string(
 		Json::JsonValue^ versionData,
 		wchar_t* path,
-		MCCL::Option::MinecraftOptions options);
+		MinecraftCpp::option::MinecraftOptions options);
 
 	bool install_minecraft_version(
 		wchar_t* versionid,
@@ -109,12 +112,12 @@ namespace MCCL {
 		Json::JsonValue^ data,
 		wchar_t* path);
 
-	namespace ModPacks {
+	namespace modpacks 
+	{
 		bool install_mod_pack(wchar_t* versionid, wchar_t* path, CallbackNull callback = CallbackNull());
-
 	}
 
-	
+
 }
 
 

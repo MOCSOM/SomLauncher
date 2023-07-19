@@ -968,7 +968,7 @@ namespace SomLauncherMainWin {
 		void create_form_changeserv();
 
 		void start_minecraft_params();
-		void install_run_minecraft(System::String^ version, System::String^ loader_mame, System::String^ loader_version, System::String^ java, System::String^ mcdir, MCCL::Option::MinecraftOptions options);
+		void install_run_minecraft(System::String^ version, System::String^ loader_mame, System::String^ loader_version, System::String^ java, System::String^ mcdir, MinecraftCpp::option::MinecraftOptions options);
 
 		bool IsConfigExist();
 		void CreateConfig();

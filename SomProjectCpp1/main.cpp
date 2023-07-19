@@ -24,7 +24,7 @@ int main() {
 	System::Console::WriteLine(System::String(StrDogW(a, L"dadads")).ToString());
 	System::Console::Read();*/
 
-	//MCCL::Option::MinecraftOptions options;
+	//MinecraftCpp::option::MinecraftOptions options;
 	//options.customResolution = false;
 	//options.gameDirectory = JoinA({ getenv("APPDATA"), ".SomSomSom" });
 	//options.launcherName = L"1";
@@ -39,11 +39,11 @@ int main() {
 	//wchar_t* launch_varsion = L"1.12.2";
 
 	////DDIC::DownloadDeleteClass dd;
-	////MCCL::install_minecraft_version(L"1.12.2", options.gameDirectory);
-	//MCCL::Forge::install_forge_version(L"1.12.2-14.23.5.2860", options.gameDirectory);
-	//wchar_t* command = MCCL::get_minecraft_command__(launch_varsion, options.gameDirectory, options);
+	////MinecraftCpp::install_minecraft_version(L"1.12.2", options.gameDirectory);
+	//MinecraftCpp::forge::install_forge_version(L"1.12.2-14.23.5.2860", options.gameDirectory);
+	//wchar_t* command = MinecraftCpp::get_minecraft_command__(launch_varsion, options.gameDirectory, options);
 	//System::Console::WriteLine(System::String(command).ToString());
-	//MCCL::start_minecraft(L"", command);
+	//MinecraftCpp::start_minecraft(L"", command);
 
 	//CallbackDict ad;
 	//DDIC::Download::Files::download_file(L"https://launchermeta.mojang.com/v1/products/java-runtime/2ec0cc96c44e5a76b9c8b7c39df7210883d12871/all.json", NULL, ad);
