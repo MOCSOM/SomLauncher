@@ -233,29 +233,30 @@ Json::JsonValue^ MCCL::inherit_json(Json::JsonValue^ original_data, wchar_t* pat
     auto new_data = json_inherit.ParseFile(System::String(path_inh_json).ToString());
     for each(auto var in original_data->get_value()) 
     {
-        if (var->second->get_type() == Json::JsonTypes::ARRAY && new_data->get_value(var->first)->get_type() == Json::JsonTypes::ARRAY)
+        if (var.Value->get_type() == Json::JsonTypes::Array && new_data->get_value(var.Key)->get_type() == Json::JsonTypes::Array)
         {
-            new_data->get_value(var->first)->operator=(var->second + new_data->get_value(var->first));
+            new_data->get_value(var.Key)->operator=(var.Value + new_data->get_value(var.Key));
         }
-        else if (var->second->get_type() == Json::JsonTypes::OBJECT && new_data->get_value(var->first)->get_type() == Json::JsonTypes::OBJECT)
+        else if (var.Value->get_type() == Json::JsonTypes::Object && new_data->get_value(var.Key)->get_type() == Json::JsonTypes::Object)
         {
-            for each (auto variable in var->second->get_value())
+            for each (auto variable in var.Value->get_value())
             {
-                if (variable->second->get_type() == Json::JsonTypes::ARRAY)
+                if (variable.Value->get_type() == Json::JsonTypes::Array)
                 {
-                    new_data->get_value(var->first)->get_value(variable->first)->operator=(new_data->get_value(var->first)->get_value(variable->first) + variable->second);
+                    new_data->get_value(var.Key)->get_value(variable.Key)->operator=
+                        (new_data->get_value(var.Key)->get_value(variable.Key) + variable.Value);
                 }
             }
         }
         else
         {
-            if (new_data->is_exist(var->first))
+            if (new_data->is_exist(var.Key))
             {
-                new_data->get_value(var->first)->operator=(var->second);
+                new_data->get_value(var.Key)->operator=(var.Value);
             }
             else
             {
-                new_data->add_value(var->first, var->second);
+                new_data->add_value(var.Key, var.Value);
             }
         }
     }
@@ -319,7 +320,7 @@ wchar_t* MCCL::get_minecraft_command__(wchar_t* version, wchar_t* minecraft_dire
     }
 
     // Newer Versions have jvmArguments in version.json
-    if (data->get_value("arguments")->get_type() == Json::JsonTypes::OBJECT)
+    if (data->get_value("arguments")->get_type() == Json::JsonTypes::Object)
     {
         if (data->get_value("arguments")->is_exist("jvm"))
         {
@@ -556,31 +557,31 @@ bool MCCL::parse_single_rule(Json::JsonValue^ rule, MCCL::Option::MinecraftOptio
     {
         for each (auto var in rule["os"]->get_value())
         {
-            if (var->first == "name")
+            if (var.Key == "name")
             {
-                if (var->second->to_string() == System::String("windows").ToString() && System::String(OS) != System::String(L"Windows"))
+                if (var.Value->to_string() == System::String("windows").ToString() && System::String(OS) != System::String(L"Windows"))
                 {
                     return returnvalue;
                 }
-                else if (var->second->to_string() == System::String("osx").ToString() && System::String(OS) != System::String(L"Darwin"))
+                else if (var.Value->to_string() == System::String("osx").ToString() && System::String(OS) != System::String(L"Darwin"))
                 {
                     return returnvalue;
                 }
-                else if (var->second->to_string() == System::String("linux").ToString() && System::String(OS) != System::String(L"Linux"))
+                else if (var.Value->to_string() == System::String("linux").ToString() && System::String(OS) != System::String(L"Linux"))
                 {
                     return returnvalue;
                 }
             }
-            else if (var->first == System::String("arch").ToString())
+            else if (var.Key == System::String("arch").ToString())
             {
-                if (var->second->to_string() == System::String("x86").ToString() && System::String(ARCH) != System::String(L"x86"))
+                if (var.Value->to_string() == System::String("x86").ToString() && System::String(ARCH) != System::String(L"x86"))
                 {
                     return returnvalue;
                 }
             }
-            else if (var->first == System::String("version").ToString())
+            else if (var.Key == System::String("version").ToString())
             {
-                if (var->second->to_string() != System::String(OS).ToString())
+                if (var.Value->to_string() != System::String(OS).ToString())
                 {
                     return returnvalue;
                 }
@@ -591,11 +592,11 @@ bool MCCL::parse_single_rule(Json::JsonValue^ rule, MCCL::Option::MinecraftOptio
     {
         for each (auto var in rule["features"]->get_value())
         {
-            if (var->first == System::String("has_custom_resolution").ToString() && !options.get(L"customResolution", false))
+            if (var.Key == System::String("has_custom_resolution").ToString() && !options.get(L"customResolution", false))
             {
                 return returnvalue;
             }
-            else if (var->first == System::String("is_demo_user").ToString() && !options.get(L"demo", false))
+            else if (var.Key == System::String("is_demo_user").ToString() && !options.get(L"demo", false))
             {
                 return returnvalue;
             }
@@ -991,7 +992,23 @@ bool MCCL::install_assets(Json::JsonValue^ data, wchar_t* path, CallbackNull cal
     int count = 0;
     for each (auto var in assets_data->get_value("objects")->get_value())
     {
-        DownloadFile(StrDogW({ L"https://resources.download.minecraft.net/", var->second->get_value("hash")[0]->to_stringW(), var->second->get_value("hash")[1]->to_stringW(), L"/", var->second->get_value("hash")->to_stringW(), JoinW({path, L"assets", L"objects", var->second->get_value("hash")[0]->to_stringW(), var->second->get_value("hash")[1]->to_stringW(), var->second->get_value("hash")->to_stringW()}) }), NULL, callback);
+        DownloadFile(
+            StrDogW({ 
+                L"https://resources.download.minecraft.net/",
+                var.Value->get_value("hash")[0]->to_stringW(),
+                var.Value->get_value("hash")[1]->to_stringW(),
+                L"/",
+                var.Value->get_value("hash")->to_stringW(),
+                JoinW
+                ({
+                    path, L"assets", L"objects",
+                    var.Value->get_value("hash")[0]->to_stringW(),
+                    var.Value->get_value("hash")[1]->to_stringW(),
+                    var.Value->get_value("hash")->to_stringW()})
+                }),
+            NULL,
+            callback);
+
         ++count;
         //callback.get("setProgress", empty)(count)
     }
@@ -1031,22 +1048,22 @@ bool MCCL::install_jvm_runtime(wchar_t* jvm_version, wchar_t* minecraft_director
     int count = 0;
     for each (auto var in platform_manifest["files"]->get_value())
     {
-        pin_ptr<const wchar_t> wch_firs = PtrToStringChars(var->first);
+        pin_ptr<const wchar_t> wch_firs = PtrToStringChars(var.Key);
         wchar_t* current_path = JoinW({ base_path, const_cast<wchar_t*>(wch_firs)});
-        if (var->second["type"]->to_string() == System::String("file").ToString())
+        if (var.Value->get_value("type")->to_string() == System::String("file").ToString())
         {
             // Prefer downloading the compresses file
-            if (var->second["downloads"]->is_exist("lzma"))
+            if (var.Value->get_value("downloads")->is_exist("lzma"))
             {
-                DownloadFile(var->second["downloads"]["lzma"]["url"]->to_stringW(), current_path, callback, true);
+                DownloadFile(var.Value->get_value("downloads")["lzma"]["url"]->to_stringW(), current_path, callback, true);
             }
             else
             {
-                DownloadFile(var->second["downloads"]["lzma"]["url"]->to_stringW(), current_path, callback);
+                DownloadFile(var.Value->get_value("downloads")["lzma"]["url"]->to_stringW(), current_path, callback);
             }
 
             // Make files executable on unix systems
-            if (var->second["executable"])
+            if (var.Value->get_value("executable"))
             {   
                 if (System::IO::File::Exists(System::String(current_path).ToString()))
                 {
@@ -1054,11 +1071,11 @@ bool MCCL::install_jvm_runtime(wchar_t* jvm_version, wchar_t* minecraft_director
                 }
             }
         }
-        else if (var->second["type"]->to_string() == System::String("directory").ToString())
+        else if (var.Value->get_value("type")->to_string() == System::String("directory").ToString())
         {
             int outp = _wmkdir(current_path);
         }
-        else if (var->second["type"]->to_string() == System::String("link").ToString())
+        else if (var.Value->get_value("type")->to_string() == System::String("link").ToString())
         {
             //TODO os.symlink(value["target"], current_path)
         }
@@ -1079,7 +1096,7 @@ wchar_t* MCCL::get_arguments(Json::JsonValue^ data, Json::JsonValue^ versionData
     */
 
     wchar_t* arglist = NULL;
-    if (data->get_type() == Json::JsonTypes::ARRAY)
+    if (data->get_type() == Json::JsonTypes::Array)
     {
         for each (auto var in data->get_value_list())
         {
@@ -1093,7 +1110,7 @@ wchar_t* MCCL::get_arguments(Json::JsonValue^ data, Json::JsonValue^ versionData
                 continue;
             }
             // var could be the argument
-            if (var->get_type() == Json::JsonTypes::STRING)
+            if (var->get_type() == Json::JsonTypes::String)
             {
                 arglist = StrDogW(arglist, MCCL::replace_arguments(var->to_string(), versionData, path, options));
                 arglist = StrDogW(arglist, L" ");
@@ -1101,7 +1118,7 @@ wchar_t* MCCL::get_arguments(Json::JsonValue^ data, Json::JsonValue^ versionData
             else
             {
                 // Sometimes  var["value"] is the argument
-                if (var["value"]->get_type() == Json::JsonTypes::STRING)
+                if (var["value"]->get_type() == Json::JsonTypes::String)
                 {
                     arglist = StrDogW(arglist, MCCL::replace_arguments(var["value"]->to_string(), versionData, path, options));
                     arglist = StrDogW(arglist, L" ");
@@ -1111,8 +1128,8 @@ wchar_t* MCCL::get_arguments(Json::JsonValue^ data, Json::JsonValue^ versionData
                 {
                     for each (auto v in var["value"]->get_value())
                     {
-                        wchar_t* val = v->second->to_stringW();
-                        val = replace_arguments(v->second->to_string(), versionData, path, options);
+                        wchar_t* val = v.Value->to_stringW();
+                        val = replace_arguments(v.Value->to_string(), versionData, path, options);
                         arglist = StrDogW(arglist, val);
                         arglist = StrDogW(arglist, L" ");
                     }
@@ -1125,35 +1142,35 @@ wchar_t* MCCL::get_arguments(Json::JsonValue^ data, Json::JsonValue^ versionData
         for each (auto var in data->get_value())
         {
             // Rules might has 2 different names in different versions.json
-            if (!parse_rule_list(var->second, L"compatibilityRules", options))
+            if (!parse_rule_list(var.Value, L"compatibilityRules", options))
             {
                 continue;
             }
-            if (!parse_rule_list(var->second, L"rules", options))
+            if (!parse_rule_list(var.Value, L"rules", options))
             {
                 continue;
             }
             // var could be the argument
-            if (var->second->get_type() == Json::JsonTypes::STRING)
+            if (var.Value->get_type() == Json::JsonTypes::String)
             {
-                arglist = StrDogW(arglist, MCCL::replace_arguments(var->second->to_string(), versionData, path, options));
+                arglist = StrDogW(arglist, MCCL::replace_arguments(var.Value->to_string(), versionData, path, options));
                 arglist = StrDogW(arglist, L" ");
             }
             else
             {
                 // Sometimes  var["value"] is the argument
-                if (var->second["value"]->get_type() == Json::JsonTypes::STRING)
+                if (var.Value->operator[]("value")->get_type() == Json::JsonTypes::String)
                 {
-                    arglist = StrDogW(arglist, MCCL::replace_arguments(var->second["value"]->to_string(), versionData, path, options));
+                    arglist = StrDogW(arglist, MCCL::replace_arguments(var.Value->operator[]("value")->to_string(), versionData, path, options));
                     arglist = StrDogW(arglist, L" ");
                 }
                 // Sometimes var["value"] is a list of arguments
                 else
                 {
-                    for each (auto v in var->second["value"]->get_value())
+                    for each (auto v in var.Value->operator[]("value")->get_value())
                     {
-                        wchar_t* val = v->second->to_stringW();
-                        val = replace_arguments(v->second->to_string(), versionData, path, options);
+                        wchar_t* val = v.Value->to_stringW();
+                        val = replace_arguments(v.Value->to_string(), versionData, path, options);
                         arglist = StrDogW(arglist, val);
                         arglist = StrDogW(arglist, L" ");
                     }
@@ -1389,13 +1406,13 @@ bool MCCL::Forge::forge_processors(Json::JsonValue^ data, wchar_t* minecraft_dir
 
     for each (auto var in data["data"]->get_value())
     {
-        if (var->second["client"]->to_string()->StartsWith("[") && var->second["client"]->to_string()->EndsWith("]"))
+        if (var.Value->get_value("client")->to_string()->StartsWith("[") && var.Value->get_value("client")->to_string()->EndsWith("]"))
         {
-            argument_vars["{" + var->first + "}"]->operator=(get_data_library_path(var->second["client"]->to_stringW(), path));
+            argument_vars["{" + var.Key + "}"]->operator=(get_data_library_path(var.Value->get_value("client")->to_stringW(), path));
         }
         else
         {
-            argument_vars["{" + var->first + "}"]->operator=(var->second["client"]);
+            argument_vars["{" + var.Key + "}"]->operator=(var.Value->get_value("client"));
         }
     }
     wchar_t* root_path = JoinW({ Additionals::TempFile::get_tempdir_SYSTEM(), StrDogW(L"forge-root-", const_cast<wchar_t*>(wch_rand)) });
@@ -1460,7 +1477,7 @@ bool MCCL::Forge::forge_processors(Json::JsonValue^ data, wchar_t* minecraft_dir
         {
             for (int i = 0; i < command.Count; i++)
             {
-                command[i] = command[i]->Replace(var2->first, var2->second->to_string());
+                command[i] = command[i]->Replace(var2.Key, var2.Value->to_string());
             }
         }
 

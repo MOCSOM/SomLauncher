@@ -3,14 +3,19 @@
 //#include "Json.h"
 //#include "DownloadClasses.h"
 #include "Minecraftus.h"
-#include "CallbackDict.h"
+//#include "CallbackDict.h"
+
 
 int main() {
 
 	/*Json::JsonParcer json_parcer;
 	auto data = json_parcer.ParseFile("DATA.json");
 
-	System::Console::WriteLine(data->is_exist("launcher"));
+	System::Console::WriteLine(data->get_count());
+
+	
+
+	data->SaveJsonToFile("DATA2.json", 4);
 
 	System::Console::Read();*/
 
@@ -29,7 +34,6 @@ int main() {
 	//options.executablePath = JoinA({ getenv("APPDATA"), ".SomSomSom", "jdk8u372-b07", "bin", "java.exe"});
 	//options.uuid = L"uuu";
 	//options.token = L"uuu";
-	//
 
 	///* minecraft_version = 1.12.2 + "-" + forge_version = 14.23.5.2860 */
 	//wchar_t* launch_varsion = L"1.12.2";
@@ -45,6 +49,7 @@ int main() {
 	//DDIC::Download::Files::download_file(L"https://launchermeta.mojang.com/v1/products/java-runtime/2ec0cc96c44e5a76b9c8b7c39df7210883d12871/all.json", NULL, ad);
 
 	//System::Console::Read();
+
 
 	using namespace SomLauncherMainWin;
 	System::Windows::Forms::Application::EnableVisualStyles();

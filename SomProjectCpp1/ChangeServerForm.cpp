@@ -81,7 +81,7 @@ System::Void SomLauncherMainWin::ChangeServerForm::button_cancel_Click(System::O
 
 System::Void SomLauncherMainWin::ChangeServerForm::button_apply_Click(System::Object^ sender, System::EventArgs^ e)
 {
-    System::Console::WriteLine("Server saved");
+    // TODO: Вставить функцию из Json.h которая сохраняет в файл
 
     Json::JsonParcer json_config;
     auto config_parce = json_config.ParseFile(config_path);
@@ -90,5 +90,9 @@ System::Void SomLauncherMainWin::ChangeServerForm::button_apply_Click(System::Ob
     System::Console::Write("Server is: ");
     System::Console::WriteLine(config_parce["user"]["server"]->to_string());
 
-    System::IO::File::WriteAllText(config_path, config_parce->to_string());
+    config_parce->SaveJsonToFile(config_path, 4);
+
+    //System::IO::File::WriteAllText(config_path, config_parce->to_string());
+
+    System::Console::WriteLine("Server saved");
 }

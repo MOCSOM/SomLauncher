@@ -4,6 +4,11 @@
 #include <cliext/map>
 #include <ctype.h>
 
+Json::JsonArray::JsonArray(): Json::JsonValue(JsonTypes::Array) 
+{
+	_values = gcnew System::Collections::Generic::List<Json::JsonValue^>;
+}
+
 Json::JsonArray::~JsonArray()
 {
 	for each (auto value in _values) 
@@ -14,16 +19,16 @@ Json::JsonArray::~JsonArray()
 
 void Json::JsonArray::add_value(Json::JsonValue^ value)
 {
-	if (value->get_type() == Json::JsonTypes::ARRAY)
+	if (value->get_type() == Json::JsonTypes::Array)
 	{
 		for each (auto var in value->get_value_list())
 		{
-			_values.Add(var);
+			_values->Add(var);
 		}
 	}
 	else
 	{
-		_values.Add(value);
+		_values->Add(value);
 	}
 }
 
@@ -31,7 +36,7 @@ void Json::JsonArray::add_value_list(Json::JsonArray^ value)
 {
 	for each (auto var in value->get_value_list())
 	{
-		_values.Add(var);
+		_values->Add(var);
 	}
 }
 
@@ -51,7 +56,7 @@ Json::JsonValue^ Json::JsonArray::FindValueInJsonValue(Json::JsonValue^ jsonValu
 	return this;
 }
 
-System::Collections::Generic::List<Json::JsonValue^>% Json::JsonArray::get_value_list()
+System::Collections::Generic::List<Json::JsonValue^>^% Json::JsonArray::get_value_list()
 {
 	return _values;
 }
@@ -73,8 +78,8 @@ Json::JsonValue^ Json::JsonArray::get_value(System::String^ key)
 
 Json::JsonValue^ Json::JsonArray::operator=(Json::JsonValue^ value)
 {
-	_values.Clear();
-	_values.Add(value);
+	_values->Clear();
+	_values->Add(value);
 
 	return this;
 }
@@ -119,11 +124,11 @@ Json::JsonValue^ Json::JsonArray::operator[](System::String^ key)
 void Json::JsonArray::Print()
 {
 	System::Console::Write("[");
-	for (int i = 0; i < _values.Count; ++i) 
+	for (int i = 0; i < _values->Count; ++i) 
 	{
 		_values[i]->Print();
 
-		if (i != _values.Count - 1) 
+		if (i != _values->Count - 1) 
 		{
 			System::Console::Write(", ");
 		}
@@ -135,7 +140,7 @@ System::String^ Json::JsonArray::to_string()
 {
 	System::String^ result = "[";
 
-	for (int i = 0; i < _values.Count; ++i) 
+	for (int i = 0; i < _values->Count; ++i) 
 	{
 		if (i > 0) 
 			result += ",";
@@ -152,7 +157,7 @@ wchar_t* Json::JsonArray::to_stringW()
 {
 	wchar_t* result = L"[";
 	//wchar_t* val_wcr;
-	for (int i = 0; i < _values.Count; ++i) 
+	for (int i = 0; i < _values->Count; ++i) 
 	{
 		if (i > 0) 
 			result = StrDogW(result, L",");
@@ -166,10 +171,32 @@ wchar_t* Json::JsonArray::to_stringW()
 	return result;
 }
 
+void Json::JsonArray::_JsonValueToStringHelper(Json::JsonValue^ json_value, System::Text::StringBuilder^ builder, int current_indent, int indent)
+{
+	builder->Append("[\n");
+	for (int i = 0; i < json_value->get_count(); i++)
+	{
+		_Indent(builder, current_indent + indent);
+		_JsonValueToStringHelper(json_value[i], builder, current_indent + indent, indent);
+		if (i != json_value->get_count() - 1)
+		{
+			builder->Append(",");
+		}
+		builder->Append("\n");
+	}
+	_Indent(builder, current_indent);
+	builder->Append("]");
+}
+
 //cliext::map<System::String^, Json::JsonValue^> Json::JsonObject::operator=(cliext::map<System::String^, Json::JsonValue^> value)
 //{
 //    return _values = value;
 //}
+
+Json::JsonObject::JsonObject() : Json::JsonValue(Json::JsonTypes::Object)
+{
+	_values = gcnew System::Collections::Generic::Dictionary<System::String^, Json::JsonValue^>;
+}
 
 Json::JsonValue^ Json::JsonObject::operator[](wchar_t*& key)
 {
@@ -177,7 +204,7 @@ Json::JsonValue^ Json::JsonObject::operator[](wchar_t*& key)
 	{
 		for each (auto value in _values) 
 		{
-			Json::JsonValue^ result = _FindValueInJsonValue(value->second, System::String(key).ToString());
+			Json::JsonValue^ result = _FindValueInJsonValue(value.Value, System::String(key).ToString());
 
 			if (result != this) 
 			{
@@ -196,7 +223,7 @@ Json::JsonValue^ Json::JsonObject::operator[](System::String^ key)
 	{
 		for each (auto value in _values) 
 		{
-			Json::JsonValue^ result = _FindValueInJsonValue(value->second, key);
+			Json::JsonValue^ result = _FindValueInJsonValue(value.Value, key);
 
 			if (result != this) 
 			{
@@ -216,12 +243,12 @@ void Json::JsonObject::Print()
 	for each (auto kv in _values) 
 	{
 		System::Console::Write("\"");
-		System::Console::Write(kv->first);
+		System::Console::Write(kv.Key);
 		System::Console::Write("\": ");
 
-		kv->second->Print();
+		kv.Value->Print();
 
-		if (i != _values.size() - 1) 
+		if (i != _values->Count - 1) 
 		{
 			System::Console::Write(", ");
 		}
@@ -252,7 +279,7 @@ Json::JsonValue^ Json::JsonObject::get_value(System::String^ key)
 	{
 		for each (auto value in _values) 
 		{
-			Json::JsonValue^ result = _FindValueInJsonValue(value->second, key);
+			Json::JsonValue^ result = _FindValueInJsonValue(value.Value, key);
 			if (result != this) 
 			{
 				return result;
@@ -263,9 +290,21 @@ Json::JsonValue^ Json::JsonObject::get_value(System::String^ key)
 	return _values[key];
 }
 
-cliext::map<System::String^, Json::JsonValue^> Json::JsonObject::get_value()
+//cliext::map<System::String^, Json::JsonValue^> Json::JsonObject::get_value()
+//{
+//	return _values;
+//}
+
+System::Collections::Generic::Dictionary<System::String^, Json::JsonValue^>^ Json::JsonObject::get_value()
 {
-	return _values;
+	auto value_return = gcnew System::Collections::Generic::Dictionary<System::String^, Json::JsonValue^>;
+
+	for each (auto var in _values)
+	{
+		value_return->Add(var.Key, var.Value);
+	}
+
+	return value_return;
 }
 
 System::String^ Json::JsonObject::get_pair(System::String^ key)
@@ -301,16 +340,16 @@ System::String^ Json::JsonObject::to_string()
 		if (!first)
 			builder->Append(",");
 
-		System::String^ key = var->first->ToString();
+		System::String^ key = var.Key->ToString();
 		System::String^ value;
 
-		if (var->second->get_type() == Json::JsonTypes::STRING)
+		if (var.Value->get_type() == Json::JsonTypes::String)
 		{
-			value = "\"" + key + "\":" + var->second->_as_string();
+			value = "\"" + key + "\":" + var.Value->_as_string();
 		}
 		else
 		{
-			value = "\"" + key + "\":" + var->second->to_string();
+			value = "\"" + key + "\":" + var.Value->to_string();
 		}
 
 		builder->Append(value);
@@ -327,7 +366,7 @@ wchar_t* Json::JsonObject::to_stringW()
 	wchar_t* result = L"{";
 	bool first = true;
 
-	for (auto it = _values.begin(); it != _values.end(); ++it) 
+	for each(auto it in _values) 
 	{
 		if (!first) 
 			result = StrDogW(result, L",");
@@ -344,6 +383,35 @@ wchar_t* Json::JsonObject::to_stringW()
 	result = StrDogW(result, L"}");
 
 	return result;
+}
+
+int Json::JsonObject::get_count()
+{
+	return this->GetSize();
+}
+
+void Json::JsonObject::_JsonValueToStringHelper(Json::JsonValue^ json_value, System::Text::StringBuilder^ builder, int current_indent, int indent)
+{
+	builder->Append("{\n");
+	int i = 0;
+
+	for each (auto kvp in json_value->get_value())
+	{
+		_Indent(builder, current_indent + indent);
+
+		builder->Append("\"" + kvp.Key + "\": ");
+
+		kvp.Value->_JsonValueToStringHelper(kvp.Value, builder, current_indent + indent, indent);
+
+		if (i != json_value->get_count() - 1)
+		{
+			builder->Append(",");
+		}
+		builder->Append("\n");
+		++i;
+	}
+	_Indent(builder, current_indent);
+	builder->Append("}");
 }
 
 Json::JsonValue^ Json::JsonParcer::ParseFile(wchar_t* filename)
@@ -384,6 +452,13 @@ Json::JsonValue^ Json::JsonParcer::ParseJson(System::String^ json_str)
 {
 	_pos = 0;
 	return ParseValue(json_str);
+}
+
+void Json::JsonValue::SaveJsonToFile(System::String^ file_name, int indent)
+{
+	System::IO::StreamWriter^ file = System::IO::File::CreateText(file_name);
+	file->WriteLine(_JsonValueToString(indent));
+	file->Close();
 }
 
 void Json::JsonParcer::SkipWhitespace(System::String^ json_str)
@@ -639,6 +714,7 @@ System::String^ Json::JsonParcer::ParseUnicode(System::String^ json_str)
 	return result;
 }
 
+
 Json::JsonValue^ Json::JsonParcer::ParseArray(System::String^ json_str)
 {
 	if (json_str[_pos] != '[') 
@@ -756,19 +832,6 @@ Json::JsonValue^ Json::JsonParcer::ParseObject(System::String^ json_str)
 	}
 }
 
-Json::JsonValue^ Json::JsonParcer::Parse(System::String^ json_str)
-{
-	_pos = 0;
-	SkipWhitespace(json_str);
-
-	Json::JsonValue^ value = ParseValue(json_str);
-
-	if (value == nullptr) 
-	{
-		System::Console::WriteLine("Failed to parse JSON string: ", json_str, "\n");
-	}
-	return value;
-}
 
 Json::JsonValue^ Json::JsonNumber::operator=(double^ value)
 {
@@ -798,6 +861,11 @@ int Json::JsonNumber::to_int()
 	return System::Convert::ToInt32(_value);
 }
 
+void Json::JsonNumber::_JsonValueToStringHelper(Json::JsonValue^ json_value, System::Text::StringBuilder^ builder, int current_indent, int indent)
+{
+	builder->Append(json_value->to_string());
+}
+
 Json::JsonValue^ Json::JsonString::operator+(Json::JsonValue^ value)
 {
 	_value += value->to_string();
@@ -816,14 +884,35 @@ Json::JsonValue^ Json::JsonString::operator=(Json::JsonValue^ value)
 	return this;
 }
 
-cliext::map<System::String^, Json::JsonValue^> Json::JsonValue::get_value()
+void Json::JsonString::_JsonValueToStringHelper(Json::JsonValue^ json_value, System::Text::StringBuilder^ builder, int current_indent, int indent)
 {
-	return cliext::map<System::String^, Json::JsonValue^>();
+	builder->Append("\"" + json_value->to_string() + "\"");
 }
 
-System::Collections::Generic::List<Json::JsonValue^>% Json::JsonValue::get_value_list()
+//cliext::map<System::String^, Json::JsonValue^> Json::JsonValue::get_value()
+//{
+//	return cliext::map<System::String^, Json::JsonValue^>();
+//}
+
+Json::JsonValue^ Json::JsonValue::operator=(Json::JsonValue^ value)
 {
-	return System::Collections::Generic::List<Json::JsonValue^>();
+	//this->get_value() = value->get_value();
+	this->get_value()->Clear();
+	for each (auto var in value->get_value())
+	{
+		this->get_value()->Add(var.Key, var.Value);
+	}
+	return this;
+}
+
+System::Collections::Generic::Dictionary<System::String^, Json::JsonValue^>^ Json::JsonValue::get_value()
+{
+	return gcnew System::Collections::Generic::Dictionary<System::String^, Json::JsonValue^>;
+}
+
+System::Collections::Generic::List<Json::JsonValue^>^% Json::JsonValue::get_value_list()
+{
+	return gcnew System::Collections::Generic::List<Json::JsonValue^>;
 }
 
 //Json::JsonValue^% Json::JsonValue::get_value(System::String^ key)
@@ -840,4 +929,31 @@ void Json::JsonValue::add_value(System::String^ key, Json::JsonValue^ value){}
 Json::JsonTypes^ Json::JsonValue::get_type()
 {
 	return _type;
+}
+
+System::String^ Json::JsonValue::_JsonValueToString(int indent)
+{
+	System::Text::StringBuilder^ builder = gcnew System::Text::StringBuilder();
+	_JsonValueToStringHelper(this, builder, 0, indent);
+	return builder->ToString();
+}
+
+void Json::JsonValue::_JsonValueToStringHelper(Json::JsonValue^ jsonValue, System::Text::StringBuilder^ builder, int current_indent, int indent){}
+
+void Json::JsonValue::_Indent(System::Text::StringBuilder^ builder, int indent)
+{
+	for (int i = 0; i < indent; ++i)
+	{
+		builder->Append(" ");
+	}
+}
+
+void Json::JsonNull::_JsonValueToStringHelper(Json::JsonValue^ json_value, System::Text::StringBuilder^ builder, int current_indent, int indent)
+{
+	builder->Append(json_value->to_string());
+}
+
+void Json::JsonBool::_JsonValueToStringHelper(Json::JsonValue^ json_value, System::Text::StringBuilder^ builder, int current_indent, int indent)
+{
+	builder->Append(json_value->to_string());
 }
