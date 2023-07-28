@@ -423,8 +423,8 @@ wchar_t* MinecraftCpp::get_libraries(Json::JsonValue* data, wchar_t* path)
     Returns the argument with all libs that come after -cp
     */
     wchar_t* classpath_seperator = MinecraftCpp::get_classpath_separator();
-    wchar_t* libstr;
-    wchar_t* native;
+    wchar_t* libstr = nullptr;
+    wchar_t* native = nullptr;
     MinecraftCpp::option::MinecraftOptions empty;
     int debug = 0;
     if ((*data)["libraries"]->get_count() == 1)
@@ -541,11 +541,13 @@ wchar_t* MinecraftCpp::get_classpath_separator()
     */
     if (std::wstring(OS) == std::wstring(L"Windows"))
     {
-        return const_cast<wchar_t*>(std::wstring(L";").c_str());
+        wchar_t* ret = const_cast<wchar_t*>(L";");
+        return ret;
     }
     else
     {
-        return const_cast<wchar_t*>(std::wstring(L":").c_str());
+        wchar_t* ret = const_cast<wchar_t*>(L":");
+        return ret;
     }
 }
 
@@ -756,7 +758,7 @@ wchar_t* MinecraftCpp::_get_jvm_platform_string()
     /*
     Get the name that is used the identify the platform
     */
-    if (std::wstring(OS) == std::wstring(L"Windows"))
+    if (std::wstring(OS) == std::wstring(L"windows"))
     {
         if (std::wstring(ARCH) == std::wstring(L"x86"))
         {
@@ -767,7 +769,7 @@ wchar_t* MinecraftCpp::_get_jvm_platform_string()
             return const_cast<wchar_t*>(L"windows-x64");
         }
     }
-    else if (std::wstring(OS) == std::wstring(L"Linux"))
+    else if (std::wstring(OS) == std::wstring(L"linux"))
     {
         if (std::wstring(ARCH) == std::wstring(L"x86"))
         {
@@ -778,7 +780,7 @@ wchar_t* MinecraftCpp::_get_jvm_platform_string()
             return const_cast<wchar_t*>(L"linux");
         }
     }
-    else if (std::wstring(OS) == std::wstring(L"Darwin"))
+    else if (std::wstring(OS) == std::wstring(L"mac"))
     {
         return const_cast<wchar_t*>(L"mac-os");
     }
@@ -840,7 +842,8 @@ wchar_t* MinecraftCpp::get_executable_path(wchar_t* jvm_version, wchar_t* minecr
     {
         if (!std::filesystem::is_directory(java_w_path))
         {
-            return const_cast<wchar_t*>(java_w_path.c_str());
+            wchar_t* ret = const_cast<wchar_t*>(java_w_path.c_str());
+            return ret;
         }
         else
         {
@@ -1260,7 +1263,7 @@ bool MinecraftCpp::forge::install_forge_version(wchar_t* versionid, wchar_t* pat
 
     // Read the install_profile.json
     Json::JsonParcer json_parcer;
-    Json::JsonValue* version_data;
+    Json::JsonValue* version_data = nullptr;
 
     for (auto& var : zArchive.entries)
     {
@@ -1461,8 +1464,8 @@ bool MinecraftCpp::forge::forge_processors(
     (*argument_vars)["{ROOT}"]->operator=(std::wstring(root_path));
     (*argument_vars)["{SIDE}"]->operator=("client");
 
-    std::wstring classpath_seperator = nullptr;
-    if (std::wstring(OS) == std::wstring(L"Windows"))
+    std::wstring classpath_seperator = L"";
+    if (std::wstring(OS) == std::wstring(L"windows"))
     {
         classpath_seperator = L";";
     }
