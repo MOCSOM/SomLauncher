@@ -1,0 +1,39 @@
+//{
+//	"servers":["Olds Tut?","Create Aeronautics","Vanilla","GregTech"],
+//	"java":["8","17","17",""],
+//	"core":["forge","fabric","fabric",""],
+//	"version":["1.12.2","1.18.2","1.20.0","1.18.2"],
+//	"loaderVersion":["","","",""]
+//}
+{
+	"servers":[
+	{
+		"name":"Olds Tut?",
+		"java":"8",
+		"core":"forge",
+		"version":"1.12.2",
+		"loaderVersion":""
+	},
+	{
+		"name":"Create Aeronautics",
+		"java":"17",
+		"core":"fabric",
+		"version":"1.18.2",
+		"loaderVersion":""
+	},
+	{
+		"name":"Vanilla",
+		"java":"8",
+		"core":"fabric",
+		"version":"1.20.0",
+		"loaderVersion":""
+	},
+	{
+		"name":"GregTech",
+		"java":"8",
+		"core":"",
+		"version":"1.18.2",
+		"loaderVersion":""
+	}
+	]
+}
