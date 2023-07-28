@@ -138,7 +138,7 @@ std::string DDIC::Download::Files::_get_java_path(wchar_t* dir)
             return var;
         }
     }
-    return nullptr;
+    return "";
 }
 
 wchar_t* DDIC::Download::Java::install(wchar_t* version, wchar_t* path, wchar_t* operating_system, wchar_t* arch, wchar_t* impl, bool jre)
