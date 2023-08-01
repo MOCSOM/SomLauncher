@@ -44,7 +44,7 @@
    <string>SomLauncherMainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QFrame" name="frame_topslidemenu">
+   <widget class="HoveredFrame" name="frame_topslidemenu">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -120,6 +120,19 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <widget class="ClickableLabel" name="label_profile">
+        <property name="geometry">
+         <rect>
+          <x>60</x>
+          <y>90</y>
+          <width>81</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Профиль  ⯆</string>
+        </property>
+       </widget>
       </widget>
      </item>
     </layout>
@@ -175,7 +188,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>PushButton</string>
+            <string>Играть</string>
            </property>
           </widget>
          </item>
@@ -236,21 +249,7 @@
      <layout class="QGridLayout" name="gridLayout_3"/>
     </widget>
    </widget>
-   <widget class="ClickableLabel" name="label_4">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>30</y>
-      <width>49</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>TextLabel</string>
-    </property>
-   </widget>
    <zorder>stackedWidget_bottommenu</zorder>
-   <zorder>label_4</zorder>
    <zorder>frame_topslidemenu</zorder>
   </widget>
  </widget>
@@ -259,7 +258,13 @@
   <customwidget>
    <class>ClickableLabel</class>
    <extends>QLabel</extends>
-   <header>ClickableLabel.h</header>
+   <header>../../../QObjects/ClickableLabel.h</header>
+  </customwidget>
+  <customwidget>
+   <class>HoveredFrame</class>
+   <extends>QFrame</extends>
+   <header>../../../QObjects/HoveredFrame.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>

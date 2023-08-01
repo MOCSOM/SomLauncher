@@ -12,7 +12,7 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget *parent)
 
 	connect(ui.pushButton_startgame, &QPushButton::released, this, &SomLauncherMainWindow::onClickpushButton_startgame);
 
-	connect(ui.label_4, &ClickableLabel::clicked, this, &SomLauncherMainWindow::mouseEnterframe_topslidemenu);
+	connect(ui.label_profile, &ClickableLabel::clicked, this, &SomLauncherMainWindow::mouseEnterframe_topslidemenu);
 
 	//Проверка и создание конфига
 	if (!SomLauncherMainWindow::IsConfigExist())

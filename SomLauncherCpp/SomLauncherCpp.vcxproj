@@ -178,7 +178,7 @@
     <ClInclude Include="Json\Json.h" />
     <ClInclude Include="Minecraft\Minecraftus.h" />
     <QtMoc Include="QObjects\ClickableLabel.h" />
-    <ClInclude Include="QObjects\HoveredFrame.h" />
+    <QtMoc Include="QObjects\HoveredFrame.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
