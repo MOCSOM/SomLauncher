@@ -24,8 +24,8 @@
 #pragma comment(lib, "Urlmon.lib")
 #pragma comment(lib, "User32.lib")
 
-#include "CallbackDict.h"
-#include "Additionals.h"
+#include "../Callbacks/CallbackDict.h"
+#include "../Additionals/Additionals.h"
 
 #if defined(_WIN32) || defined(_WIN64)
 #define OS L"windows"
@@ -74,7 +74,7 @@ namespace DDIC
 		{
 			//bool _CreateDirectoryIfNotExists(const std::wstring& path);
 
-			wchar_t* download_file(const wchar_t* s_url, const wchar_t* d_file = nullptr, CallbackNull callback = CallbackNull(), bool lzma_compressed = false);
+			std::wstring download_file(const wchar_t* s_url, const wchar_t* d_file = nullptr, CallbackNull callback = CallbackNull(), bool lzma_compressed = false);
 			bool download_all_files(wchar_t* s_url_dir, CallbackNull callback);
 			int _get_java_exist_ver(wchar_t* direct);
 			std::string _get_java_path(const wchar_t* dir);
@@ -103,14 +103,14 @@ namespace DDIC
 				bool jre = false);
 
 			wchar_t* _decompress_archive(
-				wchar_t* repo_root,
+				const wchar_t* repo_root,
 				wchar_t* file_ending,
 				wchar_t* destination_folder);
 
 			bool check_system_verison_java(wchar_t* version);
 			bool check_downloaded_version_java(wchar_t* path);
 
-			std::string _get_normalized_compressed_file_ext(wchar_t* file);
+			std::string _get_normalized_compressed_file_ext(const wchar_t* file);
 			wchar_t* normalize_version(wchar_t* version);
 			std::string expand_user(std::string path);
 		}

@@ -26,48 +26,60 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CallbackDict.cpp">
+    <ClCompile Include="Additionals\Additionals.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DownloadClasses.cpp">
+    <ClCompile Include="Form\MainWindowExtensions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Json.cpp">
+    <ClCompile Include="Form\SomLauncherMainWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SomDict.cpp">
+    <ClCompile Include="Callbacks\CallbackDict.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SomLauncherMainWindow.cpp">
+    <ClCompile Include="Json\Json.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Additionals.cpp">
+    <ClCompile Include="Minecraft\Minecraftus.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Minecraftus.cpp">
+    <ClCompile Include="QObjects\ClickableLabel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="QObjects\HoveredFrame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Web\DownloadClasses.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CallbackDict.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DownloadClasses.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Json.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SomDict.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Additionals.h">
+    <ClInclude Include="Additionals\Additionals.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Minecraftus.h">
+    <ClInclude Include="Callbacks\CallbackDict.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Json\Json.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Minecraftus.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="QObjects\HoveredFrame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Web\DownloadClasses.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="qzipreader_p.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="qzipwriter_p.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -84,23 +96,26 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="SomLauncherMainWindow.h">
+    <ResourceCompile Include="Form\SomLauncherCpp.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="Form\SomLauncherMainWindow.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="QObjects\ClickableLabel.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
-    <QtRcc Include="SomLauncherMainWindow.qrc">
+    <QtRcc Include="Form\SomLauncherMainWindow.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="SomLauncherMainWindow.ui">
+    <QtUic Include="Form\SomLauncherMainWindow.ui">
       <Filter>Form Files</Filter>
     </QtUic>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="SomLauncherCpp.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
   </ItemGroup>
 </Project>

@@ -2,7 +2,7 @@
 
 //#include <cliext/vector>
 //#include <cliext/map>
-#include <ctype.h>
+//#include <ctype.h>
 
 Json::JsonArray::JsonArray(): Json::JsonValue(JsonTypes::Array) 
 {
@@ -230,7 +230,7 @@ Json::JsonTypes Json::JsonObject::get_type()
 
 Json::JsonValue* Json::JsonObject::operator[](const wchar_t* key)
 {
-	auto search = this->values.find(Additionals::Convectors::ConvertWcharPtrToString(key));
+	/*auto search = this->values.find(Additionals::Convectors::ConvertWcharPtrToString(key));
 	if (search != this->values.end())
 	{
 		std::cout << "Not found value in map, start reqursive seacrh" << std::endl;
@@ -246,7 +246,14 @@ Json::JsonValue* Json::JsonObject::operator[](const wchar_t* key)
 		}
 		return this;
 	}
-	return this->values[Additionals::Convectors::ConvertWcharPtrToString(key)];
+	return this->values[Additionals::Convectors::ConvertWcharPtrToString(key)];*/
+	auto search = this->values.find(Additionals::Convectors::ConvertWcharPtrToString(key));
+	if (search != this->values.end())
+	{
+		return search->second;
+	}
+
+	return nullptr;
 }
 
 Json::JsonValue* Json::JsonObject::operator[](const std::string& key)
@@ -326,6 +333,19 @@ void Json::JsonObject::add_value(std::pair<std::string, Json::JsonValue*> value)
 	this->values.insert(value);
 }
 
+void Json::JsonObject::replaceValue(const std::string& key, const std::wstring value)
+{
+	if (!this->is_exist(key))
+	{
+		Json::JsonString* val = new Json::JsonString(value);
+		this->add_value(std::make_pair(key, val));
+	}
+	else
+	{
+		Json::JsonString* val = new Json::JsonString(value);
+		this->values[key] = val;
+	}
+}
 
 std::string Json::JsonObject::to_string()
 {
@@ -412,7 +432,7 @@ void Json::JsonObject::_JsonValueToStringHelper(Json::JsonValue* json_value, std
 	builder += "}";
 }
 
-Json::JsonValue* Json::JsonParcer::ParseFile(wchar_t* filename)
+Json::JsonValue* Json::JsonParcer::ParseFile(const wchar_t* filename)
 {
 	if (!std::filesystem::exists(Additionals::Convectors::ConvertWcharPtrToString(filename))) 
 	{
@@ -420,7 +440,7 @@ Json::JsonValue* Json::JsonParcer::ParseFile(wchar_t* filename)
 		return nullptr;
 	}
 
-	std::fstream file{filename, file.binary | file.trunc | file.in | file.out};
+	std::fstream file(filename, std::ios::in);
 
 	if (!file.is_open())
 	{
@@ -431,7 +451,13 @@ Json::JsonValue* Json::JsonParcer::ParseFile(wchar_t* filename)
 	else
 	{
 		std::string json_str;
-		file >> json_str;
+
+		std::string line;
+
+		while (std::getline(file, line))
+		{
+			json_str += line + '\n';
+		}
 
 		file.close();
 
@@ -989,7 +1015,15 @@ void Json::JsonString::_JsonValueToStringHelper(Json::JsonValue* json_value, std
 
 Json::JsonValue* Json::JsonString::operator=(std::wstring value)
 {
-	this->value = Additionals::Convectors::ConvertWStringToString(value);
+	if (!this->is_exist(this->value))
+	{
+		/*Json::JsonString* add_value = new Json::JsonString(value);
+		this->add_value();*/
+	}
+	else
+	{
+		this->value = Additionals::Convectors::ConvertWStringToString(value);
+	}
 	return this;
 }
 
@@ -1032,7 +1066,14 @@ Json::JsonValue* Json::JsonValue::operator[](int index)
 
 Json::JsonValue* Json::JsonValue::operator=(Json::JsonValue* value)
 {
-	this->get_value() = value->get_value();
+	if (!this->is_exist(value->to_string()))
+	{
+		this->add_value(value);
+	}
+	else
+	{
+		this->get_value() = value->get_value();
+	}
 	return this;
 }
 
@@ -1130,6 +1171,8 @@ bool Json::JsonValue::is_exist(std::string key)
 //{
 //	return Json::JsonValue(Json::JsonTypes::Null);
 //}
+
+void Json::JsonValue::replaceValue(const std::string& key, const std::wstring value){}
 
 void Json::JsonValue::add_value(Json::JsonValue* value){}
 

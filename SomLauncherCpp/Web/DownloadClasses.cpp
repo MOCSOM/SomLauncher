@@ -11,9 +11,18 @@
 //}
 
 
-wchar_t* DDIC::Download::Files::download_file(const wchar_t* s_url, const wchar_t* d_file, CallbackNull callback, bool lzma_compressed)
+std::wstring DDIC::Download::Files::download_file(const wchar_t* s_url, const wchar_t* d_file, CallbackNull callback, bool lzma_compressed)
 {
-    std::wstring destenation_file(d_file);
+    std::wstring destenation_file;
+
+    if (d_file == nullptr || d_file == NULL)
+    {
+        destenation_file = L"";
+    }
+    else
+    {
+        destenation_file = d_file;
+    }
     if (d_file == nullptr || d_file == NULL)
     {
         std::string url = Additionals::Convectors::ConvertWStringToString(s_url);
@@ -42,23 +51,28 @@ wchar_t* DDIC::Download::Files::download_file(const wchar_t* s_url, const wchar_
         }
     }
 
-    if (std::filesystem::exists(d_file) && std::filesystem::is_directory(d_file))
+    if (d_file != nullptr || d_file != NULL)
     {
-        std::string url = Additionals::Convectors::ConvertWStringToString(s_url);
-        int count = -1;
-        for (auto& var : Additionals::String::split(url, '/'))
+        if (std::filesystem::exists(d_file) && std::filesystem::is_directory(d_file))
         {
-            ++count;
-        }
-        url = Additionals::String::split(url, '/')[count];
+            std::string url = Additionals::Convectors::ConvertWStringToString(s_url);
+            int count = -1;
+            for (auto& var : Additionals::String::split(url, '/'))
+            {
+                ++count;
+            }
+            url = Additionals::String::split(url, '/')[count];
 
-        std::wstring ff = d_file;
-        destenation_file = ff + L"\\" + Additionals::Convectors::ConvertStringToWcharPtr(url);
+            std::wstring ff = d_file;
+            destenation_file = ff + L"\\" + Additionals::Convectors::ConvertStringToWcharPtr(url);
+        }
     }
-    if (S_OK == URLDownloadToFileW(NULL, s_url, d_file, NULL, &callback))
+    HRESULT download_result = URLDownloadToFileW(NULL, s_url, destenation_file.c_str(), NULL, &callback);
+
+    if (S_OK == download_result)
     {
         callback.OnProgress(NULL, NULL, NULL, StrDogW({ L"The file is saved as: ",  d_file, L"\n" }));
-        return const_cast<wchar_t*>(d_file);
+        return destenation_file;
     }
     else
     {
@@ -71,7 +85,7 @@ wchar_t* DDIC::Download::Files::download_file(const wchar_t* s_url, const wchar_
             d_file = L" ";
         }
         callback.OnProgress(NULL, NULL, NULL, StrDogW({ L"Unable to Download the file: ", s_url, L"\nto: ", d_file }));
-        return nullptr;
+        return L"";
     }
     if (lzma_compressed)
     {
@@ -159,11 +173,14 @@ wchar_t* DDIC::Download::Java::install(wchar_t* version, wchar_t* path, wchar_t*
     wchar_t* path_wch = Additionals::Convectors::ConvertStringToWcharPtr(path2 + "\\.zip");
     wchar_t* path_wch_norm = Additionals::Convectors::ConvertStringToWcharPtr(path2);
 
-    wchar_t* jdk_file = nullptr;
+    std::wstring jdk_file2 = nullptr;
     CallbackDict callback;
     
 
-    jdk_file = DownloadFile(url, path_wch, callback);
+    jdk_file2 = DownloadFile(url, path_wch, callback);
+
+    const wchar_t* jdk_file = jdk_file2.c_str();
+    
     if (jdk_file == nullptr)
     {
         return _wcsdup(L"error 105: file not download");
@@ -249,7 +266,7 @@ wchar_t* DDIC::Download::Java::get_download_url(/*wchar_t*& url,*/wchar_t* versi
     }
 }
 
-wchar_t* DDIC::Download::Java::_decompress_archive(wchar_t* repo_root, wchar_t* file_ending, wchar_t* destination_folder)
+wchar_t* DDIC::Download::Java::_decompress_archive(const wchar_t* repo_root, wchar_t* file_ending, wchar_t* destination_folder)
 {
     //WIN32_FIND_DATA ffd;
 
@@ -289,7 +306,7 @@ wchar_t* DDIC::Download::Java::_decompress_archive(wchar_t* repo_root, wchar_t* 
     }
     else 
     {
-        return repo_root;
+        return (wchar_t*)repo_root;
     }
 }
 
@@ -310,7 +327,7 @@ bool DDIC::Download::Java::check_downloaded_version_java(wchar_t* path)
 }
 
 
-std::string DDIC::Download::Java::_get_normalized_compressed_file_ext(wchar_t* file)
+std::string DDIC::Download::Java::_get_normalized_compressed_file_ext(const wchar_t* file)
 {
     std::string file_str;
     file_str = Additionals::Convectors::ConvertWcharPtrToString(file);

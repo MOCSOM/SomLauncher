@@ -1,18 +1,17 @@
 ﻿#ifndef MINECRAFTUS_H_     // equivalently, #if !defined HEADER_H_
 #define MINECRAFTUS_H_
 
-
-#include "DownloadClasses.h"
-#include "CallbackDict.h"
-#include "Json.h"
-#include "Additionals.h"
+#include "../Web/DownloadClasses.h"
+#include "../Callbacks/CallbackDict.h"
+#include "../Json/Json.h"
+#include "../Additionals/Additionals.h"
 #include <initializer_list>
 //#include <stdio.h>
 
 #include <filesystem>
 
-#include <archive.h>
-#include <archive_entry.h>
+#include "../qzipreader_p.h"
+#include "../qzipwriter_p.h" 
 
 namespace MinecraftCpp 
 {
@@ -72,7 +71,7 @@ namespace MinecraftCpp
 	namespace forge 
 	{
 		bool install_forge_version(wchar_t* versionid, wchar_t* path, CallbackNull callback = CallbackNull(), wchar_t* java = NULL);
-		bool extract_file(Additionals::archives::Archive handler, const wchar_t* zip_path, const wchar_t* extract_path);
+		bool extract_file(const QZipReader& handler, const wchar_t* zip_path, const wchar_t* extract_path);
 		std::string get_data_library_path(wchar_t* libname, wchar_t* path);
 		wchar_t* get_jar_mainclass(wchar_t* path);
 		

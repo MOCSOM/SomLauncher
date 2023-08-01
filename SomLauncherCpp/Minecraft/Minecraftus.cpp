@@ -146,16 +146,16 @@ bool MinecraftCpp::install_minecraft_version(wchar_t* versionid, wchar_t* minecr
         }
     }
     
-    wchar_t* version_manifest_file = DownloadFile(L"https://launchermeta.mojang.com/mc/game/version_manifest.json",
+    std::wstring version_manifest_file = DownloadFile(L"https://launchermeta.mojang.com/mc/game/version_manifest.json",
         download_dir, callback);
 
-    auto version_list = json_manifest.ParseFile(version_manifest_file);
+    Json::JsonValue* version_list = json_manifest.ParseFile(version_manifest_file.c_str());
 
-    for (auto var : version_list->get_value("versions")->get_value_list())
+    for (auto var : (*version_list)["versions"]->get_value_list())
     {
         if (std::wstring((*var)["id"]->to_stringW()) == std::wstring(versionid))
         {
-            do_version_install(versionid, minecraft_directory, callback, var->get_value("url")->to_stringW());
+            do_version_install(versionid, minecraft_directory, callback, (*var)["url"]->to_stringW());
             return true;
         }
     }
@@ -191,21 +191,21 @@ bool MinecraftCpp::do_version_install(wchar_t* versionid, wchar_t* path, Callbac
     wchar_t* logger_file = NULL;
     if (versiondata->is_exist("logging"))
     {
-        if (versiondata->get_value("logging")->to_int() != 0)
+        if ((*versiondata)["logging"]->to_int() != 0)
         {
-            logger_file = JoinW({ path, L"assets", L"log_configs", versiondata->get_value("logging")->get_value("client")->get_value("file")->get_value("id")->to_stringW() });
-            DownloadFile(versiondata->get_value("logging")->get_value("client")->get_value("file")->get_value("url")->to_stringW(), logger_file, callback); //to with sha
+            logger_file = JoinW({ path, L"assets", L"log_configs", (*(*(*(*versiondata)["logging"])["client"])["file"])["id"]->to_stringW() });
+            DownloadFile((*(*(*(*versiondata)["logging"])["client"])["file"])["url"]->to_stringW(), logger_file, callback); //to with sha
         }
     }
 
     //Download minecraft.jar
     if (versiondata->is_exist("downloads"))
     {
-        DownloadFile(versiondata->get_value("downloads")->get_value("client")->get_value("url")->to_stringW(), JoinW({ path, L"versions", versiondata->get_value("id")->to_stringW(), StrDogW(versiondata->get_value("id")->to_stringW(), L".jar")}), callback);
+        DownloadFile((*(*(*versiondata)["downloads"])["client"])["url"]->to_stringW(), JoinW({ path, L"versions", (*versiondata)["id"]->to_stringW(), StrDogW((*versiondata)["id"]->to_stringW(), L".jar") }), callback);
     }
 
     //Need to copy jar for old forge versions
-    if (!std::filesystem::is_directory(JoinW({ path, L"versions", versiondata->get_value("id")->to_stringW(), StrDogW(versiondata->get_value("id")->to_stringW(), L".jar") })) && versiondata->is_exist("inheritsFrom"))
+    if (!std::filesystem::is_directory(JoinW({ path, L"versions", (*versiondata)["id"]->to_stringW(), StrDogW((*versiondata)["id"]->to_stringW(), L".jar") })) && versiondata->is_exist("inheritsFrom"))
     {
         std::filesystem::copy
         (
@@ -215,10 +215,10 @@ bool MinecraftCpp::do_version_install(wchar_t* versionid, wchar_t* path, Callbac
                 ({
                     path,
                     L"versions",
-                    versiondata->get_value("id")->to_stringW(),
+                    (*versiondata)["id"]->to_stringW(),
                     StrDogW
                     (
-                        versiondata->get_value("id")->to_stringW(),
+                        (*versiondata)["id"]->to_stringW(),
                         L".jar"
                     ) 
                 })
@@ -229,10 +229,10 @@ bool MinecraftCpp::do_version_install(wchar_t* versionid, wchar_t* path, Callbac
                 ({
                     path,
                     L"versions",
-                    versiondata->get_value("inheritsFrom")->to_stringW(),
+                    (*versiondata)["inheritsFrom"]->to_stringW(),
                     StrDogW
                     (
-                        versiondata->get_value("inheritsFrom")->to_stringW(),
+                        (*versiondata)["inheritsFrom"]->to_stringW(),
                         L".jar"
                     )
                 })
@@ -243,7 +243,7 @@ bool MinecraftCpp::do_version_install(wchar_t* versionid, wchar_t* path, Callbac
     //Install java runtime if needed
     if (versiondata->is_exist("javaVersion"))
     {
-        install_jvm_runtime(versiondata->get_value("javaVersion")->get_value("component")->to_stringW(), path, callback);
+        install_jvm_runtime((*(*versiondata)["javaVersion"])["component"]->to_stringW(), path, callback);
     }
 
     return true;
@@ -255,25 +255,25 @@ Json::JsonValue* MinecraftCpp::inherit_json(Json::JsonValue* original_data, wcha
     Implement the inheritsFrom function
     See https://github.com/tomsik68/mclauncher-api/wiki/Version-Inheritance-&-forge
     */
-    auto inherit_version = original_data->get_value("inheritsFrom");
+    auto inherit_version = (*original_data)["inheritsFrom"];
 
     wchar_t* path_inh_json = JoinW({ path, L"versions", inherit_version->to_stringW(), StrDogW(inherit_version->to_stringW(), L".json")});
     Json::JsonParcer json_inherit;
     auto new_data = json_inherit.ParseFile(path_inh_json);
     for (auto& var : original_data->get_value())
     {
-        if (var.second->get_type() == Json::JsonTypes::Array && new_data->get_value(var.first)->get_type() == Json::JsonTypes::Array)
+        if (new_data->is_exist(var.first) && var.second->get_type() == Json::JsonTypes::Array && (*new_data)[var.first]->get_type() == Json::JsonTypes::Array)
         {
-            new_data->get_value(var.first)->operator=((*var.second) + (*new_data)[var.first]);
+            (*new_data)[var.first]->operator=((*var.second) + (*new_data)[var.first]);
         }
-        else if (var.second->get_type() == Json::JsonTypes::Object && new_data->get_value(var.first)->get_type() == Json::JsonTypes::Object)
+        else if (var.second->get_type() == Json::JsonTypes::Object && (*new_data)[var.first]->get_type() == Json::JsonTypes::Object)
         {
             for (auto& variable : var.second->get_value())
             {
                 if (variable.second->get_type() == Json::JsonTypes::Array)
                 {
-                    new_data->get_value(var.first)->get_value(variable.first)->operator=
-                        ((*new_data->get_value(var.first)->get_value(variable.first)) + variable.second);
+                    (*(*new_data)[var.first])[variable.first]->operator=
+                        ((*(*(*new_data)[var.first])[variable.first]) + variable.second);
                 }
             }
         }
@@ -281,7 +281,7 @@ Json::JsonValue* MinecraftCpp::inherit_json(Json::JsonValue* original_data, wcha
         {
             if (new_data->is_exist(var.first))
             {
-                new_data->get_value(var.first)->operator=(var.second);
+                (*new_data)[var.first]->operator=(var.second);
             }
             else
             {
@@ -298,7 +298,7 @@ wchar_t* MinecraftCpp::get_minecraft_command__(wchar_t* version, wchar_t* minecr
     Returns a command for launching Minecraft.For more information take a look at the documentation.
     */
     if (!std::filesystem::exists(JoinW({ minecraft_directory, L"versions", version, StrDogW(version, L".json") })) || 
-        std::filesystem::is_directory(JoinW({minecraft_directory, L"versions", version})))
+        !std::filesystem::is_directory(JoinW({minecraft_directory, L"versions", version})))
     {
         std::cout << "Version Not Found" << version << std::endl;
         return nullptr;
@@ -349,9 +349,9 @@ wchar_t* MinecraftCpp::get_minecraft_command__(wchar_t* version, wchar_t* minecr
     }
 
     // Newer Versions have jvmArguments in version.json
-    if (data->get_value("arguments")->get_type() == Json::JsonTypes::Object)
+    if (data->is_exist("arguments") && (*data)["arguments"]->get_type() == Json::JsonTypes::Object)
     {
-        if (data->get_value("arguments")->is_exist("jvm"))
+        if ((*data)["arguments"]->is_exist("jvm"))
         {
             command = StrDogW(command, MinecraftCpp::get_arguments((*(*data)["arguments"])["jvm"], data, minecraft_directory, options));
             command = StrDogW(command, L" ");
@@ -396,7 +396,7 @@ wchar_t* MinecraftCpp::get_minecraft_command__(wchar_t* version, wchar_t* minecr
     }
     else
     {
-        command = StrDogW(command, MinecraftCpp::get_arguments(data->get_value("arguments")->get_value("game"), data, minecraft_directory, options));
+        command = StrDogW(command, MinecraftCpp::get_arguments((*(*data)["arguments"])["game"], data, minecraft_directory, options));
         command = StrDogW(command, L" ");
     }
 
@@ -435,60 +435,60 @@ wchar_t* MinecraftCpp::get_libraries(Json::JsonValue* data, wchar_t* path)
             {
                 continue;
             }
-            libstr = StrDogW(libstr, StrDogW(MinecraftCpp::get_library_path(var->get_value("name")->to_stringW(), path), classpath_seperator));
+            libstr = StrDogW(libstr, StrDogW(MinecraftCpp::get_library_path((*var)["name"]->to_stringW(), path), classpath_seperator));
             native = MinecraftCpp::get_natives(var);
             if (std::wstring(native) != std::wstring(L""))
             {
                 if (var->is_exist("downloads"))
                 {
-                    libstr = StrDogW(libstr, StrDogW(JoinW({ path, L"libraries", (*var->get_value("downloads")->get_value("classifiers"))[native]->get_value("path")->to_stringW() }), classpath_seperator));
+                    libstr = StrDogW(libstr, StrDogW(JoinW({ path, L"libraries", (*(*(*(*var)["downloads"])["classifiers"])[native])["path"]->to_stringW() }), classpath_seperator));
                 }
                 else
                 {
-                    libstr = StrDogW(libstr, StrDogW(MinecraftCpp::get_library_path(StrDogW(var->get_value("name")->to_stringW(), StrDogW(L"-", native)), path), classpath_seperator));
+                    libstr = StrDogW(libstr, StrDogW(MinecraftCpp::get_library_path(StrDogW((*var)["name"]->to_stringW(), StrDogW(L"-", native)), path), classpath_seperator));
                 }
             }
         }
 
         if (data->is_exist("jar"))
         {
-            libstr = StrDogW(libstr, JoinW({ path, L"versions", data->get_value("jar")->to_stringW(), StrDogW(data->get_value("jar")->to_stringW(), L".jar") }));
+            libstr = StrDogW(libstr, JoinW({ path, L"versions", (*data)["jar"]->to_stringW(), StrDogW((*data)["jar"]->to_stringW(), L".jar") }));
         }
         else
         {
-            libstr = StrDogW(libstr, JoinW({ path, L"versions", data->get_value("id")->to_stringW(), StrDogW(data->get_value("id")->to_stringW(), L".jar") }));
+            libstr = StrDogW(libstr, JoinW({ path, L"versions", (*data)["id"]->to_stringW(), StrDogW((*data)["id"]->to_stringW(), L".jar") }));
         }
     }
     else
     {
-        for (auto var : data->get_value("libraries")->get_value_list())
+        for (auto var : (*data)["libraries"]->get_value_list())
         {
             if (!(MinecraftCpp::parse_rule_list(var, L"rules", empty)))
             {
                 continue;
             }
-            libstr = StrDogW(libstr, StrDogW(MinecraftCpp::get_library_path(var->get_value("name")->to_stringW(), path), classpath_seperator));
+            libstr = StrDogW(libstr, StrDogW(MinecraftCpp::get_library_path((*var)["name"]->to_stringW(), path), classpath_seperator));
             native = MinecraftCpp::get_natives(var);
             if (std::wstring(native) != std::wstring(L""))
             {
                 if (var->is_exist("downloads"))
                 {
-                    libstr = StrDogW(libstr, StrDogW(JoinW({ path, L"libraries", (*var->get_value("downloads")->get_value("classifiers"))[native]->get_value("path")->to_stringW() }), classpath_seperator));
+                    libstr = StrDogW(libstr, StrDogW(JoinW({ path, L"libraries", (*(*(*(*var)["downloads"])["classifiers"])[native])["path"]->to_stringW() }), classpath_seperator));
                 }
                 else
                 {
-                    libstr = StrDogW(libstr, StrDogW(MinecraftCpp::get_library_path(StrDogW(var->get_value("name")->to_stringW(), StrDogW(L"-", native)), path), classpath_seperator));
+                    libstr = StrDogW(libstr, StrDogW(MinecraftCpp::get_library_path(StrDogW((*var)["name"]->to_stringW(), StrDogW(L"-", native)), path), classpath_seperator));
                 }
             }
         }
 
         if (data->is_exist("jar"))
         {
-            libstr = StrDogW(libstr, JoinW({ path, L"versions", data->get_value("jar")->to_stringW(), StrDogW(data->get_value("jar")->to_stringW(), L".jar") }));
+            libstr = StrDogW(libstr, JoinW({ path, L"versions", (*data)["jar"]->to_stringW(), StrDogW((*data)["jar"]->to_stringW(), L".jar") }));
         }
         else
         {
-            libstr = StrDogW(libstr, JoinW({ path, L"versions", data->get_value("id")->to_stringW(), StrDogW(data->get_value("id")->to_stringW(), L".jar") }));
+            libstr = StrDogW(libstr, JoinW({ path, L"versions", (*data)["id"]->to_stringW(), StrDogW((*data)["id"]->to_stringW(), L".jar") }));
         }
     }
     
@@ -539,7 +539,7 @@ wchar_t* MinecraftCpp::get_classpath_separator()
     /*
     Returns the classpath seperator for the current os
     */
-    if (std::wstring(OS) == std::wstring(L"Windows"))
+    if (std::wstring(OS) == std::wstring(L"windows"))
     {
         wchar_t* ret = const_cast<wchar_t*>(L";");
         return ret;
@@ -560,7 +560,7 @@ bool MinecraftCpp::parse_rule_list(Json::JsonValue* data, const wchar_t* rule_st
     {
         return true;
     }
-    for (auto var : (*data)[rule_string]->get_value_list())
+    for (auto& var : (*data)[rule_string]->get_value_list())
     {
         if (!MinecraftCpp::parse_single_rule(var, options))
         {
@@ -654,7 +654,7 @@ wchar_t* MinecraftCpp::get_library_path(wchar_t* name, wchar_t* path)
     {
         libpath = JoinW({ libpath, var.c_str()});
     }
-    if (version.find('@'))
+    if (version.find('@') == 0)
     {
         auto splt = Additionals::String::split(version, '@', 2);
         version = splt[0];
@@ -707,7 +707,7 @@ wchar_t* MinecraftCpp::get_natives(Json::JsonValue* data)
 
     if (data->is_exist("natives"))
     {
-        if (std::wstring(OS) == std::wstring(L"Windows"))
+        if (std::wstring(OS) == std::wstring(L"windows"))
         {
             if ((*data)["natives"]->is_exist("windows"))
             {
@@ -720,7 +720,7 @@ wchar_t* MinecraftCpp::get_natives(Json::JsonValue* data)
                 return const_cast<wchar_t*>(L"");
             }
         }
-        else if (std::wstring(OS) == std::wstring(L"Darwin"))
+        else if (std::wstring(OS) == std::wstring(L"mac"))
         {
             if ((*data)["natives"]->is_exist("osx"))
             {
@@ -860,7 +860,7 @@ bool MinecraftCpp::install_libraries(Json::JsonValue* data, wchar_t* path, Callb
     */
     // TODO вызов callback для управление вывода
     
-    for (auto var : data->get_value("libraries")->get_value_list())
+    for (auto var : (*data)["libraries"]->get_value_list())
     {
         MinecraftCpp::option::MinecraftOptions empty;
         // Check, if the rules allow this lib for the current system
@@ -875,12 +875,12 @@ bool MinecraftCpp::install_libraries(Json::JsonValue* data, wchar_t* path, Callb
         {
             if (Additionals::String::EndsWith(var->get_value("url")->to_string(), "/"))
             {
-                std::string download_string = Additionals::String::rtrim_copy(var->get_value("url")->to_string(), '/');
+                std::string download_string = Additionals::String::rtrim_copy((*var)["url"]->to_string(), '/');
                 downloadUrl = Additionals::Convectors::ConvertStringToWcharPtr(download_string);
             }
             else
             {
-                downloadUrl = var->get_value("url")->to_stringW();
+                downloadUrl = (*var)["url"]->to_stringW();
             }
         }
         else
@@ -888,9 +888,9 @@ bool MinecraftCpp::install_libraries(Json::JsonValue* data, wchar_t* path, Callb
             downloadUrl = const_cast<wchar_t*>(L"https://libraries.minecraft.net");
         }
 
-        std::string libPath = Additionals::String::split(var->get_value("name")->to_string(), ':')[0];
-        std::string name = Additionals::String::split(var->get_value("name")->to_string(), ':')[1];
-        std::string version = Additionals::String::split(var->get_value("name")->to_string(), ':')[2];
+        std::string libPath = Additionals::String::split((*var)["name"]->to_string(), ':')[0];
+        std::string name = Additionals::String::split((*var)["name"]->to_string(), ':')[1];
+        std::string version = Additionals::String::split((*var)["name"]->to_string(), ':')[2];
         for (auto& var2 : Additionals::String::split(libPath, '.'))
         {
             currentPath = JoinW({ currentPath, Additionals::Convectors::ConvertStringToWcharPtr(var2) });
@@ -930,20 +930,20 @@ bool MinecraftCpp::install_libraries(Json::JsonValue* data, wchar_t* path, Callb
         {
             if (var->is_exist("extract"))
             {
-                extract_natives_file(JoinW({ currentPath, jarFilenameNative }), JoinW({ path, L"versions", data->get_value("id")->to_stringW(), L"natives"}), var->get_value("extract"));
+                extract_natives_file(JoinW({ currentPath, jarFilenameNative }), JoinW({ path, L"versions", (*data)["id"]->to_stringW(), L"natives" }), (*var)["extract"]);
             }
             continue;
         }
-        if (var->get_value("downloads")->is_exist("artifact"))
+        if ((*var)["downloads"]->is_exist("artifact"))
         {
-            DownloadFile(var->get_value("downloads")->get_value("artifact")->get_value("url")->to_stringW(), JoinW({ path, L"libraries", var->get_value("downloads")->get_value("artifact")->get_value("path")->to_stringW() }), callback);
+            DownloadFile((*(*(*var)["downloads"])["artifact"])["url"]->to_stringW(), JoinW({ path, L"libraries", (*(*(*var)["downloads"])["artifact"])["path"]->to_stringW() }), callback);
         }
         if (std::wstring(native) != std::wstring(L""))
         {
-            DownloadFile(var->get_value("downloads")->get_value("classifiers")->get_value(Additionals::Convectors::ConvertWcharPtrToString(native))->get_value("url")->to_stringW(), JoinW({ currentPath, jarFilenameNative }), callback);
-            if (var->get_value("extract"))
+            DownloadFile((*(*(*(*var)["downloads"])["classifiers"])[native])["url"]->to_stringW(), JoinW({ currentPath, jarFilenameNative }), callback);
+            if ((*var)["extract"])
             {
-                extract_natives_file(JoinW({ currentPath, jarFilenameNative }), JoinW({ path, L"versions", data->get_value("id")->to_stringW(), L"natives" }), var->get_value("extract"));
+                extract_natives_file(JoinW({ currentPath, jarFilenameNative }), JoinW({ path, L"versions", (*data)["id"]->to_stringW(), L"natives" }), (*var)["extract"]);
             }
         }
     }
@@ -957,32 +957,26 @@ bool MinecraftCpp::extract_natives_file(wchar_t* filename, wchar_t* extract_path
     */
     int ret = _wmkdir(extract_path);
 
-    struct archive* zArchive;
-    struct archive_entry* zArchive_entry;
-
-    zArchive = archive_read_new();
-    archive_read_support_filter_all(zArchive);
-    archive_read_support_format_all(zArchive);
-
-    if (std::filesystem::exists(filename))
-    {
-        archive_read_open_filename(zArchive, Additionals::Convectors::ConvertWcharPtrToString(filename).c_str(), 10240);
-    }
-    else
+    if (!std::filesystem::exists(filename))
     {
         return false;
     }
-    while (archive_read_next_header(zArchive, &zArchive_entry) == ARCHIVE_OK)
+
+    QZipReader zArchive(Additionals::Convectors::ConvertWStringToString(filename).c_str());
+
+    
+
+    foreach(QZipReader::FileInfo var, zArchive.fileInfoList())
     {
-        for (auto var2 : extract_data->get_value("exclude")->get_value_list())
+        for (auto var2 : (*extract_data)["exclude"]->get_value_list())
         {
-            if (var.getFileName()._Starts_with(var2->to_string().c_str()))
+            if (Additionals::Path::getFileNameFromPath(var.filePath.toStdString())._Starts_with(var2->to_string()))
             {
                 continue;
             }
         }
         int count = 0;
-        for (auto& var : Additionals::String::split(archive_entry_pathname(zArchive_entry), '.'))
+        for (auto& var : Additionals::String::split(var.filePath.toStdString(), '.'))
         {
             ++count;
         }
@@ -990,12 +984,11 @@ bool MinecraftCpp::extract_natives_file(wchar_t* filename, wchar_t* extract_path
         {
             continue;
         }
-        if (!std::filesystem::exists(std::wstring(extract_path) + L"\\" + std::wstring(Additionals::Convectors::ConvertStringToWcharPtr(archive_entry_pathname(zArchive_entry)))))
+        if (!std::filesystem::exists(std::wstring(extract_path) + L"\\" + var.filePath.toStdWString()))
         {
-            
-            Additionals::archives::Archive::extractFile(var, Additionals::Convectors::ConvertWStringToString(std::wstring(extract_path) + L"\\" + Additionals::Convectors::ConvertStringToWcharPtr(archive_entry_pathname(zArchive_entry))));
+
+            Additionals::archives::decompressFile(zArchive, var, Additionals::Convectors::ConvertWStringToString(std::wstring(extract_path) + L"\\" + var.filePath.toStdWString()));
         }
-        archive_read_data_skip(zArchive);
     }
     return true;
 }
@@ -1056,10 +1049,11 @@ bool MinecraftCpp::install_jvm_runtime(wchar_t* jvm_version, wchar_t* minecraft_
 
     Json::JsonParcer jsonParcer;
     wchar_t* platform_string = _get_jvm_platform_string();
-    auto manifest_data = jsonParcer.ParseFile(DDIC::Download::Files::download_file(_JVM_MANIFEST_URL));
+    std::wstring download_path = DDIC::Download::Files::download_file(_JVM_MANIFEST_URL);
+    auto manifest_data = jsonParcer.ParseFile(download_path.c_str());
 
     // Check if the jvm version exists
-    if (!manifest_data->get_value(Additionals::Convectors::ConvertWcharPtrToString(platform_string))->is_exist(Additionals::Convectors::ConvertWcharPtrToString(jvm_version)))
+    if (!(*manifest_data)[Additionals::Convectors::ConvertWcharPtrToString(platform_string)]->is_exist(Additionals::Convectors::ConvertWcharPtrToString(jvm_version)))
     {
         std::cout << "Version Not Found" << jvm_version << std::endl;
 
@@ -1072,7 +1066,7 @@ bool MinecraftCpp::install_jvm_runtime(wchar_t* jvm_version, wchar_t* minecraft_
         return false;
     }
 
-    auto& platform_manifest = *jsonParcer.ParseFile(DownloadFile((*(*(*(*(*manifest_data)[platform_string])[jvm_version])[0])[L"manifest"])[L"url"]->to_stringW()));
+    auto& platform_manifest = *jsonParcer.ParseFile(DownloadFile((*(*(*(*(*manifest_data)[platform_string])[jvm_version])[0])[L"manifest"])[L"url"]->to_stringW()).c_str());
     wchar_t* base_path = JoinW({ minecraft_directory, L"runtime", jvm_version, platform_string, jvm_version });
 
     // Download all files of the runtime
@@ -1081,20 +1075,20 @@ bool MinecraftCpp::install_jvm_runtime(wchar_t* jvm_version, wchar_t* minecraft_
     for (auto& var : platform_manifest["files"]->get_value())
     {
         wchar_t* current_path = JoinW({ base_path, Additionals::Convectors::ConvertStringToWcharPtr(var.first) });
-        if (var.second->get_value("type")->to_string() == std::string("file"))
+        if ((*var.second)["type"]->to_string() == std::string("file"))
         {
             // Prefer downloading the compresses file
-            if (var.second->get_value("downloads")->is_exist("lzma"))
+            if ((*var.second)["downloads"]->is_exist("lzma"))
             {
-                DownloadFile((*(*var.second->get_value("downloads"))["lzma"])["url"]->to_stringW(), current_path, callback, true);
+                DownloadFile((*(*(*var.second)["downloads"])["lzma"])["url"]->to_stringW(), current_path, callback, true);
             }
             else
             {
-                DownloadFile((*(*var.second->get_value("downloads"))["lzma"])["url"]->to_stringW(), current_path, callback);
+                DownloadFile((*(*(*var.second)["downloads"])["lzma"])["url"]->to_stringW(), current_path, callback);
             }
 
             // Make files executable on unix systems
-            if (var.second->get_value("executable"))
+            if ((*var.second)["executable"])
             {   
                 if (std::filesystem::exists(current_path))
                 {
@@ -1102,11 +1096,11 @@ bool MinecraftCpp::install_jvm_runtime(wchar_t* jvm_version, wchar_t* minecraft_
                 }
             }
         }
-        else if (var.second->get_value("type")->to_string() == "directory")
+        else if ((*var.second)["type"]->to_string() == "directory")
         {
             int outp = _wmkdir(current_path);
         }
-        else if (var.second->get_value("type")->to_string() == "link")
+        else if ((*var.second)["type"]->to_string() == "link")
         {
             //TODO os.symlink(value["target"], current_path)
         }
@@ -1261,31 +1255,27 @@ bool MinecraftCpp::forge::install_forge_version(wchar_t* versionid, wchar_t* pat
 
     wchar_t* FORGE_DOWNLOAD_URL = StrDogW({ L"https://files.minecraftforge.net/maven/net/minecraftforge/forge/", versionid, L"/forge-", versionid, L"-installer.jar" });
     wchar_t* temp_file_path = StrDogW({ Additionals::TempFile::get_tempdir_SYSTEM().c_str(), StrDogW({L"forge-installer-", std::to_wstring(random_num).c_str(), L".tmp"})});
-    if (DownloadFile(FORGE_DOWNLOAD_URL, temp_file_path, callback) == nullptr)
+    if (DownloadFile(FORGE_DOWNLOAD_URL, temp_file_path, callback).c_str() == nullptr)
     {
         std::cout << "Version Not Found" << versionid << std::endl;
         return false;
     }
-    Additionals::archives::Archive zArchive(temp_file_path);
 
+    QZipReader zArchive(Additionals::Convectors::ConvertWStringToString(temp_file_path).c_str());
 
     // Read the install_profile.json
     Json::JsonParcer json_parcer;
     Json::JsonValue* version_data = nullptr;
 
-    for (auto& var : zArchive.entries)
+    foreach(QZipReader::FileInfo var, zArchive.fileInfoList())
     {
-        if (var.getFullPath() == "install_profile.json")
+        if (var.filePath == "install_profile.json")
         {
-            std::vector<uint8_t> vec;
-
-            var.readContent();
-            vec = var.getContent();
-
-            std::string json_str = std::string(reinterpret_cast<const char*>(vec.data()), vec.size());
+            std::string json_str = zArchive.fileData(var.filePath).toStdString();
 
             version_data = json_parcer.ParseJson(json_str);
 
+            zArchive.close();
             break;
         }
     }
@@ -1329,7 +1319,7 @@ bool MinecraftCpp::forge::install_forge_version(wchar_t* versionid, wchar_t* pat
     return true;
 }
 
-bool MinecraftCpp::forge::extract_file(Additionals::archives::Archive handler, const wchar_t* zip_path, const wchar_t* extract_path)
+bool MinecraftCpp::forge::extract_file(const QZipReader& handler, const wchar_t* zip_path, const wchar_t* extract_path)
 {
     /*
     Extract a file from a zip handler into the given path
@@ -1346,14 +1336,14 @@ bool MinecraftCpp::forge::extract_file(Additionals::archives::Archive handler, c
             //System::Console::WriteLine(error);
         }
     }
-    for (auto& var : handler.entries)
+    /*for (auto& var : handler.entries)
     {
         if (std::wstring(Additionals::Convectors::ConvertStringToWcharPtr(var.getFullPath())) == std::wstring(zip_path))
         {
             Additionals::archives::Archive::extractFile(var, p.string());
             break;
         }
-    }
+    }*/
 
     return true;
 }
@@ -1449,12 +1439,17 @@ bool MinecraftCpp::forge::forge_processors(
             (*argument_vars)["{" + var.first + "}"]->operator=(var.second->get_value("client"));
         }
     }
-    wchar_t* root_path = JoinW({ Additionals::TempFile::get_tempdir_SYSTEM().c_str(), StrDogW(L"forge-root-", std::to_wstring(random_num).c_str())});
+    wchar_t* root_path = StrDogW({ Additionals::TempFile::get_tempdir_SYSTEM().c_str(), StrDogW(L"forge-root-", std::to_wstring(random_num).c_str())});
 
-    (*argument_vars)["{INSTALLER}"]->operator=(std::wstring(installer_path));
+    argument_vars->replaceValue("{INSTALLER}", std::wstring(installer_path));
+    argument_vars->replaceValue("{BINPATCH}", std::wstring(lzma_path));
+    argument_vars->replaceValue("{ROOT}", std::wstring(root_path));
+    argument_vars->replaceValue("{SIDE}", L"client");
+
+    /*(*argument_vars)["{INSTALLER}"]->operator=(std::wstring(installer_path));
     (*argument_vars)["{BINPATCH}"]->operator=(std::wstring(lzma_path));
     (*argument_vars)["{ROOT}"]->operator=(std::wstring(root_path));
-    (*argument_vars)["{SIDE}"]->operator=("client");
+    (*argument_vars)["{SIDE}"]->operator=("client");*/
 
     std::wstring classpath_seperator = L"";
     if (std::wstring(OS) == std::wstring(L"windows"))

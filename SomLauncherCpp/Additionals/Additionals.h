@@ -21,8 +21,8 @@
 
 #include <iostream>
 
-
-
+#include "../qzipreader_p.h"
+#include "../qzipwriter_p.h" 
 
 #define StrDogWA Additionals::String::strdogWA
 #define StrDogW Additionals::String::strdogW
@@ -52,6 +52,9 @@ namespace Additionals
 	}
 	namespace archives
 	{
+		void compressFile(std::string zipfile, std::string directory);
+		void decompressFile(const QZipReader& zip, const QZipReader::FileInfo& file, const std::string& directory);
+
 		class Archive
 		{
 		private:
@@ -138,6 +141,8 @@ namespace Additionals
 		wchar_t* joinW(std::initializer_list<const wchar_t*> list);
 		std::wstring joinA(std::initializer_list<const char*> list);
 		std::vector<std::string> get_directories(const std::string& directory);
+
+		std::string getFileNameFromPath(const std::string& path);
 	}
 
 	namespace TempFile 

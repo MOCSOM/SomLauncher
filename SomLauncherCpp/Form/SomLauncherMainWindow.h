@@ -5,16 +5,16 @@
 #include <iostream>
 #include <string>
 
-#include "DownloadClasses.h"
-#include "CallbackDict.h"
+#include "../Web/DownloadClasses.h"
+#include "../Callbacks/CallbackDict.h"
 //#include "ChangeServerForm.h"
-#include "Additionals.h"
-#include "Json.h"
-#include "Minecraftus.h"
+#include "../Additionals/Additionals.h"
+#include "../Json/Json.h"
+#include "../Minecraft/Minecraftus.h"
 
 #include "ui_SomLauncherMainWindow.h"
 
-#include "ClickableLabel.h"
+#include "../QObjects/ClickableLabel.h"
 
 class SomLauncherMainWindow : public QMainWindow
 {

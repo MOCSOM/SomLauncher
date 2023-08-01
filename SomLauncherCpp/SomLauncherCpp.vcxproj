@@ -98,6 +98,16 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'">
   </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(Qt_INCLUDEPATH_);E:\vcpkg\vcpkg\packages\libzip_x86-windows\include</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalDependencies>%(AdditionalDependencies);$(Qt_LIBS_);zip.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>E:\vcpkg\vcpkg\packages\libzip_x86-windows\lib</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
     <ClCompile>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
@@ -147,24 +157,29 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Additionals.cpp" />
-    <ClCompile Include="CallbackDict.cpp" />
-    <ClCompile Include="DownloadClasses.cpp" />
-    <ClCompile Include="Json.cpp" />
+    <ClCompile Include="Additionals\Additionals.cpp" />
+    <ClCompile Include="Callbacks\CallbackDict.cpp" />
+    <ClCompile Include="Form\MainWindowExtensions.cpp" />
+    <ClCompile Include="Form\SomLauncherMainWindow.cpp" />
+    <ClCompile Include="Json\Json.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Minecraftus.cpp" />
-    <ClCompile Include="SomDict.cpp" />
-    <ClCompile Include="SomLauncherMainWindow.cpp" />
+    <ClCompile Include="Minecraft\Minecraftus.cpp" />
+    <ClCompile Include="QObjects\ClickableLabel.cpp" />
+    <ClCompile Include="QObjects\HoveredFrame.cpp" />
+    <ClCompile Include="Web\DownloadClasses.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Additionals.h" />
-    <ClInclude Include="CallbackDict.h" />
-    <ClInclude Include="DownloadClasses.h" />
-    <ClInclude Include="Json.h" />
-    <ClInclude Include="Minecraftus.h" />
+    <ClInclude Include="Additionals\Additionals.h" />
+    <ClInclude Include="qzipreader_p.h" />
+    <ClInclude Include="qzipwriter_p.h" />
+    <ClInclude Include="Web\DownloadClasses.h" />
+    <QtMoc Include="Form\SomLauncherMainWindow.h" />
+    <ClInclude Include="Callbacks\CallbackDict.h" />
+    <ClInclude Include="Json\Json.h" />
+    <ClInclude Include="Minecraft\Minecraftus.h" />
+    <QtMoc Include="QObjects\ClickableLabel.h" />
+    <ClInclude Include="QObjects\HoveredFrame.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="SomDict.h" />
-    <QtMoc Include="SomLauncherMainWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="all.json" />
@@ -177,13 +192,13 @@
     <Image Include="freee.png" />
   </ItemGroup>
   <ItemGroup>
-    <QtRcc Include="SomLauncherMainWindow.qrc" />
+    <ResourceCompile Include="Form\SomLauncherCpp.rc" />
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="SomLauncherMainWindow.ui" />
+    <QtRcc Include="Form\SomLauncherMainWindow.qrc" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="SomLauncherCpp.rc" />
+    <QtUic Include="Form\SomLauncherMainWindow.ui" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

@@ -14,13 +14,14 @@ wchar_t* Additionals::Convectors::ConvertStringToWcharPtr(const std::string& str
 std::string Additionals::Convectors::ConvertWcharPtrToString(const wchar_t* str)
 {
     std::wstring ws(str);
-    std::string url(ws.begin(), ws.end());
+    std::string url(ws.begin(), ws.end()); //FIXME: выполняется компиляция ссылки на экземпляр шаблон функции "std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string<std::_String_iterator<std::_String_val<std::_Simple_types<_Elem>>>,0>(_Iter,_Iter,const _Alloc &)"
+
     return url;
 }
 
 std::string Additionals::Convectors::ConvertWStringToString(const std::wstring& str)
 {
-    std::string url(str.begin(), str.end());
+    std::string url(str.begin(), str.end()); //FIXME: выполняется компиляция ссылки на экземпляр шаблон функции "std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string<std::_String_iterator<std::_String_val<std::_Simple_types<_Elem>>>,0>(_Iter,_Iter,const _Alloc &)"
     return url;
 }
 
@@ -140,12 +141,13 @@ wchar_t* Additionals::String::strdogW(const wchar_t* ref_str, const wchar_t* str
 
 wchar_t* Additionals::String::strdogWA(const wchar_t* ref_str, const char* str_to_add)
 {
-    size_t ref_size = wcslen(ref_str);
+    size_t ref_size;
     size_t to_add_size = strlen(str_to_add);
     wchar_t* new_str_temp = nullptr;
 
     if (ref_str == nullptr || ref_str[0] == L'\0')
     {
+        ref_size = 0;
         new_str_temp = new wchar_t[to_add_size + 1];
         for (size_t j = 0; j < to_add_size; j++)
         {
@@ -153,6 +155,10 @@ wchar_t* Additionals::String::strdogWA(const wchar_t* ref_str, const char* str_t
         }
         new_str_temp[to_add_size] = L'\0';
         return new_str_temp;
+    }
+    else
+    {
+        ref_size = wcslen(ref_str);
     }
 
     size_t total_size = ref_size + to_add_size;
@@ -296,6 +302,10 @@ std::vector<std::wstring> Additionals::String::split(const std::wstring& s, cons
     {
         for (int i = 0; i < count; i++)
         {
+            if (!s.find(seperator))
+            {
+                
+            }
             if ((pos = s.find(seperator, pos)) != std::wstring::npos)
             {
                 std::wstring substring(s.substr(prev_pos, pos - prev_pos));
@@ -485,6 +495,20 @@ std::vector<std::string> Additionals::Path::get_directories(const std::string& d
         if (p.is_directory())
             r.push_back(p.path().string());
     return r;
+}
+
+std::string Additionals::Path::getFileNameFromPath(const std::string& path)
+{
+    // Находим последний разделитель пути (для Windows '\' и для Linux '/')
+    size_t lastSeparatorPos = path.find_last_of("\\/");
+    if (lastSeparatorPos != std::string::npos) {
+        // Извлекаем имя файла из строки пути
+        return path.substr(lastSeparatorPos + 1);
+    }
+    else {
+        // Если разделитель не найден, значит весь путь является именем файла
+        return path;
+    }
 }
 
 wchar_t* Additionals::TempFile::get_tempdir()
@@ -716,4 +740,22 @@ void Additionals::archives::Archive::extractFile(Additionals::file::File& file, 
 std::vector<Additionals::file::File> Additionals::archives::Archive::_getEntries()
 {
     return this->_entries;
+}
+
+void Additionals::archives::compressFile(std::string zipfile, std::string directory)
+{
+    QZipWriter c_zip(zipfile.c_str());
+    c_zip.addDirectory(directory.c_str());
+    c_zip.close();
+}
+
+void Additionals::archives::decompressFile(const QZipReader& zip, const QZipReader::FileInfo& file, const std::string& directory)
+{
+    QFile new_file(file.filePath);
+
+    new_file.open(QIODevice::WriteOnly);
+
+    new_file.write(zip.fileData(file.filePath));
+
+    new_file.close();
 }

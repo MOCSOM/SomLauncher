@@ -16,7 +16,7 @@
 #include <fstream>
 
 //#include "Additionals.h"
-#include "Additionals.h"
+#include "../Additionals/Additionals.h"
 
 #define IS_SKIP_COMMENTS true
 
@@ -76,6 +76,7 @@ namespace Json
 
 		virtual bool is_exist(std::string key);
 
+		virtual void replaceValue(const std::string& key, const std::wstring value);
 		virtual void add_value(Json::JsonValue* value);
 		virtual void add_value(std::pair<std::string, Json::JsonValue*> value);
 		virtual void add_value(std::string key, Json::JsonValue* value);
@@ -231,6 +232,8 @@ namespace Json
 		bool is_exist(std::string key) override;
 		void add_value(std::pair<std::string, Json::JsonValue*> value) override;
 
+		void replaceValue(const std::string& key, const std::wstring value);
+
 		//bool HasKey(wchar_t*& key) override { return this->values.count(System::String(key).ToString()) > 0; }
 		//bool HasKey(const wchar_t* key) override { return this->values.count(System::String(key).ToString()) > 0; }
 		std::string to_string() override;
@@ -248,7 +251,7 @@ namespace Json
 	public:
 		JsonParcer() {}
 
-		Json::JsonValue* ParseFile(wchar_t* filename);
+		Json::JsonValue* ParseFile(const wchar_t* filename);
 		Json::JsonValue* ParseFile(std::string filename);
 		Json::JsonValue* ParseJson(std::string json_str);
 
