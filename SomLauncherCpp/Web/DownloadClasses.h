@@ -14,8 +14,6 @@
 #include <memory>
 #include <urlmon.h>
 
-#include <QtZlib/zlib.h>
-
 
 //#include <vcclr.h>
 
