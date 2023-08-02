@@ -9,15 +9,15 @@ Json::JsonArray::JsonArray(): Json::JsonValue(JsonTypes::Array)
 	this->values = std::vector<Json::JsonValue*>();
 }
 
-//Json::JsonArray::~JsonArray()
-//{
-//	//for (auto& value : this->values)
-//	//{
-//	//	/*value->~JsonValue();
-//	//	delete[] value;*/
-//	//}
-//	this->values.clear();
-//}
+Json::JsonArray::~JsonArray()
+{
+	for (auto& value : this->values)
+	{
+		value->~JsonValue();
+		delete[] value;
+	}
+	this->values.clear();
+}
 
 int Json::JsonArray::get_count()
 {
@@ -177,7 +177,7 @@ wchar_t* Json::JsonArray::to_stringW()
 	return result;
 }
 
-void Json::JsonArray::_JsonValueToStringHelper(Json::JsonValue* json_value, std::string builder, int current_indent, int indent)
+void Json::JsonArray::_JsonValueToStringHelper(Json::JsonValue* json_value, std::string& builder, int current_indent, int indent)
 {
 	builder += "[\n";
 	for (int i = 0; i < json_value->get_count(); i++)
@@ -204,14 +204,15 @@ Json::JsonObject::JsonObject() : Json::JsonValue(Json::JsonTypes::Object)
 	this->values = std::unordered_map<std::string, Json::JsonValue*>();
 }
 
-//Json::JsonObject::~JsonObject()
-//{
-//	/*for (auto& var : this->values)
-//	{
-//		delete var;
-//	}*/
-//	this->values.clear();
-//}
+Json::JsonObject::~JsonObject()
+{
+	for (auto& var : this->values)
+	{
+		var.second->~JsonValue();
+		delete[] var.second;
+	}
+	this->values.clear();
+}
 
 void Json::JsonObject::add_value(std::string key, Json::JsonValue* value)
 {
@@ -408,7 +409,7 @@ int Json::JsonObject::get_count()
 	return this->GetSize();
 }
 
-void Json::JsonObject::_JsonValueToStringHelper(Json::JsonValue* json_value, std::string builder, int current_indent, int indent)
+void Json::JsonObject::_JsonValueToStringHelper(Json::JsonValue* json_value, std::string& builder, int current_indent, int indent)
 {
 	builder += "{\n";
 	int i = 0;
@@ -505,7 +506,7 @@ Json::JsonValue* Json::JsonParcer::ParseJson(std::string json_str)
 
 void Json::JsonValue::SaveJsonToFile(std::string file_name, int indent)
 {
-	std::fstream file{file_name, file.binary | file.trunc | file.in | file.out};
+	std::ofstream file(file_name, std::ios::binary);
 
 	if (!file.is_open())
 	{
@@ -514,7 +515,8 @@ void Json::JsonValue::SaveJsonToFile(std::string file_name, int indent)
 	else
 	{
 		// write
-		file << _JsonValueToString(indent);
+		std::string string_to_write = _JsonValueToString(indent);
+		file.write(string_to_write.c_str(), string_to_write.size());
 	}
 
 	file.close();
@@ -522,7 +524,7 @@ void Json::JsonValue::SaveJsonToFile(std::string file_name, int indent)
 
 void Json::JsonValue::SaveJsonToFile(std::wstring file_name, int indent)
 {
-	std::fstream file{file_name, file.binary | file.trunc | file.in | file.out};
+	std::ofstream file(file_name, std::ios::binary);
 
 	if (!file.is_open())
 	{
@@ -531,7 +533,8 @@ void Json::JsonValue::SaveJsonToFile(std::wstring file_name, int indent)
 	else
 	{
 		// write
-		file << _JsonValueToString(indent);
+		std::string string_to_write = _JsonValueToString(indent);
+		file.write(string_to_write.c_str(), string_to_write.size());
 	}
 
 	file.close();
@@ -956,7 +959,7 @@ int Json::JsonNumber::to_int()
 	return this->value;
 }
 
-void Json::JsonNumber::_JsonValueToStringHelper(Json::JsonValue* json_value, std::string builder, int current_indent, int indent)
+void Json::JsonNumber::_JsonValueToStringHelper(Json::JsonValue* json_value, std::string& builder, int current_indent, int indent)
 {
 	builder += json_value->to_string();
 }
@@ -1008,7 +1011,7 @@ wchar_t* Json::JsonString::to_stringW()
 	return Additionals::Convectors::ConvertStringToWcharPtr(this->value);
 }
 
-void Json::JsonString::_JsonValueToStringHelper(Json::JsonValue* json_value, std::string builder, int current_indent, int indent)
+void Json::JsonString::_JsonValueToStringHelper(Json::JsonValue* json_value, std::string& builder, int current_indent, int indent)
 {
 	builder += "\"" + json_value->to_string() + "\"";
 }
@@ -1192,9 +1195,9 @@ std::string Json::JsonValue::_JsonValueToString(int indent)
 	return builder;
 }
 
-void Json::JsonValue::_JsonValueToStringHelper(Json::JsonValue* jsonValue, std::string builder, int current_indent, int indent){}
+void Json::JsonValue::_JsonValueToStringHelper(Json::JsonValue* jsonValue, std::string& builder, int current_indent, int indent){}
 
-void Json::JsonValue::_Indent(std::string builder, int indent)
+void Json::JsonValue::_Indent(std::string& builder, int indent)
 {
 	for (int i = 0; i < indent; ++i)
 	{
@@ -1221,7 +1224,7 @@ Json::JsonTypes Json::JsonNull::get_type()
 	return type;
 }
 
-void Json::JsonNull::_JsonValueToStringHelper(Json::JsonValue* json_value, std::string builder, int current_indent, int indent)
+void Json::JsonNull::_JsonValueToStringHelper(Json::JsonValue* json_value, std::string& builder, int current_indent, int indent)
 {
 	builder += json_value->to_string();
 }
@@ -1245,7 +1248,7 @@ Json::JsonTypes Json::JsonBool::get_type()
 	return type;
 }
 
-void Json::JsonBool::_JsonValueToStringHelper(Json::JsonValue* json_value, std::string builder, int current_indent, int indent)
+void Json::JsonBool::_JsonValueToStringHelper(Json::JsonValue* json_value, std::string& builder, int current_indent, int indent)
 {
 	builder += json_value->to_string();
 }

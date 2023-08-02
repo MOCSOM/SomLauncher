@@ -14,7 +14,7 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget *parent)
 
 	connect(ui.pushButton_startgame, &QPushButton::released, this, &SomLauncherMainWindow::onClickpushButton_startgame);
 
-	connect(ui.label_profile, &ClickableLabel::clicked, this, &SomLauncherMainWindow::mouseEnterframe_topslidemenu);
+	connect(ui.label_profile, &ClickableLabel::clicked, this, &SomLauncherMainWindow::onClickedpushLable_profile);
 
 	connect(ui.frame_topslidemenu, &HoveredFrame::Enter, this, &SomLauncherMainWindow::mouseEnterframe_topslidemenu);
 	connect(ui.frame_topslidemenu, &HoveredFrame::Leave , this, &SomLauncherMainWindow::mouseLeaveframe_topslidemenu);
@@ -70,8 +70,13 @@ void SomLauncherMainWindow::onClickedpushButton_changeserver()
 {
 	std::cout << "pushButton_changeserver clicked" << std::endl;
 
-	ServerChanger dialog(this);
+	ServerChanger dialog(this, this->config_path);
 	dialog.exec(); //modal dialog
+}
+
+void SomLauncherMainWindow::onClickedpushLable_profile()
+{
+	std::cout << "pushLable_profile clicked" << std::endl;
 }
 
 void SomLauncherMainWindow::onClickpushButton_startgame()

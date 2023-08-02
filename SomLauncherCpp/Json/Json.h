@@ -88,9 +88,9 @@ namespace Json
 		void SaveJsonToFile(std::wstring file_name, int indent);
 
 		std::string _JsonValueToString(int indent);
-		void _Indent(std::string builder, int indent);
+		void _Indent(std::string& builder, int indent);
 
-		virtual void _JsonValueToStringHelper(Json::JsonValue* json_value, std::string builder, int current_indent, int indent);
+		virtual void _JsonValueToStringHelper(Json::JsonValue* json_value, std::string& builder, int current_indent, int indent);
 		
 
 		//property System::String^ PropertyString;
@@ -116,7 +116,7 @@ namespace Json
 
 		wchar_t* to_stringW() override;
 
-		void _JsonValueToStringHelper(Json::JsonValue* json_value, std::string builder, int current_indent, int indent) override;
+		void _JsonValueToStringHelper(Json::JsonValue* json_value, std::string& builder, int current_indent, int indent) override;
 	};
 
 	class JsonNumber : public JsonValue
@@ -138,7 +138,7 @@ namespace Json
 		double to_double() override;
 		int to_int() override;
 
-		void _JsonValueToStringHelper(Json::JsonValue* json_value, std::string builder, int current_indent, int indent) override;
+		void _JsonValueToStringHelper(Json::JsonValue* json_value, std::string& builder, int current_indent, int indent) override;
 	};
 
 	class JsonBool : public JsonValue
@@ -154,7 +154,7 @@ namespace Json
 
 		Json::JsonTypes get_type() override;
 
-		void _JsonValueToStringHelper(Json::JsonValue* json_value, std::string builder, int current_indent, int indent) override;
+		void _JsonValueToStringHelper(Json::JsonValue* json_value, std::string& builder, int current_indent, int indent) override;
 	};
 
 	class JsonNull : public JsonValue
@@ -166,7 +166,7 @@ namespace Json
 		wchar_t* to_stringW() override;
 		Json::JsonTypes get_type() override;
 
-		void _JsonValueToStringHelper(Json::JsonValue* json_value, std::string builder, int current_indent, int indent) override;
+		void _JsonValueToStringHelper(Json::JsonValue* json_value, std::string& builder, int current_indent, int indent) override;
 	};
 
 	class JsonArray : public JsonValue
@@ -176,7 +176,7 @@ namespace Json
 		
 	public:
 		JsonArray();
-		//~JsonArray();
+		~JsonArray();
 
 		int get_count() override;
 		void add_value(Json::JsonValue* value) override;
@@ -201,7 +201,7 @@ namespace Json
 		std::string to_string() override;
 		wchar_t* to_stringW() override;
 
-		void _JsonValueToStringHelper(Json::JsonValue* json_value, std::string builder, int current_indent, int indent) override;
+		void _JsonValueToStringHelper(Json::JsonValue* json_value, std::string& builder, int current_indent, int indent) override;
 	};
 
 	class JsonObject : public JsonValue
@@ -211,7 +211,7 @@ namespace Json
 
 	public:
 		JsonObject();
-		//~JsonObject();
+		~JsonObject();
 
 		void add_value(std::string key, Json::JsonValue* value) override;
 		int GetSize();
@@ -241,7 +241,7 @@ namespace Json
 
 		int get_count() override;
 
-		void _JsonValueToStringHelper(Json::JsonValue* json_value, std::string builder, int current_indent, int indent) override;
+		void _JsonValueToStringHelper(Json::JsonValue* json_value, std::string& builder, int current_indent, int indent) override;
 	};
 
 	class JsonParcer

@@ -55,6 +55,7 @@ private slots:
     void onClickedpushButton_news();
     void onClickedpushButton_aboutus();
     void onClickedpushButton_changeserver();
+    void onClickedpushLable_profile();
 
     void onClickpushButton_startgame();
 
