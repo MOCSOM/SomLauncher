@@ -41,7 +41,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>SomLauncherMainWindow</string>
+   <string>SomLauncher</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="HoveredFrame" name="frame_topslidemenu">
@@ -69,7 +69,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>PushButton</string>
+        <string>Игра</string>
        </property>
       </widget>
      </item>
@@ -82,7 +82,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>PushButton</string>
+        <string>Серверы</string>
        </property>
       </widget>
      </item>
@@ -95,7 +95,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>PushButton</string>
+        <string>Новости</string>
        </property>
       </widget>
      </item>
@@ -108,7 +108,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>PushButton</string>
+        <string>О нас</string>
        </property>
       </widget>
      </item>
@@ -123,8 +123,8 @@
        <widget class="ClickableLabel" name="label_profile">
         <property name="geometry">
          <rect>
-          <x>60</x>
-          <y>90</y>
+          <x>100</x>
+          <y>80</y>
           <width>81</width>
           <height>20</height>
          </rect>
@@ -143,7 +143,7 @@
       <x>20</x>
       <y>50</y>
       <width>761</width>
-      <height>401</height>
+      <height>411</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -154,12 +154,12 @@
     </property>
     <widget class="QWidget" name="page_game">
      <layout class="QGridLayout" name="gridLayout_4">
-      <item row="1" column="0">
+      <item row="2" column="0">
        <widget class="QFrame" name="frame_2">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
           <horstretch>0</horstretch>
-          <verstretch>2</verstretch>
+          <verstretch>3</verstretch>
          </sizepolicy>
         </property>
         <property name="frameShape">
@@ -168,7 +168,7 @@
         <property name="frameShadow">
          <enum>QFrame::Raised</enum>
         </property>
-        <layout class="QGridLayout" name="gridLayout_2" columnstretch="2,3,3">
+        <layout class="QGridLayout" name="gridLayout_2" columnstretch="2,4,4">
          <item row="1" column="1">
           <widget class="QFrame" name="frame_4">
            <property name="frameShape">
@@ -177,6 +177,57 @@
            <property name="frameShadow">
             <enum>QFrame::Raised</enum>
            </property>
+           <layout class="QGridLayout" name="gridLayout_7">
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_4">
+              <property name="text">
+               <string>Сервер:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QLabel" name="label_8">
+              <property name="text">
+               <string>client_type</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLabel" name="label_7">
+              <property name="text">
+               <string>server_name</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QLabel" name="label_9">
+              <property name="text">
+               <string>mods_count</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_6">
+              <property name="text">
+               <string>Кол-во модов:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_5">
+              <property name="text">
+               <string>Тип клиента:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2">
+             <widget class="QLabel" name="label_10">
+              <property name="text">
+               <string>server_status</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </item>
          <item row="1" column="2">
@@ -210,7 +261,7 @@
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
           <horstretch>0</horstretch>
-          <verstretch>5</verstretch>
+          <verstretch>7</verstretch>
          </sizepolicy>
         </property>
         <property name="frameShape">
@@ -219,6 +270,76 @@
         <property name="frameShadow">
          <enum>QFrame::Raised</enum>
         </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QFrame" name="frame">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>1</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_8">
+         <item row="0" column="2">
+          <widget class="QPushButton" name="pushButton_checkupdate">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>1</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>Проверить обновления</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QPushButton" name="pushButton_changeserver">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>1</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>Изменить Сервер ()</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="3">
+          <widget class="QPushButton" name="pushButton_sendbug">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>1</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>Отправить баг-репорт</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <spacer name="horizontalSpacer_additbuttoms">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>200</width>
+             <height>15</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
        </widget>
       </item>
      </layout>

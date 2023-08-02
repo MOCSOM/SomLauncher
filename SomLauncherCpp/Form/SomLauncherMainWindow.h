@@ -2,12 +2,13 @@
 #define MAINWINDOW_H_
 
 #include <QtWidgets/QMainWindow>
+#include <qpropertyanimation.h>
+
 #include <iostream>
 #include <string>
 
 #include "../Web/DownloadClasses.h"
 #include "../Callbacks/CallbackDict.h"
-//#include "ChangeServerForm.h"
 #include "../Additionals/Additionals.h"
 #include "../Json/Json.h"
 #include "../Minecraft/Minecraftus.h"
@@ -15,6 +16,8 @@
 #include "ui_SomLauncherMainWindow.h"
 
 #include "../QObjects/ClickableLabel.h"
+#include "../QObjects/HoveredFrame.h"
+#include "ServerChangerForm.h"
 
 class SomLauncherMainWindow : public QMainWindow
 {
@@ -51,10 +54,12 @@ private slots:
     void onClickedpushButton_servers();
     void onClickedpushButton_news();
     void onClickedpushButton_aboutus();
+    void onClickedpushButton_changeserver();
 
     void onClickpushButton_startgame();
 
     void mouseEnterframe_topslidemenu();
+    void mouseLeaveframe_topslidemenu();
 
 
 private:

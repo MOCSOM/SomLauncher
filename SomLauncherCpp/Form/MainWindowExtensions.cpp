@@ -111,7 +111,7 @@ void SomLauncherMainWindow::install_run_minecraft(
 	}
 
 
-	MinecraftCpp::forge::install_forge_version(Additionals::Convectors::ConvertStringToWcharPtr(install_version), Additionals::Convectors::ConvertStringToWcharPtr(this->minecraft_core_dir_path), CallbackNull(), options.executablePath);
+	MinecraftCpp::forge::install_forge_version(Additionals::Convectors::ConvertStringToWcharPtr(install_version), Additionals::Convectors::ConvertStringToWcharPtr(this->minecraft_core_dir_path), CallbackDict(), options.executablePath);
 	wchar_t* command = MinecraftCpp::get_minecraft_command__(Additionals::Convectors::ConvertStringToWcharPtr(launch_version), Additionals::Convectors::ConvertStringToWcharPtr(this->minecraft_core_dir_path), options);
 
 	std::cout << command << std::endl;

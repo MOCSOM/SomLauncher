@@ -6,10 +6,7 @@ TEMPLATE = app
 TARGET = SomLauncherCpp
 DESTDIR = ../x64/Debug
 CONFIG += debug console
-LIBS += -L"E:\vcpkg\vcpkg\packages\libzip_x86-windows" \
-    -l/"libzip" \
-    -l$(Qt_LIBS_) \
-    -lzip
+CONFIG += x86_64
 DEPENDPATH += .
 MOC_DIR += GeneratedFiles/$(ConfigurationName)
 OBJECTS_DIR += debug

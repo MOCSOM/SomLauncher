@@ -159,7 +159,9 @@
   <ItemGroup>
     <ClCompile Include="Additionals\Additionals.cpp" />
     <ClCompile Include="Callbacks\CallbackDict.cpp" />
+    <ClCompile Include="Databases\SQLBased.cpp" />
     <ClCompile Include="Form\MainWindowExtensions.cpp" />
+    <ClCompile Include="Form\ServerChangerForm.cpp" />
     <ClCompile Include="Form\SomLauncherMainWindow.cpp" />
     <ClCompile Include="Json\Json.cpp" />
     <ClCompile Include="main.cpp" />
@@ -170,6 +172,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Additionals\Additionals.h" />
+    <ClInclude Include="Databases\SQLBased.h" />
+    <QtMoc Include="Form\ServerChangerForm.h" />
     <ClInclude Include="qzipreader_p.h" />
     <ClInclude Include="qzipwriter_p.h" />
     <ClInclude Include="Web\DownloadClasses.h" />
@@ -198,6 +202,7 @@
     <QtRcc Include="Form\SomLauncherMainWindow.qrc" />
   </ItemGroup>
   <ItemGroup>
+    <QtUic Include="Form\ServerChangerForm.ui" />
     <QtUic Include="Form\SomLauncherMainWindow.ui" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

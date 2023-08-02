@@ -5,14 +5,26 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget *parent)
 {
     ui.setupUi(this);
 
+
 	connect(ui.pushButton_game, &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_game);
 	connect(ui.pushButton_servers, &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_servers);
 	connect(ui.pushButton_news, &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_news);
 	connect(ui.pushButton_aboutus, &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_aboutus);
+	connect(ui.pushButton_changeserver, &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_changeserver);
 
 	connect(ui.pushButton_startgame, &QPushButton::released, this, &SomLauncherMainWindow::onClickpushButton_startgame);
 
 	connect(ui.label_profile, &ClickableLabel::clicked, this, &SomLauncherMainWindow::mouseEnterframe_topslidemenu);
+
+	connect(ui.frame_topslidemenu, &HoveredFrame::Enter, this, &SomLauncherMainWindow::mouseEnterframe_topslidemenu);
+	connect(ui.frame_topslidemenu, &HoveredFrame::Leave , this, &SomLauncherMainWindow::mouseLeaveframe_topslidemenu);
+
+
+	ui.pushButton_game->setStyleSheet("text-align:bottom;");
+	ui.pushButton_servers->setStyleSheet("text-align:bottom;");
+	ui.pushButton_news->setStyleSheet("text-align:bottom;");
+	ui.pushButton_aboutus->setStyleSheet("text-align:bottom;");
+
 
 	//Проверка и создание конфига
 	if (!SomLauncherMainWindow::IsConfigExist())
@@ -54,8 +66,18 @@ void SomLauncherMainWindow::onClickedpushButton_aboutus()
 	ui.stackedWidget_bottommenu->setCurrentIndex(3);
 }
 
+void SomLauncherMainWindow::onClickedpushButton_changeserver()
+{
+	std::cout << "pushButton_changeserver clicked" << std::endl;
+
+	ServerChanger dialog(this);
+	dialog.exec(); //modal dialog
+}
+
 void SomLauncherMainWindow::onClickpushButton_startgame()
 {
+	std::cout << "pushButton_startgame clicked" << std::endl;
+
 	start_minecraft_params();
 }
 
@@ -63,14 +85,45 @@ void SomLauncherMainWindow::mouseEnterframe_topslidemenu()
 {
 	std::cout << "frame_topslidemenu mouse enter" << std::endl;
 
-	int i = 0;
-	while (!this->expect_table_menu && ui.frame_topslidemenu->geometry() != QRect(30, 0, 741, 131))
+	if (!this->expect_table_menu == true && ui.frame_topslidemenu->geometry() != QRect(30, 0, 741, 131))
 	{
 		this->expect_table_menu = true;
 
-		++i;
-		ui.frame_topslidemenu->setGeometry(QRect(30, (i / 18) - 90, 741, 131));
+		QPropertyAnimation* animation = new QPropertyAnimation(ui.frame_topslidemenu, "geometry");
+		animation->setDuration(100);
+		animation->setStartValue(ui.frame_topslidemenu->geometry());
+		animation->setEndValue(QRect(30, 0, 741, 131));
+		animation->start();
 
 		this->expect_table_menu = false;
 	}
+
+	ui.pushButton_game->setStyleSheet("text-align:center;");
+	ui.pushButton_servers->setStyleSheet("text-align:center;");
+	ui.pushButton_news->setStyleSheet("text-align:center;");
+	ui.pushButton_aboutus->setStyleSheet("text-align:center;");
+}
+
+void SomLauncherMainWindow::mouseLeaveframe_topslidemenu()
+{
+	std::cout << "frame_topslidemenu mouse leave" << std::endl;
+
+	if (!this->expect_table_menu == true && ui.frame_topslidemenu->geometry() != QRect(30, -90, 741, 131))
+	{
+		this->expect_table_menu = true;
+
+		QPropertyAnimation* animation = new QPropertyAnimation(ui.frame_topslidemenu, "geometry");
+		animation->setDuration(100);
+		animation->setStartValue(ui.frame_topslidemenu->geometry());
+		animation->setEndValue(QRect(30, -90, 741, 131));
+		animation->start();
+
+		this->expect_table_menu = false;
+	}
+
+	//animation->finished();
+	ui.pushButton_game->setStyleSheet("text-align:bottom;");
+	ui.pushButton_servers->setStyleSheet("text-align:bottom;");
+	ui.pushButton_news->setStyleSheet("text-align:bottom;");
+	ui.pushButton_aboutus->setStyleSheet("text-align:bottom;");
 }
