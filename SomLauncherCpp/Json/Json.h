@@ -21,7 +21,7 @@
 #define IS_SKIP_COMMENTS true
 
 //Классы для обработки и парсинга файла json
-namespace Json 
+namespace Json
 {
 	enum struct JsonTypes
 	{

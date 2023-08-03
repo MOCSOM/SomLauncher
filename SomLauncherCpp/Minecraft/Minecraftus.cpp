@@ -156,9 +156,11 @@ bool MinecraftCpp::install_minecraft_version(wchar_t* versionid, wchar_t* minecr
         if (std::wstring((*var)["id"]->to_stringW()) == std::wstring(versionid))
         {
             do_version_install(versionid, minecraft_directory, callback, (*var)["url"]->to_stringW());
+            delete[] version_list;
             return true;
         }
     }
+    delete[] version_list;
 	return false;
 }
 
@@ -1315,7 +1317,7 @@ bool MinecraftCpp::forge::install_forge_version(wchar_t* versionid, wchar_t* pat
         std::filesystem::remove(lzma_path);
     }
 
-
+    delete[] version_data;
     return true;
 }
 
@@ -1423,23 +1425,23 @@ bool MinecraftCpp::forge::forge_processors(
     */
     int random_num = 1 + (rand() % 100000);
     wchar_t* path = minecraft_directory;
-
+    
     Json::JsonValue* argument_vars = new Json::JsonObject();
     Json::JsonValue* value_ = new Json::JsonString(std::wstring(JoinW({ path, L"versions", (*data)["minecraft"]->to_stringW(), StrDogW((*data)["minecraft"]->to_stringW(), L".jar") })));
     argument_vars->add_value("{MINECRAFT_JAR}", value_);
 
     for (auto& var : (*data)["data"]->get_value())
     {
-        if (var.second->get_value("client")->to_string()._Starts_with("[") && Additionals::String::EndsWith(var.second->get_value("client")->to_string(), "]"))
+        if ((*var.second)["client"]->to_string()._Starts_with("[") && Additionals::String::EndsWith((*var.second)["client"]->to_string(), "]"))
         {
-            (*argument_vars)["{" + var.first + "}"]->operator=(get_data_library_path(var.second->get_value("client")->to_stringW(), path));
+            (*argument_vars)["{" + var.first + "}"]->operator=(get_data_library_path((*var.second)["client"]->to_stringW(), path));
         }
         else
         {
-            (*argument_vars)["{" + var.first + "}"]->operator=(var.second->get_value("client"));
+            (*argument_vars)["{" + var.first + "}"]->operator=((*var.second)["client"]);
         }
     }
-    wchar_t* root_path = StrDogW({ Additionals::TempFile::get_tempdir_SYSTEM().c_str(), StrDogW(L"forge-root-", std::to_wstring(random_num).c_str())});
+    wchar_t* root_path = StrDogW({ Additionals::TempFile::get_tempdir_SYSTEM().c_str(), L"forge-root-", std::to_wstring(random_num).c_str()});
 
     argument_vars->replaceValue("{INSTALLER}", std::wstring(installer_path));
     argument_vars->replaceValue("{BINPATCH}", std::wstring(lzma_path));
@@ -1525,7 +1527,8 @@ bool MinecraftCpp::forge::forge_processors(
     {
         std::filesystem::remove(root_path);
     }
-
+    delete[] argument_vars;
+    delete[] value_;
     return true;
 }
 
