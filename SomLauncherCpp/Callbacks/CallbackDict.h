@@ -91,20 +91,25 @@ public:
     {
         if (ulProgress == NULL && ulProgressMax == NULL && ulStatusCode == NULL)
         {
-            //System::Console::WriteLine(System::String(wszStatusText).ToString());
-
-            std::cout << wszStatusText;
+            if (wszStatusText != NULL)
+            {
+                std::wstring ws(wszStatusText);
+                std::string url(ws.begin(), ws.end());
+                std::cout << url << std::endl;
+            }
+            else
+            {
+                std::cout << wszStatusText << std::endl;
+            }
         }
 
         switch (ulStatusCode)
         {
             case BINDSTATUS_FINDINGRESOURCE:
-                //System::Console::WriteLine("Finding resource...");
-                std::cout << "Finding resource..." << '\n';
+                std::cout << "Finding resource..." << std::endl;
                 break;
             case BINDSTATUS_CONNECTING:
-                //System::Console::WriteLine("Connecting...");
-                std::cout << "Connecting..." << '\n';
+                std::cout << "Connecting..." << std::endl;
                 break;
             case BINDSTATUS_SENDINGREQUEST:
                 //System::Console::WriteLine("Sending request...");
@@ -116,8 +121,7 @@ public:
                 //System::Console::WriteLine("Cache filename available");
                 break;
             case BINDSTATUS_BEGINDOWNLOADDATA:
-                //System::Console::WriteLine("Begin download");
-                std::cout << "Begin download" << '\n';
+                std::cout << "Begin download" << std::endl;
                 break;
             case BINDSTATUS_DOWNLOADINGDATA:
             case BINDSTATUS_ENDDOWNLOADDATA:
@@ -131,21 +135,16 @@ public:
                 }
                 if (ulStatusCode == BINDSTATUS_ENDDOWNLOADDATA)
                 {
-                    /*System::Console::WriteLine();
-                    System::Console::WriteLine("End download");
-                    System::Console::WriteLine(System::String(wszStatusText).ToString());*/
-
-                    std::cout << '\n' << "End download" << '\n' << wszStatusText;
+                    std::wstring ws(wszStatusText);
+                    std::string url(ws.begin(), ws.end());
+                    std::cout << std::endl << "End download" << std::endl << url << std::endl;
                 }
             }
             break;
 
             default:
             {
-                /*System::Console::Write("Status code : ");
-                System::Console::WriteLine(static_cast<long int>(ulStatusCode));*/
-
-                std::cout << "Status code : " << ulStatusCode << '\n';
+                std::cout << "Status code : " << ulStatusCode << std::endl << std::endl;
             }
         }
         

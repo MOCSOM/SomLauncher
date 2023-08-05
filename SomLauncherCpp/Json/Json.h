@@ -30,7 +30,8 @@ namespace Json
 		Bool,
 		Array,
 		Object,
-		Null
+		Null,
+		NotImplemented
 	};
 
 	class JsonValue

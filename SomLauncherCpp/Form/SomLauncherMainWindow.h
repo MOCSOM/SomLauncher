@@ -28,7 +28,7 @@ private:
     std::string config_path = Additionals::Convectors::ConvertWStringToString(JoinA({ /*"\\",*/ minecraft_core_dir_path.c_str(), "SOMCONFIG.json"}));
     std::string launcher_name = "SomLauncher";
     std::string launcher_version = "2.0";
-    std::string username = "";
+    std::string username = "Debug";
     std::string servers_json = Additionals::Convectors::ConvertWStringToString(JoinA({ /*"\\",*/ minecraft_core_dir_path.c_str(), "SERVERS.json" }));
 
     bool expect_table_menu = false;

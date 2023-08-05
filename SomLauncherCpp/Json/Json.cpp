@@ -13,8 +13,15 @@ Json::JsonArray::~JsonArray()
 {
 	for (auto& value : this->values)
 	{
-		value->~JsonValue();
-		delete[] value;
+		if (value->get_type() == Json::JsonTypes::Array)
+		{
+			value->~JsonValue();
+			delete value;
+		}
+		else
+		{
+			value->~JsonValue();
+		}
 	}
 	this->values.clear();
 }
@@ -96,8 +103,11 @@ Json::JsonValue* Json::JsonArray::operator[](int index)
 Json::JsonValue* Json::JsonArray::operator=(Json::JsonValue* value)
 {
 	this->values.clear();
-	this->values.push_back(value);
-
+	for (auto& var : value->get_value_list())
+	{
+		this->values.push_back(var);
+	}
+	
 	return this;
 }
 
@@ -206,11 +216,20 @@ Json::JsonObject::JsonObject() : Json::JsonValue(Json::JsonTypes::Object)
 
 Json::JsonObject::~JsonObject()
 {
-	for (auto& var : this->values)
+	/*for (auto& var : this->values)
 	{
-		var.second->~JsonValue();
-		delete[] var.second;
-	}
+		if (var.second->get_type() == Json::JsonTypes::Object)
+		{
+			var.second->~JsonValue();
+		}
+		else
+		{
+			var.second->~JsonValue();
+			delete var.second;
+
+		}
+	}*/
+
 	this->values.clear();
 }
 
@@ -1041,6 +1060,7 @@ Json::JsonValue::JsonValue(const Json::JsonTypes& type) : type(type)
 
 Json::JsonValue::JsonValue()
 {
+	type = Json::JsonTypes::NotImplemented;
 }
 
 Json::JsonValue::JsonValue(std::nullptr_t values)

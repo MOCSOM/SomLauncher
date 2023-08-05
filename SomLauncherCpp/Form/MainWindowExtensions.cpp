@@ -111,12 +111,12 @@ void SomLauncherMainWindow::install_run_minecraft(
 	}
 
 
-	MinecraftCpp::forge::install_forge_version(Additionals::Convectors::ConvertStringToWcharPtr(install_version), Additionals::Convectors::ConvertStringToWcharPtr(this->minecraft_core_dir_path), CallbackDict(), options.executablePath);
-	wchar_t* command = MinecraftCpp::get_minecraft_command__(Additionals::Convectors::ConvertStringToWcharPtr(launch_version), Additionals::Convectors::ConvertStringToWcharPtr(this->minecraft_core_dir_path), options);
+	MinecraftCpp::forge::install_forge_version(Additionals::Convectors::ConvertStringToWcharPtr(install_version), Additionals::Convectors::ConvertStringToWcharPtr(this->minecraft_core_dir_path), new CallbackDict(), options.executablePath);
+	std::wstring command = MinecraftCpp::get_minecraft_command__(Additionals::Convectors::ConvertStringToWcharPtr(launch_version), Additionals::Convectors::ConvertStringToWcharPtr(this->minecraft_core_dir_path), options);
 
-	std::cout << command << std::endl;
+	std::wcout << command << std::endl;
 
-	MinecraftCpp::start_minecraft(L"", command);
+	MinecraftCpp::start_minecraft(L"", command.c_str());
 }
 
 bool SomLauncherMainWindow::IsConfigExist()

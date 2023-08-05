@@ -167,6 +167,7 @@
     <ClCompile Include="Json\Json.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Minecraft\Minecraftus.cpp" />
+    <ClCompile Include="Minecraft\Mods.cpp" />
     <ClCompile Include="QObjects\ClickableLabel.cpp" />
     <ClCompile Include="QObjects\HoveredFrame.cpp" />
     <ClCompile Include="Web\DownloadClasses.cpp" />
@@ -175,6 +176,7 @@
     <ClInclude Include="Additionals\Additionals.h" />
     <ClInclude Include="Databases\SQLBased.h" />
     <QtMoc Include="Form\ServerChangerForm.h" />
+    <ClInclude Include="Minecraft\Mods.h" />
     <ClInclude Include="qzipreader_p.h" />
     <ClInclude Include="qzipwriter_p.h" />
     <ClInclude Include="Web\DownloadClasses.h" />

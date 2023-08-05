@@ -751,7 +751,21 @@ void Additionals::archives::compressFile(std::string zipfile, std::string direct
 
 void Additionals::archives::decompressFile(const QZipReader& zip, const QZipReader::FileInfo& file, const std::string& directory)
 {
-    QFile new_file(file.filePath);
+    std::filesystem::path d_file_path(directory);
+    d_file_path = d_file_path.parent_path();
+
+    DWORD attrib = GetFileAttributesW(d_file_path.wstring().c_str());
+    if (attrib == INVALID_FILE_ATTRIBUTES || !(attrib & FILE_ATTRIBUTE_DIRECTORY))
+    {
+        if (!std::filesystem::create_directories(d_file_path))
+        {
+            // Обработка ошибки создания директории
+            int error = GetLastError();
+        }
+    }
+
+
+    QFile new_file(directory.c_str());
 
     new_file.open(QIODevice::WriteOnly);
 

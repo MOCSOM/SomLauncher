@@ -72,7 +72,7 @@ namespace DDIC
 		{
 			//bool _CreateDirectoryIfNotExists(const std::wstring& path);
 
-			std::wstring download_file(const wchar_t* s_url, const wchar_t* d_file = nullptr, CallbackNull callback = CallbackNull(), bool lzma_compressed = false);
+			std::wstring download_file(const wchar_t* s_url, const wchar_t* d_file = nullptr, CallbackNull* callback = new CallbackNull(), bool lzma_compressed = false);
 			bool download_all_files(wchar_t* s_url_dir, CallbackNull callback);
 			int _get_java_exist_ver(wchar_t* direct);
 			std::string _get_java_path(const wchar_t* dir);

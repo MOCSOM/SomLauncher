@@ -13,6 +13,9 @@
 #include "../qzipreader_p.h"
 #include "../qzipwriter_p.h" 
 
+#include <qdir.h>
+
+
 namespace MinecraftCpp 
 {
 	namespace option 
@@ -49,7 +52,7 @@ namespace MinecraftCpp
 	}
 
 
-	wchar_t* get_minecraft_command__(
+	std::wstring get_minecraft_command__(
 		wchar_t* version,
 		wchar_t* minecraft_directory,
 		MinecraftCpp::option::MinecraftOptions options);
@@ -63,14 +66,14 @@ namespace MinecraftCpp
 	wchar_t* _get_jvm_platform_string();
 	std::string replace_arguments(std::string argstr, Json::JsonValue* versionData, wchar_t* path, MinecraftCpp::option::MinecraftOptions options);
 	wchar_t* get_executable_path(wchar_t* jvm_version, wchar_t* minecraft_directory);
-	bool install_libraries(Json::JsonValue* data, wchar_t* path, CallbackNull callback);
+	bool install_libraries(Json::JsonValue* data, wchar_t* path, CallbackNull* callback);
 	bool extract_natives_file(wchar_t* filename, wchar_t* extract_path, Json::JsonValue* extract_data);
-	bool install_assets(Json::JsonValue* data, wchar_t* path, CallbackNull callback);
-	bool install_jvm_runtime(wchar_t* jvm_version, wchar_t* minecraft_directory, CallbackNull callback = CallbackNull());
+	bool install_assets(Json::JsonValue* data, wchar_t* path, CallbackNull* callback);
+	bool install_jvm_runtime(wchar_t* jvm_version, wchar_t* minecraft_directory, CallbackNull* callback = new CallbackNull());
 
 	namespace forge 
 	{
-		bool install_forge_version(wchar_t* versionid, wchar_t* path, CallbackNull callback = CallbackNull(), wchar_t* java = NULL);
+		bool install_forge_version(wchar_t* versionid, wchar_t* path, CallbackNull* callback = new CallbackNull(), wchar_t* java = NULL);
 		bool extract_file(const QZipReader& handler, const wchar_t* zip_path, const wchar_t* extract_path);
 		std::string get_data_library_path(wchar_t* libname, wchar_t* path);
 		wchar_t* get_jar_mainclass(wchar_t* path);
@@ -80,7 +83,7 @@ namespace MinecraftCpp
 			wchar_t* minecraft_directory,
 			wchar_t* lzma_path,
 			wchar_t* installer_path,
-			CallbackNull callback,
+			CallbackNull* callback,
 			wchar_t* java);
 	}
 
@@ -90,7 +93,7 @@ namespace MinecraftCpp
 		wchar_t* path,
 		MinecraftCpp::option::MinecraftOptions options);
 
-	wchar_t* get_arguments_string(
+	std::string get_arguments_string(
 		Json::JsonValue* versionData,
 		wchar_t* path,
 		MinecraftCpp::option::MinecraftOptions options);
@@ -98,12 +101,12 @@ namespace MinecraftCpp
 	bool install_minecraft_version(
 		wchar_t* versionid,
 		wchar_t* minecraft_directory,
-		CallbackNull callback = CallbackNull());
+		CallbackNull* callback = new CallbackNull());
 
 	bool do_version_install(
 		wchar_t* versionid,
 		wchar_t* path,
-		CallbackNull callback,
+		CallbackNull* callback,
 		wchar_t* url = NULL);
 
 	Json::JsonValue* inherit_json(
@@ -114,10 +117,7 @@ namespace MinecraftCpp
 		Json::JsonValue* data,
 		wchar_t* path);
 
-	namespace modpacks 
-	{
-		bool install_mod_pack(wchar_t* versionid, wchar_t* path, CallbackNull callback = CallbackNull());
-	}
+
 
 
 }

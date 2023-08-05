@@ -11,8 +11,9 @@
 //}
 
 
-std::wstring DDIC::Download::Files::download_file(const wchar_t* s_url, const wchar_t* d_file, CallbackNull callback, bool lzma_compressed)
+std::wstring DDIC::Download::Files::download_file(const wchar_t* s_url, const wchar_t* d_file, CallbackNull* callback, bool lzma_compressed)
 {
+    //callback = const_cast<CallbackNull>(callback);
     std::wstring destenation_file;
 
     if (d_file == nullptr || d_file == NULL)
@@ -39,17 +40,21 @@ std::wstring DDIC::Download::Files::download_file(const wchar_t* s_url, const wc
     std::filesystem::path d_file_path(destenation_file);
     d_file_path = d_file_path.parent_path();
 
-    DWORD attrib = GetFileAttributesW(d_file_path.wstring().c_str());
-    if (d_file_path != "" && attrib == INVALID_FILE_ATTRIBUTES || !(attrib & FILE_ATTRIBUTE_DIRECTORY))
+    if (d_file_path != "")
     {
-        if (!CreateDirectoryW(d_file_path.wstring().c_str(), NULL))
+        if (!std::filesystem::create_directories(d_file_path))
         {
             // Обработка ошибки создания директории
             int error = GetLastError();
-            //System::Console::WriteLine(System::String(().ToString());
-            //System::Console::WriteLine(error);
         }
     }
+    
+
+    /*DWORD attrib = GetFileAttributesW(d_file_path.wstring().c_str());
+    if (d_file_path != "" || attrib == INVALID_FILE_ATTRIBUTES || !(attrib & FILE_ATTRIBUTE_DIRECTORY))
+    {
+        
+    }*/
 
     if (d_file != nullptr || d_file != NULL)
     {
@@ -67,11 +72,11 @@ std::wstring DDIC::Download::Files::download_file(const wchar_t* s_url, const wc
             destenation_file = ff + L"\\" + Additionals::Convectors::ConvertStringToWcharPtr(url);
         }
     }
-    HRESULT download_result = URLDownloadToFileW(NULL, s_url, destenation_file.c_str(), NULL, &callback);
+    HRESULT download_result = URLDownloadToFileW(NULL, s_url, destenation_file.c_str(), NULL, callback);
 
     if (S_OK == download_result)
     {
-        callback.OnProgress(NULL, NULL, NULL, StrDogW({ L"The file is saved as: ",  d_file, L"\n" }));
+        callback->OnProgress(NULL, NULL, NULL, StrDogW({ L"The file is saved as: ",  d_file, L"\n" }));
         return destenation_file;
     }
     else
@@ -84,7 +89,7 @@ std::wstring DDIC::Download::Files::download_file(const wchar_t* s_url, const wc
         {
             d_file = L" ";
         }
-        callback.OnProgress(NULL, NULL, NULL, StrDogW({ L"Unable to Download the file: ", s_url, L"\nto: ", d_file }));
+        callback->OnProgress(NULL, NULL, NULL, StrDogW({ L"Unable to Download the file: ", s_url, L"\nto: ", d_file }));
         return L"";
     }
     if (lzma_compressed)
@@ -173,11 +178,11 @@ wchar_t* DDIC::Download::Java::install(wchar_t* version, wchar_t* path, wchar_t*
     wchar_t* path_wch = Additionals::Convectors::ConvertStringToWcharPtr(path2 + "\\.zip");
     wchar_t* path_wch_norm = Additionals::Convectors::ConvertStringToWcharPtr(path2);
 
-    std::wstring jdk_file2 = nullptr;
+    std::wstring jdk_file2 = L"";
     CallbackDict callback;
     
 
-    jdk_file2 = DownloadFile(url, path_wch, callback);
+    jdk_file2 = DownloadFile(url, path_wch, &callback);
 
     const wchar_t* jdk_file = jdk_file2.c_str();
     
