@@ -50,22 +50,22 @@
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
     <QtInstall>6.5.2</QtInstall>
-    <QtModules>core;gui;widgets</QtModules>
+    <QtModules>core;gui;network;widgets</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
     <QtInstall>6.5.2</QtInstall>
-    <QtModules>core</QtModules>
+    <QtModules>core;gui;widgets</QtModules>
     <QtBuildConfig>release</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|Win32'" Label="QtSettings">
     <QtInstall>6.5.2</QtInstall>
-    <QtModules>core</QtModules>
+    <QtModules>core;gui;widgets</QtModules>
     <QtBuildConfig>release</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'" Label="QtSettings">
     <QtInstall>6.5.2</QtInstall>
-    <QtModules>core</QtModules>
+    <QtModules>core;gui;widgets</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
@@ -163,6 +163,7 @@
     <ClCompile Include="Databases\SQLBased.cpp" />
     <ClCompile Include="Form\MainWindowExtensions.cpp" />
     <ClCompile Include="Form\ServerChangerForm.cpp" />
+    <ClCompile Include="Form\ServerWidget.cpp" />
     <ClCompile Include="Form\SomLauncherMainWindow.cpp" />
     <ClCompile Include="Json\Json.cpp" />
     <ClCompile Include="main.cpp" />
@@ -176,6 +177,7 @@
     <ClInclude Include="Additionals\Additionals.h" />
     <ClInclude Include="Databases\SQLBased.h" />
     <QtMoc Include="Form\ServerChangerForm.h" />
+    <ClInclude Include="Form\ServerWidget.h" />
     <ClInclude Include="Minecraft\Mods.h" />
     <ClInclude Include="qzipreader_p.h" />
     <ClInclude Include="qzipwriter_p.h" />
@@ -206,6 +208,7 @@
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="Form\ServerChangerForm.ui" />
+    <QtUic Include="Form\ServerWidget.ui" />
     <QtUic Include="Form\SomLauncherMainWindow.ui" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

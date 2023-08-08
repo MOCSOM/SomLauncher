@@ -5,6 +5,10 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget *parent)
 {
     ui.setupUi(this);
 
+	Json::JsonParcer json_config;
+	this->servers_parce = json_config.ParseFile(this->servers_json);
+	this->config_parce = json_config.ParseFile(this->config_path);
+
 
 	connect(ui.pushButton_game, &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_game);
 	connect(ui.pushButton_servers, &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_servers);
@@ -24,6 +28,29 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget *parent)
 	ui.pushButton_servers->setStyleSheet("text-align:bottom;");
 	ui.pushButton_news->setStyleSheet("text-align:bottom;");
 	ui.pushButton_aboutus->setStyleSheet("text-align:bottom;");
+
+
+	this->server_radio_button_group = new QButtonGroup();
+
+	QList<ServerWidget*> widget_list;
+
+	for (int i = 0; i < (*this->servers_parce)["servers"]->get_count(); ++i)
+	{
+		ServerWidget* widget = new ServerWidget(this->server_radio_button_group, (*(*this->servers_parce)["servers"])[i]);
+
+		widget_list.append(widget);
+	}
+
+	int index = 0;
+	for (int i = 0; i < ((*this->servers_parce)["servers"]->get_count() - 1) / 2 + 1; i++)
+	{
+		for (int j = 0; j < ((*this->servers_parce)["servers"]->get_count() - 1) / 2 + 1; j++)
+		{
+			ui.gridLayout_scrollArea_servers->addWidget(widget_list[index], i, j);
+
+			++index;
+		}
+	}
 
 
 	//Проверка и создание конфига

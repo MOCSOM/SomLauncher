@@ -3,6 +3,7 @@
 
 #include <QtWidgets/QMainWindow>
 #include <qpropertyanimation.h>
+#include <qbuttongroup.h>
 
 #include <iostream>
 #include <string>
@@ -18,20 +19,24 @@
 #include "../QObjects/ClickableLabel.h"
 #include "../QObjects/HoveredFrame.h"
 #include "ServerChangerForm.h"
+#include "ServerWidget.h"
 
 class SomLauncherMainWindow : public QMainWindow
 {
     Q_OBJECT
 
 private:
-    std::string minecraft_core_dir_path = Additionals::Convectors::ConvertWStringToString(JoinA({ getenv("APPDATA"), ".SomSomSom" }));
-    std::string config_path = Additionals::Convectors::ConvertWStringToString(JoinA({ /*"\\",*/ minecraft_core_dir_path.c_str(), "SOMCONFIG.json"}));
+    std::string minecraft_core_dir_path = Join({ getenv("APPDATA"), ".SomSomSom" });
+    std::string config_path = Join({ /*"\\",*/ minecraft_core_dir_path, "SOMCONFIG.json"});
     std::string launcher_name = "SomLauncher";
     std::string launcher_version = "2.0";
     std::string username = "Debug";
-    std::string servers_json = Additionals::Convectors::ConvertWStringToString(JoinA({ /*"\\",*/ minecraft_core_dir_path.c_str(), "SERVERS.json" }));
+    std::string servers_json = Join({ /*"\\",*/ minecraft_core_dir_path, "SERVERS.json" });
 
     bool expect_table_menu = false;
+
+    Json::JsonValue* config_parce;
+    Json::JsonValue* servers_parce;
 
 public:
     SomLauncherMainWindow(QWidget *parent = nullptr);
@@ -65,6 +70,8 @@ private slots:
 
 private:
     Ui::SomLauncherMainWindowClass ui;
+
+    QButtonGroup* server_radio_button_group;
 };
 
 #endif /*MAINWINDOW_H_*/

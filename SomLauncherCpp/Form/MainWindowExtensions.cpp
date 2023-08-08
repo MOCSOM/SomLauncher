@@ -2,16 +2,13 @@
 
 void SomLauncherMainWindow::start_minecraft_params()
 {
-	Json::JsonParcer json_config;
-	Json::JsonValue* servers_parce = json_config.ParseFile(this->servers_json);
-	Json::JsonValue* config_parce = json_config.ParseFile(this->config_path);
 
 	std::cout << "Config loaded" << std::endl;
-	std::cout << (*(*config_parce)["user"])["name"]->to_string() << std::endl;
-	std::cout << (*(*config_parce)["user"])["memory"]->to_string() << std::endl;
-	std::cout << (*(*config_parce)["user"])["mcdir"]->to_string() << std::endl;
-	std::cout << (*(*config_parce)["user"])["online"]->to_string() << std::endl;
-	std::cout << (*(*config_parce)["user"])["server"]->to_string() << std::endl;
+	std::cout << (*(*this->config_parce)["user"])["name"]->to_string() << std::endl;
+	std::cout << (*(*this->config_parce)["user"])["memory"]->to_string() << std::endl;
+	std::cout << (*(*this->config_parce)["user"])["mcdir"]->to_string() << std::endl;
+	std::cout << (*(*this->config_parce)["user"])["online"]->to_string() << std::endl;
+	std::cout << (*(*this->config_parce)["user"])["server"]->to_string() << std::endl;
 
 	std::string java = "";
 	std::string core = "";
@@ -22,28 +19,28 @@ void SomLauncherMainWindow::start_minecraft_params()
 
 	_dupenv_s(&appdata, &appdata_sz, "APPDATA");
 
-	std::string path_wch_java = DDIC::Download::Files::_get_java_path(JoinA({ appdata, ".SomSomSom" }).c_str()) + "\\" + "bin" + "\\" + "java.exe";
+	std::string path_wch_java = DDIC::Download::Files::_get_java_path(Join({ appdata, ".SomSomSom" })) + "\\" + "bin" + "\\" + "java.exe";
 
 
 	MinecraftCpp::option::MinecraftOptions options;
 	options.customResolution = false;
-	options.gameDirectory = Additionals::Convectors::ConvertStringToWcharPtr(this->minecraft_core_dir_path);
-	options.launcherName = Additionals::Convectors::ConvertStringToWcharPtr(this->launcher_name);
-	options.launcherVersion = Additionals::Convectors::ConvertStringToWcharPtr(this->launcher_version);
-	options.username = Additionals::Convectors::ConvertStringToWcharPtr(this->username);
-	options.jvmArguments = StrDogW(L"-Xms1024M -Xmx", StrDogW(L"8000", L"M"));
-	options.executablePath = Additionals::Convectors::ConvertStringToWcharPtr(path_wch_java);
-	options.uuid = Additionals::Convectors::ConvertStringToWcharPtr("uuu");
-	options.token = Additionals::Convectors::ConvertStringToWcharPtr("uuu");
+	options.gameDirectory = this->minecraft_core_dir_path;
+	options.launcherName = this->launcher_name;
+	options.launcherVersion = this->launcher_version;
+	options.username = this->username;
+	options.jvmArguments = "-Xms1024M -Xmx" + std::to_string(8000) + "M";
+	options.executablePath = path_wch_java;
+	options.uuid = "uuu";
+	options.token = "uuu";
 
-	switch ((*(*config_parce)["user"])["server"]->to_int())
+	switch ((*(*this->config_parce)["user"])["server"]->to_int())
 	{
 	case 0:
 	{
 		java = (*(*(*servers_parce)["servers"])[0])["java"]->to_string();
 		core = (*(*(*servers_parce)["servers"])[0])["core"]->to_string();
 		version = (*(*(*servers_parce)["servers"])[0])["version"]->to_string();
-		install_run_minecraft(version, core, (*(*(*servers_parce)["servers"])[0])["loaderVersion"]->to_string(), java, (*(*config_parce)["user"])["mcdir"]->to_string(), options);
+		install_run_minecraft(version, core, (*(*(*this->servers_parce)["servers"])[0])["loaderVersion"]->to_string(), java, (*(*this->config_parce)["user"])["mcdir"]->to_string(), options);
 	}
 	//case 1:
 	//{
@@ -79,10 +76,10 @@ void SomLauncherMainWindow::install_run_minecraft(
 	std::string mcdir,
 	MinecraftCpp::option::MinecraftOptions options)
 {
-	wchar_t* java_dir = NULL;
-	if (/*!DDIC::Download::Java::check_system_verison_java(java) ||*/ !DDIC::Download::Java::check_downloaded_version_java(Additionals::Convectors::ConvertStringToWcharPtr(this->minecraft_core_dir_path)))
+	std::string java_dir = "";
+	if (/*!DDIC::Download::Java::check_system_verison_java(java) ||*/ !DDIC::Download::Java::check_downloaded_version_java(this->minecraft_core_dir_path))
 	{
-		java_dir = DDIC::Download::Java::install(Additionals::Convectors::ConvertStringToWcharPtr(java), Additionals::Convectors::ConvertStringToWcharPtr(this->minecraft_core_dir_path));
+		java_dir = DDIC::Download::Java::install(java, this->minecraft_core_dir_path);
 		options.executablePath = java_dir;
 	}
 	else
@@ -111,12 +108,12 @@ void SomLauncherMainWindow::install_run_minecraft(
 	}
 
 
-	MinecraftCpp::forge::install_forge_version(Additionals::Convectors::ConvertStringToWcharPtr(install_version), Additionals::Convectors::ConvertStringToWcharPtr(this->minecraft_core_dir_path), new CallbackDict(), options.executablePath);
-	std::wstring command = MinecraftCpp::get_minecraft_command__(Additionals::Convectors::ConvertStringToWcharPtr(launch_version), Additionals::Convectors::ConvertStringToWcharPtr(this->minecraft_core_dir_path), options);
+	MinecraftCpp::forge::install_forge_version(install_version, this->minecraft_core_dir_path, new CallbackDict(), options.executablePath);
+	std::string command = MinecraftCpp::get_minecraft_command__(launch_version, this->minecraft_core_dir_path, options);
 
-	std::wcout << command << std::endl;
+	std::cout << command << std::endl;
 
-	MinecraftCpp::start_minecraft(L"", command.c_str());
+	MinecraftCpp::start_minecraft("", command);
 }
 
 bool SomLauncherMainWindow::IsConfigExist()

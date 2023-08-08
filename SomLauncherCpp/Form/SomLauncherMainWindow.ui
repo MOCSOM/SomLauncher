@@ -59,7 +59,7 @@
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
-    <layout class="QGridLayout" name="gridLayout" columnstretch="2,2,2,2,3">
+    <layout class="QGridLayout" name="gridLayout_frame_topslidemenu" columnstretch="2,2,2,2,3">
      <item row="0" column="0">
       <widget class="QPushButton" name="pushButton_game">
        <property name="sizePolicy">
@@ -150,12 +150,12 @@
      <enum>QFrame::Box</enum>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="page_game">
-     <layout class="QGridLayout" name="gridLayout_4">
+     <layout class="QGridLayout" name="gridLayout_page_game">
       <item row="2" column="0">
-       <widget class="QFrame" name="frame_2">
+       <widget class="QFrame" name="frame_status_table">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
           <horstretch>0</horstretch>
@@ -168,7 +168,7 @@
         <property name="frameShadow">
          <enum>QFrame::Raised</enum>
         </property>
-        <layout class="QGridLayout" name="gridLayout_2" columnstretch="2,4,4">
+        <layout class="QGridLayout" name="gridLayout_frame_status_table" columnstretch="2,4,4">
          <item row="1" column="1">
           <widget class="QFrame" name="frame_4">
            <property name="frameShape">
@@ -257,7 +257,7 @@
        </widget>
       </item>
       <item row="0" column="0">
-       <widget class="QFrame" name="frame_3">
+       <widget class="QFrame" name="frame_short_news">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
           <horstretch>0</horstretch>
@@ -273,7 +273,7 @@
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QFrame" name="frame">
+       <widget class="QFrame" name="frame_additin_buttons">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
           <horstretch>0</horstretch>
@@ -286,9 +286,9 @@
         <property name="frameShadow">
          <enum>QFrame::Raised</enum>
         </property>
-        <layout class="QGridLayout" name="gridLayout_8">
+        <layout class="QGridLayout" name="gridLayout_frame_additin_buttons">
          <item row="0" column="2">
-          <widget class="QPushButton" name="pushButton_checkupdate">
+          <widget class="QPushButton" name="pushButton_2">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
              <horstretch>1</horstretch>
@@ -297,6 +297,32 @@
            </property>
            <property name="text">
             <string>Проверить обновления</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>200</width>
+             <height>15</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="0" column="3">
+          <widget class="QPushButton" name="pushButton">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>1</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>Отправить баг-репорт</string>
            </property>
           </widget>
          </item>
@@ -313,50 +339,35 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="3">
-          <widget class="QPushButton" name="pushButton_sendbug">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-             <horstretch>1</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>Отправить баг-репорт</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0">
-          <spacer name="horizontalSpacer_additbuttoms">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>200</width>
-             <height>15</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
         </layout>
        </widget>
       </item>
      </layout>
     </widget>
     <widget class="QWidget" name="page_servers">
-     <layout class="QGridLayout" name="gridLayout_6">
+     <layout class="QGridLayout" name="gridLayout_page_servers">
       <item row="0" column="0">
-       <widget class="QLabel" name="label_3">
-        <property name="text">
-         <string>TextLabel</string>
+       <widget class="QScrollArea" name="scrollArea_servers">
+        <property name="widgetResizable">
+         <bool>true</bool>
         </property>
+        <widget class="QWidget" name="scrollAreaWidgetContents">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>739</width>
+           <height>389</height>
+          </rect>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_scrollArea_servers"/>
+        </widget>
        </widget>
       </item>
      </layout>
     </widget>
     <widget class="QWidget" name="page_news">
-     <layout class="QGridLayout" name="gridLayout_5">
+     <layout class="QGridLayout" name="gridLayout_page_news">
       <item row="0" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
@@ -367,7 +378,7 @@
      </layout>
     </widget>
     <widget class="QWidget" name="page_aboutus">
-     <layout class="QGridLayout" name="gridLayout_3"/>
+     <layout class="QGridLayout" name="gridLayout_page_aboutus"/>
     </widget>
    </widget>
    <zorder>stackedWidget_bottommenu</zorder>

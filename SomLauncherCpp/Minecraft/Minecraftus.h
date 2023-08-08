@@ -14,6 +14,12 @@
 #include "../qzipwriter_p.h" 
 
 #include <qdir.h>
+#include <chrono>
+#include <iostream>
+#include <iomanip>
+#include <sstream>
+#include <chrono>
+#include <regex>
 
 
 namespace MinecraftCpp 
@@ -25,100 +31,113 @@ namespace MinecraftCpp
 			MinecraftOptions() {}
 			~MinecraftOptions() {}
 
-			wchar_t* username            = NULL;
-			wchar_t* uuid                = NULL;
-			wchar_t* token               = NULL;
-			wchar_t* executablePath      = NULL;
-			wchar_t* jvmArguments        = NULL;
-			wchar_t* launcherName        = NULL;
-			wchar_t* launcherVersion     = NULL;
-			wchar_t* gameDirectory       = NULL;
-			bool	 demo                = NULL;
-			bool	 customResolution    = NULL;
-			wchar_t* resolutionWidth     = NULL;
-			wchar_t* resolutionHeight    = NULL;
-			wchar_t* server              = NULL;
-			wchar_t* port                = NULL;
-			wchar_t* nativesDirectory    = NULL;
-			bool	 enableLoggingConfig = NULL;
-			wchar_t* classpath           = NULL;
-			wchar_t* NULLES              = NULL;
+			std::string username            = "";
+			std::string uuid                = "";
+			std::string token               = "";
+			std::string executablePath      = "";
+			std::string jvmArguments        = "";
+			std::string launcherName        = "";
+			std::string launcherVersion     = "";
+			std::string gameDirectory       = "";
+			bool	 demo                   = NULL;
+			bool	 customResolution       = NULL;
+			std::string resolutionWidth     = "";
+			std::string resolutionHeight    = "";
+			std::string server              = "";
+			std::string port                = "";
+			std::string nativesDirectory    = "";
+			bool	 enableLoggingConfig    = NULL;
+			std::string classpath           = "";
+			std::string NULLES              = "";
 			
 			// get (поле, стандарт)
-			wchar_t* get(const wchar_t* param, const wchar_t* writ = NULL);
-			bool get(const wchar_t* param, bool writ = NULL);
-			bool is_exist(wchar_t* param);
+			std::string get(const std::string& param, const std::string& writ = "");
+			bool get(const std::string& param, bool writ = NULL);
+			bool is_exist(const std::string& param);
 		};
 	}
 
+	Json::JsonValue* get_version_list();
 
-	std::wstring get_minecraft_command__(
-		wchar_t* version,
-		wchar_t* minecraft_directory,
+	std::string get_minecraft_command__(
+		const std::string& version,
+		const std::string& minecraft_directory,
 		MinecraftCpp::option::MinecraftOptions options);
 
-	bool start_minecraft(const wchar_t* java_path = NULL, const wchar_t* args = NULL);
-	wchar_t* get_classpath_separator();
+	bool start_minecraft(const std::string& java_path = "", const std::string& args = "");
+	std::string get_classpath_separator();
 	bool parse_single_rule(Json::JsonValue* rule, MinecraftCpp::option::MinecraftOptions options);
-	bool parse_rule_list(Json::JsonValue* data, const wchar_t* rule_string, MinecraftCpp::option::MinecraftOptions options);
-	wchar_t* get_library_path(wchar_t* name, wchar_t* path);
-	wchar_t* get_natives(Json::JsonValue* data);
-	wchar_t* _get_jvm_platform_string();
-	std::string replace_arguments(std::string argstr, Json::JsonValue* versionData, wchar_t* path, MinecraftCpp::option::MinecraftOptions options);
-	wchar_t* get_executable_path(wchar_t* jvm_version, wchar_t* minecraft_directory);
-	bool install_libraries(Json::JsonValue* data, wchar_t* path, CallbackNull* callback);
-	bool extract_natives_file(wchar_t* filename, wchar_t* extract_path, Json::JsonValue* extract_data);
-	bool install_assets(Json::JsonValue* data, wchar_t* path, CallbackNull* callback);
-	bool install_jvm_runtime(wchar_t* jvm_version, wchar_t* minecraft_directory, CallbackNull* callback = new CallbackNull());
+	bool parse_rule_list(Json::JsonValue* data, const std::string& rule_string, MinecraftCpp::option::MinecraftOptions options);
+	std::string get_library_path(const std::string& name, const std::string& path);
+	std::string get_natives(Json::JsonValue* data);
+	std::string _get_jvm_platform_string();
+	std::string replace_arguments(std::string argstr, Json::JsonValue* versionData, const std::string& path, MinecraftCpp::option::MinecraftOptions options);
+	std::string get_executable_path(const std::string& jvm_version, const std::string& minecraft_directory);
+	bool install_libraries(Json::JsonValue* data, const std::string& path, CallbackNull* callback);
+	bool extract_natives_file(const std::string& filename, const std::string& extract_path, Json::JsonValue* extract_data);
+	bool install_assets(Json::JsonValue* data, const std::string& path, CallbackNull* callback);
+	bool install_jvm_runtime(const std::string& jvm_version, const std::string& minecraft_directory, CallbackNull* callback = new CallbackNull());
 
 	namespace forge 
 	{
-		bool install_forge_version(wchar_t* versionid, wchar_t* path, CallbackNull* callback = new CallbackNull(), wchar_t* java = NULL);
-		bool extract_file(const QZipReader& handler, const wchar_t* zip_path, const wchar_t* extract_path);
-		std::string get_data_library_path(wchar_t* libname, wchar_t* path);
-		wchar_t* get_jar_mainclass(wchar_t* path);
+		bool install_forge_version(const std::string& versionid, const std::string& path, CallbackNull* callback = new CallbackNull(), const std::string& java = "");
+		bool extract_file(const QZipReader& handler, const std::string& zip_path, const std::string& extract_path);
+		std::string get_data_library_path(const std::string& libname, const std::string& path);
+		std::string get_jar_mainclass(const std::string& path);
 		
 		bool forge_processors(
 			Json::JsonValue* data,
-			wchar_t* minecraft_directory,
-			wchar_t* lzma_path,
-			wchar_t* installer_path,
+			const std::string& minecraft_directory,
+			const std::string& lzma_path,
+			const std::string& installer_path,
 			CallbackNull* callback,
-			wchar_t* java);
+			const std::string& java);
 	}
 
-	wchar_t* get_arguments(
+	namespace fabric
+	{
+		int install_fabric_version(const std::string& minecraft_version, const std::string& minecraft_directory, const std::string& loader_version = "", CallbackNull* callback = new CallbackNull(), const std::string& java = "");
+		bool _is_version_valid(const std::string& version, const std::string& minecraft_directory);
+		bool _is_minecraft_version_supported(const std::string& version);
+		Json::JsonValue* get_all_minecraft_versions();
+		std::string get_latest_loader_version();
+		Json::JsonValue* get_all_loader_versions();
+		std::string get_latest_installer_version();
+		Json::JsonValue* parse_maven_metadata(const std::string& url);
+	}
+
+	std::string get_arguments(
 		Json::JsonValue* data,
 		Json::JsonValue* versionData,
-		wchar_t* path,
+		const std::string& path,
 		MinecraftCpp::option::MinecraftOptions options);
 
 	std::string get_arguments_string(
 		Json::JsonValue* versionData,
-		wchar_t* path,
+		const std::string& path,
 		MinecraftCpp::option::MinecraftOptions options);
 
 	bool install_minecraft_version(
-		wchar_t* versionid,
-		wchar_t* minecraft_directory,
+		const std::string& versionid,
+		const std::string& minecraft_directory,
 		CallbackNull* callback = new CallbackNull());
 
 	bool do_version_install(
-		wchar_t* versionid,
-		wchar_t* path,
+		const std::string& versionid,
+		const std::string& path,
 		CallbackNull* callback,
-		wchar_t* url = NULL);
+		const std::string& url = "");
 
 	Json::JsonValue* inherit_json(
 		Json::JsonValue* original_data,
-		wchar_t* path);
+		const std::string& path);
 
-	wchar_t* get_libraries(
+	std::string get_libraries(
 		Json::JsonValue* data,
-		wchar_t* path);
+		const std::string& path);
 
-
-
+	std::chrono::system_clock::time_point _parseDateTime(const std::string& isoDateTime);
+	
 
 }
 

@@ -11,29 +11,29 @@
 //}
 
 
-std::wstring DDIC::Download::Files::download_file(const wchar_t* s_url, const wchar_t* d_file, CallbackNull* callback, bool lzma_compressed)
+std::string DDIC::Download::Files::download_file(const std::string& s_url, const std::string& d_file, CallbackNull* callback, bool lzma_compressed)
 {
     //callback = const_cast<CallbackNull>(callback);
-    std::wstring destenation_file;
+    std::string destenation_file;
 
-    if (d_file == nullptr || d_file == NULL)
+    if (d_file == "")
     {
-        destenation_file = L"";
+        destenation_file = "";
     }
     else
     {
         destenation_file = d_file;
     }
-    if (d_file == nullptr || d_file == NULL)
+    if (d_file == "")
     {
-        std::string url = Additionals::Convectors::ConvertWStringToString(s_url);
+        std::string url = s_url;
         int count = -1;
         for (auto& var : Additionals::String::split(url, '/'))
         {
             ++count;
         }
         url = Additionals::String::split(url, '/')[count];
-        destenation_file = Additionals::Convectors::ConvertStringToWcharPtr(url);
+        destenation_file = url;
     }
 
 
@@ -50,17 +50,11 @@ std::wstring DDIC::Download::Files::download_file(const wchar_t* s_url, const wc
     }
     
 
-    /*DWORD attrib = GetFileAttributesW(d_file_path.wstring().c_str());
-    if (d_file_path != "" || attrib == INVALID_FILE_ATTRIBUTES || !(attrib & FILE_ATTRIBUTE_DIRECTORY))
-    {
-        
-    }*/
-
-    if (d_file != nullptr || d_file != NULL)
+    if (d_file != "")
     {
         if (std::filesystem::exists(d_file) && std::filesystem::is_directory(d_file))
         {
-            std::string url = Additionals::Convectors::ConvertWStringToString(s_url);
+            std::string url = s_url;
             int count = -1;
             for (auto& var : Additionals::String::split(url, '/'))
             {
@@ -68,29 +62,21 @@ std::wstring DDIC::Download::Files::download_file(const wchar_t* s_url, const wc
             }
             url = Additionals::String::split(url, '/')[count];
 
-            std::wstring ff = d_file;
-            destenation_file = ff + L"\\" + Additionals::Convectors::ConvertStringToWcharPtr(url);
+            std::string ff = d_file;
+            destenation_file = ff + "\\" + url;
         }
     }
-    HRESULT download_result = URLDownloadToFileW(NULL, s_url, destenation_file.c_str(), NULL, callback);
+    HRESULT download_result = URLDownloadToFileA(NULL, s_url.c_str(), destenation_file.c_str(), NULL, callback);
 
     if (S_OK == download_result)
     {
-        callback->OnProgress(NULL, NULL, NULL, StrDogW({ L"The file is saved as: ",  d_file, L"\n" }));
+        callback->OnProgress(NULL, NULL, NULL, Additionals::Convectors::ConvertStringToWcharPtr("The file is saved as: " + d_file + "\n"));
         return destenation_file;
     }
     else
     {
-        if (s_url == NULL)
-        {
-            s_url = L" ";
-        }
-        if (d_file == NULL)
-        {
-            d_file = L" ";
-        }
-        callback->OnProgress(NULL, NULL, NULL, StrDogW({ L"Unable to Download the file: ", s_url, L"\nto: ", d_file }));
-        return L"";
+        callback->OnProgress(NULL, NULL, NULL, Additionals::Convectors::ConvertStringToWcharPtr("Unable to Download the file: " + s_url + "\nto: " + d_file));
+        return "";
     }
     if (lzma_compressed)
     {
@@ -116,14 +102,14 @@ std::wstring DDIC::Download::Files::download_file(const wchar_t* s_url, const wc
 //}
 
 
-bool DDIC::Download::Files::download_all_files(wchar_t* s_url_dir, CallbackNull callback)
+bool DDIC::Download::Files::download_all_files(const std::string& s_url_dir, CallbackNull callback)
 {
     return false;
 }
 
-int DDIC::Download::Files::_get_java_exist_ver(wchar_t* direct)
+int DDIC::Download::Files::_get_java_exist_ver(const std::string& direct)
 {
-    std::vector<std::string> dirs = Additionals::Path::get_directories(Additionals::Convectors::ConvertWcharPtrToString(direct));
+    std::vector<std::string> dirs = Additionals::Path::get_directories(direct);
     for (std::string var : dirs)
     {
         int count = -1;
@@ -143,9 +129,9 @@ int DDIC::Download::Files::_get_java_exist_ver(wchar_t* direct)
     return 0;
 }
 
-std::string DDIC::Download::Files::_get_java_path(const wchar_t* dir)
+std::string DDIC::Download::Files::_get_java_path(const std::string& dir)
 {
-    std::vector<std::string> dirs = Additionals::Path::get_directories(Additionals::Convectors::ConvertWcharPtrToString(dir));
+    std::vector<std::string> dirs = Additionals::Path::get_directories(dir);
     for (std::string var : dirs)
     {
         int count = -1;
@@ -161,12 +147,12 @@ std::string DDIC::Download::Files::_get_java_path(const wchar_t* dir)
     return "";
 }
 
-wchar_t* DDIC::Download::Java::install(wchar_t* version, wchar_t* path, wchar_t* operating_system, wchar_t* arch, wchar_t* impl, bool jre)
+std::string DDIC::Download::Java::install(const std::string& version, const std::string& path, const std::string& operating_system, const std::string& arch, const std::string& impl, bool jre)
 {
-    wchar_t* url = get_download_url(version, operating_system, arch, impl, jre);
+    std::string url = get_download_url(version, operating_system, arch, impl, jre);
 
-    std::string path2 = Additionals::Convectors::ConvertWcharPtrToString(path);
-    if (!path) {
+    std::string path2 = path;
+    if (path != "") {
         if (jre){
             path2 = _JRE_DIR;
         }
@@ -175,35 +161,35 @@ wchar_t* DDIC::Download::Java::install(wchar_t* version, wchar_t* path, wchar_t*
         }
     }
 
-    wchar_t* path_wch = Additionals::Convectors::ConvertStringToWcharPtr(path2 + "\\.zip");
-    wchar_t* path_wch_norm = Additionals::Convectors::ConvertStringToWcharPtr(path2);
+    std::string path_wch = path2 + "\\.zip";
+    std::string path_wch_norm = path2;
 
-    std::wstring jdk_file2 = L"";
+    std::string jdk_file2 = "";
     CallbackDict callback;
     
 
     jdk_file2 = DownloadFile(url, path_wch, &callback);
 
-    const wchar_t* jdk_file = jdk_file2.c_str();
+    std::string jdk_file = jdk_file2;
     
-    if (jdk_file == nullptr)
+    if (jdk_file == "")
     {
-        return _wcsdup(L"error 105: file not download");
+        //return _wcsdup(L"error 105: file not download");
+        return "";
     }
-    wchar_t* jdk_ext = Additionals::Convectors::ConvertStringToWcharPtr(_get_normalized_compressed_file_ext(jdk_file));
-    wchar_t* jdk_dir = _decompress_archive(jdk_file, jdk_ext, path_wch_norm);
+    std::string jdk_ext = _get_normalized_compressed_file_ext(jdk_file);
+    std::string jdk_dir = _decompress_archive(jdk_file, jdk_ext, path_wch_norm);
 
 
-    if (jdk_file != nullptr)
+    if (jdk_file != "")
     {
         std::string fifa;
         for (size_t i = 0; jdk_file[i] != L'\0'; ++i)
         {
             fifa += jdk_file[i];
         }
-        bool del = DeleteFileW(Additionals::Convectors::ConvertStringToWcharPtr(fifa));
-        /*System::Console::Write("Deleted archive status: ");
-        System::Console::WriteLine(del);*/
+        bool del = DeleteFileA(fifa.c_str());
+
 
         std::cout << "Deleted archive status: " << del << std::endl;
     }
@@ -215,9 +201,10 @@ wchar_t* DDIC::Download::Java::install(wchar_t* version, wchar_t* path, wchar_t*
     return jdk_dir;
 }
 
-wchar_t* DDIC::Download::Java::get_download_url(/*wchar_t*& url,*/wchar_t* version, wchar_t* operating_system, wchar_t* arch, wchar_t* impl, bool jre)
+std::string DDIC::Download::Java::get_download_url(/*wchar_t*& url,*/const std::string& version, const std::string& operating_system, const std::string& arch, const std::string& impl, bool jre)
 {
-    version = normalize_version(version);
+    std::string _version = version;
+    _version = normalize_version(version);
     if(jre) {
         //L"https://api.adoptopenjdk.net/v3/binary/latest/"
 
@@ -232,15 +219,15 @@ wchar_t* DDIC::Download::Java::get_download_url(/*wchar_t*& url,*/wchar_t* versi
         url = strdogW(url, impl);
         url = strdogW(url, L"/normal/adoptopenjdk");*/
 
-        wchar_t* url = JoinW({ 
-            L"https://api.adoptopenjdk.net/v3/binary/latest/",
-            version,
-            L"ga",
+        std::string url = Join({
+            "https://api.adoptopenjdk.net/v3/binary/latest/",
+            _version,
+            "ga",
             operating_system,
             arch,
-            L"jre",
+            "jre",
             impl,
-            L"normal/adoptopenjdk "});
+            "normal/adoptopenjdk "});
 
         return url; 
         //L"https://api.adoptopenjdk.net/v3/binary/latest/%s/ga/%s/%s/jre/%s/normal/adoptopenjdk", version, operating_system, arch, impl;
@@ -257,33 +244,33 @@ wchar_t* DDIC::Download::Java::get_download_url(/*wchar_t*& url,*/wchar_t* versi
         url = strdogW(url, impl);
         url = strdogW(url, L"/normal/adoptopenjdk");*/
 
-		wchar_t* url = JoinW({ 
-            L"https://api.adoptopenjdk.net/v3/binary/latest/",
-            version,
-            L"ga",
+        std::string url = Join({
+            "https://api.adoptopenjdk.net/v3/binary/latest/",
+            _version,
+            "ga",
             operating_system,
             arch,
-            L"jdk",
+            "jdk",
             impl,
-            L"normal/adoptopenjdk "});
+            "normal/adoptopenjdk "});
         
         return url;
     }
 }
 
-wchar_t* DDIC::Download::Java::_decompress_archive(const wchar_t* repo_root, wchar_t* file_ending, wchar_t* destination_folder)
+std::string DDIC::Download::Java::_decompress_archive(const std::string& repo_root, const std::string& file_ending, const std::string& destination_folder)
 {
     //WIN32_FIND_DATA ffd;
 
     std::string destination_str;
-    destination_str = Additionals::Convectors::ConvertWcharPtrToString(destination_folder);
-    wchar_t* destination_str_cstr = Additionals::Convectors::ConvertStringToWcharPtr(destination_str);
+    destination_str = destination_folder;
+    std::string destination_str_cstr = destination_str;
 
     std::string repo_root_str;
-    repo_root_str = Additionals::Convectors::ConvertWcharPtrToString(repo_root);
+    repo_root_str = repo_root;
 
     if (!std::filesystem::exists(destination_str)) {
-        int out_mkdir = _wmkdir(destination_str_cstr);
+        bool out_mkdir = std::filesystem::create_directories(destination_str_cstr);
         /*System::Console::Write("java dir is maked with status: ");
         System::Console::WriteLine(out_mkdir);*/
 
@@ -311,17 +298,17 @@ wchar_t* DDIC::Download::Java::_decompress_archive(const wchar_t* repo_root, wch
     }
     else 
     {
-        return (wchar_t*)repo_root;
+        return repo_root;
     }
 }
 
-bool DDIC::Download::Java::check_system_verison_java(wchar_t* version)
+bool DDIC::Download::Java::check_system_verison_java(const std::string& version)
 {
     //TODO Проверка текущей версии java
     return false;
 }
 
-bool DDIC::Download::Java::check_downloaded_version_java(wchar_t* path)
+bool DDIC::Download::Java::check_downloaded_version_java(const std::string& path)
 {
     std::string java_path = DDIC::Download::Files::_get_java_path(path) + "\\" + "bin" + "\\" + "java.exe";
     if (std::filesystem::exists(java_path))
@@ -332,10 +319,10 @@ bool DDIC::Download::Java::check_downloaded_version_java(wchar_t* path)
 }
 
 
-std::string DDIC::Download::Java::_get_normalized_compressed_file_ext(const wchar_t* file)
+std::string DDIC::Download::Java::_get_normalized_compressed_file_ext(const std::string& file)
 {
     std::string file_str;
-    file_str = Additionals::Convectors::ConvertWcharPtrToString(file);
+    file_str = file;
     
     if (file_str.find(_TAR)) {
         return _TAR;
@@ -351,17 +338,18 @@ std::string DDIC::Download::Java::_get_normalized_compressed_file_ext(const wcha
     }
 }
 
-wchar_t* DDIC::Download::Java::normalize_version(wchar_t* version)
+std::string DDIC::Download::Java::normalize_version(const std::string& version)
 {
-    if (version == L"1.8") {
-        return const_cast<wchar_t*>(L"8");
+    if (version == "1.8") {
+        return "8";
     } 
     return version;
 }
 
 std::string DDIC::Download::Java::expand_user(std::string path)
 {
-    if (!path.empty() && path[0] == '~') {
+    if (!path.empty() && path[0] == '~') 
+    {
         //assert(path.size() == 1 || path[1] == '/');  // or other error handling
         //_dupenv_s(,"HOME")
 

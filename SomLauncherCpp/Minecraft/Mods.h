@@ -1,4 +1,4 @@
-#ifndef MODS_H_     // equivalently, #if !defined HEADER_H_
+#ifndef MODS_H_
 #define MODS_H_
 
 #include "../Web/DownloadClasses.h"
@@ -10,7 +10,7 @@ namespace MinecraftCpp
 {
 	namespace modpacks
 	{
-		bool install_mod_pack(wchar_t* versionid, wchar_t* path, CallbackNull* callback = new CallbackNull());
+		bool installModPack(Json::JsonValue* json_from_server, const std::string& path, CallbackNull* callback = new CallbackNull());
 	}
 }
 

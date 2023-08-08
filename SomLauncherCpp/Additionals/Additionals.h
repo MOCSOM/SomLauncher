@@ -30,6 +30,7 @@
 #define StrDogA Additionals::String::strdogA
 #define JoinW Additionals::Path::joinW
 #define JoinA Additionals::Path::joinA
+#define Join Additionals::Path::joinString
 
 namespace Additionals 
 {
@@ -140,6 +141,7 @@ namespace Additionals
 	{
 		wchar_t* joinW(std::initializer_list<const wchar_t*> list);
 		std::wstring joinA(std::initializer_list<const char*> list);
+		std::string joinString(std::initializer_list<const std::string> list);
 		std::vector<std::string> get_directories(const std::string& directory);
 
 		std::string getFileNameFromPath(const std::string& path);
@@ -148,7 +150,7 @@ namespace Additionals
 	namespace TempFile 
 	{
 		wchar_t* get_tempdir();
-		std::wstring get_tempdir_SYSTEM();
+		std::string get_tempdir_SYSTEM();
 		wchar_t* _get_default_tempdir();
 	}
 }

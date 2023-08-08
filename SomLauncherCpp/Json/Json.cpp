@@ -353,7 +353,7 @@ void Json::JsonObject::add_value(std::pair<std::string, Json::JsonValue*> value)
 	this->values.insert(value);
 }
 
-void Json::JsonObject::replaceValue(const std::string& key, const std::wstring value)
+void Json::JsonObject::replaceValue(const std::string& key, const std::string& value)
 {
 	if (!this->is_exist(key))
 	{
@@ -521,6 +521,36 @@ Json::JsonValue* Json::JsonParcer::ParseJson(std::string json_str)
 {
 	_pos = 0;
 	return ParseValue(json_str);
+}
+
+Json::JsonValue* Json::JsonParcer::ParseUrl(const std::string& url)
+{
+	QNetworkRequest request;
+	request.setUrl(QUrl(url.c_str()));
+
+	QNetworkAccessManager networkManager;
+	QNetworkReply* reply = networkManager.get(request);
+
+	QByteArray responseData;
+
+	QObject::connect(reply, &QNetworkReply::finished, [&]() 
+	{
+		if (reply->error() == QNetworkReply::NoError) 
+		{
+			responseData = reply->readAll();
+
+
+
+		}
+		else 
+		{
+			qDebug() << "Ошибка HTTP-запроса:" << reply->errorString();
+		}
+
+		reply->deleteLater();
+	});
+
+	return ParseJson(responseData.toStdString());
 }
 
 void Json::JsonValue::SaveJsonToFile(std::string file_name, int indent)
@@ -992,6 +1022,11 @@ Json::JsonString::JsonString(const std::wstring& value) : JsonValue(JsonTypes::S
 	this->value = Additionals::Convectors::ConvertWStringToString(value);
 }
 
+Json::JsonString::JsonString(const std::string& value) : JsonValue(JsonTypes::String)
+{
+	this->value = value;
+}
+
 std::string Json::JsonString::_as_string()
 {
 	return "\"" + this->value + "\"";
@@ -1195,7 +1230,7 @@ bool Json::JsonValue::is_exist(std::string key)
 //	return Json::JsonValue(Json::JsonTypes::Null);
 //}
 
-void Json::JsonValue::replaceValue(const std::string& key, const std::wstring value){}
+void Json::JsonValue::replaceValue(const std::string& key, const std::string& value){}
 
 void Json::JsonValue::add_value(Json::JsonValue* value){}
 

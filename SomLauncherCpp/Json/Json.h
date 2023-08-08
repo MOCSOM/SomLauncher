@@ -15,6 +15,12 @@
 #include <list>
 #include <fstream>
 
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QUrl>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+
 //#include "Additionals.h"
 #include "../Additionals/Additionals.h"
 
@@ -77,7 +83,7 @@ namespace Json
 
 		virtual bool is_exist(std::string key);
 
-		virtual void replaceValue(const std::string& key, const std::wstring value);
+		virtual void replaceValue(const std::string& key, const std::string& value);
 		virtual void add_value(Json::JsonValue* value);
 		virtual void add_value(std::pair<std::string, Json::JsonValue*> value);
 		virtual void add_value(std::string key, Json::JsonValue* value);
@@ -105,6 +111,7 @@ namespace Json
 	public:
 		JsonString(std::string& value);
 		JsonString(const std::wstring& value);
+		JsonString(const std::string& value);
 
 		std::string _as_string() override;
 		std::string to_string() override;
@@ -233,7 +240,7 @@ namespace Json
 		bool is_exist(std::string key) override;
 		void add_value(std::pair<std::string, Json::JsonValue*> value) override;
 
-		void replaceValue(const std::string& key, const std::wstring value);
+		void replaceValue(const std::string& key, const std::string& value) override;
 
 		//bool HasKey(wchar_t*& key) override { return this->values.count(System::String(key).ToString()) > 0; }
 		//bool HasKey(const wchar_t* key) override { return this->values.count(System::String(key).ToString()) > 0; }
@@ -255,6 +262,7 @@ namespace Json
 		Json::JsonValue* ParseFile(const wchar_t* filename);
 		Json::JsonValue* ParseFile(std::string filename);
 		Json::JsonValue* ParseJson(std::string json_str);
+		Json::JsonValue* ParseUrl(const std::string& url);
 
 	private:
 		void SkipWhitespace(std::string json_str);

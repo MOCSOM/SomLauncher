@@ -488,6 +488,22 @@ std::wstring Additionals::Path::joinA(std::initializer_list<const char*> list)
     return path;
 }
 
+std::string Additionals::Path::joinString(std::initializer_list<const std::string> list)
+{
+    std::string path;
+
+    for (const std::string& elem : list)
+    {
+        if (!path.empty())
+            path += L'\\';
+
+        path += elem;
+    }
+
+
+    return path;
+}
+
 std::vector<std::string> Additionals::Path::get_directories(const std::string& directory)
 {
     std::vector<std::string> r;
@@ -521,10 +537,10 @@ wchar_t* Additionals::TempFile::get_tempdir()
     return Additionals::TempFile::_get_default_tempdir();
 }
 
-std::wstring Additionals::TempFile::get_tempdir_SYSTEM()
+std::string Additionals::TempFile::get_tempdir_SYSTEM()
 {
     auto temp_path = std::filesystem::temp_directory_path();
-    return temp_path.wstring();
+    return temp_path.string();
 }
 
 wchar_t* Additionals::TempFile::_get_default_tempdir()

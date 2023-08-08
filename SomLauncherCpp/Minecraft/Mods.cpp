@@ -1,6 +1,6 @@
 #include "Mods.h"
 
-bool MinecraftCpp::modpacks::install_mod_pack(wchar_t* versionid, wchar_t* path, CallbackNull* callback)
+bool MinecraftCpp::modpacks::installModPack(Json::JsonValue* json_from_server, const std::string& path, CallbackNull* callback)
 {
     return false;
 }
