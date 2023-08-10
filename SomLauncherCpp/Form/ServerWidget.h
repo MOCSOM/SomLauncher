@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SERVERWIDGET_H_
+#define SERVERWIDGET_H_
 
 #include <QWidget>
 #include "ui_ServerWidget.h"
@@ -20,3 +21,5 @@ public:
 private:
 	Ui::ServerWidgetClass ui;
 };
+
+#endif /*SERVERWIDGET_H_*/

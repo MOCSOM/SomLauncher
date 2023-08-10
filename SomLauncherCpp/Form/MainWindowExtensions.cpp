@@ -14,24 +14,7 @@ void SomLauncherMainWindow::start_minecraft_params()
 	std::string core = "";
 	std::string version = "";
 
-	char* appdata = nullptr;
-	size_t appdata_sz = 0;
-
-	_dupenv_s(&appdata, &appdata_sz, "APPDATA");
-
-	std::string path_wch_java = DDIC::Download::Files::_get_java_path(Join({ appdata, ".SomSomSom" })) + "\\" + "bin" + "\\" + "java.exe";
-
-
-	MinecraftCpp::option::MinecraftOptions options;
-	options.customResolution = false;
-	options.gameDirectory = this->minecraft_core_dir_path;
-	options.launcherName = this->launcher_name;
-	options.launcherVersion = this->launcher_version;
-	options.username = this->username;
-	options.jvmArguments = "-Xms1024M -Xmx" + std::to_string(8000) + "M";
-	options.executablePath = path_wch_java;
-	options.uuid = "uuu";
-	options.token = "uuu";
+	
 
 	switch ((*(*this->config_parce)["user"])["server"]->to_int())
 	{
@@ -40,21 +23,24 @@ void SomLauncherMainWindow::start_minecraft_params()
 		java = (*(*(*servers_parce)["servers"])[0])["java"]->to_string();
 		core = (*(*(*servers_parce)["servers"])[0])["core"]->to_string();
 		version = (*(*(*servers_parce)["servers"])[0])["version"]->to_string();
-		install_run_minecraft(version, core, (*(*(*this->servers_parce)["servers"])[0])["loaderVersion"]->to_string(), java, (*(*this->config_parce)["user"])["mcdir"]->to_string(), options);
+		install_run_minecraft(version, core, (*(*(*this->servers_parce)["servers"])[0])["loaderVersion"]->to_string(), java, (*(*this->config_parce)["user"])["mcdir"]->to_string(), this->options);
+		break;
 	}
-	//case 1:
-	//{
-	//	java = (*(*servers_parce)["java"])[1]->to_string();
-	//	core = (*(*servers_parce)["core"])[1]->to_string();
-	//	version = (*(*servers_parce)["version"])[0]->to_string();
-	//	//install_run_Aeronautics(java, core, config_parce["user"]["mcdir"]->to_string());
-	//}
+	case 1:
+	{
+		java = (*(*(*servers_parce)["servers"])[1])["java"]->to_string();
+		core = (*(*(*servers_parce)["servers"])[1])["core"]->to_string();
+		version = (*(*(*servers_parce)["servers"])[1])["version"]->to_string();
+		install_run_minecraft(version, core, (*(*(*this->servers_parce)["servers"])[1])["loaderVersion"]->to_string(), java, (*(*this->config_parce)["user"])["mcdir"]->to_string(), this->options);
+		break;
+	}
 	//case 2:
 	//{
 	//	java = (*(*servers_parce)["java"])[2]->to_string();
 	//	core = (*(*servers_parce)["core"])[2]->to_string();
 	//	version = (*(*servers_parce)["version"])[0]->to_string();
 	//	//install_run_Vanilla(java, core, config_parce["user"]["mcdir"]->to_string());
+	//	break;
 	//}
 	/*case 3:
 		java = servers_parce["java"][3]->to_stringW();
@@ -131,6 +117,26 @@ bool SomLauncherMainWindow::IsConfigExist()
 void SomLauncherMainWindow::CreateConfig()
 {
 	std::filesystem::copy("SOMCONFIG.json", this->config_path);
+}
+
+void SomLauncherMainWindow::configureOptions()
+{
+	char* appdata = nullptr;
+	size_t appdata_sz = 0;
+
+	_dupenv_s(&appdata, &appdata_sz, "APPDATA");
+
+	std::string path_wch_java = DDIC::Download::Files::_get_java_path(Join({ appdata == nullptr ? "" : appdata, ".SomSomSom" })) + "\\" + "bin" + "\\" + "java.exe";
+
+	this->options.customResolution = false;
+	this->options.gameDirectory = this->minecraft_core_dir_path;
+	this->options.launcherName = this->launcher_name;
+	this->options.launcherVersion = this->launcher_version;
+	this->options.username = this->username;
+	this->options.jvmArguments = "-Xms1024M -Xmx" + std::to_string(8000) + "M";
+	this->options.executablePath = path_wch_java;
+	this->options.uuid = "uuu";
+	this->options.token = "uuu";
 }
 
 

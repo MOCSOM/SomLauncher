@@ -65,6 +65,12 @@
     <ClCompile Include="Form\ServerWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Form\SettingsDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="QObjects\SomSlider.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -100,6 +106,9 @@
     <ClInclude Include="Form\ServerWidget.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="QObjects\SomSlider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="all.json" />
@@ -131,11 +140,9 @@
     <QtMoc Include="Form\ServerChangerForm.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-  </ItemGroup>
-  <ItemGroup>
-    <QtRcc Include="Form\SomLauncherMainWindow.qrc">
-      <Filter>Resource Files</Filter>
-    </QtRcc>
+    <QtMoc Include="Form\SettingsDialog.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="Form\SomLauncherMainWindow.ui">
@@ -145,6 +152,9 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="Form\ServerWidget.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="Form\SettingsDialog.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>

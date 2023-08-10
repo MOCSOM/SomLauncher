@@ -60,19 +60,6 @@
      <enum>QFrame::Raised</enum>
     </property>
     <layout class="QGridLayout" name="gridLayout_frame_topslidemenu" columnstretch="2,2,2,2,3">
-     <item row="0" column="0">
-      <widget class="QPushButton" name="pushButton_game">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>Игра</string>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="1">
       <widget class="QPushButton" name="pushButton_servers">
        <property name="sizePolicy">
@@ -86,6 +73,19 @@
        </property>
       </widget>
      </item>
+     <item row="0" column="0">
+      <widget class="QPushButton" name="pushButton_game">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Игра</string>
+       </property>
+      </widget>
+     </item>
      <item row="0" column="2">
       <widget class="QPushButton" name="pushButton_news">
        <property name="sizePolicy">
@@ -96,19 +96,6 @@
        </property>
        <property name="text">
         <string>Новости</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="3">
-      <widget class="QPushButton" name="pushButton_aboutus">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>О нас</string>
        </property>
       </widget>
      </item>
@@ -133,6 +120,32 @@
          <string>Профиль  ⯆</string>
         </property>
        </widget>
+       <widget class="QPushButton" name="pushButton_settings">
+        <property name="geometry">
+         <rect>
+          <x>100</x>
+          <y>10</y>
+          <width>75</width>
+          <height>24</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Настройки</string>
+        </property>
+       </widget>
+      </widget>
+     </item>
+     <item row="0" column="3">
+      <widget class="QPushButton" name="pushButton_aboutus">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>О нас</string>
+       </property>
       </widget>
      </item>
     </layout>
@@ -143,18 +156,18 @@
       <x>20</x>
       <y>50</y>
       <width>761</width>
-      <height>411</height>
+      <height>401</height>
      </rect>
     </property>
     <property name="frameShape">
      <enum>QFrame::Box</enum>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="page_game">
      <layout class="QGridLayout" name="gridLayout_page_game">
-      <item row="2" column="0">
+      <item row="2" column="0" colspan="2">
        <widget class="QFrame" name="frame_status_table">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -170,7 +183,7 @@
         </property>
         <layout class="QGridLayout" name="gridLayout_frame_status_table" columnstretch="2,4,4">
          <item row="1" column="1">
-          <widget class="QFrame" name="frame_4">
+          <widget class="QFrame" name="frame_status_table_in">
            <property name="frameShape">
             <enum>QFrame::StyledPanel</enum>
            </property>
@@ -179,49 +192,49 @@
            </property>
            <layout class="QGridLayout" name="gridLayout_7">
             <item row="0" column="0">
-             <widget class="QLabel" name="label_4">
+             <widget class="QLabel" name="label_server">
               <property name="text">
                <string>Сервер:</string>
               </property>
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="QLabel" name="label_8">
+             <widget class="QLabel" name="label_client_type">
               <property name="text">
                <string>client_type</string>
               </property>
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QLabel" name="label_7">
+             <widget class="QLabel" name="label_server_name">
               <property name="text">
                <string>server_name</string>
               </property>
              </widget>
             </item>
             <item row="2" column="1">
-             <widget class="QLabel" name="label_9">
+             <widget class="QLabel" name="label_mods_count_change">
               <property name="text">
                <string>mods_count</string>
               </property>
              </widget>
             </item>
             <item row="2" column="0">
-             <widget class="QLabel" name="label_6">
+             <widget class="QLabel" name="label_count_mods">
               <property name="text">
                <string>Кол-во модов:</string>
               </property>
              </widget>
             </item>
             <item row="1" column="0">
-             <widget class="QLabel" name="label_5">
+             <widget class="QLabel" name="label_client">
               <property name="text">
                <string>Тип клиента:</string>
               </property>
              </widget>
             </item>
             <item row="0" column="2">
-             <widget class="QLabel" name="label_10">
+             <widget class="QLabel" name="label_server_status">
               <property name="text">
                <string>server_status</string>
               </property>
@@ -244,7 +257,7 @@
           </widget>
          </item>
          <item row="1" column="0">
-          <widget class="QLabel" name="label">
+          <widget class="QLabel" name="label_logo">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
              <horstretch>0</horstretch>
@@ -256,7 +269,7 @@
         </layout>
        </widget>
       </item>
-      <item row="0" column="0">
+      <item row="0" column="0" colspan="2">
        <widget class="QFrame" name="frame_short_news">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
@@ -272,7 +285,7 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
+      <item row="1" column="0" colspan="2">
        <widget class="QFrame" name="frame_additin_buttons">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -346,6 +359,21 @@
     </widget>
     <widget class="QWidget" name="page_servers">
      <layout class="QGridLayout" name="gridLayout_page_servers">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <property name="spacing">
+       <number>0</number>
+      </property>
       <item row="0" column="0">
        <widget class="QScrollArea" name="scrollArea_servers">
         <property name="widgetResizable">
@@ -356,8 +384,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>739</width>
-           <height>389</height>
+           <width>98</width>
+           <height>28</height>
           </rect>
          </property>
          <layout class="QGridLayout" name="gridLayout_scrollArea_servers"/>
@@ -381,8 +409,22 @@
      <layout class="QGridLayout" name="gridLayout_page_aboutus"/>
     </widget>
    </widget>
+   <widget class="QLabel" name="label_minecraft_directory">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>451</y>
+      <width>661</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>pasha lox</string>
+    </property>
+   </widget>
    <zorder>stackedWidget_bottommenu</zorder>
    <zorder>frame_topslidemenu</zorder>
+   <zorder>label_minecraft_directory</zorder>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

@@ -1544,7 +1544,7 @@ bool MinecraftCpp::forge::forge_processors(
         classpath = classpath + get_library_path((*var)["jar"]->to_string(), path);
         std::string mainclass = get_jar_mainclass(get_library_path((*var)["jar"]->to_string(), path));
         std::vector<std::string> command;
-        command[0] = java == "" || java == "" ? "java" : java + "-cp", classpath, mainclass;
+        command[0] = java == "" ? "java" : java + "-cp", classpath, mainclass;
 
         std::string variable = "";
         for (auto var2 : (*var)["args"]->get_value_list())

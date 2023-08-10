@@ -5,6 +5,21 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget *parent)
 {
     ui.setupUi(this);
 
+
+	recomended_memory = 3072;
+
+	MEMORYSTATUSEX statex;
+
+	statex.dwLength = sizeof(statex);
+
+	GlobalMemoryStatusEx(&statex);
+
+	max_memory = statex.ullTotalPhys / MEM_DIV - 512;
+
+
+	configureOptions();
+
+
 	Json::JsonParcer json_config;
 	this->servers_parce = json_config.ParseFile(this->servers_json);
 	this->config_parce = json_config.ParseFile(this->config_path);
@@ -15,6 +30,7 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget *parent)
 	connect(ui.pushButton_news, &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_news);
 	connect(ui.pushButton_aboutus, &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_aboutus);
 	connect(ui.pushButton_changeserver, &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_changeserver);
+	connect(ui.pushButton_settings, &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_settings);
 
 	connect(ui.pushButton_startgame, &QPushButton::released, this, &SomLauncherMainWindow::onClickpushButton_startgame);
 
@@ -104,6 +120,21 @@ void SomLauncherMainWindow::onClickedpushButton_changeserver()
 void SomLauncherMainWindow::onClickedpushLable_profile()
 {
 	std::cout << "pushLable_profile clicked" << std::endl;
+}
+
+void SomLauncherMainWindow::onClickedpushButton_settings()
+{
+	std::cout << "pushButton_settings clicked" << std::endl;
+
+	SettingsDialog dialog(new Json::JsonObject(), this); //TODO: Сделать отправку данных о акке
+	
+
+	dialog.setMemoryData(1024, max_memory, recomended_memory);
+	
+	dialog.setStandartJavaPath(this->options.executablePath);
+	dialog.setStandartMinecraftPath(this->minecraft_core_dir_path);
+
+	dialog.exec();
 }
 
 void SomLauncherMainWindow::onClickpushButton_startgame()

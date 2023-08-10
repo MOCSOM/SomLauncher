@@ -164,6 +164,7 @@
     <ClCompile Include="Form\MainWindowExtensions.cpp" />
     <ClCompile Include="Form\ServerChangerForm.cpp" />
     <ClCompile Include="Form\ServerWidget.cpp" />
+    <ClCompile Include="Form\SettingsDialog.cpp" />
     <ClCompile Include="Form\SomLauncherMainWindow.cpp" />
     <ClCompile Include="Json\Json.cpp" />
     <ClCompile Include="main.cpp" />
@@ -171,6 +172,7 @@
     <ClCompile Include="Minecraft\Mods.cpp" />
     <ClCompile Include="QObjects\ClickableLabel.cpp" />
     <ClCompile Include="QObjects\HoveredFrame.cpp" />
+    <ClCompile Include="QObjects\SomSlider.cpp" />
     <ClCompile Include="Web\DownloadClasses.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -178,7 +180,9 @@
     <ClInclude Include="Databases\SQLBased.h" />
     <QtMoc Include="Form\ServerChangerForm.h" />
     <ClInclude Include="Form\ServerWidget.h" />
+    <QtMoc Include="Form\SettingsDialog.h" />
     <ClInclude Include="Minecraft\Mods.h" />
+    <ClInclude Include="QObjects\SomSlider.h" />
     <ClInclude Include="qzipreader_p.h" />
     <ClInclude Include="qzipwriter_p.h" />
     <ClInclude Include="Web\DownloadClasses.h" />
@@ -204,11 +208,9 @@
     <ResourceCompile Include="Form\SomLauncherCpp.rc" />
   </ItemGroup>
   <ItemGroup>
-    <QtRcc Include="Form\SomLauncherMainWindow.qrc" />
-  </ItemGroup>
-  <ItemGroup>
     <QtUic Include="Form\ServerChangerForm.ui" />
     <QtUic Include="Form\ServerWidget.ui" />
+    <QtUic Include="Form\SettingsDialog.ui" />
     <QtUic Include="Form\SomLauncherMainWindow.ui" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

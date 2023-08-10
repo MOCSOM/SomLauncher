@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <string>
+#include <windows.h>
 
 #include "../Web/DownloadClasses.h"
 #include "../Callbacks/CallbackDict.h"
@@ -20,6 +21,11 @@
 #include "../QObjects/HoveredFrame.h"
 #include "ServerChangerForm.h"
 #include "ServerWidget.h"
+#include "SettingsDialog.h"
+
+
+// Use to convert bytes to MB
+constexpr auto MEM_DIV = 1024 * 1024;
 
 class SomLauncherMainWindow : public QMainWindow
 {
@@ -33,10 +39,15 @@ private:
     std::string username = "Debug";
     std::string servers_json = Join({ /*"\\",*/ minecraft_core_dir_path, "SERVERS.json" });
 
+    MinecraftCpp::option::MinecraftOptions options;
+
     bool expect_table_menu = false;
 
     Json::JsonValue* config_parce;
     Json::JsonValue* servers_parce;
+
+    int max_memory = 1024;
+    int recomended_memory = 1024;
 
 public:
     SomLauncherMainWindow(QWidget *parent = nullptr);
@@ -53,6 +64,7 @@ public:
 
     bool IsConfigExist();
     void CreateConfig();
+    void configureOptions();
 
 private slots:
     void onClickedpushButton_game();
@@ -61,6 +73,7 @@ private slots:
     void onClickedpushButton_aboutus();
     void onClickedpushButton_changeserver();
     void onClickedpushLable_profile();
+    void onClickedpushButton_settings();
 
     void onClickpushButton_startgame();
 
