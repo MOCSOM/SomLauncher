@@ -102,11 +102,19 @@ Json::JsonValue* Json::JsonArray::operator[](int index)
 
 Json::JsonValue* Json::JsonArray::operator=(Json::JsonValue* value)
 {
-	this->values.clear();
+	this->values = value->get_value_list();
+
+
+	/*this->values.clear();
+
 	for (auto& var : value->get_value_list())
 	{
 		this->values.push_back(var);
-	}
+	}*/
+	/*for (auto& var : value->get_value())
+	{
+		this->values.push_back(var.second);
+	}*/
 	
 	return this;
 }
@@ -525,32 +533,28 @@ Json::JsonValue* Json::JsonParcer::ParseJson(std::string json_str)
 
 Json::JsonValue* Json::JsonParcer::ParseUrl(const std::string& url)
 {
-	QNetworkRequest request;
-	request.setUrl(QUrl(url.c_str()));
+	std::string destenation_file = Additionals::TempFile::get_tempdir_SYSTEM();
 
-	QNetworkAccessManager networkManager;
-	QNetworkReply* reply = networkManager.get(request);
 
-	QByteArray responseData;
-
-	QObject::connect(reply, &QNetworkReply::finished, [&]() 
 	{
-		if (reply->error() == QNetworkReply::NoError) 
-		{
-			responseData = reply->readAll();
+		std::string replace_url = url;
+		replace_url = Additionals::String::split(url, '/')[Additionals::String::split(url, '/').size() - 1];
+		destenation_file = destenation_file /*+ "\\"*/ + replace_url;
+	}
 
 
+	HRESULT resurl = URLDownloadToFileA(NULL, url.c_str(), destenation_file.c_str(), NULL, NULL);
 
-		}
-		else 
-		{
-			qDebug() << "Ошибка HTTP-запроса:" << reply->errorString();
-		}
-
-		reply->deleteLater();
-	});
-
-	return ParseJson(responseData.toStdString());
+	if (resurl == S_OK)
+	{
+		Json::JsonValue* return_val = ParseFile(destenation_file);
+		DeleteFileA(destenation_file.c_str());
+		return return_val;
+	}
+	else
+	{
+		std::cerr << "Dont download file in json" << std::endl;
+	}
 }
 
 void Json::JsonValue::SaveJsonToFile(std::string file_name, int indent)

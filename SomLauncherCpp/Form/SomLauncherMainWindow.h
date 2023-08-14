@@ -1,4 +1,4 @@
-#ifndef MAINWINDOW_H_     // equivalently, #if !defined HEADER_H_
+﻿#ifndef MAINWINDOW_H_     // equivalently, #if !defined HEADER_H_
 #define MAINWINDOW_H_
 
 #include <QtWidgets/QMainWindow>
@@ -40,6 +40,8 @@ private:
     std::string servers_json = Join({ /*"\\",*/ minecraft_core_dir_path, "SERVERS.json" });
 
     MinecraftCpp::option::MinecraftOptions options;
+    SettingsDialog* dialog; //TODO: Сделать отправку данных о акке
+
 
     bool expect_table_menu = false;
 
@@ -48,6 +50,7 @@ private:
 
     int max_memory = 1024;
     int recomended_memory = 1024;
+    int uses_memory = 1024;
 
 public:
     SomLauncherMainWindow(QWidget *parent = nullptr);

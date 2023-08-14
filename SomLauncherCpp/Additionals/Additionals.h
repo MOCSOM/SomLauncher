@@ -55,6 +55,7 @@ namespace Additionals
 	{
 		void compressFile(std::string zipfile, std::string directory);
 		void decompressFile(const QZipReader& zip, const QZipReader::FileInfo& file, const std::string& directory);
+		std::string decompressArchive(const QZipReader& zip, const std::string& directory);
 
 		class Archive
 		{

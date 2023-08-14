@@ -129,9 +129,10 @@ int DDIC::Download::Files::_get_java_exist_ver(const std::string& direct)
     return 0;
 }
 
-std::string DDIC::Download::Files::_get_java_path(const std::string& dir)
+std::vector<std::pair<std::string, std::string>> DDIC::Download::Files::_get_java_path(const std::string& dir)
 {
     std::vector<std::string> dirs = Additionals::Path::get_directories(dir);
+    std::vector<std::pair<std::string, std::string>> return_vector;
     for (std::string var : dirs)
     {
         int count = -1;
@@ -139,24 +140,35 @@ std::string DDIC::Download::Files::_get_java_path(const std::string& dir)
         {
             ++count;
         }
-        if (Additionals::String::split(var, '\\')[count]._Starts_with("jdk"))
+        if (Additionals::String::split(var, '\\')[count].find("jdk") == 0)
         {
-            return var;
+            if (Additionals::String::split(var, '\\')[count].find("jdk8") == 0)
+            {
+                return_vector.push_back(std::make_pair(var, "8"));
+            }
+            if (Additionals::String::split(var, '\\')[count].find("jdk-17") == 0)
+            {
+                return_vector.push_back(std::make_pair(var, "17"));
+            }
         }
     }
-    return "";
+    //return_vector.push_back(std::make_pair("", ""));
+    return return_vector;
 }
 
-std::string DDIC::Download::Java::install(const std::string& version, const std::string& path, const std::string& operating_system, const std::string& arch, const std::string& impl, bool jre)
+std::string DDIC::Download::Java::install(const std::string& version, const std::string& path, CallbackNull* callback, const std::string& operating_system, const std::string& arch, const std::string& impl, bool jre)
 {
     std::string url = get_download_url(version, operating_system, arch, impl, jre);
 
     std::string path2 = path;
-    if (path != "") {
-        if (jre){
+    if (path == "") 
+    {
+        if (jre)
+        {
             path2 = _JRE_DIR;
         }
-        else{
+        else
+        {
             path2 = _JDK_DIR;
         }
     }
@@ -165,10 +177,9 @@ std::string DDIC::Download::Java::install(const std::string& version, const std:
     std::string path_wch_norm = path2;
 
     std::string jdk_file2 = "";
-    CallbackDict callback;
     
 
-    jdk_file2 = DownloadFile(url, path_wch, &callback);
+    jdk_file2 = DownloadFile(url, path_wch, callback);
 
     std::string jdk_file = jdk_file2;
     
@@ -277,6 +288,8 @@ std::string DDIC::Download::Java::_decompress_archive(const std::string& repo_ro
         std::cout << "java dir is maked with status: " << out_mkdir << std::endl;
     }
 
+    
+
     std::string jdk_file = repo_root_str;
 
     if (std::filesystem::is_directory(jdk_file))
@@ -298,19 +311,35 @@ std::string DDIC::Download::Java::_decompress_archive(const std::string& repo_ro
     }
     else 
     {
-        return repo_root;
+        if (std::filesystem::exists(destination_str))
+        {
+            QZipReader zip(jdk_file.c_str());
+            return Additionals::archives::decompressArchive(zip, destination_str);
+        }
     }
+    return repo_root;
 }
 
-bool DDIC::Download::Java::check_system_verison_java(const std::string& version)
+bool DDIC::Download::Java::check_system_verison_java(const std::string& java)
 {
-    //TODO Проверка текущей версии java
-    return false;
+    char* program_files = nullptr;
+    size_t program_files_sz = 0;
+    _dupenv_s(&program_files, &program_files_sz, "ProgramFiles");
+
+    return check_downloaded_version_java(std::string(program_files == nullptr ? "" : program_files) + '\\' + "java", java);
 }
 
-bool DDIC::Download::Java::check_downloaded_version_java(const std::string& path)
+bool DDIC::Download::Java::check_downloaded_version_java(const std::string& path, const std::string& java)
 {
-    std::string java_path = DDIC::Download::Files::_get_java_path(path) + "\\" + "bin" + "\\" + "java.exe";
+    std::string java_path = "";
+    for (auto& var : DDIC::Download::Files::_get_java_path(path))
+    {
+        if (var.second == java) 
+        {
+            java_path = var.first + "\\" + "bin" + "\\" + "java.exe";
+        }
+    }
+
     if (std::filesystem::exists(java_path))
     {
         return true;
@@ -361,7 +390,7 @@ std::string DDIC::Download::Java::expand_user(std::string path)
 		//home.compare(profile)
         if (home || (_dupenv_s(&home, &home_sz, "USERPROFILE")) && home != 0) 
         {
-            path = Additionals::String::replace(path, path, std::string(home));
+            Additionals::String::replace(path, path, std::string(home));
         }
         else 
         {
@@ -376,7 +405,7 @@ std::string DDIC::Download::Java::expand_user(std::string path)
             //assert(hdrive);  // or other error handling
             //assert(hpath);
 
-            path = Additionals::String::replace(path, path, (hdrive == 0 ? "" : std::string(hdrive)) + (hpath == 0 ? "" : std::string(hpath)));
+            Additionals::String::replace(path, path, (hdrive == 0 ? "" : std::string(hdrive)) + (hpath == 0 ? "" : std::string(hpath)));
         }
     }
     return path;

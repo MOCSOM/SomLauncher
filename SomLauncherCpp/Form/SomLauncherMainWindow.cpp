@@ -5,6 +5,8 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget *parent)
 {
     ui.setupUi(this);
 
+	this->dialog = new SettingsDialog(new Json::JsonObject(), this->options, this);
+
 
 	recomended_memory = 3072;
 
@@ -25,19 +27,19 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget *parent)
 	this->config_parce = json_config.ParseFile(this->config_path);
 
 
-	connect(ui.pushButton_game, &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_game);
-	connect(ui.pushButton_servers, &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_servers);
-	connect(ui.pushButton_news, &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_news);
-	connect(ui.pushButton_aboutus, &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_aboutus);
-	connect(ui.pushButton_changeserver, &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_changeserver);
-	connect(ui.pushButton_settings, &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_settings);
+	QObject::connect(ui.pushButton_game, &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_game);
+	QObject::connect(ui.pushButton_servers, &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_servers);
+	QObject::connect(ui.pushButton_news, &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_news);
+	QObject::connect(ui.pushButton_aboutus, &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_aboutus);
+	QObject::connect(ui.pushButton_changeserver, &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_changeserver);
+	QObject::connect(ui.pushButton_settings, &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_settings);
 
-	connect(ui.pushButton_startgame, &QPushButton::released, this, &SomLauncherMainWindow::onClickpushButton_startgame);
+	QObject::connect(ui.pushButton_startgame, &QPushButton::released, this, &SomLauncherMainWindow::onClickpushButton_startgame);
 
-	connect(ui.label_profile, &ClickableLabel::clicked, this, &SomLauncherMainWindow::onClickedpushLable_profile);
+	QObject::connect(ui.label_profile, &ClickableLabel::clicked, this, &SomLauncherMainWindow::onClickedpushLable_profile);
 
-	connect(ui.frame_topslidemenu, &HoveredFrame::Enter, this, &SomLauncherMainWindow::mouseEnterframe_topslidemenu);
-	connect(ui.frame_topslidemenu, &HoveredFrame::Leave , this, &SomLauncherMainWindow::mouseLeaveframe_topslidemenu);
+	QObject::connect(ui.frame_topslidemenu, &HoveredFrame::Enter, this, &SomLauncherMainWindow::mouseEnterframe_topslidemenu);
+	QObject::connect(ui.frame_topslidemenu, &HoveredFrame::Leave , this, &SomLauncherMainWindow::mouseLeaveframe_topslidemenu);
 
 
 	ui.pushButton_game->setStyleSheet("text-align:bottom;");
@@ -79,6 +81,9 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget *parent)
 
 SomLauncherMainWindow::~SomLauncherMainWindow()
 {
+	delete this->dialog;
+	delete this->servers_parce;
+	delete this->config_parce;
 }
 
 void SomLauncherMainWindow::onClickedpushButton_game()
@@ -126,15 +131,14 @@ void SomLauncherMainWindow::onClickedpushButton_settings()
 {
 	std::cout << "pushButton_settings clicked" << std::endl;
 
-	SettingsDialog dialog(new Json::JsonObject(), this); //TODO: Сделать отправку данных о акке
 	
 
-	dialog.setMemoryData(1024, max_memory, recomended_memory);
+	dialog->setMemoryData(1024, max_memory, recomended_memory);
 	
-	dialog.setStandartJavaPath(this->options.executablePath);
-	dialog.setStandartMinecraftPath(this->minecraft_core_dir_path);
+	dialog->setStandartJavaPath(this->options.executablePath);
+	dialog->setStandartMinecraftPath(this->minecraft_core_dir_path);
 
-	dialog.exec();
+	dialog->exec();
 }
 
 void SomLauncherMainWindow::onClickpushButton_startgame()

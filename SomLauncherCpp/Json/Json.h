@@ -1,27 +1,21 @@
 ﻿#ifndef JSON_H_     // equivalently, #if !defined HEADER_H_
 #define JSON_H_
 
-//#include <ctype.h>
-//#include <tchar.h> 
-//#include <stdio.h>
-//#include <strsafe.h>
-//#include <sys/stat.h>
-//#include <cstdio>
-//#include <vcclr.h>
 
 #include <iostream>
-//#include <map>
 #include <unordered_map>
 #include <list>
 #include <fstream>
+#include <urlmon.h>
 
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
-#include <QUrl>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
+#pragma comment(lib, "Urlmon.lib")
 
-//#include "Additionals.h"
+//#include <QNetworkAccessManager>
+//#include <QNetworkReply>
+//#include <QUrl>
+//#include <QNetworkAccessManager>
+//#include <QNetworkReply>
+
 #include "../Additionals/Additionals.h"
 
 #define IS_SKIP_COMMENTS true

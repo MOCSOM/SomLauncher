@@ -1,16 +1,16 @@
 #include "SettingsDialog.h"
 
-SettingsDialog::SettingsDialog(Json::JsonValue* data, QWidget* parent)
-	: QDialog(parent)
+SettingsDialog::SettingsDialog(Json::JsonValue* data, MinecraftCpp::option::MinecraftOptions& option, QWidget* parent)
+	: QDialog(parent), option(option)
 {
 	ui.setupUi(this);
 
 	account_data = data;
 
-	
 
 	QObject::connect(ui.horizontalSlider_memory, &QSlider::valueChanged, this, &SettingsDialog::setMemoryLableValue);
 
+	QObject::connect(ui.okButton, &QPushButton::clicked, this, &SettingsDialog::saveSettings);
 }
 
 SettingsDialog::~SettingsDialog()
@@ -39,16 +39,12 @@ void SettingsDialog::setStandartMinecraftPath(const std::string& new_path)
 	ui.lineEdit_game_path->setPlaceholderText(new_path.c_str());
 }
 
-void SettingsDialog::updateMinecraftPath()
+void SettingsDialog::saveSettings()
 {
-	QString newData = ui.lineEdit_game_path->text();
-	emit minecraftPathChanged(newData);
-}
+	this->option.gameDirectory = ui.lineEdit_game_path->text().toStdString();
+	this->option.executablePath = ui.lineEdit_java_path->text().toStdString();
 
-void SettingsDialog::updateJavaPath()
-{
-	QString newData = ui.lineEdit_java_path->text();
-	emit javaPathChanged(newData);
+	
 }
 
 void SettingsDialog::setMemoryLableValue(int value)

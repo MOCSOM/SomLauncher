@@ -63,14 +63,38 @@ void SomLauncherMainWindow::install_run_minecraft(
 	MinecraftCpp::option::MinecraftOptions options)
 {
 	std::string java_dir = "";
-	if (/*!DDIC::Download::Java::check_system_verison_java(java) ||*/ !DDIC::Download::Java::check_downloaded_version_java(this->minecraft_core_dir_path))
+	if (!DDIC::Download::Java::check_system_verison_java(java))
 	{
-		java_dir = DDIC::Download::Java::install(java, this->minecraft_core_dir_path);
-		options.executablePath = java_dir;
+		if (!DDIC::Download::Java::check_downloaded_version_java(this->minecraft_core_dir_path, java))
+		{
+			java_dir = DDIC::Download::Java::install(java, this->minecraft_core_dir_path);
+			options.executablePath = java_dir + "\\" + "bin" + "\\" + "java.exe";
+		}
+		else
+		{
+			for (auto& var : DDIC::Download::Files::_get_java_path(this->minecraft_core_dir_path))
+			{
+				if (var.second == java)
+				{
+					options.executablePath = var.first + "\\" + "bin" + "\\" + "java.exe";
+				}
+			}
+
+		}
 	}
 	else
 	{
-		java_dir = options.executablePath;
+		char* program_files = nullptr;
+		size_t program_files_sz = 0;
+		_dupenv_s(&program_files, &program_files_sz, "ProgramFiles");
+
+		for (auto& var : DDIC::Download::Files::_get_java_path(std::string(program_files == nullptr ? "" : program_files) + '\\' + "java"))
+		{
+			if (var.second == java)
+			{
+				options.executablePath = var.first + "\\" + "bin" + "\\" + "java.exe";
+			}
+		}
 	}
 
 	Json::JsonParcer parecer_modpack;
@@ -87,14 +111,15 @@ void SomLauncherMainWindow::install_run_minecraft(
 	{
 		launch_version = version + "-" + loader_mame + "-" + loader_version;
 		install_version = version + "-" + loader_version;
+		MinecraftCpp::forge::install_forge_version(install_version, this->minecraft_core_dir_path, new CallbackDict(), options.executablePath);
 	}
 	else if (loader_mame == "fabric" || loader_mame == "Fabric")
 	{
-
+		launch_version = std::string("fabric") + "-" + "loader" + "-" + loader_version + "-" + version;
+		MinecraftCpp::fabric::install_fabric_version(version, this->minecraft_core_dir_path, loader_version, new CallbackDict(), options.executablePath);
 	}
 
 
-	MinecraftCpp::forge::install_forge_version(install_version, this->minecraft_core_dir_path, new CallbackDict(), options.executablePath);
 	std::string command = MinecraftCpp::get_minecraft_command__(launch_version, this->minecraft_core_dir_path, options);
 
 	std::cout << command << std::endl;
@@ -126,7 +151,7 @@ void SomLauncherMainWindow::configureOptions()
 
 	_dupenv_s(&appdata, &appdata_sz, "APPDATA");
 
-	std::string path_wch_java = DDIC::Download::Files::_get_java_path(Join({ appdata == nullptr ? "" : appdata, ".SomSomSom" })) + "\\" + "bin" + "\\" + "java.exe";
+	//std::string path_wch_java = DDIC::Download::Files::_get_java_path(Join({ appdata == nullptr ? "" : appdata, ".SomSomSom" })).first + "\\" + "bin" + "\\" + "java.exe";
 
 	this->options.customResolution = false;
 	this->options.gameDirectory = this->minecraft_core_dir_path;
@@ -134,7 +159,7 @@ void SomLauncherMainWindow::configureOptions()
 	this->options.launcherVersion = this->launcher_version;
 	this->options.username = this->username;
 	this->options.jvmArguments = "-Xms1024M -Xmx" + std::to_string(8000) + "M";
-	this->options.executablePath = path_wch_java;
+	this->options.executablePath = "";
 	this->options.uuid = "uuu";
 	this->options.token = "uuu";
 }

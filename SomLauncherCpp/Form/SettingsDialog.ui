@@ -265,11 +265,27 @@
    <hints>
     <hint type="sourcelabel">
      <x>405</x>
-     <y>411</y>
+     <y>408</y>
     </hint>
     <hint type="destinationlabel">
      <x>179</x>
      <y>282</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>okButton</sender>
+   <signal>released()</signal>
+   <receiver>SettingsDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>250</x>
+     <y>403</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>75</x>
+     <y>401</y>
     </hint>
    </hints>
   </connection>

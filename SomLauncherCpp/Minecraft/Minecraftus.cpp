@@ -302,15 +302,22 @@ Json::JsonValue* MinecraftCpp::get_version_list()
     */
     Json::JsonParcer parcer;
     Json::JsonValue* vlist = parcer.ParseUrl("https://launchermeta.mojang.com/mc/game/version_manifest.json");
-    Json::JsonValue* returnlist = new Json::JsonObject();
-    for (auto& i : (*vlist)["versions"]->get_value())
+    Json::JsonValue* returnlist = new Json::JsonArray();
+
+    int count = -1;
+    for (auto i : (*vlist)["versions"]->get_value_list())
     {
-        returnlist->add_value(std::make_pair("id", (*i.second)["id"]));
-        returnlist->add_value(std::make_pair("type", (*i.second)["type"]));
+        ++count;
+        Json::JsonValue* object = new Json::JsonObject();
 
-        std::chrono::seconds seconds = std::chrono::duration_cast<std::chrono::seconds>(_parseDateTime((*i.second)["releaseTime"]->to_string()).time_since_epoch());
+        object->add_value(std::make_pair("id", (*i)["id"]));
+        object->add_value(std::make_pair("type", (*i)["type"]));
 
-        returnlist->add_value(std::make_pair("releaseTime", new Json::JsonNumber(seconds.count())));
+        std::chrono::seconds seconds = std::chrono::duration_cast<std::chrono::seconds>(_parseDateTime((*i)["releaseTime"]->to_string()).time_since_epoch());
+
+        object->add_value(std::make_pair("releaseTime", new Json::JsonNumber(seconds.count())));
+
+        returnlist->add_value(object);
     }
     return returnlist;
 }
@@ -515,11 +522,11 @@ std::string MinecraftCpp::get_libraries(Json::JsonValue* data, const std::string
 
         if (data->is_exist("jar"))
         {
-            libstr = libstr + ( path + "versions" + (*data)["jar"]->to_string() + ((*data)["jar"]->to_string() + ".jar"));
+            libstr = libstr + (path + "\\" + "versions" + "\\" + (*data)["jar"]->to_string() + "\\" + ((*data)["jar"]->to_string() + ".jar"));
         }
         else
         {
-            libstr = libstr + ( path + "versions" + (*data)["id"]->to_string() + ((*data)["id"]->to_string() + ".jar") );
+            libstr = libstr + (path + "\\" + "versions" + "\\" + (*data)["id"]->to_string() + "\\" + ((*data)["id"]->to_string() + ".jar"));
         }
     }
     
@@ -1076,8 +1083,8 @@ bool MinecraftCpp::install_assets(Json::JsonValue* data, const std::string& path
                 (*var.second)["hash"]->to_string() 
             ),
             (
-                path + "assets" + "objects" +
-                (*var.second)["hash"]->to_string().substr(0, 2) +
+                path + '\\' + "assets" + '\\' + "objects" + '\\' +
+                (*var.second)["hash"]->to_string().substr(0, 2) + '\\' +
                 (*var.second)["hash"]->to_string()
             ),
             callback
@@ -1617,9 +1624,10 @@ int MinecraftCpp::fabric::install_fabric_version(const std::string& minecraft_ve
     install_minecraft_version(minecraft_version, minecraft_directory, callback = callback);
     // Get installer version
     std::string installer_version = get_latest_installer_version();
-    std::string installer_download_url = "https://maven.fabricmc.net/net/fabricmc/fabric-installer/" + installer_version + "//fabric-installer-" + installer_version + ".jar";
+    std::string installer_download_url = "https://maven.fabricmc.net/net/fabricmc/fabric-installer/" + installer_version + "\\fabric-installer-" + installer_version + ".jar";
     // Generate a temporary path for downloading the installer
-    std::string installer_path = Join({ std::filesystem::temp_directory_path().string(), "fabric-installer-{random.randrange(100,10000)}.tmp"});
+    int random_num = 100 + (rand() % 10000);
+    std::string installer_path = std::filesystem::temp_directory_path().string() + "fabric-installer-" + std::to_string(random_num) + ".tmp";
     // Download the installer
     DownloadFile(installer_download_url, installer_path, callback = callback);
     // Run the installer see https ://fabricmc.net/wiki/install#cli_installation
@@ -1679,15 +1687,14 @@ bool MinecraftCpp::fabric::_is_version_valid(const std::string& version, const s
     {
         return true;
     }
-    for (auto& i : get_version_list()->get_value())
+    for (auto& i : get_version_list()->get_value_list())
     {
-        if ((*i.second)["id"]->to_string() == version)
+        if ((*i)["id"]->to_string() == version)
         {
             return true;
         }
-        return false;
     }
-        
+    return false;
 }
 
 bool MinecraftCpp::fabric::_is_minecraft_version_supported(const std::string& version)
@@ -1696,9 +1703,9 @@ bool MinecraftCpp::fabric::_is_minecraft_version_supported(const std::string& ve
     Checks if a Minecraft version supported by fabric
     */
     Json::JsonValue* minecraft_versions = get_all_minecraft_versions();
-    for (auto& i : minecraft_versions->get_value())
+    for (auto i : minecraft_versions->get_value_list())
     {
-        if ((*i.second)["version"]->to_string() == version)
+        if ((*i)["version"]->to_string() == version)
         {
             return true;
         }
@@ -1749,10 +1756,65 @@ Json::JsonValue* MinecraftCpp::fabric::parse_maven_metadata(const std::string& u
     /*
     Parses a maven metadata file
     */
-    Json::JsonParcer parcer;
-    Json::JsonValue* data = parcer.ParseUrl(url);
 
-    std::string text = data->to_string();
+    Json::JsonValue* data = new Json::JsonObject();
+    std::string text;
+
+    std::string destenation_file = Additionals::TempFile::get_tempdir_SYSTEM();
+
+
+    {
+        std::string replace_url = url;
+        replace_url = Additionals::String::split(url, '/')[Additionals::String::split(url, '/').size() - 1];
+        destenation_file = destenation_file /*+ "\\"*/ + replace_url;
+    }
+
+
+    HRESULT resurl = URLDownloadToFileA(NULL, url.c_str(), destenation_file.c_str(), NULL, NULL);
+
+    if (resurl == S_OK)
+    {
+
+        if (!std::filesystem::exists(destenation_file))
+        {
+            std::cout << "Unable to open file: " << destenation_file << std::endl;
+            return nullptr;
+        }
+
+        std::fstream file(destenation_file, std::ios::in);
+
+        if (!file.is_open())
+        {
+            std::cout << "failed to open " << destenation_file << std::endl;
+            return nullptr;
+        }
+        else
+        {
+            std::string json_str;
+
+            std::string line;
+
+            while (std::getline(file, line))
+            {
+                json_str += line + '\n';
+            }
+
+            file.close();
+
+            text = json_str;
+
+
+        }
+        DeleteFileA(destenation_file.c_str());
+
+    }
+    else
+    {
+        std::cerr << "Dont download file in json" << std::endl;
+        text = "";
+    }
+
+    
     std::smatch mathc;
 
     // The structure of the metadata file is simple.So you don't need a XML parser. It can be parsed using RegEx.
@@ -1761,7 +1823,7 @@ Json::JsonValue* MinecraftCpp::fabric::parse_maven_metadata(const std::string& u
     {
         // matches[0] содержит всю найденную строку, matches[1] содержит текст между тегами
         std::string result = mathc[1];
-        (*(*data)["release"]) = result;
+        data->add_value(std::make_pair("release", new Json::JsonString(result)));
     }
 
     pattern = R"(<latest>(.*?)</latest>)";
@@ -1769,15 +1831,20 @@ Json::JsonValue* MinecraftCpp::fabric::parse_maven_metadata(const std::string& u
     {
         // matches[0] содержит всю найденную строку, matches[1] содержит текст между тегами
         std::string result = mathc[1];
-        (*(*data)["latest"]) = result;
+        data->add_value(std::make_pair("latest", new Json::JsonString(result)));
     }
 
+
+    data->add_value(std::make_pair("versions", new Json::JsonArray));
+
     pattern = R"(<version>(.*?)</version>)";
-    if (std::regex_search(text, mathc, pattern))
+    while (std::regex_search(text, mathc, pattern))
     {
         // matches[0] содержит всю найденную строку, matches[1] содержит текст между тегами
         std::string result = mathc[1];
-        (*(*data)["versions"]) = result;
+        (*data)["versions"]->add_value(new Json::JsonString(result));
+
+        text = mathc.suffix();
     }
 
 
