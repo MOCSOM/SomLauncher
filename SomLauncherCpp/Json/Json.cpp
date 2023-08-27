@@ -201,7 +201,18 @@ void Json::JsonArray::_JsonValueToStringHelper(Json::JsonValue* json_value, std:
 	for (int i = 0; i < json_value->get_count(); i++)
 	{
 		_Indent(builder, current_indent + indent);
-		_JsonValueToStringHelper((*json_value)[i], builder, current_indent + indent, indent);
+
+		if ((*json_value)[i]->get_type() == Json::JsonTypes::Object)
+		{
+			Json::JsonObject obj;
+			obj._JsonValueToStringHelper((*json_value)[i], builder, current_indent + indent, indent);
+		}
+		else
+		{
+			_JsonValueToStringHelper((*json_value)[i], builder, current_indent + indent, indent);
+		}
+
+
 		if (i != json_value->get_count() - 1)
 		{
 			builder += ",";
@@ -411,7 +422,7 @@ std::string Json::JsonObject::to_string()
 wchar_t* Json::JsonObject::to_stringW()
 {
 	const wchar_t* start = L"{";
-	wchar_t* result;
+	wchar_t* result = nullptr;
 	bool first = true;
 
 	for (auto& it : this->values)
@@ -555,6 +566,7 @@ Json::JsonValue* Json::JsonParcer::ParseUrl(const std::string& url)
 	{
 		std::cerr << "Dont download file in json" << std::endl;
 	}
+	return nullptr;
 }
 
 void Json::JsonValue::SaveJsonToFile(std::string file_name, int indent)

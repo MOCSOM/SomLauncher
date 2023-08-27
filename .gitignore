@@ -7,6 +7,9 @@
 SomProject.sln
 SomProjectCpp1/SomProjectCpp1.vcxproj
 SomProjectCpp1/SomProjectCpp1.SomProjectCpp1.vcxproj.filters
+*.sln
+*.vcxproj
+*.vcxproj.filters
 
 SomLauncherCpp.vcxproj
 SomLauncherCpp.vcxproj.filters

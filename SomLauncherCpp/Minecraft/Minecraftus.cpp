@@ -257,6 +257,7 @@ Json::JsonValue* MinecraftCpp::inherit_json(Json::JsonValue* original_data, cons
     Implement the inheritsFrom function
     See https://github.com/tomsik68/mclauncher-api/wiki/Version-Inheritance-&-forge
     */
+
     Json::JsonValue* inherit_version = (*original_data)["inheritsFrom"];
 
     std::string path_inh_json = Join({ path, "versions", inherit_version->to_string(), (inherit_version->to_string() + ".json")});

@@ -11,6 +11,8 @@ SettingsDialog::SettingsDialog(Json::JsonValue* data, MinecraftCpp::option::Mine
 	QObject::connect(ui.horizontalSlider_memory, &QSlider::valueChanged, this, &SettingsDialog::setMemoryLableValue);
 
 	QObject::connect(ui.okButton, &QPushButton::clicked, this, &SettingsDialog::saveSettings);
+
+	QObject::connect(ui.okButton, &QPushButton::clicked, this, &SettingsDialog::acceptButtonClicked);
 }
 
 SettingsDialog::~SettingsDialog()
@@ -29,6 +31,11 @@ void SettingsDialog::setMemoryData(int min, int max, int recomended_value)
 	ui.horizontalSlider_memory->setPivotalValue(recomended_value);
 }
 
+void SettingsDialog::setCurretMemory(int value)
+{
+	ui.horizontalSlider_memory->setValue(value);
+}
+
 void SettingsDialog::setStandartJavaPath(const std::string& new_path)
 {
 	ui.lineEdit_java_path->setPlaceholderText(new_path.c_str());
@@ -39,11 +46,32 @@ void SettingsDialog::setStandartMinecraftPath(const std::string& new_path)
 	ui.lineEdit_game_path->setPlaceholderText(new_path.c_str());
 }
 
+int SettingsDialog::getMemoryValue()
+{
+	return ui.horizontalSlider_memory->value();
+}
+
+
+std::string SettingsDialog::getMinecraftPath()
+{
+	return ui.lineEdit_game_path->text().toStdString();
+}
+
+std::string SettingsDialog::getJavaPath()
+{
+	return ui.lineEdit_java_path->text().toStdString();
+}
+
 void SettingsDialog::saveSettings()
 {
-	this->option.gameDirectory = ui.lineEdit_game_path->text().toStdString();
-	this->option.executablePath = ui.lineEdit_java_path->text().toStdString();
-
+	if (ui.lineEdit_game_path->text().toStdString() != "")
+	{
+		this->option.gameDirectory = ui.lineEdit_game_path->text().toStdString();
+	}
+	if (ui.lineEdit_java_path->text().toStdString() != "")
+	{
+		this->option.executablePath = ui.lineEdit_java_path->text().toStdString();
+	}
 	
 }
 

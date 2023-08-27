@@ -301,7 +301,7 @@
         </property>
         <layout class="QGridLayout" name="gridLayout_frame_additin_buttons">
          <item row="0" column="2">
-          <widget class="QPushButton" name="pushButton_2">
+          <widget class="QPushButton" name="pushButton_checkupdates">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
              <horstretch>1</horstretch>
@@ -327,7 +327,7 @@
           </spacer>
          </item>
          <item row="0" column="3">
-          <widget class="QPushButton" name="pushButton">
+          <widget class="QPushButton" name="pushButton_reportbug">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
              <horstretch>1</horstretch>

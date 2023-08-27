@@ -9,14 +9,18 @@
 
 class ServerWidget : public QWidget
 {
-	//Q_OBJECT
+	Q_OBJECT
 
 public:
 	ServerWidget(QButtonGroup* group, Json::JsonValue* server_data, QWidget *parent = nullptr);
 	~ServerWidget();
 
-//private slots:
-//	void refreshLables();
+	void setStatusServer(bool value);
+
+private slots:
+	void pushButtonSelectClicked();
+private slots:
+	void radioButtonChecked(bool checked);
 
 private:
 	Ui::ServerWidgetClass ui;

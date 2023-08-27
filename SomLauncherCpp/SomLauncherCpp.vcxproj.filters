@@ -74,6 +74,9 @@
     <ClCompile Include="basic_xml.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="QObjects\Threads\FunThread.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -106,9 +109,6 @@
     <ClInclude Include="Minecraft\Mods.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Form\ServerWidget.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="QObjects\SomSlider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -122,16 +122,7 @@
     <None Include="SERVERS.json" />
     <None Include="SOMCONFIG.json" />
     <None Include="TODO_List.md" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="freee.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Form\SomLauncherCpp.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
+    <None Include="cpp.hint" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Form\SomLauncherMainWindow.h">
@@ -147,6 +138,12 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="Form\SettingsDialog.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="QObjects\Threads\FunThread.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="Form\ServerWidget.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

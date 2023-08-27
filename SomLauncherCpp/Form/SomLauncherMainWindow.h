@@ -19,6 +19,8 @@
 
 #include "../QObjects/ClickableLabel.h"
 #include "../QObjects/HoveredFrame.h"
+#include "../QObjects/Threads/FunThread.h"
+
 #include "ServerChangerForm.h"
 #include "ServerWidget.h"
 #include "SettingsDialog.h"
@@ -33,14 +35,14 @@ class SomLauncherMainWindow : public QMainWindow
 
 private:
     std::string minecraft_core_dir_path = Join({ getenv("APPDATA"), ".SomSomSom" });
-    std::string config_path = Join({ /*"\\",*/ minecraft_core_dir_path, "SOMCONFIG.json"});
+    std::string config_path = Join({ minecraft_core_dir_path, "SOMCONFIG.json"});
     std::string launcher_name = "SomLauncher";
     std::string launcher_version = "2.0";
     std::string username = "Debug";
-    std::string servers_json = Join({ /*"\\",*/ minecraft_core_dir_path, "SERVERS.json" });
+    std::string servers_json = Join({ minecraft_core_dir_path, "SERVERS.json" });
 
     MinecraftCpp::option::MinecraftOptions options;
-    SettingsDialog* dialog; //TODO: Сделать отправку данных о акке
+    SettingsDialog* dialog;
 
 
     bool expect_table_menu = false;
@@ -51,13 +53,15 @@ private:
     int max_memory = 1024;
     int recomended_memory = 1024;
     int uses_memory = 1024;
+    int curret_memory = recomended_memory;
+
 
 public:
     SomLauncherMainWindow(QWidget *parent = nullptr);
     ~SomLauncherMainWindow();
 
     void start_minecraft_params();
-    void install_run_minecraft(
+    std::string install_minecraft(
         std::string version,
         std::string loader_mame,
         std::string loader_version,
@@ -68,6 +72,10 @@ public:
     bool IsConfigExist();
     void CreateConfig();
     void configureOptions();
+    void checkJava(MinecraftCpp::option::MinecraftOptions& options, std::string java_verison = "");
+    //void setStatusServer();
+
+    //void setStandartServer();
 
 private slots:
     void onClickedpushButton_game();
@@ -82,6 +90,10 @@ private slots:
 
     void mouseEnterframe_topslidemenu();
     void mouseLeaveframe_topslidemenu();
+
+    void groupButtonsClicked(QAbstractButton* id, bool status);
+
+    void saveSettings();
 
 
 private:

@@ -22,9 +22,17 @@ public:
 	~SettingsDialog();
 
 	void setMemoryData(int min, int max, int recomended_value);
+	void setCurretMemory(int value);
 
 	void setStandartJavaPath(const std::string& new_path);
 	void setStandartMinecraftPath(const std::string& new_path);
+
+	int getMemoryValue();
+	std::string getMinecraftPath();
+	std::string getJavaPath();
+
+signals:
+	void acceptButtonClicked();
 
 private slots:
 	void setMemoryLableValue(int value);

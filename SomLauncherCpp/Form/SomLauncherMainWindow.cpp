@@ -5,10 +5,8 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget *parent)
 {
     ui.setupUi(this);
 
-	this->dialog = new SettingsDialog(new Json::JsonObject(), this->options, this);
+	this->dialog = new SettingsDialog(new Json::JsonObject(), this->options, this); //TODO: Сделать отправку данных о акке
 
-
-	recomended_memory = 3072;
 
 	MEMORYSTATUSEX statex;
 
@@ -17,9 +15,6 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget *parent)
 	GlobalMemoryStatusEx(&statex);
 
 	max_memory = statex.ullTotalPhys / MEM_DIV - 512;
-
-
-	configureOptions();
 
 
 	Json::JsonParcer json_config;
@@ -41,6 +36,8 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget *parent)
 	QObject::connect(ui.frame_topslidemenu, &HoveredFrame::Enter, this, &SomLauncherMainWindow::mouseEnterframe_topslidemenu);
 	QObject::connect(ui.frame_topslidemenu, &HoveredFrame::Leave , this, &SomLauncherMainWindow::mouseLeaveframe_topslidemenu);
 
+	QObject::connect(this->dialog, &SettingsDialog::acceptButtonClicked, this, &SomLauncherMainWindow::saveSettings);
+
 
 	ui.pushButton_game->setStyleSheet("text-align:bottom;");
 	ui.pushButton_servers->setStyleSheet("text-align:bottom;");
@@ -57,6 +54,11 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget *parent)
 		ServerWidget* widget = new ServerWidget(this->server_radio_button_group, (*(*this->servers_parce)["servers"])[i]);
 
 		widget_list.append(widget);
+
+		if ((*(*this->config_parce)["user"])["server"]->get_type() != Json::JsonTypes::Null && (*(*this->config_parce)["user"])["server"]->to_int() == i)
+		{
+			widget->setStatusServer(true);
+		}
 	}
 
 	int index = 0;
@@ -70,6 +72,7 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget *parent)
 		}
 	}
 
+	QObject::connect(this->server_radio_button_group, &QButtonGroup::buttonToggled, this, &SomLauncherMainWindow::groupButtonsClicked);
 
 	//Проверка и создание конфига
 	if (!SomLauncherMainWindow::IsConfigExist())
@@ -77,6 +80,11 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget *parent)
 		SomLauncherMainWindow::CreateConfig();
 		std::cout << "Config created" << std::endl;
 	}
+
+	this->recomended_memory = 3072;
+	this->curret_memory = (*(*this->config_parce)["user"])["memory"]->to_int();
+
+	configureOptions();
 }
 
 SomLauncherMainWindow::~SomLauncherMainWindow()
@@ -133,12 +141,13 @@ void SomLauncherMainWindow::onClickedpushButton_settings()
 
 	
 
-	dialog->setMemoryData(1024, max_memory, recomended_memory);
+	this->dialog->setMemoryData(1024, this->max_memory, this->recomended_memory);
+	this->dialog->setCurretMemory(this->curret_memory);
 	
-	dialog->setStandartJavaPath(this->options.executablePath);
-	dialog->setStandartMinecraftPath(this->minecraft_core_dir_path);
+	this->dialog->setStandartJavaPath(this->options.executablePath);
+	this->dialog->setStandartMinecraftPath(this->options.gameDirectory);
 
-	dialog->exec();
+	this->dialog->exec();
 }
 
 void SomLauncherMainWindow::onClickpushButton_startgame()
@@ -193,4 +202,66 @@ void SomLauncherMainWindow::mouseLeaveframe_topslidemenu()
 	ui.pushButton_servers->setStyleSheet("text-align:bottom;");
 	ui.pushButton_news->setStyleSheet("text-align:bottom;");
 	ui.pushButton_aboutus->setStyleSheet("text-align:bottom;");
+}
+
+void SomLauncherMainWindow::groupButtonsClicked(QAbstractButton* id, bool status)
+{
+	std::cout << "groupButtons Clicked id: " << id->objectName().toStdString() << " " << status << std::endl;
+	
+	if (status == true)
+	{
+		int index = 0;
+		int i = -1;
+		for (auto var : (*this->servers_parce)["servers"]->get_value_list())
+		{
+			++i;
+			if ((*var)["name"]->to_string() == id->objectName().toStdString())
+			{
+				index = i;
+			}
+		}
+
+		(*(*config_parce)["user"])["server"]->operator=(index);
+
+		std::cout << "Server is: " << (*(*config_parce)["user"])["server"]->to_string() << std::endl;
+
+		config_parce->SaveJsonToFile(this->config_path, 4);
+
+
+		std::cout << "Server saved" << std::endl;
+	}
+}
+
+void SomLauncherMainWindow::saveSettings()
+{
+	int memory_value = this->dialog->getMemoryValue();
+
+	this->curret_memory = memory_value;
+
+	(*(*config_parce)["user"])["memory"]->operator=(memory_value);
+
+	std::cout << "Memory is: " << (*(*config_parce)["user"])["memory"]->to_string() << std::endl;
+
+	config_parce->SaveJsonToFile(this->config_path, 4);
+
+	std::cout << "Memory saved" << std::endl;
+
+
+	std::string minecraft_path = this->dialog->getMinecraftPath();
+
+	if (minecraft_path != "")
+	{
+		this->minecraft_core_dir_path = minecraft_path;
+
+		(*(*config_parce)["user"])["mcdir"]->operator=(minecraft_path);
+
+		std::cout << "Mcdir is: " << (*(*config_parce)["user"])["mcdir"]->to_string() << std::endl;
+
+		config_parce->SaveJsonToFile(this->config_path, 4);
+
+		std::cout << "Mcdir saved" << std::endl;
+	}
+
+	
+
 }
