@@ -22,7 +22,6 @@ void Xml::XmlParcer::SkipWhitespace(const std::string& json_str)
 {
 	while (this->_position < json_str.size())
 	{
-
 #ifdef IS_SKIP_COMMENTS
 
 		// Пропустить однострочные комментарии

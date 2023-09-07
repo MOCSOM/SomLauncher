@@ -21,8 +21,10 @@
 
 #include <iostream>
 
+#if defined(QT_CORE_LIB)
 #include "../qzipreader_p.h"
-#include "../qzipwriter_p.h" 
+#include "../qzipwriter_p.h"
+#endif /*defined(QT_CORE_LIB)*/
 
 #define StrDogWA Additionals::String::strdogWA
 #define StrDogW Additionals::String::strdogW
@@ -32,8 +34,9 @@
 #define JoinA Additionals::Path::joinA
 #define Join Additionals::Path::joinString
 
-namespace Additionals 
+namespace Additionals
 {
+#if defined(QT_CORE_LIB)
 	namespace file
 	{
 		class File
@@ -66,7 +69,6 @@ namespace Additionals
 		public:
 			__declspec(property(get = _getEntries)) std::vector<Additionals::file::File> entries;
 
-
 		public:
 			Archive(const std::string& archive_name);
 			Archive(const std::wstring& archive_name);
@@ -80,11 +82,12 @@ namespace Additionals
 			static void extractFile(Additionals::file::File& file, const std::string& destination_path);
 
 			std::vector<Additionals::file::File> _getEntries();
-
 		};
 	}
 
-	namespace Convectors 
+#endif /*defined(QT_CORE_LIB)*/
+
+	namespace Convectors
 	{
 		wchar_t* ConvertStringToWcharPtr(const std::string& str);
 		std::string ConvertWcharPtrToString(const wchar_t* str);
@@ -93,7 +96,7 @@ namespace Additionals
 		std::unique_ptr<wchar_t[]> ConvertWstringToWcharPtr(const std::wstring& str);
 	}
 
-	namespace String 
+	namespace String
 	{
 		wchar_t* strdogW(const wchar_t* ref_str, const wchar_t* str_to_add);
 
@@ -111,7 +114,6 @@ namespace Additionals
 
 		bool EndsWith(const std::string& str, const std::string& suffix);
 		bool EndsWith(const std::wstring& str, const std::wstring& suffix);
-
 
 		// trim from start (in place)
 		static inline void ltrim(std::string& s);
@@ -138,7 +140,7 @@ namespace Additionals
 		static inline std::string trim_copy(std::string s, const char& symbol);
 	}
 
-	namespace Path 
+	namespace Path
 	{
 		wchar_t* joinW(std::initializer_list<const wchar_t*> list);
 		std::wstring joinA(std::initializer_list<const char*> list);
@@ -148,7 +150,7 @@ namespace Additionals
 		std::string getFileNameFromPath(const std::string& path);
 	}
 
-	namespace TempFile 
+	namespace TempFile
 	{
 		wchar_t* get_tempdir();
 		std::string get_tempdir_SYSTEM();
@@ -156,6 +158,4 @@ namespace Additionals
 	}
 }
 
-
 #endif // !ADDITIONALS_H_
-

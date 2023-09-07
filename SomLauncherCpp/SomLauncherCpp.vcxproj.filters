@@ -38,9 +38,6 @@
     <ClCompile Include="Callbacks\CallbackDict.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Json\Json.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Minecraft\Minecraftus.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -86,9 +83,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Callbacks\CallbackDict.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Json\Json.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Minecraft\Minecraftus.h">

@@ -1,26 +1,20 @@
 ﻿#include "SomLauncherMainWindow.h"
 
-SomLauncherMainWindow::SomLauncherMainWindow(QWidget *parent)
-    : QMainWindow(parent)
+SomLauncherMainWindow::SomLauncherMainWindow(QWidget* parent)
+	: QMainWindow(parent)
 {
-    ui.setupUi(this);
+	ui.setupUi(this);
 
-	this->dialog = new SettingsDialog(new Json::JsonObject(), this->options, this); //TODO: Сделать отправку данных о акке
+	this->dialog = new SettingsDialog(std::make_shared<Json::JsonObject>(), this->options, this); //TODO: Сделать отправку данных о акке
 
-
-	MEMORYSTATUSEX statex;
-
+	MEMORYSTATUSEX statex{};
 	statex.dwLength = sizeof(statex);
-
 	GlobalMemoryStatusEx(&statex);
-
-	max_memory = statex.ullTotalPhys / MEM_DIV - 512;
-
+	this->max_memory = statex.ullTotalPhys / MEM_DIV - 512;
 
 	Json::JsonParcer json_config;
 	this->servers_parce = json_config.ParseFile(this->servers_json);
 	this->config_parce = json_config.ParseFile(this->config_path);
-
 
 	QObject::connect(ui.pushButton_game, &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_game);
 	QObject::connect(ui.pushButton_servers, &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_servers);
@@ -34,21 +28,18 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget *parent)
 	QObject::connect(ui.label_profile, &ClickableLabel::clicked, this, &SomLauncherMainWindow::onClickedpushLable_profile);
 
 	QObject::connect(ui.frame_topslidemenu, &HoveredFrame::Enter, this, &SomLauncherMainWindow::mouseEnterframe_topslidemenu);
-	QObject::connect(ui.frame_topslidemenu, &HoveredFrame::Leave , this, &SomLauncherMainWindow::mouseLeaveframe_topslidemenu);
+	QObject::connect(ui.frame_topslidemenu, &HoveredFrame::Leave, this, &SomLauncherMainWindow::mouseLeaveframe_topslidemenu);
 
 	QObject::connect(this->dialog, &SettingsDialog::acceptButtonClicked, this, &SomLauncherMainWindow::saveSettings);
-
 
 	ui.pushButton_game->setStyleSheet("text-align:bottom;");
 	ui.pushButton_servers->setStyleSheet("text-align:bottom;");
 	ui.pushButton_news->setStyleSheet("text-align:bottom;");
 	ui.pushButton_aboutus->setStyleSheet("text-align:bottom;");
 
-
 	this->server_radio_button_group = new QButtonGroup();
 
 	QList<ServerWidget*> widget_list;
-
 	for (int i = 0; i < (*this->servers_parce)["servers"]->get_count(); ++i)
 	{
 		ServerWidget* widget = new ServerWidget(this->server_radio_button_group, (*(*this->servers_parce)["servers"])[i]);
@@ -90,8 +81,6 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget *parent)
 SomLauncherMainWindow::~SomLauncherMainWindow()
 {
 	delete this->dialog;
-	delete this->servers_parce;
-	delete this->config_parce;
 }
 
 void SomLauncherMainWindow::onClickedpushButton_game()
@@ -139,11 +128,9 @@ void SomLauncherMainWindow::onClickedpushButton_settings()
 {
 	std::cout << "pushButton_settings clicked" << std::endl;
 
-	
-
 	this->dialog->setMemoryData(1024, this->max_memory, this->recomended_memory);
 	this->dialog->setCurretMemory(this->curret_memory);
-	
+
 	this->dialog->setStandartJavaPath(this->options.executablePath);
 	this->dialog->setStandartMinecraftPath(this->options.gameDirectory);
 
@@ -207,12 +194,12 @@ void SomLauncherMainWindow::mouseLeaveframe_topslidemenu()
 void SomLauncherMainWindow::groupButtonsClicked(QAbstractButton* id, bool status)
 {
 	std::cout << "groupButtons Clicked id: " << id->objectName().toStdString() << " " << status << std::endl;
-	
+
 	if (status == true)
 	{
 		int index = 0;
 		int i = -1;
-		for (auto var : (*this->servers_parce)["servers"]->get_value_list())
+		for (auto& var : (*this->servers_parce)["servers"]->get_value_list())
 		{
 			++i;
 			if ((*var)["name"]->to_string() == id->objectName().toStdString())
@@ -226,7 +213,6 @@ void SomLauncherMainWindow::groupButtonsClicked(QAbstractButton* id, bool status
 		std::cout << "Server is: " << (*(*config_parce)["user"])["server"]->to_string() << std::endl;
 
 		config_parce->SaveJsonToFile(this->config_path, 4);
-
 
 		std::cout << "Server saved" << std::endl;
 	}
@@ -246,7 +232,6 @@ void SomLauncherMainWindow::saveSettings()
 
 	std::cout << "Memory saved" << std::endl;
 
-
 	std::string minecraft_path = this->dialog->getMinecraftPath();
 
 	if (minecraft_path != "")
@@ -261,7 +246,4 @@ void SomLauncherMainWindow::saveSettings()
 
 		std::cout << "Mcdir saved" << std::endl;
 	}
-
-	
-
 }

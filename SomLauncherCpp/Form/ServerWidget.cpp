@@ -1,6 +1,6 @@
 #include "ServerWidget.h"
 
-ServerWidget::ServerWidget(QButtonGroup* group, Json::JsonValue* server_data, QWidget *parent)
+ServerWidget::ServerWidget(QButtonGroup* group, Json::JsonValue server_data, QWidget* parent)
 	: QWidget(parent)
 {
 	ui.setupUi(this);
@@ -48,4 +48,3 @@ void ServerWidget::radioButtonChecked(bool checked)
 		ui.widget_selecter->setStyleSheet(style);
 	}
 }
-

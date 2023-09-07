@@ -1,12 +1,11 @@
 #include "SettingsDialog.h"
 
-SettingsDialog::SettingsDialog(Json::JsonValue* data, MinecraftCpp::option::MinecraftOptions& option, QWidget* parent)
+SettingsDialog::SettingsDialog(Json::JsonValue data, MinecraftCpp::option::MinecraftOptions& option, QWidget* parent)
 	: QDialog(parent), option(option)
 {
 	ui.setupUi(this);
 
 	account_data = data;
-
 
 	QObject::connect(ui.horizontalSlider_memory, &QSlider::valueChanged, this, &SettingsDialog::setMemoryLableValue);
 
@@ -51,7 +50,6 @@ int SettingsDialog::getMemoryValue()
 	return ui.horizontalSlider_memory->value();
 }
 
-
 std::string SettingsDialog::getMinecraftPath()
 {
 	return ui.lineEdit_game_path->text().toStdString();
@@ -72,11 +70,9 @@ void SettingsDialog::saveSettings()
 	{
 		this->option.executablePath = ui.lineEdit_java_path->text().toStdString();
 	}
-	
 }
 
 void SettingsDialog::setMemoryLableValue(int value)
 {
 	ui.label_memory_count->setText((std::to_string(value) + " Mb").c_str());
 }
-

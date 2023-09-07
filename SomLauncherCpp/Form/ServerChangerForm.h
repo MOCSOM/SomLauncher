@@ -5,7 +5,7 @@
 
 #include <string>
 
-#include "../Json/Json.h"
+#include "../../SomJson/SomJson.h"
 
 #include "ui_ServerChangerForm.h"
 

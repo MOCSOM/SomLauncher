@@ -3,7 +3,7 @@
 
 #include "ui_SettingsDialog.h"
 
-#include "../Json/Json.h"
+#include "../../SomJson/SomJson.h"
 #include "../Minecraft/Minecraftus.h"
 
 #include <string>
@@ -11,14 +11,14 @@
 class SettingsDialog : public QDialog
 {
 	Q_OBJECT
-		
+
 private:
 	Json::JsonValue* account_data;
 
 	MinecraftCpp::option::MinecraftOptions& option;
 
 public:
-	SettingsDialog(Json::JsonValue* data, MinecraftCpp::option::MinecraftOptions& option, QWidget* parent = nullptr);
+	SettingsDialog(Json::JsonValue data, MinecraftCpp::option::MinecraftOptions& option, QWidget* parent = nullptr);
 	~SettingsDialog();
 
 	void setMemoryData(int min, int max, int recomended_value);

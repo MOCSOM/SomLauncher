@@ -3,7 +3,7 @@
 
 #include "../Web/DownloadClasses.h"
 #include "../Callbacks/CallbackDict.h"
-#include "../Json/Json.h"
+#include "../../SomJson/SomJson.h"
 #include "../Additionals/Additionals.h"
 #include <initializer_list>
 //#include <stdio.h>
@@ -11,7 +11,7 @@
 #include <filesystem>
 
 #include "../qzipreader_p.h"
-#include "../qzipwriter_p.h" 
+#include "../qzipwriter_p.h"
 
 #include <qdir.h>
 #include <chrono>
@@ -21,35 +21,34 @@
 #include <chrono>
 #include <regex>
 
-
-namespace MinecraftCpp 
+namespace MinecraftCpp
 {
-	namespace option 
+	namespace option
 	{
 		struct MinecraftOptions
 		{
 			MinecraftOptions() {}
 			~MinecraftOptions() {}
 
-			std::string username            = "";
-			std::string uuid                = "";
-			std::string token               = "";
-			std::string executablePath      = "";
-			std::string jvmArguments        = "";
-			std::string launcherName        = "";
-			std::string launcherVersion     = "";
-			std::string gameDirectory       = "";
-			bool	 demo                   = NULL;
-			bool	 customResolution       = NULL;
-			std::string resolutionWidth     = "";
-			std::string resolutionHeight    = "";
-			std::string server              = "";
-			std::string port                = "";
-			std::string nativesDirectory    = "";
-			bool	 enableLoggingConfig    = NULL;
-			std::string classpath           = "";
-			std::string NULLES              = "";
-			
+			std::string username = "";
+			std::string uuid = "";
+			std::string token = "";
+			std::string executablePath = "";
+			std::string jvmArguments = "";
+			std::string launcherName = "";
+			std::string launcherVersion = "";
+			std::string gameDirectory = "";
+			bool	 demo = NULL;
+			bool	 customResolution = NULL;
+			std::string resolutionWidth = "";
+			std::string resolutionHeight = "";
+			std::string server = "";
+			std::string port = "";
+			std::string nativesDirectory = "";
+			bool	 enableLoggingConfig = NULL;
+			std::string classpath = "";
+			std::string NULLES = "";
+
 			// get (поле, стандарт)
 			std::string get(const std::string& param, const std::string& writ = "");
 			bool get(const std::string& param, bool writ = NULL);
@@ -78,13 +77,13 @@ namespace MinecraftCpp
 	bool install_assets(Json::JsonValue* data, const std::string& path, CallbackNull* callback);
 	bool install_jvm_runtime(const std::string& jvm_version, const std::string& minecraft_directory, CallbackNull* callback = new CallbackNull());
 
-	namespace forge 
+	namespace forge
 	{
 		bool install_forge_version(const std::string& versionid, const std::string& path, CallbackNull* callback = new CallbackNull(), const std::string& java = "");
 		bool extract_file(const QZipReader& handler, const std::string& zip_path, const std::string& extract_path);
 		std::string get_data_library_path(const std::string& libname, const std::string& path);
 		std::string get_jar_mainclass(const std::string& path);
-		
+
 		bool forge_processors(
 			Json::JsonValue* data,
 			const std::string& minecraft_directory,
@@ -137,11 +136,6 @@ namespace MinecraftCpp
 		const std::string& path);
 
 	std::chrono::system_clock::time_point _parseDateTime(const std::string& isoDateTime);
-	
-
 }
-
-
-
 
 #endif  /*MINECRAFTUS_H_*/

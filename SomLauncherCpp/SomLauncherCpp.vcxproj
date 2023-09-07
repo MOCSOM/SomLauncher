@@ -167,7 +167,6 @@
     <ClCompile Include="Form\ServerWidget.cpp" />
     <ClCompile Include="Form\SettingsDialog.cpp" />
     <ClCompile Include="Form\SomLauncherMainWindow.cpp" />
-    <ClCompile Include="Json\Json.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Minecraft\Minecraftus.cpp" />
     <ClCompile Include="Minecraft\Mods.cpp" />
@@ -192,7 +191,6 @@
     <ClInclude Include="Web\DownloadClasses.h" />
     <QtMoc Include="Form\SomLauncherMainWindow.h" />
     <ClInclude Include="Callbacks\CallbackDict.h" />
-    <ClInclude Include="Json\Json.h" />
     <ClInclude Include="Minecraft\Minecraftus.h" />
     <QtMoc Include="QObjects\ClickableLabel.h" />
     <QtMoc Include="QObjects\HoveredFrame.h" />

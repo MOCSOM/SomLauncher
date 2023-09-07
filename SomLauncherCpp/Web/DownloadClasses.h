@@ -2,7 +2,7 @@
 #define DWLD_H_
 
 #include <windows.h>
-#include <tchar.h> 
+#include <tchar.h>
 #include <stdio.h>
 #include <strsafe.h>
 #include <sys/stat.h>
@@ -13,7 +13,6 @@
 #include <string>
 #include <memory>
 #include <urlmon.h>
-
 
 //#include <vcclr.h>
 
@@ -64,11 +63,11 @@ const std::string _SEVEN_ZIP = ".7z";
 
 #define DownloadFile DDIC::Download::Files::download_file
 
-namespace DDIC 
+namespace DDIC
 {
-	namespace Download 
+	namespace Download
 	{
-		namespace Files 
+		namespace Files
 		{
 			//bool _CreateDirectoryIfNotExists(const std::wstring& path);
 
@@ -76,6 +75,7 @@ namespace DDIC
 			bool download_all_files(const std::string& s_url_dir, CallbackNull callback);
 			int _get_java_exist_ver(const std::string& direct);
 			std::vector<std::pair<std::string, std::string>> _get_java_path(const std::string& dir);
+			std::string getInstalledJavaInDirectory(std::string directory_path = "", int version = 0);
 			//bool delete_file();
 			//bool delete_all_files();
 			//bool delete_repos();
@@ -116,6 +116,4 @@ namespace DDIC
 	}
 }
 
-
 #endif //DWLD_H_
-
