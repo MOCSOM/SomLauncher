@@ -1,3 +1,5 @@
+#include "pch.h"
+
 #include "Json.h"
 
 Json::JsonString::JsonString(const std::wstring& value) : JsonNode(JsonTypes::String)

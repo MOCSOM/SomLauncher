@@ -3,8 +3,8 @@
 
 #include "../Web/DownloadClasses.h"
 #include "../Callbacks/CallbackDict.h"
-#include "../../SomJson/SomJson.h"
-#include "../Additionals/Additionals.h"
+#include "../../SomJsonLib/SomJson.h"
+#include "../../SomAdditionalsLib/Additionals.h"
 
 namespace MinecraftCpp
 {

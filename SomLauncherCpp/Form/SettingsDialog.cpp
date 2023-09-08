@@ -5,7 +5,7 @@ SettingsDialog::SettingsDialog(Json::JsonValue data, MinecraftCpp::option::Minec
 {
 	ui.setupUi(this);
 
-	account_data = data;
+	this->account_data = data;
 
 	QObject::connect(ui.horizontalSlider_memory, &QSlider::valueChanged, this, &SettingsDialog::setMemoryLableValue);
 

@@ -26,9 +26,6 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Additionals\Additionals.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Form\MainWindowExtensions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -74,12 +71,12 @@
     <ClCompile Include="QObjects\Threads\FunThread.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Archives.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Additionals\Additionals.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Callbacks\CallbackDict.h">
@@ -107,6 +104,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="basic_xml.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Archives.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

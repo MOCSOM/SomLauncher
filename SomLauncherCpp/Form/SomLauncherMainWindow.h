@@ -11,8 +11,8 @@
 
 #include "../Web/DownloadClasses.h"
 #include "../Callbacks/CallbackDict.h"
-#include "../Additionals/Additionals.h"
-#include "../../SomJson/SomJson.h"
+#include "../../SomAdditionalsLib/Additionals.h"
+#include "../../SomJsonLib/SomJson.h"
 #include "../Minecraft/Minecraftus.h"
 
 #include "ui_SomLauncherMainWindow.h"

@@ -17,9 +17,9 @@ ServerChanger::ServerChanger(QWidget* parent, std::string config_path)
 
 	for (int i = 0; i < (*json_parce)["servers"]->get_count(); ++i)
 	{
-		QListWidgetItem* item = new QListWidgetItem((*(*(*json_parce)["servers"])[i])["name"]->to_string().c_str(), ui.listWidget_changeserver);
-		item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
-		item->setCheckState(Qt::Unchecked);
+		this->item = new QListWidgetItem((*(*(*json_parce)["servers"])[i])["name"]->to_string().c_str(), ui.listWidget_changeserver);
+		this->item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
+		this->item->setCheckState(Qt::Unchecked);
 	}
 
 	if (ui.listWidget_changeserver->item((*(*parce_config)["user"])["server"]->to_int())->text() == "")
@@ -36,12 +36,13 @@ ServerChanger::ServerChanger(QWidget* parent, std::string config_path)
 
 ServerChanger::~ServerChanger()
 {
+	delete item;
 }
 
 void ServerChanger::onClickedpushButton_apply()
 {
 	Json::JsonParcer json_config;
-	auto config_parce = json_config.ParseFile(this->config_path);
+	Json::JsonValue config_parce = json_config.ParseFile(this->config_path);
 	(*(*config_parce)["user"])["server"]->operator=(this->index);
 
 	std::cout << "Server is: " << (*(*config_parce)["user"])["server"]->to_string() << std::endl;

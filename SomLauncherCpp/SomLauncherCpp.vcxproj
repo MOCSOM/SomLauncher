@@ -31,6 +31,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -91,6 +92,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <AllProjectIncludesArePublic>true</AllProjectIncludesArePublic>
+    <AllProjectBMIsArePublic>true</AllProjectBMIsArePublic>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
   </PropertyGroup>
@@ -104,9 +107,9 @@
     </ClCompile>
     <Link>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
-      <AdditionalDependencies>%(AdditionalDependencies);$(Qt_LIBS_)</AdditionalDependencies>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies);$(Qt_LIBS_)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
@@ -158,7 +161,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Additionals\Additionals.cpp" />
+    <ClCompile Include="Archives.cpp" />
     <ClCompile Include="basic_xml.cpp" />
     <ClCompile Include="Callbacks\CallbackDict.cpp" />
     <ClCompile Include="Databases\SQLBased.cpp" />
@@ -177,7 +180,7 @@
     <ClCompile Include="Web\DownloadClasses.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Additionals\Additionals.h" />
+    <ClInclude Include="Archives.h" />
     <ClInclude Include="basic_xml.h" />
     <ClInclude Include="Databases\SQLBased.h" />
     <QtMoc Include="Form\ServerChangerForm.h" />
@@ -209,6 +212,14 @@
     <QtUic Include="Form\ServerWidget.ui" />
     <QtUic Include="Form\SettingsDialog.ui" />
     <QtUic Include="Form\SomLauncherMainWindow.ui" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SomAdditionalsLib\SomAdditionalsLib.vcxproj">
+      <Project>{63fda220-d21d-441c-b2e5-f17d86fe29e7}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\SomJsonLib\SomJsonLib.vcxproj">
+      <Project>{b41ca7d7-f328-4e65-802c-a9ccf77055b0}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

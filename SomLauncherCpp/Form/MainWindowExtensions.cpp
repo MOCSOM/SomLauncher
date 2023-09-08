@@ -76,7 +76,7 @@ std::string SomLauncherMainWindow::install_minecraft(
 	checkJava(options, java);
 
 	Json::JsonParcer parecer_modpack;
-	Json::JsonValue* data_modpack = parecer_modpack.ParseFile(this->minecraft_core_dir_path);
+	Json::JsonValue data_modpack = parecer_modpack.ParseFile(this->minecraft_core_dir_path);
 
 	/* minecraft_version = 1.12.2 + "-" + forge_version = 14.23.5.2860 */
 	//wchar_t* launch_varsion = L"1.12.2-forge-14.23.5.2860";
@@ -99,6 +99,7 @@ std::string SomLauncherMainWindow::install_minecraft(
 
 		return launch_version;
 	}
+	return std::string();
 }
 
 bool SomLauncherMainWindow::IsConfigExist()

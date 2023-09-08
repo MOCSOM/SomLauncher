@@ -3,6 +3,8 @@
 SomLauncherMainWindow::SomLauncherMainWindow(QWidget* parent)
 	: QMainWindow(parent)
 {
+	std::cout << 1;
+
 	ui.setupUi(this);
 
 	this->dialog = new SettingsDialog(std::make_shared<Json::JsonObject>(), this->options, this); //TODO: Сделать отправку данных о акке
@@ -53,9 +55,9 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget* parent)
 	}
 
 	int index = 0;
-	for (int i = 0; i < ((*this->servers_parce)["servers"]->get_count() - 1) / 2 + 1; i++)
+	for (int i = 0; i < ((*this->servers_parce)["servers"]->get_count() - 1) / 2 + 1; ++i)
 	{
-		for (int j = 0; j < ((*this->servers_parce)["servers"]->get_count() - 1) / 2 + 1; j++)
+		for (int j = 0; j < ((*this->servers_parce)["servers"]->get_count() - 1) / 2 + 1; ++j)
 		{
 			ui.gridLayout_scrollArea_servers->addWidget(widget_list[index], i, j);
 

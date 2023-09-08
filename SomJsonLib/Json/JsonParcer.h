@@ -1,17 +1,28 @@
+#ifndef JSONPARCER_H_
+#define JSONPARCER_H_
+
+#ifdef SOMJSONDLL_EXPORTS
+#define JSONPARCER_API __declspec(dllexport)
+#else
+#define JSONPARCER_API __declspec(dllimport)
+#endif
+
 #include <urlmon.h>
 
 #include "Json.h"
 
-#include "../../SomLauncherCpp/Additionals/Additionals.h"
+//#include "../../AdditionalsDll/Additionals.h"
 
 #pragma comment(lib, "Urlmon.lib")
+
+#define IS_SKIP_COMMENTS 1
 
 namespace Json
 {
 	class JsonParcer
 	{
 	private:
-		int _pos = 0;
+		size_t _pos = 0;
 	public:
 		JsonParcer() {}
 
@@ -34,3 +45,5 @@ namespace Json
 		std::string ParseUnicode(const std::string& json_str);
 	};
 }
+
+#endif /*JSONPARCER_H_*/

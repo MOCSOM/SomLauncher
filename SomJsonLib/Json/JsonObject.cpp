@@ -1,3 +1,5 @@
+#include "pch.h"
+
 #include "Json.h"
 
 //cliext::map<System::String^, Json::JsonNode^> Json::JsonObject::operator=(cliext::map<System::String^, Json::JsonNode^> value)

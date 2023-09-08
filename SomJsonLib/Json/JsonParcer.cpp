@@ -1,4 +1,7 @@
+ï»¿#include "pch.h"
+
 #include "JsonParcer.h"
+
 
 Json::JsonValue Json::JsonParcer::ParseFile(const std::wstring& filename)
 {
@@ -103,7 +106,7 @@ void Json::JsonParcer::SkipWhitespace(const std::string& json_str)
 	while (_pos < json_str.size())
 	{
 #ifdef IS_SKIP_COMMENTS
-		// Ïðîïóñòèòü îäíîñòðî÷íûå êîììåíòàðèè
+		// ÐŸÑ€Ð¾Ð¿ÑƒÑÑ‚Ð¸Ñ‚ÑŒ Ð¾Ð´Ð½Ð¾ÑÑ‚Ñ€Ð¾Ñ‡Ð½Ñ‹Ðµ ÐºÐ¾Ð¼Ð¼ÐµÐ½Ñ‚Ð°Ñ€Ð¸Ð¸
 		if (json_str[_pos] == '/' && json_str[_pos + 1] == '/')
 		{
 			_pos += 2;
@@ -114,7 +117,7 @@ void Json::JsonParcer::SkipWhitespace(const std::string& json_str)
 			continue;
 		}
 
-		// Ïðîïóñòèòü ìíîãîñòðî÷íûå êîììåíòàðèè
+		// ÐŸÑ€Ð¾Ð¿ÑƒÑÑ‚Ð¸Ñ‚ÑŒ Ð¼Ð½Ð¾Ð³Ð¾ÑÑ‚Ñ€Ð¾Ñ‡Ð½Ñ‹Ðµ ÐºÐ¾Ð¼Ð¼ÐµÐ½Ñ‚Ð°Ñ€Ð¸Ð¸
 		if (json_str[_pos] == '/' && json_str[_pos + 1] == '*')
 		{
 			_pos += 2;

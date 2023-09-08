@@ -5,7 +5,7 @@
 
 #include <string>
 
-#include "../../SomJson/SomJson.h"
+#include "../../SomJsonLib/SomJson.h"
 
 #include "ui_ServerChangerForm.h"
 
@@ -17,6 +17,8 @@ private:
 	std::string server = "";
 	std::string config_path;
 	int index = -1;
+
+	QListWidgetItem* item;
 
 public:
 	ServerChanger(QWidget* parent = nullptr, std::string config_path = "");

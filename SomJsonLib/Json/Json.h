@@ -1,6 +1,12 @@
 ﻿#ifndef JSON_H_     // equivalently, #if !defined HEADER_H_
 #define JSON_H_
 
+//#ifdef SOMJSONDLL_EXPORTS
+//#define JSONPARCER_API __declspec(dllexport)
+//#else
+//#define JSONPARCER_API __declspec(dllimport)
+//#endif
+
 #include <memory>
 #include <string>
 #include <unordered_map>
@@ -8,9 +14,10 @@
 #include <fstream>
 #include <iostream>
 
+#include "..\..\SomAdditionalsLib\Additionals.h"
+
 #include "JsonTypes.h"
 
-#include "../../SomLauncherCpp/Additionals/Additionals.h"
 
 //Классы для обработки и парсинга файла json
 namespace Json

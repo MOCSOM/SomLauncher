@@ -3,7 +3,7 @@
 
 #include "ui_SettingsDialog.h"
 
-#include "../../SomJson/SomJson.h"
+#include "../../SomJsonLib/SomJson.h"
 #include "../Minecraft/Minecraftus.h"
 
 #include <string>
@@ -13,7 +13,7 @@ class SettingsDialog : public QDialog
 	Q_OBJECT
 
 private:
-	Json::JsonValue* account_data;
+	Json::JsonValue account_data;
 
 	MinecraftCpp::option::MinecraftOptions& option;
 

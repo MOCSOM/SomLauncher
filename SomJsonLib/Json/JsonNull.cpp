@@ -1,3 +1,5 @@
+#include "pch.h"
+
 #include "Json.h"
 
 Json::JsonNull::JsonNull() : JsonNode(JsonTypes::Null)

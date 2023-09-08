@@ -1,4 +1,4 @@
-#include "basic_xml.h"
+ï»¿#include "basic_xml.h"
 
 Xml::XmlParcer::XmlParcer()
 {
@@ -24,7 +24,7 @@ void Xml::XmlParcer::SkipWhitespace(const std::string& json_str)
 	{
 #ifdef IS_SKIP_COMMENTS
 
-		// Ïðîïóñòèòü îäíîñòðî÷íûå êîììåíòàðèè
+		// ÐŸÑ€Ð¾Ð¿ÑƒÑÑ‚Ð¸Ñ‚ÑŒ Ð¾Ð´Ð½Ð¾ÑÑ‚Ñ€Ð¾Ñ‡Ð½Ñ‹Ðµ ÐºÐ¾Ð¼Ð¼ÐµÐ½Ñ‚Ð°Ñ€Ð¸Ð¸
 		if (json_str[this->_position] == '/' && json_str[this->_position + 1] == '/')
 		{
 			this->_position += 2;
@@ -35,7 +35,7 @@ void Xml::XmlParcer::SkipWhitespace(const std::string& json_str)
 			continue;
 		}
 
-		// Ïðîïóñòèòü ìíîãîñòðî÷íûå êîììåíòàðèè
+		// ÐŸÑ€Ð¾Ð¿ÑƒÑÑ‚Ð¸Ñ‚ÑŒ Ð¼Ð½Ð¾Ð³Ð¾ÑÑ‚Ñ€Ð¾Ñ‡Ð½Ñ‹Ðµ ÐºÐ¾Ð¼Ð¼ÐµÐ½Ñ‚Ð°Ñ€Ð¸Ð¸
 		if (json_str[this->_position] == '/' && json_str[this->_position + 1] == '*')
 		{
 			this->_position += 2;

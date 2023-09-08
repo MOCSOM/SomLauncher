@@ -22,7 +22,8 @@
 #pragma comment(lib, "User32.lib")
 
 #include "../Callbacks/CallbackDict.h"
-#include "../Additionals/Additionals.h"
+#include "../../SomAdditionalsLib/Additionals.h"
+#include "../Archives.h"
 
 #if defined(_WIN32) || defined(_WIN64)
 const std::string OS = "windows";

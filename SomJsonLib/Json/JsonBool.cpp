@@ -1,3 +1,5 @@
+#include "pch.h"
+
 #include "Json.h"
 
 Json::JsonBool::JsonBool(bool value) : JsonNode(JsonTypes::Bool), value(value)
