@@ -26,7 +26,7 @@
 #include "SettingsDialog.h"
 
 // Use to convert bytes to MB
-constexpr auto MEM_DIV = 1024 * 1024;
+constexpr int MEM_DIV = 1024 * 1024;
 
 class SomLauncherMainWindow : public QMainWindow
 {
@@ -40,18 +40,23 @@ private:
 	std::string username = "Debug";
 	std::string servers_json = Join({ minecraft_core_dir_path, "SERVERS.json" });
 
-	MinecraftCpp::option::MinecraftOptions options;
-	SettingsDialog* dialog;
+	std::string server_buttom_text = "";
 
-	bool expect_table_menu = false;
+	MinecraftCpp::option::MinecraftOptions options;
+	MinecraftCpp::option::MinecraftOptions default_options = options;
+	std::unique_ptr<SettingsDialog> dialog;
 
 	Json::JsonValue config_parce;
 	Json::JsonValue servers_parce;
+
+	Json::JsonParcer global_parcer;
 
 	int max_memory = 1024;
 	int recomended_memory = 1024;
 	int uses_memory = 1024;
 	int curret_memory = recomended_memory;
+
+	QList<ServerWidget*> widget_list;
 
 public:
 	SomLauncherMainWindow(QWidget* parent = nullptr);
@@ -66,10 +71,11 @@ public:
 		std::string mcdir,
 		MinecraftCpp::option::MinecraftOptions options);
 
-	bool IsConfigExist();
-	void CreateConfig();
+	bool isConfigExist();
+	void createConfig();
 	void configureOptions();
 	void checkJava(MinecraftCpp::option::MinecraftOptions& options, std::string java_verison = "");
+	void setOptionsValuesFromConfig();
 	//void setStatusServer();
 
 	//void setStandartServer();
@@ -92,10 +98,11 @@ private slots:
 
 	void saveSettings();
 
+
 private:
 	Ui::SomLauncherMainWindowClass ui;
 
-	QButtonGroup* server_radio_button_group;
+	std::unique_ptr<QButtonGroup> server_radio_button_group;
 };
 
 #endif /*MAINWINDOW_H_*/

@@ -4,6 +4,7 @@
 #include <QtWidgets/qdialog.h>
 
 #include <string>
+#include <memory>
 
 #include "../../SomJsonLib/SomJson.h"
 
@@ -15,10 +16,10 @@ class ServerChanger : public QDialog
 
 private:
 	std::string server = "";
-	std::string config_path;
+	std::string config_path = "";
 	int index = -1;
 
-	QListWidgetItem* item;
+	QListWidgetItem* item = nullptr;
 
 public:
 	ServerChanger(QWidget* parent = nullptr, std::string config_path = "");

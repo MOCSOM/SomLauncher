@@ -72,7 +72,7 @@ void Json::JsonNode::_Indent(std::string& builder, int indent)
 	}
 }
 
-std::shared_ptr<Json::JsonNode> Json::JsonNode::operator=(std::shared_ptr<Json::JsonNode> value)
+Json::JsonValue Json::JsonNode::operator=(Json::JsonValue value)
 {
 	if (!this->is_exist(value->to_string()))
 	{
@@ -85,12 +85,12 @@ std::shared_ptr<Json::JsonNode> Json::JsonNode::operator=(std::shared_ptr<Json::
 	return shared_from_this();
 }
 
-bool Json::JsonNode::operator!=(std::shared_ptr<Json::JsonNode> value)
+bool Json::JsonNode::operator!=(Json::JsonValue value)
 {
 	return !(this->type == value->get_type());
 }
 
-bool Json::JsonNode::operator==(std::shared_ptr<Json::JsonNode> value)
+bool Json::JsonNode::operator==(Json::JsonValue value)
 {
 	return this->type == value->get_type();
 }

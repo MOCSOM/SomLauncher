@@ -22,6 +22,8 @@ ServerWidget::~ServerWidget()
 void ServerWidget::setStatusServer(bool value)
 {
 	ui.radioButton_selecterserver->setChecked(value);
+
+	emit toggled();
 }
 
 void ServerWidget::pushButtonSelectClicked()

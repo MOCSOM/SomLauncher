@@ -36,24 +36,24 @@ namespace Json
 		JsonNode();
 		virtual ~JsonNode();
 
-		virtual bool operator!=(std::shared_ptr<Json::JsonNode> value);
-		virtual bool operator==(std::shared_ptr<Json::JsonNode> value);
+		virtual bool operator!=(Json::JsonValue value);
+		virtual bool operator==(Json::JsonValue value);
 
-		virtual std::shared_ptr<Json::JsonNode> operator[](const std::wstring& key);
-		virtual std::shared_ptr<Json::JsonNode> operator[](const std::string& key);
-		virtual std::shared_ptr<Json::JsonNode> operator[](int index);
-		virtual std::shared_ptr<Json::JsonNode> operator=(std::shared_ptr<Json::JsonNode> value);
-		virtual std::shared_ptr<Json::JsonNode> operator=(double value);
-		virtual std::shared_ptr<Json::JsonNode> operator=(const std::string& value);
-		virtual std::shared_ptr<Json::JsonNode> operator=(const std::wstring& value);
-		virtual std::shared_ptr<Json::JsonNode> operator=(int value);
-		virtual std::shared_ptr<Json::JsonNode> operator+(std::shared_ptr<Json::JsonNode> value);
+		virtual Json::JsonValue operator[](const std::wstring& key);
+		virtual Json::JsonValue operator[](const std::string& key);
+		virtual Json::JsonValue operator[](int index);
+		virtual Json::JsonValue operator=(Json::JsonValue value);
+		virtual Json::JsonValue operator=(double value);
+		virtual Json::JsonValue operator=(const std::string& value);
+		virtual Json::JsonValue operator=(const std::wstring& value);
+		virtual Json::JsonValue operator=(int value);
+		virtual Json::JsonValue operator+(Json::JsonValue value);
 
-		virtual std::unordered_map<std::string, std::shared_ptr<Json::JsonNode>> get_value();
+		virtual std::unordered_map<std::string, Json::JsonValue> get_value();
 
-		virtual std::vector<std::shared_ptr<Json::JsonNode>> get_value_list();
+		virtual std::vector<Json::JsonValue> get_value_list();
 
-		virtual std::shared_ptr<Json::JsonNode> get_value(const std::string& key);
+		virtual Json::JsonValue get_value(const std::string& key);
 
 		virtual std::string to_string();
 		virtual std::wstring to_stringW();
@@ -69,10 +69,11 @@ namespace Json
 		virtual bool is_exist(const std::string& key);
 
 		virtual void replaceValue(const std::string& key, const std::string& value);
-		virtual void add_value(std::shared_ptr<Json::JsonNode> value);
-		virtual void add_value(std::pair<std::string, std::shared_ptr<Json::JsonNode>> value);
-		virtual void add_value(const std::string& key, std::shared_ptr<Json::JsonNode> value);
-		//virtual bool HasKey(const wchar_t*& key) { return nullptr; }
+		virtual void add_value(Json::JsonValue value);
+		virtual void add_value(std::pair<std::string, Json::JsonValue> value);
+		virtual void add_value(const std::string& key, Json::JsonValue value);
+
+		virtual void setValue(Json::JsonValue value);
 
 		virtual Json::JsonTypes get_type();
 
@@ -82,7 +83,7 @@ namespace Json
 		std::string _JsonValueToString(int indent);
 		void _Indent(std::string& builder, int indent);
 
-		virtual void _JsonValueToStringHelper(std::shared_ptr<Json::JsonNode> json_value, std::string& builder, int current_indent, int indent);
+		virtual void _JsonValueToStringHelper(Json::JsonValue json_value, std::string& builder, int current_indent, int indent);
 	};
 
 	class JsonNull : public Json::JsonNode

@@ -11,57 +11,57 @@ Json::JsonNode::~JsonNode()
 {
 }
 
-std::shared_ptr<Json::JsonNode> Json::JsonNode::operator[](const std::wstring& key)
+Json::JsonValue Json::JsonNode::operator[](const std::wstring& key)
 {
 	return nullptr;
 }
 
-std::shared_ptr<Json::JsonNode> Json::JsonNode::operator[](const std::string& key)
+Json::JsonValue Json::JsonNode::operator[](const std::string& key)
 {
 	return nullptr;
 }
 
-std::shared_ptr<Json::JsonNode> Json::JsonNode::operator[](int index)
+Json::JsonValue Json::JsonNode::operator[](int index)
 {
 	return nullptr;
 }
 
-std::shared_ptr<Json::JsonNode> Json::JsonNode::operator=(double value)
+Json::JsonValue Json::JsonNode::operator=(double value)
 {
 	return nullptr;
 }
 
-std::shared_ptr<Json::JsonNode> Json::JsonNode::operator=(const std::string& value)
+Json::JsonValue Json::JsonNode::operator=(const std::string& value)
 {
 	return nullptr;
 }
 
-std::shared_ptr<Json::JsonNode> Json::JsonNode::operator=(const std::wstring& value)
+Json::JsonValue Json::JsonNode::operator=(const std::wstring& value)
 {
 	return nullptr;
 }
 
-std::shared_ptr<Json::JsonNode> Json::JsonNode::operator=(int value)
+Json::JsonValue Json::JsonNode::operator=(int value)
 {
 	return nullptr;
 }
 
-std::shared_ptr<Json::JsonNode> Json::JsonNode::operator+(std::shared_ptr<Json::JsonNode> value)
+Json::JsonValue Json::JsonNode::operator+(Json::JsonValue value)
 {
 	return nullptr;
 }
 
-std::unordered_map<std::string, std::shared_ptr<Json::JsonNode>> Json::JsonNode::get_value()
+std::unordered_map<std::string, Json::JsonValue> Json::JsonNode::get_value()
 {
-	return std::unordered_map<std::string, std::shared_ptr<Json::JsonNode>>();
+	return std::unordered_map<std::string, Json::JsonValue>();
 }
 
-std::vector<std::shared_ptr<Json::JsonNode>> Json::JsonNode::get_value_list()
+std::vector<Json::JsonValue> Json::JsonNode::get_value_list()
 {
-	return std::vector<std::shared_ptr<Json::JsonNode>>();
+	return std::vector<Json::JsonValue>();
 }
 
-std::shared_ptr<Json::JsonNode> Json::JsonNode::get_value(const std::string& key)
+Json::JsonValue Json::JsonNode::get_value(const std::string& key)
 {
 	return nullptr;
 }
@@ -113,10 +113,12 @@ bool Json::JsonNode::is_exist(const std::string& key)
 
 void Json::JsonNode::replaceValue(const std::string& key, const std::string& value) {}
 
-void Json::JsonNode::add_value(std::shared_ptr<Json::JsonNode> value) {}
+void Json::JsonNode::add_value(Json::JsonValue value) {}
 
-void Json::JsonNode::add_value(std::pair<std::string, std::shared_ptr<Json::JsonNode>> value) {}
+void Json::JsonNode::add_value(std::pair<std::string, Json::JsonValue> value) {}
 
-void Json::JsonNode::add_value(const std::string& key, std::shared_ptr<Json::JsonNode> value) {}
+void Json::JsonNode::add_value(const std::string& key, Json::JsonValue value) {}
 
-void Json::JsonNode::_JsonValueToStringHelper(std::shared_ptr<Json::JsonNode> jsonValue, std::string& builder, int current_indent, int indent) {}
+void Json::JsonNode::setValue(Json::JsonValue value) {}
+
+void Json::JsonNode::_JsonValueToStringHelper(Json::JsonValue jsonValue, std::string& builder, int current_indent, int indent) {}

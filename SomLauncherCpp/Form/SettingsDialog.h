@@ -27,12 +27,19 @@ public:
 	void setStandartJavaPath(const std::string& new_path);
 	void setStandartMinecraftPath(const std::string& new_path);
 
+	void setJavaPath(const std::string& new_path);
+	void setMinecraftPath(const std::string& new_path);
+
 	int getMemoryValue();
 	std::string getMinecraftPath();
 	std::string getJavaPath();
 
+	void setToDefault(const MinecraftCpp::option::MinecraftOptions& option, int memory);
+
 signals:
 	void acceptButtonClicked();
+signals:
+	void setToDefaultButtonClicked();
 
 private slots:
 	void setMemoryLableValue(int value);

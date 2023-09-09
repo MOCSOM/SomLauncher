@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>415</width>
+    <width>407</width>
     <height>425</height>
    </rect>
   </property>
@@ -22,6 +22,13 @@
      <property name="margin" stdset="0">
       <number>0</number>
      </property>
+     <item>
+      <widget class="QPushButton" name="pushButton_toDefault">
+       <property name="text">
+        <string>Сбросить</string>
+       </property>
+      </widget>
+     </item>
      <item>
       <spacer name="spacer_ok_chanel">
        <property name="orientation">

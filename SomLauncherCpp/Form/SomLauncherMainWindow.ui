@@ -348,7 +348,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>Изменить Сервер ()</string>
+            <string>Изменить Сервер (</string>
            </property>
           </widget>
          </item>

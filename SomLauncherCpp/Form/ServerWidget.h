@@ -17,6 +17,9 @@ public:
 
 	void setStatusServer(bool value);
 
+signals:
+	void toggled();
+
 private slots:
 	void pushButtonSelectClicked();
 private slots:

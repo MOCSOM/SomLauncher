@@ -126,6 +126,10 @@ int DDIC::Download::Files::_get_java_exist_ver(const std::string& direct)
 
 std::vector<std::pair<std::string, std::string>> DDIC::Download::Files::_get_java_path(const std::string& dir)
 {
+	if (!std::filesystem::exists(dir))
+	{
+		return std::vector<std::pair<std::string, std::string>>();
+	}
 	std::vector<std::string> dirs = Additionals::Path::get_directories(dir);
 	std::vector<std::pair<std::string, std::string>> return_vector;
 	for (std::string var : dirs)

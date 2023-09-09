@@ -1,4 +1,4 @@
-#include "Archives.h"
+п»ї#include "Archives.h"
 
 void Additionals::archives::compressFile(std::string zipfile, std::string directory)
 {
@@ -17,7 +17,7 @@ void Additionals::archives::decompressFile(const QZipReader& zip, const QZipRead
 	{
 		if (!std::filesystem::create_directories(d_file_path))
 		{
-			// Обработка ошибки создания директории
+			// РћР±СЂР°Р±РѕС‚РєР° РѕС€РёР±РєРё СЃРѕР·РґР°РЅРёСЏ РґРёСЂРµРєС‚РѕСЂРёРё
 			int error = GetLastError();
 		}
 	}
@@ -42,7 +42,7 @@ std::string Additionals::archives::decompressArchive(const QZipReader& zip, cons
 	{
 		if (!std::filesystem::create_directories(d_file_path))
 		{
-			// Обработка ошибки создания директории
+			// РћР±СЂР°Р±РѕС‚РєР° РѕС€РёР±РєРё СЃРѕР·РґР°РЅРёСЏ РґРёСЂРµРєС‚РѕСЂРёРё
 			int error = GetLastError();
 		}
 	}

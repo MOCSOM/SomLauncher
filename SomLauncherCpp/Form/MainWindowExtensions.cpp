@@ -102,7 +102,7 @@ std::string SomLauncherMainWindow::install_minecraft(
 	return std::string();
 }
 
-bool SomLauncherMainWindow::IsConfigExist()
+bool SomLauncherMainWindow::isConfigExist()
 {
 	if (std::filesystem::exists(this->config_path))
 	{
@@ -114,7 +114,7 @@ bool SomLauncherMainWindow::IsConfigExist()
 	}
 }
 
-void SomLauncherMainWindow::CreateConfig()
+void SomLauncherMainWindow::createConfig()
 {
 	std::filesystem::copy("SOMCONFIG.json", this->config_path);
 }
@@ -137,6 +137,7 @@ void SomLauncherMainWindow::configureOptions()
 	this->options.executablePath = "";
 	this->options.uuid = "uuu";
 	this->options.token = "uuu";
+
 
 	checkJava(this->options);
 }
@@ -185,3 +186,4 @@ void SomLauncherMainWindow::checkJava(MinecraftCpp::option::MinecraftOptions& op
 		}
 	}
 }
+

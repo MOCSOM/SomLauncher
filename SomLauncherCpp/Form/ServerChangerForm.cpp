@@ -52,6 +52,8 @@ void ServerChanger::onClickedpushButton_apply()
 	std::cout << "Server saved" << std::endl;
 
 	this->close();
+
+	emit accepted();
 }
 
 void ServerChanger::onClickedpushButton_denied()

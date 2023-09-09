@@ -2,7 +2,7 @@
 
 #include "Json.h"
 
-Json::JsonNull::JsonNull() : JsonNode(JsonTypes::Null)
+Json::JsonNull::JsonNull() : Json::JsonNode(Json::JsonTypes::Null)
 {
 }
 
