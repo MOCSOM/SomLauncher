@@ -1,7 +1,6 @@
-﻿#include "pch.h"
+﻿#include "../pch.h"
 
 #include "JsonParcer.h"
-
 
 Json::JsonValue Json::JsonParcer::ParseFile(const std::wstring& filename)
 {

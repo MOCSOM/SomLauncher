@@ -27,7 +27,6 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget* parent)
 
 	this->dialog = std::make_unique<SettingsDialog>(std::make_shared<Json::JsonObject>(), this->options, this); //TODO: Сделать отправку данных о акке
 
-
 	QObject::connect(ui.pushButton_game, &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_game);
 	QObject::connect(ui.pushButton_servers, &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_servers);
 	QObject::connect(ui.pushButton_news, &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_news);
@@ -46,7 +45,7 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget* parent)
 	QObject::connect(this->dialog.get(), &SettingsDialog::setToDefaultButtonClicked,
 		this, [=]() -> void
 		{
-			dialog->setToDefault(default_options, recomended_memory);
+			this->dialog->setToDefault(default_options, recomended_memory);
 		});
 
 	ui.pushButton_game->setStyleSheet("text-align:bottom;");
@@ -101,7 +100,6 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget* parent)
 
 	this->recomended_memory = 3072;
 	this->curret_memory = (*(*this->config_parce)["user"])["memory"]->to_int();
-
 }
 
 SomLauncherMainWindow::~SomLauncherMainWindow()
