@@ -101,6 +101,11 @@ int Json::JsonNode::to_int()
 	return 0;
 }
 
+bool Json::JsonNode::toBool()
+{
+	return false;
+}
+
 bool Json::JsonNode::is_exist(const std::string& key)
 {
 	return false;

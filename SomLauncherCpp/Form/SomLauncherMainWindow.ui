@@ -163,7 +163,7 @@
      <enum>QFrame::Box</enum>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="page_game">
      <layout class="QGridLayout" name="gridLayout_page_game">
@@ -384,8 +384,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>98</width>
-           <height>28</height>
+           <width>757</width>
+           <height>397</height>
           </rect>
          </property>
          <layout class="QGridLayout" name="gridLayout_scrollArea_servers"/>
@@ -422,6 +422,23 @@
      <string>pasha lox</string>
     </property>
    </widget>
+   <widget class="QLabel" name="labeltest">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>801</width>
+      <height>471</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>lol</string>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <zorder>labeltest</zorder>
    <zorder>stackedWidget_bottommenu</zorder>
    <zorder>frame_topslidemenu</zorder>
    <zorder>label_minecraft_directory</zorder>

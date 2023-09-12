@@ -51,7 +51,7 @@
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
     <QtInstall>6.5.2</QtInstall>
-    <QtModules>core;gui;network;widgets</QtModules>
+    <QtModules>core;gui;network;widgets;sql</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
@@ -205,6 +205,7 @@
     <None Include="DATA.json" />
     <None Include="SERVERS.json" />
     <None Include="SOMCONFIG.json" />
+    <None Include="SomLauncherCpp.pro" />
     <None Include="TODO_List.md" />
   </ItemGroup>
   <ItemGroup>
@@ -220,6 +221,9 @@
     <ProjectReference Include="..\SomJsonLib\SomJsonLib.vcxproj">
       <Project>{b41ca7d7-f328-4e65-802c-a9ccf77055b0}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="minecraft.gif" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

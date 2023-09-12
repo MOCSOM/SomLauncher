@@ -117,6 +117,7 @@
     <None Include="SOMCONFIG.json" />
     <None Include="TODO_List.md" />
     <None Include="cpp.hint" />
+    <None Include="SomLauncherCpp.pro" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Form\SomLauncherMainWindow.h">
@@ -154,5 +155,10 @@
     <QtUic Include="Form\SettingsDialog.ui">
       <Filter>Form Files</Filter>
     </QtUic>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="minecraft.gif">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

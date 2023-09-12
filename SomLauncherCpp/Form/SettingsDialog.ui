@@ -250,6 +250,13 @@
         </property>
        </widget>
       </item>
+      <item row="11" column="2" colspan="2">
+       <widget class="QLabel" name="label_modreinstall_notifiy">
+        <property name="text">
+         <string>Моды будут скачены при запуске</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>

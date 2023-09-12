@@ -16,6 +16,11 @@ std::wstring Json::JsonBool::to_stringW()
 	return this->value ? L"true" : L"false";
 }
 
+bool Json::JsonBool::toBool()
+{
+	return this->value;
+}
+
 Json::JsonTypes Json::JsonBool::get_type()
 {
 	return type;

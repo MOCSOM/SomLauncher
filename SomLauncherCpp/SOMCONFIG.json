@@ -5,7 +5,7 @@
     "wight": 854,
     "hight": 480,
     "mcdir": "",
-    "online": false,
+    "installMods": false,
     "server": 0
   }
 }

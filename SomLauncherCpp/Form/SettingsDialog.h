@@ -36,6 +36,8 @@ public:
 
 	void setToDefault(const MinecraftCpp::option::MinecraftOptions& option, int memory);
 
+	bool getReintsallModsState();
+
 signals:
 	void acceptButtonClicked();
 signals:
@@ -45,6 +47,8 @@ private slots:
 	void setMemoryLableValue(int value);
 
 	void saveSettings();
+
+	void reinstallModPackIsChecked();
 
 private:
 	Ui::SettingsDialog ui;

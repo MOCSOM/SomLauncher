@@ -7,6 +7,13 @@ SettingsDialog::SettingsDialog(Json::JsonValue data, MinecraftCpp::option::Minec
 
 	this->account_data = data;
 
+	QPalette palette = ui.label_modreinstall_notifiy->palette();
+	palette.setColor(ui.label_modreinstall_notifiy->backgroundRole(), Qt::red);
+	palette.setColor(ui.label_modreinstall_notifiy->foregroundRole(), Qt::red);
+	ui.label_modreinstall_notifiy->setPalette(palette);
+
+	ui.label_modreinstall_notifiy->setHidden(true);
+
 	QObject::connect(ui.horizontalSlider_memory, &QSlider::valueChanged, this, &SettingsDialog::setMemoryLableValue);
 
 	QObject::connect(ui.okButton, &QPushButton::clicked, this, &SettingsDialog::saveSettings);
@@ -14,6 +21,8 @@ SettingsDialog::SettingsDialog(Json::JsonValue data, MinecraftCpp::option::Minec
 	QObject::connect(ui.okButton, &QPushButton::clicked, this, &SettingsDialog::acceptButtonClicked);
 
 	QObject::connect(ui.pushButton_toDefault, &QPushButton::clicked, this, &SettingsDialog::setToDefaultButtonClicked);
+
+	QObject::connect(ui.checkBox_reinstall_modpack, &QPushButton::clicked, this, &SettingsDialog::reinstallModPackIsChecked);
 }
 
 SettingsDialog::~SettingsDialog()
@@ -77,6 +86,11 @@ void SettingsDialog::setToDefault(const MinecraftCpp::option::MinecraftOptions& 
 	setMinecraftPath("");
 }
 
+bool SettingsDialog::getReintsallModsState()
+{
+	return ui.checkBox_reinstall_modpack->isChecked();
+}
+
 std::string SettingsDialog::getJavaPath()
 {
 	return ui.lineEdit_java_path->text().toStdString();
@@ -92,6 +106,19 @@ void SettingsDialog::saveSettings()
 	{
 		this->option.executablePath = ui.lineEdit_java_path->text().toStdString();
 	}
+}
+
+void SettingsDialog::reinstallModPackIsChecked()
+{
+	if (ui.label_modreinstall_notifiy->isHidden())
+	{
+		ui.label_modreinstall_notifiy->setHidden(false);
+	}
+	else
+	{
+		ui.label_modreinstall_notifiy->setHidden(true);
+	}
+
 }
 
 void SettingsDialog::setMemoryLableValue(int value)

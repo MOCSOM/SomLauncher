@@ -3,9 +3,13 @@
 SomLauncherMainWindow::SomLauncherMainWindow(QWidget* parent)
 	: QMainWindow(parent)
 {
-	//std::cout << 1;
-
 	ui.setupUi(this);
+
+	QMovie* movie = new QMovie(this);
+	movie->setFileName(this->background_gif.c_str());
+	movie->start();
+
+	ui.labeltest->setMovie(movie);
 
 	MEMORYSTATUSEX statex{};
 	statex.dwLength = sizeof(statex);
@@ -20,6 +24,7 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget* parent)
 	this->default_options = this->options;
 
 	setOptionsValuesFromConfig();
+
 	this->dialog = std::make_unique<SettingsDialog>(std::make_shared<Json::JsonObject>(), this->options, this); //TODO: Сделать отправку данных о акке
 
 
@@ -56,6 +61,9 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget* parent)
 
 	ui.label_minecraft_directory->setText(this->minecraft_core_dir_path.c_str());
 
+	//ui.scrollAreaWidgetContents->setAttribute(Qt::WA_TranslucentBackground);
+	ui.scrollArea_servers->setStyleSheet("background-color: transparent;");
+
 	this->server_radio_button_group = std::make_unique<QButtonGroup>();
 
 	for (int i = 0; i < (*this->servers_parce)["servers"]->get_count(); ++i)
@@ -81,12 +89,13 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget* parent)
 		}
 	}
 
-	QObject::connect(this->server_radio_button_group.get(), &QButtonGroup::buttonToggled, this, &SomLauncherMainWindow::groupButtonsClicked);
+	QObject::connect(this->server_radio_button_group.get(), &QButtonGroup::buttonToggled,
+		this, &SomLauncherMainWindow::groupButtonsClicked);
 
 	//Проверка и создание конфига
-	if (!SomLauncherMainWindow::isConfigExist())
+	if (!isConfigExist())
 	{
-		SomLauncherMainWindow::createConfig();
+		createConfig();
 		std::cout << "Config created" << std::endl;
 	}
 
@@ -134,7 +143,8 @@ void SomLauncherMainWindow::onClickedpushButton_changeserver()
 
 	ServerChanger dialog(this, this->config_path);
 
-	QObject::connect(&dialog, &ServerChanger::accepted, this, [=]() -> void
+	QObject::connect(&dialog, &ServerChanger::accepted,
+		this, [=]() -> void
 		{
 			this->config_parce = this->global_parcer.ParseFile(this->config_path);
 			ui.pushButton_changeserver->setText((this->server_buttom_text +
@@ -243,6 +253,12 @@ void SomLauncherMainWindow::saveSettings()
 {
 	int memory_value = this->dialog->getMemoryValue();
 
+	if (this->dialog->getReintsallModsState() == true)
+	{
+		this->isInstallMods = true;
+		(*(*config_parce)["user"])["isInstallMods"]->operator=(this->isInstallMods);
+	}
+
 	this->curret_memory = memory_value;
 
 	(*(*config_parce)["user"])["memory"]->operator=(memory_value);
@@ -291,7 +307,11 @@ void SomLauncherMainWindow::saveSettings()
 
 void SomLauncherMainWindow::setOptionsValuesFromConfig()
 {
-	this->minecraft_core_dir_path = (*(*this->config_parce)["user"])["mcdir"]->to_string();
+	if ((*(*this->config_parce)["user"])["mcdir"]->to_string() != "")
+	{
+		this->minecraft_core_dir_path = (*(*this->config_parce)["user"])["mcdir"]->to_string();
+	}
+
 	this->username = (*(*this->config_parce)["user"])["name"]->to_string();
 	this->options.resolutionWidth = (*(*this->config_parce)["user"])["wight"]->to_int();
 	this->options.resolutionHeight = (*(*this->config_parce)["user"])["hight"]->to_int();
@@ -299,4 +319,6 @@ void SomLauncherMainWindow::setOptionsValuesFromConfig()
 
 	this->options.gameDirectory = this->minecraft_core_dir_path;
 	this->options.username = this->username;
+
+	this->isInstallMods = (*(*config_parce)["user"])["isInstallMods"]->toBool();
 }

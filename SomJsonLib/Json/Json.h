@@ -65,6 +65,7 @@ namespace Json
 
 		virtual double to_double();
 		virtual int to_int();
+		virtual bool toBool();
 
 		virtual bool is_exist(const std::string& key);
 
@@ -228,6 +229,7 @@ namespace Json
 
 		std::string to_string() override;
 		std::wstring to_stringW() override;
+		bool toBool() override;
 
 		Json::JsonTypes get_type() override;
 

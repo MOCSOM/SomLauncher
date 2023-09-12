@@ -4,6 +4,7 @@
 #include <QtWidgets/QMainWindow>
 #include <qpropertyanimation.h>
 #include <qbuttongroup.h>
+//#include <qgraphicsview.h>
 
 #include <iostream>
 #include <string>
@@ -39,8 +40,11 @@ private:
 	std::string launcher_version = "2.0";
 	std::string username = "Debug";
 	std::string servers_json = Join({ minecraft_core_dir_path, "SERVERS.json" });
+	bool isInstallMods = true;
 
 	std::string server_buttom_text = "";
+
+	std::string background_gif = "C:\\Users\\alkor\\source\\repos\\SomLauncher\\SomLauncherCpp\\minecraft2.gif";
 
 	MinecraftCpp::option::MinecraftOptions options;
 	MinecraftCpp::option::MinecraftOptions default_options = options;
