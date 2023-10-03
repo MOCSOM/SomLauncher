@@ -47,6 +47,23 @@ std::unique_ptr<wchar_t[]> Additionals::Convectors::ConvertWstringToWcharPtr(con
 	return buffer;
 }
 
+std::string Additionals::Convectors::ConvertLPCWSTRToString(LPCWSTR lpcwszStr)
+{
+	// Determine the length of the converted string
+	int strLength = WideCharToMultiByte(CP_UTF8, 0, lpcwszStr, -1,
+		nullptr, 0, nullptr, nullptr);
+
+	// Create a std::string with the determined length
+	std::string str(strLength, 0);
+
+	// Perform the conversion from LPCWSTR to std::string
+	WideCharToMultiByte(CP_UTF8, 0, lpcwszStr, -1, &str[0],
+		strLength, nullptr, nullptr);
+
+	// Return the converted std::string
+	return str;
+}
+
 //wchar_t* Additionals::String::strdogW(wchar_t* ref_str, wchar_t* str_to_add)
 //{
 //	if (ref_str == NULL || ref_str[0] == L'\0')
@@ -540,7 +557,7 @@ wchar_t* Additionals::TempFile::get_tempdir()
 
 std::string Additionals::TempFile::get_tempdir_SYSTEM()
 {
-	auto temp_path = std::filesystem::temp_directory_path();
+	std::filesystem::path temp_path = std::filesystem::temp_directory_path();
 	return temp_path.string();
 }
 

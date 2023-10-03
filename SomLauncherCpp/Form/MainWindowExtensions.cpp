@@ -2,12 +2,12 @@
 
 void SomLauncherMainWindow::start_minecraft_params()
 {
-	std::cout << "Config loaded" << std::endl;
-	std::cout << (*(*this->config_parce)["user"])["name"]->to_string() << std::endl;
-	std::cout << (*(*this->config_parce)["user"])["memory"]->to_string() << std::endl;
-	std::cout << (*(*this->config_parce)["user"])["mcdir"]->to_string() << std::endl;
-	std::cout << (*(*this->config_parce)["user"])["online"]->to_string() << std::endl;
-	std::cout << (*(*this->config_parce)["user"])["server"]->to_string() << std::endl;
+	Logger << "Config loaded" << std::endl;
+	Logger << (*(*this->config_parce)["user"])["name"]->to_string() << std::endl;
+	Logger << (*(*this->config_parce)["user"])["memory"]->to_string() << std::endl;
+	Logger << (*(*this->config_parce)["user"])["mcdir"]->to_string() << std::endl;
+	Logger << (*(*this->config_parce)["user"])["online"]->to_string() << std::endl;
+	Logger << (*(*this->config_parce)["user"])["server"]->to_string() << std::endl;
 
 	std::string java = "";
 	std::string core = "";
@@ -138,7 +138,6 @@ void SomLauncherMainWindow::configureOptions()
 	this->options.uuid = "uuu";
 	this->options.token = "uuu";
 
-
 	checkJava(this->options);
 }
 
@@ -186,4 +185,3 @@ void SomLauncherMainWindow::checkJava(MinecraftCpp::option::MinecraftOptions& op
 		}
 	}
 }
-

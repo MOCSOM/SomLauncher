@@ -4,6 +4,8 @@
 #include <QtWidgets/QMainWindow>
 #include <qpropertyanimation.h>
 #include <qbuttongroup.h>
+#include <qsharedpointer.h>
+#include <qshareddata.h>
 //#include <qgraphicsview.h>
 
 #include <iostream>
@@ -15,6 +17,7 @@
 #include "../../SomAdditionalsLib/Additionals.h"
 #include "../../SomJsonLib/SomJson.h"
 #include "../Minecraft/Minecraftus.h"
+#include "../Moc/Logger/MocIOStream.h"
 
 #include "ui_SomLauncherMainWindow.h"
 
@@ -35,16 +38,17 @@ class SomLauncherMainWindow : public QMainWindow
 
 private:
 	std::string minecraft_core_dir_path = Join({ getenv("APPDATA"), ".SomSomSom" });
-	std::string config_path = Join({ minecraft_core_dir_path, "SOMCONFIG.json" });
+	std::string config_path = Join({ this->minecraft_core_dir_path, "SOMCONFIG.json" });
 	std::string launcher_name = "SomLauncher";
 	std::string launcher_version = "2.0";
 	std::string username = "Debug";
-	std::string servers_json = Join({ minecraft_core_dir_path, "SERVERS.json" });
+	std::string servers_json = Join({ this->minecraft_core_dir_path, "SERVERS.json" });
 	bool isInstallMods = true;
 
-	std::string server_buttom_text = "";
+	std::string server_changer_button_text = "";
 
-	std::string background_gif = "C:\\Users\\alkor\\source\\repos\\SomLauncher\\SomLauncherCpp\\minecraft2.gif";
+	std::string background_gif = "minecraft2.gif";
+	std::string all_modpacks_url = "";
 
 	MinecraftCpp::option::MinecraftOptions options;
 	MinecraftCpp::option::MinecraftOptions default_options = options;
@@ -60,7 +64,7 @@ private:
 	int uses_memory = 1024;
 	int curret_memory = recomended_memory;
 
-	QList<ServerWidget*> widget_list;
+	QList<QSharedPointer<ServerWidget>> widget_list;
 
 public:
 	SomLauncherMainWindow(QWidget* parent = nullptr);
@@ -102,11 +106,15 @@ private slots:
 
 	void saveSettings();
 
+signals:
+	void updateSignal();
 
 private:
 	Ui::SomLauncherMainWindowClass ui;
 
 	std::unique_ptr<QButtonGroup> server_radio_button_group;
+
+	moc::SomLogger Logger;
 };
 
 #endif /*MAINWINDOW_H_*/

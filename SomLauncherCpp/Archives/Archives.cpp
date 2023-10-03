@@ -31,7 +31,6 @@ void Additionals::archives::decompressFile(const QZipReader& zip, const QZipRead
 	new_file.close();
 }
 
-
 std::string Additionals::archives::decompressArchive(const QZipReader& zip, const std::string& directory)
 {
 	std::filesystem::path d_file_path(directory);

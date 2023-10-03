@@ -9,7 +9,8 @@
 //    return true;
 //}
 
-std::string DDIC::Download::Files::download_file(const std::string& s_url, const std::string& d_file, CallbackNull* callback, bool lzma_compressed)
+std::string DDIC::Download::Files::download_file(const std::string& s_url,
+	const std::string& d_file, CallbackNull* callback, bool lzma_compressed)
 {
 	//callback = const_cast<CallbackNull>(callback);
 	std::string destenation_file;

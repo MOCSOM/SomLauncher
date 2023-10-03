@@ -10,8 +10,8 @@
 
 #include <filesystem>
 
-#include "../qzipreader_p.h"
-#include "../qzipwriter_p.h"
+//#include "../Archives/qzipreader_p.h"
+//#include "../Archives/qzipwriter_p.h"
 
 #include <qdir.h>
 #include <chrono>
@@ -30,24 +30,24 @@ namespace MinecraftCpp
 			MinecraftOptions() {}
 			~MinecraftOptions() {}
 
-			std::string username            = "";
-			std::string uuid                = "";
-			std::string token               = "";
-			std::string executablePath      = "";
-			std::string jvmArguments        = "";
-			std::string launcherName        = "";
-			std::string launcherVersion     = "";
-			std::string gameDirectory       = "";
-			bool		demo                = NULL;
-			bool		customResolution    = NULL;
-			std::string resolutionWidth     = "";
-			std::string resolutionHeight    = "";
-			std::string server              = "";
-			std::string port                = "";
-			std::string nativesDirectory    = "";
+			std::string username = "";
+			std::string uuid = "";
+			std::string token = "";
+			std::string executablePath = "";
+			std::string jvmArguments = "";
+			std::string launcherName = "";
+			std::string launcherVersion = "";
+			std::string gameDirectory = "";
+			bool		demo = NULL;
+			bool		customResolution = NULL;
+			std::string resolutionWidth = "";
+			std::string resolutionHeight = "";
+			std::string server = "";
+			std::string port = "";
+			std::string nativesDirectory = "";
 			bool		enableLoggingConfig = NULL;
-			std::string classpath           = "";
-			std::string NULLES              = "";
+			std::string classpath = "";
+			std::string NULLES = "";
 
 			// get (поле, стандарт)
 			std::string get(const std::string& param, const std::string& writ = "");

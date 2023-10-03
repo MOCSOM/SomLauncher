@@ -1,4 +1,5 @@
-#pragma once
+﻿#ifndef ARCHIVES_H_
+#define ARCHIVES_H_
 
 #include <filesystem>
 
@@ -15,7 +16,9 @@ namespace Additionals
 
 		void decompressFile(const QZipReader& zip, const QZipReader::FileInfo& file, const std::string& directory);
 
+		//TODO: Изменить возвращаемое значение
 		std::string decompressArchive(const QZipReader& zip, const std::string& directory);
-
-	}	
+	}
 }
+
+#endif /*ARCHIVES_H_*/

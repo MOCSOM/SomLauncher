@@ -71,7 +71,10 @@
     <ClCompile Include="QObjects\Threads\FunThread.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Archives.cpp">
+    <ClCompile Include="Archives\Archives.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Moc\Logger\MocIOStream.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -88,12 +91,6 @@
     <ClInclude Include="Web\DownloadClasses.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="qzipreader_p.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="qzipwriter_p.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Databases\SQLBased.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -106,7 +103,16 @@
     <ClInclude Include="basic_xml.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Archives.h">
+    <ClInclude Include="Archives\Archives.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Moc\Logger\MocIOStream.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Archives\qzipreader_p.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Archives\qzipwriter_p.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -155,10 +161,5 @@
     <QtUic Include="Form\SettingsDialog.ui">
       <Filter>Form Files</Filter>
     </QtUic>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="minecraft.gif">
-      <Filter>Resource Files</Filter>
-    </Image>
   </ItemGroup>
 </Project>

@@ -5,8 +5,8 @@ FunctionThread::FunctionThread(FunctionType func)
 
 void FunctionThread::run()
 {
-    if (this->m_function)
-    {
-        this->m_function(); // Вызываем переданную функцию в другом потоке
-    }
+	if (this->m_function)
+	{
+		this->m_function(); // Вызываем переданную функцию в другом потоке
+	}
 }

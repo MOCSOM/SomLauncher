@@ -4,12 +4,10 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget* parent)
 	: QMainWindow(parent)
 {
 	ui.setupUi(this);
+	Logger << "ui setup completed" << std::endl;
 
-	QMovie* movie = new QMovie(this);
-	movie->setFileName(this->background_gif.c_str());
-	movie->start();
-
-	ui.labeltest->setMovie(movie);
+	QPixmap background = QPixmap(this->background_gif.c_str());
+	ui.labeltest->setPixmap(background);
 
 	MEMORYSTATUSEX statex{};
 	statex.dwLength = sizeof(statex);
@@ -53,8 +51,8 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget* parent)
 	ui.pushButton_news->setStyleSheet("text-align:bottom;");
 	ui.pushButton_aboutus->setStyleSheet("text-align:bottom;");
 
-	this->server_buttom_text = ui.pushButton_changeserver->text().toStdString();
-	ui.pushButton_changeserver->setText((this->server_buttom_text +
+	this->server_changer_button_text = ui.pushButton_changeserver->text().toStdString();
+	ui.pushButton_changeserver->setText((this->server_changer_button_text +
 		(*(*(*this->servers_parce)["servers"])[(*(*this->config_parce)["user"])["server"]->to_int()])["name"]->to_string() +
 		")").c_str());
 
@@ -67,7 +65,7 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget* parent)
 
 	for (int i = 0; i < (*this->servers_parce)["servers"]->get_count(); ++i)
 	{
-		ServerWidget* widget = new ServerWidget(this->server_radio_button_group.get(), (*(*this->servers_parce)["servers"])[i]);
+		QSharedPointer<ServerWidget> widget = QSharedPointer<ServerWidget>::create(this->server_radio_button_group.get(), (*(*this->servers_parce)["servers"])[i]);
 
 		this->widget_list.append(widget);
 
@@ -82,7 +80,7 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget* parent)
 	{
 		for (int j = 0; j < ((*this->servers_parce)["servers"]->get_count() - 1) / 2 + 1; ++j)
 		{
-			ui.gridLayout_scrollArea_servers->addWidget(this->widget_list[index], i, j);
+			ui.gridLayout_scrollArea_servers->addWidget(this->widget_list[index].get(), i, j);
 
 			++index;
 		}
@@ -95,7 +93,7 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget* parent)
 	if (!isConfigExist())
 	{
 		createConfig();
-		std::cout << "Config created" << std::endl;
+		Logger << "Config created" << std::endl;
 	}
 
 	this->recomended_memory = 3072;
@@ -109,35 +107,35 @@ SomLauncherMainWindow::~SomLauncherMainWindow()
 
 void SomLauncherMainWindow::onClickedpushButton_game()
 {
-	std::cout << "pushButton_game clicked" << std::endl;
+	Logger << "pushButton_game clicked" << std::endl;
 
 	ui.stackedWidget_bottommenu->setCurrentIndex(0);
 }
 
 void SomLauncherMainWindow::onClickedpushButton_servers()
 {
-	std::cout << "pushButton_servers clicked" << std::endl;
+	Logger << "pushButton_servers clicked" << std::endl;
 
 	ui.stackedWidget_bottommenu->setCurrentIndex(1);
 }
 
 void SomLauncherMainWindow::onClickedpushButton_news()
 {
-	std::cout << "pushButton_news clicked" << std::endl;
+	Logger << "pushButton_news clicked" << std::endl;
 
 	ui.stackedWidget_bottommenu->setCurrentIndex(2);
 }
 
 void SomLauncherMainWindow::onClickedpushButton_aboutus()
 {
-	std::cout << "pushButton_aboutus clicked" << std::endl;
+	Logger << "pushButton_aboutus clicked" << std::endl;
 
 	ui.stackedWidget_bottommenu->setCurrentIndex(3);
 }
 
 void SomLauncherMainWindow::onClickedpushButton_changeserver()
 {
-	std::cout << "pushButton_changeserver clicked" << std::endl;
+	Logger << "pushButton_changeserver clicked" << std::endl;
 
 	ServerChanger dialog(this, this->config_path);
 
@@ -145,7 +143,7 @@ void SomLauncherMainWindow::onClickedpushButton_changeserver()
 		this, [=]() -> void
 		{
 			this->config_parce = this->global_parcer.ParseFile(this->config_path);
-			ui.pushButton_changeserver->setText((this->server_buttom_text +
+			ui.pushButton_changeserver->setText((this->server_changer_button_text +
 				(*(*(*this->servers_parce)["servers"])[(*(*this->config_parce)["user"])["server"]->to_int()])["name"]->to_string() +
 				")").c_str());
 			this->widget_list[(*(*this->config_parce)["user"])["server"]->to_int()]->setStatusServer(true);
@@ -156,12 +154,12 @@ void SomLauncherMainWindow::onClickedpushButton_changeserver()
 
 void SomLauncherMainWindow::onClickedpushLable_profile()
 {
-	std::cout << "pushLable_profile clicked" << std::endl;
+	Logger << "pushLable_profile clicked" << std::endl;
 }
 
 void SomLauncherMainWindow::onClickedpushButton_settings()
 {
-	std::cout << "pushButton_settings clicked" << std::endl;
+	Logger << "pushButton_settings clicked" << std::endl;
 
 	this->dialog->setMemoryData(1024, this->max_memory, this->recomended_memory);
 	this->dialog->setCurretMemory(this->curret_memory);
@@ -174,14 +172,14 @@ void SomLauncherMainWindow::onClickedpushButton_settings()
 
 void SomLauncherMainWindow::onClickpushButton_startgame()
 {
-	std::cout << "pushButton_startgame clicked" << std::endl;
+	Logger << "pushButton_startgame clicked" << std::endl;
 
 	start_minecraft_params();
 }
 
 void SomLauncherMainWindow::mouseEnterframe_topslidemenu()
 {
-	std::cout << "frame_topslidemenu mouse enter" << std::endl;
+	Logger << "frame_topslidemenu mouse enter" << std::endl;
 
 	if (ui.frame_topslidemenu->geometry() != QRect(30, 0, 741, 131))
 	{
@@ -200,7 +198,7 @@ void SomLauncherMainWindow::mouseEnterframe_topslidemenu()
 
 void SomLauncherMainWindow::mouseLeaveframe_topslidemenu()
 {
-	std::cout << "frame_topslidemenu mouse leave" << std::endl;
+	Logger << "frame_topslidemenu mouse leave" << std::endl;
 
 	if (ui.frame_topslidemenu->geometry() != QRect(30, -90, 741, 131))
 	{
@@ -220,7 +218,7 @@ void SomLauncherMainWindow::mouseLeaveframe_topslidemenu()
 
 void SomLauncherMainWindow::groupButtonsClicked(QAbstractButton* id, bool status)
 {
-	std::cout << "groupButtons Clicked id: " << id->objectName().toStdString() << " " << status << std::endl;
+	Logger << "groupButtons Clicked id: " << id->objectName().toStdString() << " " << status << std::endl;
 
 	if (status == true)
 	{
@@ -237,13 +235,13 @@ void SomLauncherMainWindow::groupButtonsClicked(QAbstractButton* id, bool status
 
 		(*(*this->config_parce)["user"])["server"]->operator=(index);
 
-		std::cout << "Server is: " << (*(*config_parce)["user"])["server"]->to_string() << std::endl;
+		Logger << "Server is: " << (*(*config_parce)["user"])["server"]->to_string() << std::endl;
 
 		config_parce->SaveJsonToFile(this->config_path, 4);
 
 		this->config_parce = this->global_parcer.ParseFile(this->config_path);
 
-		std::cout << "Server saved" << std::endl;
+		Logger << "Server saved" << std::endl;
 	}
 }
 
@@ -261,11 +259,11 @@ void SomLauncherMainWindow::saveSettings()
 
 	(*(*config_parce)["user"])["memory"]->operator=(memory_value);
 
-	std::cout << "Memory is: " << (*(*config_parce)["user"])["memory"]->to_string() << std::endl;
+	Logger << "Memory is: " << (*(*config_parce)["user"])["memory"]->to_string() << std::endl;
 
 	config_parce->SaveJsonToFile(this->config_path, 4);
 
-	std::cout << "Memory saved" << std::endl;
+	Logger << "Memory saved" << std::endl;
 
 	std::string minecraft_path = this->dialog->getMinecraftPath();
 
@@ -275,13 +273,13 @@ void SomLauncherMainWindow::saveSettings()
 
 		(*(*config_parce)["user"])["mcdir"]->operator=(this->minecraft_core_dir_path);
 
-		std::cout << "Mcdir is: " << (*(*config_parce)["user"])["mcdir"]->to_string() << std::endl;
+		Logger << "Mcdir is: " << (*(*config_parce)["user"])["mcdir"]->to_string() << std::endl;
 
 		config_parce->SaveJsonToFile(this->config_path, 4);
 
 		this->config_parce = this->global_parcer.ParseFile(this->config_path);
 
-		std::cout << "Mcdir saved" << std::endl;
+		Logger << "Mcdir saved" << std::endl;
 
 		ui.label_minecraft_directory->setText(this->minecraft_core_dir_path.c_str());
 	}
@@ -291,13 +289,13 @@ void SomLauncherMainWindow::saveSettings()
 
 		(*(*config_parce)["user"])["mcdir"]->operator=("");
 
-		std::cout << "Mcdir is: " << (*(*config_parce)["user"])["mcdir"]->to_string() << std::endl;
+		Logger << "Mcdir is: " << (*(*config_parce)["user"])["mcdir"]->to_string() << std::endl;
 
 		config_parce->SaveJsonToFile(this->config_path, 4);
 
 		this->config_parce = this->global_parcer.ParseFile(this->config_path);
 
-		std::cout << "Mcdir saved" << std::endl;
+		Logger << "Mcdir saved" << std::endl;
 
 		ui.label_minecraft_directory->setText(this->minecraft_core_dir_path.c_str());
 	}
@@ -318,5 +316,5 @@ void SomLauncherMainWindow::setOptionsValuesFromConfig()
 	this->options.gameDirectory = this->minecraft_core_dir_path;
 	this->options.username = this->username;
 
-	this->isInstallMods = (*(*config_parce)["user"])["isInstallMods"]->toBool();
+	this->isInstallMods = (*(*this->config_parce)["user"])["isInstallMods"]->toBool();
 }
