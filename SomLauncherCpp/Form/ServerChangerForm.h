@@ -22,7 +22,7 @@ private:
 	QListWidgetItem* item = nullptr;
 
 public:
-	ServerChanger(QWidget* parent = nullptr, std::string config_path = "");
+	explicit ServerChanger(QWidget* parent = nullptr, std::string config_path = "");
 	~ServerChanger();
 
 private slots:

@@ -12,7 +12,7 @@ class ServerWidget : public QWidget
 	Q_OBJECT
 
 public:
-	ServerWidget(QButtonGroup* group, Json::JsonValue server_data, QWidget* parent = nullptr);
+	explicit ServerWidget(QButtonGroup* group, Json::JsonValue server_data, QWidget* parent = nullptr);
 	~ServerWidget();
 
 	void setStatusServer(bool value);

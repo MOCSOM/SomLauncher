@@ -31,6 +31,14 @@ public:
 	~CallbackNull() = default;
 
 public:
+	/// <summary>
+	///
+	/// </summary>
+	/// <param name="ulProgress"></param>
+	/// <param name="ulProgressMax"></param>
+	/// <param name="ulStatusCode">- 6 для окончания загрузки</param>
+	/// <param name="wszStatusText"></param>
+	/// <returns></returns>
 	STDMETHOD(OnProgress)(/* [in] */ ULONG ulProgress, /* [in] */ ULONG ulProgressMax, /* [in] */ ULONG ulStatusCode, /* [in] */ LPCWSTR wszStatusText)
 	{
 		return E_NOTIMPL;

@@ -1,4 +1,4 @@
-﻿#ifndef MAINWINDOW_H_     // equivalently, #if !defined HEADER_H_
+﻿#ifndef MAINWINDOW_H_
 #define MAINWINDOW_H_
 
 #include <QtWidgets/QMainWindow>
@@ -18,6 +18,7 @@
 #include "../../SomJsonLib/SomJson.h"
 #include "../Minecraft/Minecraftus.h"
 #include "../Moc/Logger/MocIOStream.h"
+#include "../Servers/ServerTypes.h"
 
 #include "ui_SomLauncherMainWindow.h"
 
@@ -37,13 +38,13 @@ class SomLauncherMainWindow : public QMainWindow
 	Q_OBJECT
 
 private:
-	std::string minecraft_core_dir_path = Join({ getenv("APPDATA"), ".SomSomSom" });
-	std::string config_path = Join({ this->minecraft_core_dir_path, "SOMCONFIG.json" });
+	std::string minecraft_core_dir_path = "";
+	std::string config_path = "";
+	std::string servers_json = "";
 	std::string launcher_name = "SomLauncher";
 	std::string launcher_version = "2.0";
 	std::string username = "Debug";
-	std::string servers_json = Join({ this->minecraft_core_dir_path, "SERVERS.json" });
-	bool isInstallMods = true;
+	bool is_install_mods = true;
 
 	std::string server_changer_button_text = "";
 
@@ -52,7 +53,7 @@ private:
 
 	MinecraftCpp::option::MinecraftOptions options;
 	MinecraftCpp::option::MinecraftOptions default_options = options;
-	std::unique_ptr<SettingsDialog> dialog;
+	std::unique_ptr<SettingsDialog> settings_dialog;
 
 	Json::JsonValue config_parce;
 	Json::JsonValue servers_parce;
@@ -66,9 +67,20 @@ private:
 
 	QList<QSharedPointer<ServerWidget>> widget_list;
 
+	std::unique_ptr<QButtonGroup> server_radio_button_group;
+
 public:
-	SomLauncherMainWindow(QWidget* parent = nullptr);
-	~SomLauncherMainWindow();
+	explicit SomLauncherMainWindow(QWidget* parent = nullptr);
+	~SomLauncherMainWindow() = default;
+
+	void _settingMinecraftStandartPath();
+	void _parcingConfigs();
+	void _settingUiChanges();
+	void _settingCurrentServerName();
+	void _settingConnections();
+	void _settingMemory();
+	void _settingModsCount();
+	void _settingServerType();
 
 	void start_minecraft_params();
 	std::string install_minecraft(
@@ -84,9 +96,10 @@ public:
 	void configureOptions();
 	void checkJava(MinecraftCpp::option::MinecraftOptions& options, std::string java_verison = "");
 	void setOptionsValuesFromConfig();
-	//void setStatusServer();
-
-	//void setStandartServer();
+	size_t getMinecraftModsCount();
+	ServerTypes getServerType();
+	std::string getCurrentServerName();
+	void _settingServerNameInChangeServerButton();
 
 private slots:
 	void onClickedpushButton_game();
@@ -111,8 +124,6 @@ signals:
 
 private:
 	Ui::SomLauncherMainWindowClass ui;
-
-	std::unique_ptr<QButtonGroup> server_radio_button_group;
 
 	moc::SomLogger Logger;
 };

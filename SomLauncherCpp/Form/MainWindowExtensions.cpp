@@ -139,6 +139,8 @@ void SomLauncherMainWindow::configureOptions()
 	this->options.token = "uuu";
 
 	checkJava(this->options);
+
+	this->default_options = this->options;
 }
 
 void SomLauncherMainWindow::checkJava(MinecraftCpp::option::MinecraftOptions& options, std::string java_verison)
@@ -176,7 +178,9 @@ void SomLauncherMainWindow::checkJava(MinecraftCpp::option::MinecraftOptions& op
 		size_t program_files_sz = 0;
 		_dupenv_s(&program_files, &program_files_sz, "ProgramFiles");
 
-		for (auto& var : DDIC::Download::Files::_get_java_path(std::string(program_files == nullptr ? "" : program_files) + '\\' + "java"))
+		for (auto& var : DDIC::Download::Files::_get_java_path(
+			std::string(program_files == nullptr ? "" : program_files)
+			+ '\\' + "java"))
 		{
 			if (var.second == java_verison)
 			{
@@ -184,4 +188,31 @@ void SomLauncherMainWindow::checkJava(MinecraftCpp::option::MinecraftOptions& op
 			}
 		}
 	}
+}
+
+size_t SomLauncherMainWindow::getMinecraftModsCount()
+{
+	size_t count = 0;
+
+	std::filesystem::directory_iterator directory(this->minecraft_core_dir_path + "\\" + "mods");
+	for (std::filesystem::directory_entry elem : directory)
+	{
+		if (elem.is_regular_file())
+		{
+			if (elem.path().extension().u8string() == ".jar" || elem.path().extension().u8string() == ".disabled")
+				++count;
+		}
+	}
+
+	return count;
+}
+
+ServerTypes SomLauncherMainWindow::getServerType()
+{
+	return ServerTypes::LIVE;
+}
+
+std::string SomLauncherMainWindow::getCurrentServerName()
+{
+	return (*(*(*this->servers_parce)["servers"])[(*(*this->config_parce)["user"])["server"]->to_int()])["name"]->to_string();
 }

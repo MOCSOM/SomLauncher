@@ -18,7 +18,7 @@ private:
 	MinecraftCpp::option::MinecraftOptions& option;
 
 public:
-	SettingsDialog(Json::JsonValue data, MinecraftCpp::option::MinecraftOptions& option, QWidget* parent = nullptr);
+	explicit SettingsDialog(Json::JsonValue data, MinecraftCpp::option::MinecraftOptions& option, QWidget* parent = nullptr);
 	~SettingsDialog();
 
 	void setMemoryData(int min, int max, int recomended_value);

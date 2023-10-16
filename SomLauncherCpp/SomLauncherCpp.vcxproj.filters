@@ -9,10 +9,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>qrc;rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="Form Files">
       <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
       <Extensions>ui</Extensions>
@@ -21,15 +17,16 @@
       <UniqueIdentifier>{639EADAA-A684-42e4-A9AD-28FC9BCB8F7C}</UniqueIdentifier>
       <Extensions>ts</Extensions>
     </Filter>
+    <Filter Include="Custom Qt Files">
+      <UniqueIdentifier>{09c25faf-52f9-4ccb-b9a9-b26dbbc8ec97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>qrc;rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Form\MainWindowExtensions.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Form\SomLauncherMainWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Callbacks\CallbackDict.cpp">
@@ -38,31 +35,13 @@
     <ClCompile Include="Minecraft\Minecraftus.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="QObjects\ClickableLabel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="QObjects\HoveredFrame.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Web\DownloadClasses.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Databases\SQLBased.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Form\ServerChangerForm.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Minecraft\Mods.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Form\ServerWidget.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Form\SettingsDialog.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="QObjects\SomSlider.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="basic_xml.cpp">
@@ -75,6 +54,33 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Moc\Logger\MocIOStream.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="QObjects\HoveredFrame.cpp">
+      <Filter>Custom Qt Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Form\ServerChangerForm.cpp">
+      <Filter>Custom Qt Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Form\SettingsDialog.cpp">
+      <Filter>Custom Qt Files</Filter>
+    </ClCompile>
+    <ClCompile Include="QObjects\SomSlider.cpp">
+      <Filter>Custom Qt Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Form\ServerWidget.cpp">
+      <Filter>Custom Qt Files</Filter>
+    </ClCompile>
+    <ClCompile Include="QObjects\ClickableLabel.cpp">
+      <Filter>Custom Qt Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Form\SomLauncherMainWindow.cpp">
+      <Filter>Custom Qt Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Form\MainWindowExtensions.cpp">
+      <Filter>Custom Qt Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Servers\ServerTypes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -97,9 +103,6 @@
     <ClInclude Include="Minecraft\Mods.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="QObjects\SomSlider.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="basic_xml.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -115,6 +118,12 @@
     <ClInclude Include="Archives\qzipwriter_p.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="QObjects\SomSlider.h">
+      <Filter>Custom Qt Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Servers\ServerTypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="all.json" />
@@ -126,26 +135,26 @@
     <None Include="SomLauncherCpp.pro" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="Form\SomLauncherMainWindow.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="QObjects\ClickableLabel.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="QObjects\HoveredFrame.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="Form\ServerChangerForm.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="Form\SettingsDialog.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
     <QtMoc Include="QObjects\Threads\FunThread.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="QObjects\HoveredFrame.h">
+      <Filter>Custom Qt Files</Filter>
+    </QtMoc>
+    <QtMoc Include="QObjects\ClickableLabel.h">
+      <Filter>Custom Qt Files</Filter>
+    </QtMoc>
+    <QtMoc Include="Form\ServerChangerForm.h">
+      <Filter>Custom Qt Files</Filter>
+    </QtMoc>
     <QtMoc Include="Form\ServerWidget.h">
-      <Filter>Header Files</Filter>
+      <Filter>Custom Qt Files</Filter>
+    </QtMoc>
+    <QtMoc Include="Form\SettingsDialog.h">
+      <Filter>Custom Qt Files</Filter>
+    </QtMoc>
+    <QtMoc Include="Form\SomLauncherMainWindow.h">
+      <Filter>Custom Qt Files</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>

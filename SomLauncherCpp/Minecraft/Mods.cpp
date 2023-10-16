@@ -1,12 +1,19 @@
 ﻿#include "Mods.h"
 
-bool MinecraftCpp::modpacks::installModPack(Json::JsonValue json_from_server,
-	const std::filesystem::path& path, std::unique_ptr<CallbackNull> callback) noexcept
+bool MinecraftCpp::modpacks::download::database::installModPack(const Json::JsonValue& json_from_server,
+	const std::filesystem::path& path_to_download, std::unique_ptr<CallbackNull> callback) noexcept
 {
-	return false;
+	Json::JsonValue urls = json_from_server;
+	for (std::pair<const std::string, Json::JsonValue> elem : urls->get_value())
+	{
+		std::string downloaded_path = DownloadFile(elem.second->to_string(),
+			path_to_download.u8string(), callback.get());
+	}
+
+	return true;
 }
 
-bool MinecraftCpp::modpacks::deleteSingleMod(const std::filesystem::path& mod_path) noexcept
+bool MinecraftCpp::modpacks::deletemods::deleteSingleMod(const std::filesystem::path& mod_path) noexcept
 {
 	try
 	{
@@ -14,20 +21,21 @@ bool MinecraftCpp::modpacks::deleteSingleMod(const std::filesystem::path& mod_pa
 
 		return true;
 	}
-	catch (std::filesystem::filesystem_error const& ex)
+	catch (const std::filesystem::filesystem_error& ex)
 	{
-		std::cout << "what():  " << ex.what() << std::endl
-			<< "path1(): " << ex.path1() << std::endl
-			<< "path2(): " << ex.path2() << std::endl
-			<< "code().value():    " << ex.code().value() << std::endl
-			<< "code().message():  " << ex.code().message() << std::endl
-			<< "code().category(): " << ex.code().category().name() << std::endl;
+		std::cerr
+			<< "what:  " << ex.what() << std::endl
+			<< "path1: " << ex.path1() << std::endl
+			<< "path2: " << ex.path2() << std::endl
+			<< "code.value:    " << ex.code().value() << std::endl
+			<< "code.message:  " << ex.code().message() << std::endl
+			<< "code.category: " << ex.code().category().name() << std::endl;
 
 		return false;
 	}
 }
 
-bool MinecraftCpp::modpacks::deleteAllMods(const std::filesystem::path& directory_mods_path) noexcept
+bool MinecraftCpp::modpacks::deletemods::deleteAllMods(const std::filesystem::path& directory_mods_path) noexcept
 {
 	std::string folder_path = directory_mods_path.string();
 
@@ -53,7 +61,7 @@ bool MinecraftCpp::modpacks::deleteAllMods(const std::filesystem::path& director
 	return true;
 }
 
-bool MinecraftCpp::modpacks::installModPackManualy(const std::string& archive_url,
+bool MinecraftCpp::modpacks::download::manual::installModPackManualy(const std::string& archive_url,
 	const std::filesystem::path& path, std::unique_ptr<CallbackNull> callback) noexcept
 {
 	std::string downloaded_arhcive_path = DownloadFile(archive_url,
@@ -64,11 +72,13 @@ bool MinecraftCpp::modpacks::installModPackManualy(const std::string& archive_ur
 	}
 
 	callback->OnProgress(0, 1, NULL, L"Start extracting archive");
+	callback->OnProgress(0, 1, 6, NULL);
 
 	QZipReader archive(downloaded_arhcive_path.c_str());
 	Additionals::archives::decompressArchive(archive, path.string());
 
 	callback->OnProgress(1, 1, NULL, L"Extracting archive completed");
+	callback->OnProgress(1, 1, 6, NULL);
 
 	return true;
 }

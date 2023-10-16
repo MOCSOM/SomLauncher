@@ -10,7 +10,7 @@ private:
 	int pivotal_value = 0;
 
 public:
-	SomSlider(QWidget* parent = nullptr);
+	explicit SomSlider(QWidget* parent = nullptr);
 	~SomSlider();
 
 	void setPivotalValue(int new_value);
@@ -21,7 +21,6 @@ protected:
 	void mousePressEvent(QMouseEvent* event) override;
 	void mouseMoveEvent(QMouseEvent* event) override;
 	void paintEvent(QPaintEvent* event) override;
-
 };
 
 #endif /*SOMSLIDER_H_*/

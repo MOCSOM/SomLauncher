@@ -6,45 +6,56 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget* parent)
 	ui.setupUi(this);
 	Logger << "ui setup completed" << std::endl;
 
-	QPixmap background = QPixmap(this->background_gif.c_str());
-	ui.labeltest->setPixmap(background);
+	_settingMinecraftStandartPath();
 
-	MEMORYSTATUSEX statex{};
-	statex.dwLength = sizeof(statex);
-	GlobalMemoryStatusEx(&statex);
-	this->max_memory = statex.ullTotalPhys / MEM_DIV - 512;
+	_settingMemory();
 
-	this->servers_parce = this->global_parcer.ParseFile(this->servers_json);
-	this->config_parce = this->global_parcer.ParseFile(this->config_path);
+	_parcingConfigs();
 
 	configureOptions();
 
-	this->default_options = this->options;
-
 	setOptionsValuesFromConfig();
 
-	this->dialog = std::make_unique<SettingsDialog>(std::make_shared<Json::JsonObject>(), this->options, this); //TODO: Сделать отправку данных о акке
+	this->settings_dialog = std::make_unique<SettingsDialog>(std::make_shared<Json::JsonObject>(), this->options, this); //TODO: Сделать отправку данных о акке
 
-	QObject::connect(ui.pushButton_game, &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_game);
-	QObject::connect(ui.pushButton_servers, &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_servers);
-	QObject::connect(ui.pushButton_news, &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_news);
-	QObject::connect(ui.pushButton_aboutus, &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_aboutus);
-	QObject::connect(ui.pushButton_changeserver, &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_changeserver);
-	QObject::connect(ui.pushButton_settings, &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_settings);
+	_settingConnections();
 
-	QObject::connect(ui.pushButton_startgame, &QPushButton::released, this, &SomLauncherMainWindow::onClickpushButton_startgame);
+	_settingUiChanges();
 
-	QObject::connect(ui.label_profile, &ClickableLabel::clicked, this, &SomLauncherMainWindow::onClickedpushLable_profile);
+	QObject::connect(this->server_radio_button_group.get(), &QButtonGroup::buttonToggled,
+		this, &SomLauncherMainWindow::groupButtonsClicked);
 
-	QObject::connect(ui.frame_topslidemenu, &HoveredFrame::Enter, this, &SomLauncherMainWindow::mouseEnterframe_topslidemenu);
-	QObject::connect(ui.frame_topslidemenu, &HoveredFrame::Leave, this, &SomLauncherMainWindow::mouseLeaveframe_topslidemenu);
+	//Проверка и создание конфига
+	if (!isConfigExist())
+	{
+		createConfig();
+		Logger << "Config created" << std::endl;
+	}
 
-	QObject::connect(this->dialog.get(), &SettingsDialog::acceptButtonClicked, this, &SomLauncherMainWindow::saveSettings);
-	QObject::connect(this->dialog.get(), &SettingsDialog::setToDefaultButtonClicked,
-		this, [=]() -> void
-		{
-			this->dialog->setToDefault(default_options, recomended_memory);
-		});
+	this->recomended_memory = 3072;
+	this->curret_memory = (*(*this->config_parce)["user"])["memory"]->to_int();
+}
+
+void SomLauncherMainWindow::_settingMinecraftStandartPath()
+{
+	char* path_buffer = nullptr;
+	size_t path_buffer_size = 0;
+	_dupenv_s(&path_buffer, &path_buffer_size, "APPDATA");
+	this->minecraft_core_dir_path = Join({ path_buffer == nullptr ? "" : path_buffer, ".SomSomSom" });
+	this->config_path = Join({ this->minecraft_core_dir_path, "SOMCONFIG.json" });
+	this->servers_json = Join({ this->minecraft_core_dir_path, "SERVERS.json" });
+}
+
+void SomLauncherMainWindow::_parcingConfigs()
+{
+	this->servers_parce = this->global_parcer.ParseFile(this->servers_json);
+	this->config_parce = this->global_parcer.ParseFile(this->config_path);
+}
+
+void SomLauncherMainWindow::_settingUiChanges()
+{
+	QPixmap background = QPixmap(this->background_gif.c_str());
+	ui.labeltest->setPixmap(background);
 
 	ui.pushButton_game->setStyleSheet("text-align:bottom;");
 	ui.pushButton_servers->setStyleSheet("text-align:bottom;");
@@ -86,23 +97,60 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget* parent)
 		}
 	}
 
-	QObject::connect(this->server_radio_button_group.get(), &QButtonGroup::buttonToggled,
-		this, &SomLauncherMainWindow::groupButtonsClicked);
+	_settingCurrentServerName();
 
-	//Проверка и создание конфига
-	if (!isConfigExist())
-	{
-		createConfig();
-		Logger << "Config created" << std::endl;
-	}
+	_settingModsCount();
 
-	this->recomended_memory = 3072;
-	this->curret_memory = (*(*this->config_parce)["user"])["memory"]->to_int();
+	_settingServerType();
 }
 
-SomLauncherMainWindow::~SomLauncherMainWindow()
+void SomLauncherMainWindow::_settingCurrentServerName()
 {
-	//delete this->dialog;
+	ui.label_server_name->setText(getCurrentServerName().c_str());
+}
+
+void SomLauncherMainWindow::_settingConnections()
+{
+	QObject::connect(ui.pushButton_game, &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_game);
+	QObject::connect(ui.pushButton_servers, &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_servers);
+	QObject::connect(ui.pushButton_news, &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_news);
+	QObject::connect(ui.pushButton_aboutus, &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_aboutus);
+	QObject::connect(ui.pushButton_changeserver, &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_changeserver);
+	QObject::connect(ui.pushButton_settings, &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_settings);
+
+	QObject::connect(ui.pushButton_startgame, &QPushButton::released, this, &SomLauncherMainWindow::onClickpushButton_startgame);
+
+	QObject::connect(ui.label_profile, &ClickableLabel::clicked, this, &SomLauncherMainWindow::onClickedpushLable_profile);
+
+	QObject::connect(ui.frame_topslidemenu, &HoveredFrame::Enter, this, &SomLauncherMainWindow::mouseEnterframe_topslidemenu);
+	QObject::connect(ui.frame_topslidemenu, &HoveredFrame::Leave, this, &SomLauncherMainWindow::mouseLeaveframe_topslidemenu);
+
+	QObject::connect(this->settings_dialog.get(), &SettingsDialog::acceptButtonClicked, this, &SomLauncherMainWindow::saveSettings);
+	QObject::connect(this->settings_dialog.get(), &SettingsDialog::setToDefaultButtonClicked,
+		this, [=]() -> void
+		{
+			this->settings_dialog->setToDefault(default_options, recomended_memory);
+		});
+}
+
+void SomLauncherMainWindow::_settingMemory()
+{
+	MEMORYSTATUSEX statex{};
+	statex.dwLength = sizeof(statex);
+	GlobalMemoryStatusEx(&statex);
+	this->max_memory = statex.ullTotalPhys / MEM_DIV - 512;
+}
+
+void SomLauncherMainWindow::_settingModsCount()
+{
+	size_t count = getMinecraftModsCount();
+	ui.label_mods_count_change->setText(std::to_string(count).c_str());
+}
+
+void SomLauncherMainWindow::_settingServerType()
+{
+	ServerTypes type = getServerType();
+	ui.label_client_type->setText(ServerTypesToString(type).c_str());
 }
 
 void SomLauncherMainWindow::onClickedpushButton_game()
@@ -142,14 +190,20 @@ void SomLauncherMainWindow::onClickedpushButton_changeserver()
 	QObject::connect(&dialog, &ServerChanger::accepted,
 		this, [=]() -> void
 		{
-			this->config_parce = this->global_parcer.ParseFile(this->config_path);
-			ui.pushButton_changeserver->setText((this->server_changer_button_text +
-				(*(*(*this->servers_parce)["servers"])[(*(*this->config_parce)["user"])["server"]->to_int()])["name"]->to_string() +
-				")").c_str());
-			this->widget_list[(*(*this->config_parce)["user"])["server"]->to_int()]->setStatusServer(true);
+			_settingServerNameInChangeServerButton();
+			_settingCurrentServerName();
 		});
 
-	dialog.exec(); //modal dialog
+	dialog.exec(); //modal settings_dialog
+}
+
+void SomLauncherMainWindow::_settingServerNameInChangeServerButton()
+{
+	this->config_parce = this->global_parcer.ParseFile(this->config_path);
+	ui.pushButton_changeserver->setText((this->server_changer_button_text +
+		(*(*(*this->servers_parce)["servers"])[(*(*this->config_parce)["user"])["server"]->to_int()])["name"]->to_string() +
+		")").c_str());
+	this->widget_list[(*(*this->config_parce)["user"])["server"]->to_int()]->setStatusServer(true);
 }
 
 void SomLauncherMainWindow::onClickedpushLable_profile()
@@ -161,13 +215,13 @@ void SomLauncherMainWindow::onClickedpushButton_settings()
 {
 	Logger << "pushButton_settings clicked" << std::endl;
 
-	this->dialog->setMemoryData(1024, this->max_memory, this->recomended_memory);
-	this->dialog->setCurretMemory(this->curret_memory);
+	this->settings_dialog->setMemoryData(1024, this->max_memory, this->recomended_memory);
+	this->settings_dialog->setCurretMemory(this->curret_memory);
 
-	this->dialog->setStandartJavaPath(this->options.executablePath);
-	this->dialog->setStandartMinecraftPath(this->options.gameDirectory);
+	this->settings_dialog->setStandartJavaPath(this->options.executablePath);
+	this->settings_dialog->setStandartMinecraftPath(this->options.gameDirectory);
 
-	this->dialog->exec();
+	this->settings_dialog->exec();
 }
 
 void SomLauncherMainWindow::onClickpushButton_startgame()
@@ -242,17 +296,20 @@ void SomLauncherMainWindow::groupButtonsClicked(QAbstractButton* id, bool status
 		this->config_parce = this->global_parcer.ParseFile(this->config_path);
 
 		Logger << "Server saved" << std::endl;
+
+		_settingServerNameInChangeServerButton();
+		_settingCurrentServerName();
 	}
 }
 
 void SomLauncherMainWindow::saveSettings()
 {
-	int memory_value = this->dialog->getMemoryValue();
+	int memory_value = this->settings_dialog->getMemoryValue();
 
-	if (this->dialog->getReintsallModsState() == true)
+	if (this->settings_dialog->getReintsallModsState() == true)
 	{
-		this->isInstallMods = true;
-		(*(*config_parce)["user"])["isInstallMods"]->operator=(this->isInstallMods);
+		this->is_install_mods = true;
+		(*(*config_parce)["user"])["isInstallMods"]->operator=(this->is_install_mods);
 	}
 
 	this->curret_memory = memory_value;
@@ -265,7 +322,7 @@ void SomLauncherMainWindow::saveSettings()
 
 	Logger << "Memory saved" << std::endl;
 
-	std::string minecraft_path = this->dialog->getMinecraftPath();
+	std::string minecraft_path = this->settings_dialog->getMinecraftPath();
 
 	if (minecraft_path != "")
 	{
@@ -316,5 +373,5 @@ void SomLauncherMainWindow::setOptionsValuesFromConfig()
 	this->options.gameDirectory = this->minecraft_core_dir_path;
 	this->options.username = this->username;
 
-	this->isInstallMods = (*(*this->config_parce)["user"])["isInstallMods"]->toBool();
+	this->is_install_mods = (*(*this->config_parce)["user"])["isInstallMods"]->toBool();
 }
