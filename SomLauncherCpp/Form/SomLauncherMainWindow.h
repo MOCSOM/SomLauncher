@@ -6,11 +6,13 @@
 #include <qbuttongroup.h>
 #include <qsharedpointer.h>
 #include <qshareddata.h>
+#include <qthread.h>
 //#include <qgraphicsview.h>
 
 #include <iostream>
 #include <string>
 #include <windows.h>
+#include <thread>
 
 #include "../Web/DownloadClasses.h"
 #include "../Callbacks/CallbackDict.h"
@@ -69,6 +71,8 @@ private:
 
 	std::unique_ptr<QButtonGroup> server_radio_button_group;
 
+	FunctionThread* download_thread = nullptr;
+
 public:
 	explicit SomLauncherMainWindow(QWidget* parent = nullptr);
 	~SomLauncherMainWindow() = default;
@@ -118,6 +122,8 @@ private slots:
 	void groupButtonsClicked(QAbstractButton* id, bool status);
 
 	void saveSettings();
+
+	void updateProgressBar(int value);
 
 signals:
 	void updateSignal();

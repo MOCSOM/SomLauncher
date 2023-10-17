@@ -20,7 +20,7 @@ void SomConsole::setloadbar(unsigned curr_val, unsigned max_val, unsigned bar_wi
 }
 
 void SomProgressBarr::set_prog_bar(unsigned curr_val, unsigned max_val,
-	std::shared_ptr<QProgressBar> progress_bar)
+	QProgressBar* progress_bar)
 {
 	if ((curr_val != max_val) && (curr_val % (max_val / 100) != 0))
 	{
@@ -29,7 +29,7 @@ void SomProgressBarr::set_prog_bar(unsigned curr_val, unsigned max_val,
 
 	progress_bar->setMinimum(0);
 	progress_bar->setMaximum(max_val);
-	progress_bar->setValue(curr_val);
+	emit progress_bar->valueChanged(curr_val);
 
 	/*double   ratio = curr_val / static_cast<double>(max_val);
 	unsigned bar_now = static_cast<unsigned>(ratio * 20);
@@ -45,7 +45,7 @@ inline void CallbackDict::setLogger(moc::SomLogger logger)
 	this->Logger.setQtPlainText(logger.getQtPlainText());
 }
 
-inline void CallbackDict::setQProgressBar(std::shared_ptr<QProgressBar> progress_bar)
+void CallbackDict::setQProgressBar(QProgressBar* progress_bar)
 {
 	this->progress_bar = progress_bar;
 }
@@ -82,7 +82,8 @@ STDMETHODIMP_(HRESULT __stdcall) CallbackDict::OnProgress(ULONG ulProgress, ULON
 			/ static_cast<double>(ulProgressMax));
 		if (m_percentLast < percent)
 		{
-			ProgressBarInConsole(percent, 100);
+			SomConsole::setloadbar(percent, 100);
+			SomProgressBarr::set_prog_bar(percent, 100, this->progress_bar);
 			m_percentLast = percent;
 		}
 		if (ulStatusCode == BINDSTATUS_ENDDOWNLOADDATA)
@@ -144,4 +145,8 @@ HRESULT CallbackDict::setConsoleBar(ULONG& ulProgress, ULONG& ulProgressMax, ULO
 		return S_OK;
 	}
 	return S_OK;
+}
+
+void CallbackNull::setQProgressBar(QProgressBar* progress_bar)
+{
 }

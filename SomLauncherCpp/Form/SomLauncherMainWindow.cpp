@@ -227,8 +227,13 @@ void SomLauncherMainWindow::onClickedpushButton_settings()
 void SomLauncherMainWindow::onClickpushButton_startgame()
 {
 	Logger << "pushButton_startgame clicked" << std::endl;
+	std::function<void()> myFunction = [=]() {
+		start_minecraft_params();
+		};
 
-	start_minecraft_params();
+	connect(ui.progressBar_ahtung, &QProgressBar::valueChanged, this, &SomLauncherMainWindow::updateProgressBar);
+	download_thread = new FunctionThread(myFunction);
+	download_thread->start();
 }
 
 void SomLauncherMainWindow::mouseEnterframe_topslidemenu()
@@ -356,6 +361,11 @@ void SomLauncherMainWindow::saveSettings()
 
 		ui.label_minecraft_directory->setText(this->minecraft_core_dir_path.c_str());
 	}
+}
+
+void SomLauncherMainWindow::updateProgressBar(int value)
+{
+	ui.progressBar_ahtung->setValue(value);
 }
 
 void SomLauncherMainWindow::setOptionsValuesFromConfig()

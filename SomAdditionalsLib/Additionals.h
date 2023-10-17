@@ -36,9 +36,11 @@ namespace Additionals
 		wchar_t* ConvertStringToWcharPtr(const std::string& str);
 		std::string ConvertWcharPtrToString(const wchar_t* str);
 		std::string ConvertWStringToString(const std::wstring& str);
+		std::wstring ConvertStringToWString(const std::string& str);
 		std::wstring ConvertWcharPtrToWstring(const wchar_t* str);
 		std::unique_ptr<wchar_t[]> ConvertWstringToWcharPtr(const std::wstring& str);
 		std::string ConvertLPCWSTRToString(LPCWSTR lpcwszStr);
+		LPCWSTR ConvertTringToLPCWSTR(std::string string);
 	}
 
 	namespace String

@@ -285,6 +285,8 @@ Json::JsonValue MinecraftCpp::inherit_json(Json::JsonValue original_data, const 
 		}
 	}
 
+	std::cout << (*new_data)["libraries"]->to_string() << std::endl;
+
 	return new_data;
 }
 
@@ -329,12 +331,14 @@ std::string MinecraftCpp::get_minecraft_command__(const std::string& version, co
 	}
 
 	Json::JsonParcer json_parcer;
-	Json::JsonValue data = json_parcer.ParseFile(Join({ minecraft_directory, "versions", version, (version + ".json") }));
+	Json::JsonValue orig_data = json_parcer.ParseFile(Join({ minecraft_directory, "versions", version, (version + ".json") }));
+	Json::JsonValue data;
 
-	if (data->is_exist("inheritsFrom"))
+	if (orig_data->is_exist("inheritsFrom"))
 	{
-		data = MinecraftCpp::inherit_json(data, minecraft_directory);
+		data = MinecraftCpp::inherit_json(orig_data, minecraft_directory); //FIXME: Баг: библиотеки(лист) не приравниваются, в функции всё норм
 	}
+	std::cout << data->to_string() << std::endl;
 	options.nativesDirectory = options.get("nativesDirectory", Join({ minecraft_directory, "versions", (*data)["id"]->to_string(), "natives" }));
 	//options.nativesDirectory = JoinW({ minecraft_directory, L"versions", data["id"]->to_stringW(), L"natives" });
 	options.classpath = MinecraftCpp::get_libraries(data, minecraft_directory);
@@ -457,8 +461,45 @@ std::string MinecraftCpp::get_libraries(Json::JsonValue data, const std::string&
 	std::string libstr = "";
 	std::string native = "";
 	MinecraftCpp::option::MinecraftOptions empty;
-	int debug = 0;
-	if ((*data)["libraries"]->get_count() == 1)
+
+	for (auto& elem : (*data)["libraries"]->get_value_list())
+	{
+		if (elem->is_exist("rules") && !(MinecraftCpp::parse_rule_list(elem, "rules", empty)))
+		{
+			continue;
+		}
+
+		std::cout << elem->to_string() << std::endl;
+		std::cout << (*data)["libraries"]->to_string() << std::endl;
+
+		libstr += (MinecraftCpp::get_library_path((*elem)["name"]->to_string(), path) + classpath_seperator);
+		native = MinecraftCpp::get_natives(elem);
+
+		if (native != "")
+		{
+			if (elem->is_exist("downloads"))
+			{
+				libstr += (Join({ path, "libraries", (*(*(*(*elem)["downloads"])["classifiers"])[native])["path"]->to_string() }) + classpath_seperator);
+			}
+			else
+			{
+				libstr += (MinecraftCpp::get_library_path(((*elem)["name"]->to_string() + ("-" + native)), path) + classpath_seperator);
+			}
+		}
+	}
+
+	if (data->is_exist("jar"))
+	{
+		libstr = libstr + Join({ path, "versions", (*data)["jar"]->to_string(), ((*data)["jar"]->to_string() + ".jar") });
+	}
+	else
+	{
+		libstr = libstr + Join({ path, "versions", (*data)["id"]->to_string(), ((*data)["id"]->to_string() + ".jar") });
+	}
+
+	return libstr;
+
+	/*if ((*data)["libraries"]->get_count() == 1)
 	{
 		for (auto& var : (*(*data)["libraries"])[0]->get_value_list())
 		{
@@ -523,7 +564,7 @@ std::string MinecraftCpp::get_libraries(Json::JsonValue data, const std::string&
 		}
 	}
 
-	return libstr;
+	return libstr;*/
 }
 
 std::chrono::system_clock::time_point MinecraftCpp::_parseDateTime(const std::string& isoDateTime)
@@ -596,6 +637,7 @@ bool MinecraftCpp::parse_rule_list(Json::JsonValue data, const std::string& rule
 	/*
 	Parse a list of rules
 	*/
+
 	if (!data->is_exist(rule_string))
 	{
 		return true;
@@ -900,7 +942,7 @@ bool MinecraftCpp::install_libraries(Json::JsonValue data, const std::string& pa
 	*/
 
 	callback->OnProgress(NULL, NULL, NULL, L"Download Libraries");
-	callback->OnProgress(NULL, (*data)["libraries"]->get_count() - 1, NULL, NULL);
+	callback->OnProgress(NULL, NULL, NULL, std::to_wstring((*data)["libraries"]->get_count() - 1).c_str());
 
 	int count = -1;
 	for (auto& var : (*data)["libraries"]->get_value_list())
@@ -936,9 +978,20 @@ bool MinecraftCpp::install_libraries(Json::JsonValue data, const std::string& pa
 			downloadUrl = "https://libraries.minecraft.net";
 		}
 
-		std::string libPath = Additionals::String::split((*var)["name"]->to_string(), ':')[0];
-		std::string name = Additionals::String::split((*var)["name"]->to_string(), ':')[1];
-		std::string version = Additionals::String::split((*var)["name"]->to_string(), ':')[2];
+		std::string libPath;
+		std::string name;
+		std::string version;
+
+		if ((*var)["name"] != nullptr)
+		{
+			libPath = Additionals::String::split((*var)["name"]->to_string(), ':')[0];
+			name = Additionals::String::split((*var)["name"]->to_string(), ':')[1];
+			version = Additionals::String::split((*var)["name"]->to_string(), ':')[2];
+		}
+		else
+		{
+			continue;
+		}
 
 		for (auto& libPart : Additionals::String::split(libPath, '.'))
 		{

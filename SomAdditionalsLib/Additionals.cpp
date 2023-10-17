@@ -4,13 +4,13 @@
 
 wchar_t* Additionals::Convectors::ConvertStringToWcharPtr(const std::string& str)
 {
-	UINT CodePage = CP_ACP;
 	/*std::wstring_convert<std::codecvt<wchar_t, char, wchar_t>, wchar_t> converter;
 	std::wstring wstr = converter.from_bytes(str);
 
 	wchar_t* wch_str = new wchar_t[wstr.size() + 1];
 	wcscpy(wch_str, wstr.c_str());*/
 
+	UINT CodePage = CP_ACP;
 	DWORD const BuffSize = MultiByteToWideChar(CodePage, 0, str.c_str(), -1, NULL, 0);
 	if (!BuffSize) return NULL;
 	std::vector<wchar_t> Buffer;
@@ -31,6 +31,14 @@ std::string Additionals::Convectors::ConvertWStringToString(const std::wstring& 
 {
 	std::string url(str.begin(), str.end()); //FIXME: выполняется компиляция ссылки на экземпляр шаблон функции "std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string<std::_String_iterator<std::_String_val<std::_Simple_types<_Elem>>>,0>(_Iter,_Iter,const _Alloc &)"
 	return url;
+}
+
+std::wstring Additionals::Convectors::ConvertStringToWString(const std::string& str)
+{
+	std::wstring_convert<std::codecvt<wchar_t, char, wchar_t>, wchar_t> converter;
+
+	std::wstring wideStr = converter.from_bytes(str);
+	return wideStr;
 }
 
 std::wstring Additionals::Convectors::ConvertWcharPtrToWstring(const wchar_t* str)
@@ -62,6 +70,18 @@ std::string Additionals::Convectors::ConvertLPCWSTRToString(LPCWSTR lpcwszStr)
 
 	// Return the converted std::string
 	return str;
+}
+
+LPCWSTR Additionals::Convectors::ConvertTringToLPCWSTR(std::string string)
+{
+	int bufferSize = MultiByteToWideChar(CP_UTF8, 0, string.c_str(), -1, NULL, 0);
+	std::unique_ptr<wchar_t[]> wideStr = std::make_unique<wchar_t[]>(bufferSize);
+
+	MultiByteToWideChar(CP_UTF8, 0, string.c_str(), -1, wideStr.get(), bufferSize);
+
+	LPCWSTR lpcwstr = wideStr.get();
+
+	return lpcwstr;
 }
 
 //wchar_t* Additionals::String::strdogW(wchar_t* ref_str, wchar_t* str_to_add)

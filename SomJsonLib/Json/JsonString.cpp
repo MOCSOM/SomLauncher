@@ -39,7 +39,7 @@ Json::JsonValue Json::JsonString::operator=(const std::string& value)
 	return shared_from_this();
 }
 
-Json::JsonValue Json::JsonString::operator=(Json::JsonValue value)
+Json::JsonValue& Json::JsonString::operator=(const Json::JsonValue& value)
 {
 	this->value = value->to_string();
 	return shared_from_this();

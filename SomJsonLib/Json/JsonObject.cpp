@@ -84,6 +84,13 @@ Json::JsonValue Json::JsonObject::operator[](const std::string& key)
 	return nullptr;
 }
 
+Json::JsonValue& Json::JsonObject::operator=(const Json::JsonValue& value)
+{
+	std::cout << "operator= values " << value->to_string() << std::endl;
+	std::cout << "this->values[]->to_string() " << this->values["libraries"]->to_string() << std::endl;
+	return shared_from_this();
+}
+
 Json::JsonValue Json::JsonObject::_FindValueInJsonValue(Json::JsonValue jsonValue,
 	const std::string& key)
 {

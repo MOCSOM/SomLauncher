@@ -18,7 +18,6 @@
 
 #include "JsonTypes.h"
 
-
 //Классы для обработки и парсинга файла json
 namespace Json
 {
@@ -42,7 +41,7 @@ namespace Json
 		virtual Json::JsonValue operator[](const std::wstring& key);
 		virtual Json::JsonValue operator[](const std::string& key);
 		virtual Json::JsonValue operator[](int index);
-		virtual Json::JsonValue operator=(Json::JsonValue value);
+		virtual Json::JsonValue& operator=(const Json::JsonValue& value);
 		virtual Json::JsonValue operator=(double value);
 		virtual Json::JsonValue operator=(const std::string& value);
 		virtual Json::JsonValue operator=(const std::wstring& value);
@@ -121,7 +120,7 @@ namespace Json
 		Json::JsonValue get_value(const std::string& key) override;
 
 		Json::JsonValue operator[](int index) override;
-		Json::JsonValue operator=(Json::JsonValue value) override;
+		Json::JsonValue& operator=(const Json::JsonValue& value) override;
 		Json::JsonValue operator+(Json::JsonValue value) override;
 		/*Json::JsonValue operator[](const std::wstring& key) override;
 		Json::JsonValue operator[](const std::string& key) override;*/
@@ -172,6 +171,7 @@ namespace Json
 
 		Json::JsonValue operator[](const std::wstring& key);
 		Json::JsonValue operator[](const std::string& key);
+		Json::JsonValue& operator=(const Json::JsonValue& value) override;
 
 		Json::JsonValue _FindValueInJsonValue(Json::JsonValue jsonValue,
 			const std::string& key);
@@ -211,7 +211,7 @@ namespace Json
 
 		Json::JsonValue operator+(Json::JsonValue value) override;
 		Json::JsonValue operator=(const std::string& value) override;
-		Json::JsonValue operator=(Json::JsonValue value) override;
+		Json::JsonValue& operator=(const Json::JsonValue& value)override;
 		Json::JsonValue operator=(const std::wstring& value) override;
 
 		std::wstring to_stringW() override;

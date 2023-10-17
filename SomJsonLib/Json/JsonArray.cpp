@@ -9,7 +9,7 @@ Json::JsonArray::JsonArray() : Json::JsonNode(Json::JsonTypes::Array)
 
 Json::JsonArray::~JsonArray()
 {
-	for (Json::JsonValue value : this->values)
+	/*for (Json::JsonValue value : this->values)
 	{
 		if (value->get_type() == Json::JsonTypes::Array)
 		{
@@ -21,7 +21,7 @@ Json::JsonArray::~JsonArray()
 		{
 			value->~JsonNode();
 		}
-	}
+	}*/
 	this->values.clear();
 }
 
@@ -99,7 +99,7 @@ Json::JsonValue Json::JsonArray::operator[](int index)
 	return this->values[index];
 }
 
-Json::JsonValue Json::JsonArray::operator=(Json::JsonValue value)
+Json::JsonValue& Json::JsonArray::operator=(const Json::JsonValue& value)
 {
 	this->values = value->get_value_list();
 

@@ -2,6 +2,7 @@
 #define CBD_H_
 
 #include <qprogressbar.h>
+#include <qcoreapplication.h>
 
 #include <windows.h>
 #include <tchar.h>
@@ -21,7 +22,7 @@ namespace SomConsole
 }
 namespace SomProgressBarr {
 	void set_prog_bar(unsigned curr_val, unsigned max_val,
-		std::shared_ptr<QProgressBar> progress_bar);
+		QProgressBar* progress_bar);
 }
 
 class CallbackNull : public IBindStatusCallback
@@ -31,6 +32,8 @@ public:
 	~CallbackNull() = default;
 
 public:
+	void setQProgressBar(QProgressBar* progress_bar);
+
 	/// <summary>
 	///
 	/// </summary>
@@ -82,7 +85,7 @@ class CallbackDict : public CallbackNull
 private:
 	int m_percentLast = -1;
 	moc::SomLogger Logger;
-	std::shared_ptr<QProgressBar> progress_bar;
+	QProgressBar* progress_bar = nullptr;
 
 public:
 	CallbackDict() = default;
@@ -90,7 +93,7 @@ public:
 	~CallbackDict() = default;
 
 	inline void setLogger(moc::SomLogger logger);
-	inline void setQProgressBar(std::shared_ptr<QProgressBar> progress_bar);
+	void setQProgressBar(QProgressBar* progress_bar);
 
 	// This one is called by URLDownloadToFile
 	STDMETHOD(OnProgress)(/* [in] */ ULONG ulProgress, /* [in] */ ULONG ulProgressMax, /* [in] */ ULONG ulStatusCode, /* [in] */ LPCWSTR wszStatusText) override;

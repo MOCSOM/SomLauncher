@@ -72,15 +72,12 @@ void Json::JsonNode::_Indent(std::string& builder, int indent)
 	}
 }
 
-Json::JsonValue Json::JsonNode::operator=(Json::JsonValue value)
+Json::JsonValue& Json::JsonNode::operator=(const Json::JsonValue& value)
 {
-	if (!this->is_exist(value->to_string()))
+	this->get_value().clear();
+	for (auto& elem : value->get_value())
 	{
-		this->add_value(value);
-	}
-	else
-	{
-		//this->get_value() = value->get_value();
+		this->add_value(elem);
 	}
 	return shared_from_this();
 }
