@@ -13,4 +13,5 @@ MOC_DIR += GeneratedFiles/$(ConfigurationName)
 OBJECTS_DIR += debug
 UI_DIR += GeneratedFiles
 RCC_DIR += GeneratedFiles
+SOURCES += main.cpp
 include(SomLauncherCpp.pri)
