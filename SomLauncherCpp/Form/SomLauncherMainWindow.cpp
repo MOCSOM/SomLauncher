@@ -6,6 +6,8 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget* parent)
 	ui.setupUi(this);
 	Logger << "ui setup completed" << std::endl;
 
+	this->progressBar_ahtung_geometry = ui.progressBar_ahtung->geometry();
+
 	_settingMinecraftStandartPath();
 
 	_settingMemory();
@@ -102,6 +104,8 @@ void SomLauncherMainWindow::_settingUiChanges()
 	_settingModsCount();
 
 	_settingServerType();
+
+	ui.progressBar_ahtung->setHidden(true);
 }
 
 void SomLauncherMainWindow::_settingCurrentServerName()
@@ -131,6 +135,8 @@ void SomLauncherMainWindow::_settingConnections()
 		{
 			this->settings_dialog->setToDefault(default_options, recomended_memory);
 		});
+
+	QObject::connect(ui.stackedWidget_bottommenu, &QStackedWidget::currentChanged, this, &SomLauncherMainWindow::pageChangedSlidedWidget);
 }
 
 void SomLauncherMainWindow::_settingMemory()
@@ -227,8 +233,16 @@ void SomLauncherMainWindow::onClickedpushButton_settings()
 void SomLauncherMainWindow::onClickpushButton_startgame()
 {
 	Logger << "pushButton_startgame clicked" << std::endl;
-	std::function<void()> myFunction = [=]() {
-		start_minecraft_params();
+
+	ui.progressBar_ahtung->setHidden(false);
+
+	ui.pushButton_startgame->setDisabled(true);
+	ui.pushButton_settings->setDisabled(true);
+
+	std::function<void()> myFunction =
+		[this]()
+		{
+			start_minecraft_params();
 		};
 
 	connect(ui.progressBar_ahtung, &QProgressBar::valueChanged, this, &SomLauncherMainWindow::updateProgressBar);
@@ -366,6 +380,22 @@ void SomLauncherMainWindow::saveSettings()
 void SomLauncherMainWindow::updateProgressBar(int value)
 {
 	ui.progressBar_ahtung->setValue(value);
+}
+
+void SomLauncherMainWindow::pageChangedSlidedWidget(int value)
+{
+	if (value != 0 && !ui.progressBar_ahtung->isHidden())
+	{
+		ui.gridLayout_page_game->removeWidget(ui.progressBar_ahtung);
+		ui.progressBar_ahtung->setParent(ui.centralWidget);
+		ui.progressBar_ahtung->setGeometry(ui.label_minecraft_directory->geometry());
+		ui.progressBar_ahtung->show();
+	}
+	else if (!ui.progressBar_ahtung->isHidden())
+	{
+		ui.gridLayout_page_game->addWidget(ui.progressBar_ahtung, 2, 0, 1, 1);
+		ui.progressBar_ahtung->setGeometry(this->progressBar_ahtung_geometry);
+	}
 }
 
 void SomLauncherMainWindow::setOptionsValuesFromConfig()

@@ -3,6 +3,7 @@
 
 #include <qplaintextedit.h>
 #include <qsharedpointer.h>
+#include <qlogging.h>
 
 #include <iostream>
 #include <string>

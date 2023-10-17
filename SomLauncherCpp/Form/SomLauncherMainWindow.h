@@ -73,6 +73,8 @@ private:
 
 	FunctionThread* download_thread = nullptr;
 
+	QRect progressBar_ahtung_geometry;
+
 public:
 	explicit SomLauncherMainWindow(QWidget* parent = nullptr);
 	~SomLauncherMainWindow() = default;
@@ -124,6 +126,8 @@ private slots:
 	void saveSettings();
 
 	void updateProgressBar(int value);
+
+	void pageChangedSlidedWidget(int value);
 
 signals:
 	void updateSignal();
