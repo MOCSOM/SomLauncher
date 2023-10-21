@@ -34,6 +34,12 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget* parent)
 		Logger << "Config created" << std::endl;
 	}
 
+	setCurrentVersionFromGithub();
+
+	if (isVersionOld())
+	{
+	}
+
 	this->recomended_memory = 3072;
 	this->curret_memory = (*(*this->config_parce)["user"])["memory"]->to_int();
 }
@@ -44,8 +50,8 @@ void SomLauncherMainWindow::_settingMinecraftStandartPath()
 	size_t path_buffer_size = 0;
 	_dupenv_s(&path_buffer, &path_buffer_size, "APPDATA");
 	this->minecraft_core_dir_path = Join({ path_buffer == nullptr ? "" : path_buffer, ".SomSomSom" });
-	this->config_path = Join({ this->minecraft_core_dir_path, "SOMCONFIG.json" });
-	this->servers_json = Join({ this->minecraft_core_dir_path, "SERVERS.json" });
+	this->config_path = "SOMCONFIG.json";
+	this->servers_json = "SERVERS.json";
 }
 
 void SomLauncherMainWindow::_parcingConfigs()

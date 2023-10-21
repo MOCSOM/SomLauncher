@@ -182,6 +182,7 @@
     <ClCompile Include="QObjects\SomSlider.cpp" />
     <ClCompile Include="QObjects\Threads\FunThread.cpp" />
     <ClCompile Include="Servers\ServerTypes.cpp" />
+    <ClCompile Include="Upgrader.cpp" />
     <ClCompile Include="Web\DownloadClasses.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -198,6 +199,7 @@
     <ClInclude Include="QObjects\SomSlider.h" />
     <QtMoc Include="QObjects\Threads\FunThread.h" />
     <ClInclude Include="Servers\ServerTypes.h" />
+    <ClInclude Include="Upgrader.h" />
     <ClInclude Include="Web\DownloadClasses.h" />
     <QtMoc Include="Form\SomLauncherMainWindow.h" />
     <ClInclude Include="Callbacks\CallbackDict.h" />
@@ -212,6 +214,7 @@
     <None Include="DATA.json" />
     <None Include="SERVERS.json" />
     <None Include="SOMCONFIG.json" />
+    <None Include="SOMCONFIG_template.json" />
     <None Include="SomLauncherCpp.pro" />
     <None Include="TODO_List.md" />
   </ItemGroup>

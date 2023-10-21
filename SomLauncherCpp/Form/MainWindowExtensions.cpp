@@ -24,7 +24,7 @@ void SomLauncherMainWindow::start_minecraft_params()
 		version = (*(*(*servers_parce)["servers"])[0])["version"]->to_string();
 		std::string launch_version = install_minecraft(version, core, (*(*(*this->servers_parce)["servers"])[0])["loaderVersion"]->to_string(), java, (*(*this->config_parce)["user"])["mcdir"]->to_string(), this->options);
 		std::string command = MinecraftCpp::get_minecraft_command__(launch_version, this->minecraft_core_dir_path, options);
-		std::cout << command << std::endl;
+		qInfo() << command;
 
 		this->close();
 
@@ -40,7 +40,7 @@ void SomLauncherMainWindow::start_minecraft_params()
 		std::string launch_version = install_minecraft(version, core, (*(*(*this->servers_parce)["servers"])[1])["loaderVersion"]->to_string(), java, (*(*this->config_parce)["user"])["mcdir"]->to_string(), this->options);
 
 		std::string command = MinecraftCpp::get_minecraft_command__(launch_version, this->minecraft_core_dir_path, options);
-		std::cout << command << std::endl;
+		qInfo() << command;
 
 		this->close();
 
@@ -146,7 +146,7 @@ bool SomLauncherMainWindow::isConfigExist()
 
 void SomLauncherMainWindow::createConfig()
 {
-	std::filesystem::copy("SOMCONFIG.json", this->config_path);
+	std::filesystem::copy("SOMCONFIG_template.json", this->config_path, std::filesystem::copy_options::overwrite_existing);
 }
 
 void SomLauncherMainWindow::configureOptions()
@@ -245,4 +245,56 @@ ServerTypes SomLauncherMainWindow::getServerType()
 std::string SomLauncherMainWindow::getCurrentServerName()
 {
 	return (*(*(*this->servers_parce)["servers"])[(*(*this->config_parce)["user"])["server"]->to_int()])["name"]->to_string();
+}
+
+std::string SomLauncherMainWindow::getLatestVersionFromGithub()
+{
+	QUrl url("https://api.github.com/repos/MOCSOM/SomLauncher/tags");
+	qInfo() << url.toString();
+	QNetworkRequest request(url);
+	request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+	QNetworkAccessManager nam;
+	QNetworkReply* reply = nam.get(request);
+
+	bool timeout = false;
+
+	while (!timeout)
+	{
+		qApp->processEvents();
+		if (reply->isFinished()) break;
+	}
+
+	if (reply->isFinished())
+	{
+		QByteArray response_data = reply->readAll();
+		QJsonDocument json = QJsonDocument::fromJson(response_data);
+		return json[json.array().size() - 1]["name"].toString().toStdString();
+	}
+	else
+	{
+		return QString("Timeout").toStdString();
+	}
+}
+
+std::string SomLauncherMainWindow::getCurrentVersionFromConfig()
+{
+	return (*(*this->config_parce)["launcher"])["verison"]->to_string();
+}
+
+void SomLauncherMainWindow::setCurrentVersionFromGithub()
+{
+	if (getCurrentVersionFromConfig() == "")
+	{
+		(*(*(*this->config_parce)["launcher"])["verison"]) = getLatestVersionFromGithub();
+		this->config_parce->SaveJsonToFile(this->config_path, 4);
+	}
+}
+
+bool SomLauncherMainWindow::isVersionOld()
+{
+	if (getCurrentVersionFromConfig() != getLatestVersionFromGithub())
+	{
+		return true;
+	}
+	return false;
 }

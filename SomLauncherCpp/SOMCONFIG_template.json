@@ -1,0 +1,14 @@
+{
+  "user": {
+    "name": "debug",
+    "memory": 7168,
+    "wight": 854,
+    "hight": 480,
+    "mcdir": "",
+    "isInstallMods": false,
+    "server": 0
+  },
+  "launcher": {
+    "verison": ""
+  }
+}

@@ -7,6 +7,11 @@
 #include <qsharedpointer.h>
 #include <qshareddata.h>
 #include <qthread.h>
+#include <qjsondocument.h>
+#include <qurl.h>
+#include <qnetworkrequest.h>
+#include <qnetworkaccessmanager.h>
+#include <qnetworkreply.h>
 //#include <qgraphicsview.h>
 
 #include <iostream>
@@ -106,6 +111,10 @@ public:
 	ServerTypes getServerType();
 	std::string getCurrentServerName();
 	void _settingServerNameInChangeServerButton();
+	std::string getLatestVersionFromGithub();
+	std::string getCurrentVersionFromConfig();
+	void setCurrentVersionFromGithub();
+	bool isVersionOld();
 
 private slots:
 	void onClickedpushButton_game();

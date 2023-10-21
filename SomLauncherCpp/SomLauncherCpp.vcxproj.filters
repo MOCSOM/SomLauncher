@@ -83,6 +83,9 @@
     <ClCompile Include="Servers\ServerTypes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Upgrader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -124,6 +127,9 @@
     <ClInclude Include="Servers\ServerTypes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Upgrader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="all.json" />
@@ -133,6 +139,7 @@
     <None Include="TODO_List.md" />
     <None Include="cpp.hint" />
     <None Include="SomLauncherCpp.pro" />
+    <None Include="SOMCONFIG_template.json" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="QObjects\Threads\FunThread.h">
