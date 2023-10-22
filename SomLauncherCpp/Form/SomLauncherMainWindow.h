@@ -22,7 +22,7 @@
 #include "../Web/DownloadClasses.h"
 #include "../Callbacks/CallbackDict.h"
 #include "../../SomAdditionalsLib/Additionals.h"
-#include "../../SomJsonLib/SomJson.h"
+#include "../../MocJsonLib/SomJson.h"
 #include "../Minecraft/Minecraftus.h"
 #include "../Moc/Logger/MocIOStream.h"
 #include "../Servers/ServerTypes.h"
@@ -47,6 +47,7 @@ class SomLauncherMainWindow : public QMainWindow
 private:
 	std::string minecraft_core_dir_path = "";
 	std::string config_path = "";
+	std::string template_config_path = "";
 	std::string servers_json = "";
 	std::string launcher_name = "SomLauncher";
 	std::string launcher_version = "2.0";

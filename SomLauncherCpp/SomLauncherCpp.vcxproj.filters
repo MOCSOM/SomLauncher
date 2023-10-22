@@ -135,11 +135,11 @@
     <None Include="all.json" />
     <None Include="DATA.json" />
     <None Include="SERVERS.json" />
-    <None Include="SOMCONFIG.json" />
     <None Include="TODO_List.md" />
     <None Include="cpp.hint" />
     <None Include="SomLauncherCpp.pro" />
     <None Include="SOMCONFIG_template.json" />
+    <None Include="SOMCONFIG.json" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="QObjects\Threads\FunThread.h">

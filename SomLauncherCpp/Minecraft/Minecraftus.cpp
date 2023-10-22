@@ -145,11 +145,11 @@ bool MinecraftCpp::install_minecraft_version(const std::string& versionid, const
 
 	Json::JsonValue version_list = json_manifest.ParseFile(version_manifest_file.c_str());
 
-	for (auto& var : (*version_list)["versions"]->get_value_list())
+	for (auto& var : version_list["versions"].get_array())
 	{
-		if ((*var)["id"]->to_string() == versionid)
+		if (var["id"].to_string() == versionid)
 		{
-			do_version_install(versionid, minecraft_directory, callback, (*var)["url"]->to_string());
+			do_version_install(versionid, minecraft_directory, callback, var["url"].to_string());
 			return true;
 		}
 	}
@@ -174,9 +174,9 @@ bool MinecraftCpp::do_version_install(const std::string& versionid, const std::s
 	Json::JsonValue versiondata = json_verid.ParseFile(path_ver_json);
 
 	// For forge
-	if (versiondata->is_exist("inheritsFrom"))
+	if (versiondata.is_exist("inheritsFrom"))
 	{
-		install_minecraft_version((*versiondata)["inheritsFrom"]->to_string(), path, callback);
+		install_minecraft_version(versiondata["inheritsFrom"].to_string(), path, callback);
 		versiondata = inherit_json(versiondata, path);
 	}
 	install_libraries(versiondata, path, callback);
@@ -184,23 +184,23 @@ bool MinecraftCpp::do_version_install(const std::string& versionid, const std::s
 
 	//Download logging config
 	std::string logger_file = "";
-	if (versiondata->is_exist("logging"))
+	if (versiondata.is_exist("logging"))
 	{
-		if ((*versiondata)["logging"]->get_count() != 0)
+		if (versiondata["logging"].get_count() != 0)
 		{
-			logger_file = Join({ path, "assets", "log_configs", (*(*(*(*versiondata)["logging"])["client"])["file"])["id"]->to_string() });
-			DownloadFile((*(*(*(*versiondata)["logging"])["client"])["file"])["url"]->to_string(), logger_file, callback); //to with sha
+			logger_file = Join({ path, "assets", "log_configs", versiondata["logging"]["client"]["file"]["id"].to_string() });
+			DownloadFile(versiondata["logging"]["client"]["file"]["url"].to_string(), logger_file, callback); //to with sha
 		}
 	}
 
 	//Download minecraft.jar
-	if (versiondata->is_exist("downloads"))
+	if (versiondata.is_exist("downloads"))
 	{
-		DownloadFile((*(*(*versiondata)["downloads"])["client"])["url"]->to_string(), Join({ path, "versions", (*versiondata)["id"]->to_string(), ((*versiondata)["id"]->to_string() + ".jar") }), callback);
+		DownloadFile(versiondata["downloads"]["client"]["url"].to_string(), Join({ path, "versions", versiondata["id"].to_string(), (versiondata["id"].to_string() + ".jar") }), callback);
 	}
 
 	//Need to copy jar for old forge versions
-	if (std::filesystem::is_directory(Join({ path, "versions", (*versiondata)["id"]->to_string(), ((*versiondata)["id"]->to_string() + ".jar") })) && versiondata->is_exist("inheritsFrom"))
+	if (std::filesystem::is_directory(Join({ path, "versions", versiondata["id"].to_string(), (versiondata["id"].to_string() + ".jar") })) && versiondata.is_exist("inheritsFrom"))
 	{
 		std::filesystem::copy
 		(
@@ -210,9 +210,9 @@ bool MinecraftCpp::do_version_install(const std::string& versionid, const std::s
 				({
 					path,
 					"versions",
-					(*versiondata)["id"]->to_string(),
+					versiondata["id"].to_string(),
 					(
-						(*versiondata)["id"]->to_string()
+						versiondata["id"].to_string()
 						+
 						".jar"
 					)
@@ -224,9 +224,9 @@ bool MinecraftCpp::do_version_install(const std::string& versionid, const std::s
 				({
 					path,
 					"versions",
-					(*versiondata)["inheritsFrom"]->to_string(),
+					versiondata["inheritsFrom"].to_string(),
 					(
-						(*versiondata)["inheritsFrom"]->to_string()
+						versiondata["inheritsFrom"].to_string()
 						+
 						".jar"
 					)
@@ -236,9 +236,9 @@ bool MinecraftCpp::do_version_install(const std::string& versionid, const std::s
 	}
 
 	//Install java runtime if needed
-	if (versiondata->is_exist("javaVersion"))
+	if (versiondata.is_exist("javaVersion"))
 	{
-		install_jvm_runtime((*(*versiondata)["javaVersion"])["component"]->to_string(), path, callback);
+		install_jvm_runtime(versiondata["javaVersion"]["component"].to_string(), path, callback);
 	}
 
 	return true;
@@ -251,41 +251,41 @@ Json::JsonValue MinecraftCpp::inherit_json(Json::JsonValue original_data, const 
 	See https://github.com/tomsik68/mclauncher-api/wiki/Version-Inheritance-&-forge
 	*/
 
-	Json::JsonValue inherit_version = (*original_data)["inheritsFrom"];
+	Json::JsonValue inherit_version = original_data["inheritsFrom"];
 
-	std::string path_inh_json = Join({ path, "versions", inherit_version->to_string(), (inherit_version->to_string() + ".json") });
+	std::string path_inh_json = Join({ path, "versions", inherit_version.to_string(), (inherit_version.to_string() + ".json") });
 	Json::JsonParcer json_inherit;
 	Json::JsonValue new_data = json_inherit.ParseFile(path_inh_json);
-	for (auto& var : original_data->get_value())
+	for (auto& var : original_data.get_object())
 	{
-		if (new_data->is_exist(var.first) && var.second->get_type() == Json::JsonTypes::Array && (*new_data)[var.first]->get_type() == Json::JsonTypes::Array)
+		if (new_data.is_exist(var.first) && var.second.get_type() == Json::JsonTypes::Array && new_data[var.first].get_type() == Json::JsonTypes::Array)
 		{
-			(*new_data)[var.first]->operator=((*var.second) + (*new_data)[var.first]);
+			new_data[var.first] = var.second + new_data[var.first];
 		}
-		else if (var.second->get_type() == Json::JsonTypes::Object && (*new_data)[var.first]->get_type() == Json::JsonTypes::Object)
+		else if (var.second.get_type() == Json::JsonTypes::Object && new_data[var.first].get_type() == Json::JsonTypes::Object)
 		{
-			for (auto& variable : var.second->get_value())
+			for (auto& variable : var.second.get_object())
 			{
-				if (variable.second->get_type() == Json::JsonTypes::Array)
+				if (variable.second.get_type() == Json::JsonTypes::Array)
 				{
-					(*(*(*new_data)[var.first])[variable.first]) = (*(*(*new_data)[var.first])[variable.first]) + variable.second;
+					new_data[var.first][variable.first] = new_data[var.first][variable.first] + variable.second;
 				}
 			}
 		}
 		else
 		{
-			if (new_data->is_exist(var.first))
+			if (new_data.is_exist(var.first))
 			{
-				(*new_data)[var.first]->operator=(var.second);
+				new_data[var.first] = var.second;
 			}
 			else
 			{
-				new_data->add_value(var.first, var.second);
+				new_data.add_value(var.first, var.second);
 			}
 		}
 	}
 
-	std::cout << (*new_data)["libraries"]->to_string() << std::endl;
+	std::cout << new_data["libraries"].to_string() << std::endl;
 
 	return new_data;
 }
@@ -297,22 +297,22 @@ Json::JsonValue MinecraftCpp::get_version_list()
 	*/
 	Json::JsonParcer parcer;
 	Json::JsonValue vlist = parcer.ParseUrl("https://launchermeta.mojang.com/mc/game/version_manifest.json");
-	Json::JsonValue returnlist = std::make_shared<Json::JsonArray>();
+	Json::JsonValue returnlist = Json::JsonValue(std::vector<Json::JsonValue>());
 
 	int count = -1;
-	for (auto& i : (*vlist)["versions"]->get_value_list())
+	for (auto& i : vlist["versions"].get_array())
 	{
 		++count;
-		Json::JsonValue object = std::make_shared<Json::JsonObject>();
+		Json::JsonValue object = Json::JsonValue(std::unordered_map<std::string, Json::JsonValue>());
 
-		object->add_value(std::make_pair("id", (*i)["id"]));
-		object->add_value(std::make_pair("type", (*i)["type"]));
+		object.add_value(std::make_pair("id", i["id"]));
+		object.add_value(std::make_pair("type", i["type"]));
 
-		std::chrono::seconds seconds = std::chrono::duration_cast<std::chrono::seconds>(_parseDateTime((*i)["releaseTime"]->to_string()).time_since_epoch());
+		std::chrono::seconds seconds = std::chrono::duration_cast<std::chrono::seconds>(_parseDateTime(i["releaseTime"].to_string()).time_since_epoch());
 
-		object->add_value(std::make_pair("releaseTime", std::make_shared<Json::JsonNumber>(seconds.count())));
+		object.add_value(std::make_pair("releaseTime", Json::JsonValue(seconds.count())));
 
-		returnlist->add_value(object);
+		returnlist.add_value(object);
 	}
 	return returnlist;
 }
@@ -334,13 +334,13 @@ std::string MinecraftCpp::get_minecraft_command__(const std::string& version, co
 	Json::JsonValue orig_data = json_parcer.ParseFile(Join({ minecraft_directory, "versions", version, (version + ".json") }));
 	Json::JsonValue data;
 
-	if (orig_data->is_exist("inheritsFrom"))
+	if (orig_data.is_exist("inheritsFrom"))
 	{
 		data = MinecraftCpp::inherit_json(orig_data, minecraft_directory); //FIXME: Баг: библиотеки(лист) не приравниваются, в функции всё норм
 	}
-	std::cout << data->to_string() << std::endl;
-	options.nativesDirectory = options.get("nativesDirectory", Join({ minecraft_directory, "versions", (*data)["id"]->to_string(), "natives" }));
+	options.nativesDirectory = options.get("nativesDirectory", Join({ minecraft_directory, "versions", data["id"].to_string(), "natives" }));
 	//options.nativesDirectory = JoinW({ minecraft_directory, L"versions", data["id"]->to_stringW(), L"natives" });
+	std::cout << data.to_string() << std::endl << data["libraries"].get_count() << std::endl;
 	options.classpath = MinecraftCpp::get_libraries(data, minecraft_directory);
 
 	std::string command = "";
@@ -351,9 +351,9 @@ std::string MinecraftCpp::get_minecraft_command__(const std::string& version, co
 		command += options.executablePath;
 		command += " ";
 	}
-	else if (data->is_exist("javaVersion"))
+	else if (data.is_exist("javaVersion"))
 	{
-		std::string java_path = MinecraftCpp::get_executable_path((*(*data)["javaVersion"])["component"]->to_string(), minecraft_directory);
+		std::string java_path = MinecraftCpp::get_executable_path(data["javaVersion"]["component"].to_string(), minecraft_directory);
 		if (java_path == "")
 		{
 			command += "java";
@@ -377,11 +377,11 @@ std::string MinecraftCpp::get_minecraft_command__(const std::string& version, co
 	}
 
 	// Newer Versions have jvmArguments in version.json
-	if (data->is_exist("arguments") && (*data)["arguments"]->get_type() == Json::JsonTypes::Object)
+	if (data.is_exist("arguments") && data["arguments"].get_type() == Json::JsonTypes::Object)
 	{
-		if ((*data)["arguments"]->is_exist("jvm"))
+		if (data["arguments"].is_exist("jvm"))
 		{
-			command += MinecraftCpp::get_arguments((*(*data)["arguments"])["jvm"], data, minecraft_directory, options);
+			command += MinecraftCpp::get_arguments(data["arguments"]["jvm"], data, minecraft_directory, options);
 			command += " ";
 		}
 		else
@@ -408,21 +408,21 @@ std::string MinecraftCpp::get_minecraft_command__(const std::string& version, co
 
 	if (options.get("enableLoggingConfig", false))
 	{
-		if (data->is_exist("logging"))
+		if (data.is_exist("logging"))
 		{
-			if ((*data)["logging"]->to_int() != 0)
+			if (data["logging"].to_int() != 0)
 			{
-				std::string logger_file = Join({ minecraft_directory, "assets", "log_configs", (*(*(*(*data)["logging"])["client"])["file"])["id"]->to_string() });
-				std::string data_replacer = (*(*(*data)["logging"])["client"])["argument"]->to_string();
+				std::string logger_file = Join({ minecraft_directory, "assets", "log_configs", data["logging"]["client"]["file"]["id"].to_string() });
+				std::string data_replacer = data["logging"]["client"]["argument"].to_string();
 				Additionals::String::replace(data_replacer, "${path}", logger_file);
 				command += data_replacer;
 			}
 		}
 	}
 
-	command += (*data)["mainClass"]->to_string();
+	command += data["mainClass"].to_string();
 	command += " ";
-	if (data->is_exist("minecraftArguments"))
+	if (data.is_exist("minecraftArguments"))
 	{
 		// For older versions
 		command += MinecraftCpp::get_arguments_string(data, minecraft_directory, options);
@@ -430,7 +430,7 @@ std::string MinecraftCpp::get_minecraft_command__(const std::string& version, co
 	}
 	else
 	{
-		command += MinecraftCpp::get_arguments((*(*data)["arguments"])["game"], data, minecraft_directory, options);
+		command += MinecraftCpp::get_arguments(data["arguments"]["game"], data, minecraft_directory, options);
 		command += " ";
 	}
 
@@ -462,109 +462,39 @@ std::string MinecraftCpp::get_libraries(Json::JsonValue data, const std::string&
 	std::string native = "";
 	MinecraftCpp::option::MinecraftOptions empty;
 
-	for (auto& elem : (*data)["libraries"]->get_value_list())
+	for (auto& elem : data["libraries"].get_array())
 	{
-		if (elem->is_exist("rules") && !(MinecraftCpp::parse_rule_list(elem, "rules", empty)))
+		if (elem.is_exist("rules") && !(MinecraftCpp::parse_rule_list(elem, "rules", empty)))
 		{
 			continue;
 		}
 
-		std::cout << elem->to_string() << std::endl;
-		std::cout << (*data)["libraries"]->to_string() << std::endl;
-
-		libstr += (MinecraftCpp::get_library_path((*elem)["name"]->to_string(), path) + classpath_seperator);
+		libstr += (MinecraftCpp::get_library_path(elem["name"].to_string(), path) + classpath_seperator);
 		native = MinecraftCpp::get_natives(elem);
 
 		if (native != "")
 		{
-			if (elem->is_exist("downloads"))
+			if (elem.is_exist("downloads"))
 			{
-				libstr += (Join({ path, "libraries", (*(*(*(*elem)["downloads"])["classifiers"])[native])["path"]->to_string() }) + classpath_seperator);
+				libstr += (Join({ path, "libraries", elem["downloads"]["classifiers"][native]["path"].to_string() }) + classpath_seperator);
 			}
 			else
 			{
-				libstr += (MinecraftCpp::get_library_path(((*elem)["name"]->to_string() + ("-" + native)), path) + classpath_seperator);
+				libstr += (MinecraftCpp::get_library_path((elem["name"].to_string() + ("-" + native)), path) + classpath_seperator);
 			}
 		}
 	}
 
-	if (data->is_exist("jar"))
+	if (data.is_exist("jar"))
 	{
-		libstr = libstr + Join({ path, "versions", (*data)["jar"]->to_string(), ((*data)["jar"]->to_string() + ".jar") });
+		libstr = libstr + Join({ path, "versions", data["jar"].to_string(), (data["jar"].to_string() + ".jar") });
 	}
 	else
 	{
-		libstr = libstr + Join({ path, "versions", (*data)["id"]->to_string(), ((*data)["id"]->to_string() + ".jar") });
+		libstr = libstr + Join({ path, "versions", data["id"].to_string(), (data["id"].to_string() + ".jar") });
 	}
 
 	return libstr;
-
-	/*if ((*data)["libraries"]->get_count() == 1)
-	{
-		for (auto& var : (*(*data)["libraries"])[0]->get_value_list())
-		{
-			if (!(MinecraftCpp::parse_rule_list(var, "rules", empty)))
-			{
-				continue;
-			}
-			libstr = libstr + (MinecraftCpp::get_library_path((*var)["name"]->to_string(), path) + classpath_seperator);
-			native = MinecraftCpp::get_natives(var);
-			if (native != "")
-			{
-				if (var->is_exist("downloads"))
-				{
-					libstr = libstr + (Join({ path, "libraries", (*(*(*(*var)["downloads"])["classifiers"])[native])["path"]->to_string() }) + classpath_seperator);
-				}
-				else
-				{
-					libstr = libstr + (MinecraftCpp::get_library_path(((*var)["name"]->to_string() + ("-" + native)), path) + classpath_seperator);
-				}
-			}
-		}
-
-		if (data->is_exist("jar"))
-		{
-			libstr = libstr + (path + "versions" + (*data)["jar"]->to_string() + ((*data)["jar"]->to_string() + ".jar"));
-		}
-		else
-		{
-			libstr = libstr + (path, "versions", (*data)["id"]->to_string(), ((*data)["id"]->to_string() + ".jar"));
-		}
-	}
-	else
-	{
-		for (auto& var : (*data)["libraries"]->get_value_list())
-		{
-			if (!(MinecraftCpp::parse_rule_list(var, "rules", empty)))
-			{
-				continue;
-			}
-			libstr = libstr + (MinecraftCpp::get_library_path((*var)["name"]->to_string(), path) + classpath_seperator);
-			native = MinecraftCpp::get_natives(var);
-			if (native != "")
-			{
-				if (var->is_exist("downloads"))
-				{
-					libstr = libstr + (Join({ path, "libraries", (*(*(*(*var)["downloads"])["classifiers"])[native])["path"]->to_string() }) + classpath_seperator);
-				}
-				else
-				{
-					libstr = libstr + (MinecraftCpp::get_library_path(((*var)["name"]->to_string() + ("-" + native)), path) + classpath_seperator);
-				}
-			}
-		}
-
-		if (data->is_exist("jar"))
-		{
-			libstr = libstr + (path + "\\" + "versions" + "\\" + (*data)["jar"]->to_string() + "\\" + ((*data)["jar"]->to_string() + ".jar"));
-		}
-		else
-		{
-			libstr = libstr + (path + "\\" + "versions" + "\\" + (*data)["id"]->to_string() + "\\" + ((*data)["id"]->to_string() + ".jar"));
-		}
-	}
-
-	return libstr;*/
 }
 
 std::chrono::system_clock::time_point MinecraftCpp::_parseDateTime(const std::string& isoDateTime)
@@ -638,11 +568,11 @@ bool MinecraftCpp::parse_rule_list(Json::JsonValue data, const std::string& rule
 	Parse a list of rules
 	*/
 
-	if (!data->is_exist(rule_string))
+	if (!data.is_exist(rule_string))
 	{
 		return true;
 	}
-	for (auto& var : (*data)[rule_string]->get_value_list())
+	for (Json::SomJson var : data[rule_string].get_array())
 	{
 		if (!MinecraftCpp::parse_single_rule(var, options))
 		{
@@ -658,52 +588,52 @@ bool MinecraftCpp::parse_single_rule(Json::JsonValue rule, MinecraftCpp::option:
 	Parse a single rule from the versions.json
 	*/
 	bool returnvalue = false;
-	if ((*rule)["action"]->to_string() == "allow")
+	if (rule["action"].to_string() == "allow")
 	{
 		returnvalue = false;
 	}
-	else if ((*rule)["action"]->to_string() == "disallow")
+	else if (rule["action"].to_string() == "disallow")
 	{
 		returnvalue = true;
 	}
-	if (rule->is_exist("os"))
+	if (rule.is_exist("os"))
 	{
-		for (auto& var : (*rule)["os"]->get_value())
+		for (auto& var : rule["os"].get_object())
 		{
 			if (var.first == "name")
 			{
-				if (var.second->to_string() == "windows" && OS != "Windows")
+				if (var.second.to_string() == "windows" && OS != "Windows")
 				{
 					return returnvalue;
 				}
-				else if (var.second->to_string() == "osx" && OS != "Darwin")
+				else if (var.second.to_string() == "osx" && OS != "Darwin")
 				{
 					return returnvalue;
 				}
-				else if (var.second->to_string() == "linux" && OS != "Linux")
+				else if (var.second.to_string() == "linux" && OS != "Linux")
 				{
 					return returnvalue;
 				}
 			}
 			else if (var.first == "arch")
 			{
-				if (var.second->to_string() == "x86" && ARCH != "x86")
+				if (var.second.to_string() == "x86" && ARCH != "x86")
 				{
 					return returnvalue;
 				}
 			}
 			else if (var.first == "version")
 			{
-				if (var.second->to_string() != OS)
+				if (var.second.to_string() != OS)
 				{
 					return returnvalue;
 				}
 			}
 		}
 	}
-	if (rule->is_exist("features"))
+	if (rule.is_exist("features"))
 	{
-		for (auto& var : (*rule)["features"]->get_value())
+		for (auto& var : rule["features"].get_object())
 		{
 			if (var.first == "has_custom_resolution" && !options.get("customResolution", false))
 			{
@@ -787,13 +717,13 @@ std::string MinecraftCpp::get_natives(Json::JsonValue data)
 		arch_type = "64";
 	}
 
-	if (data->is_exist("natives"))
+	if (data.is_exist("natives"))
 	{
 		if (OS == "windows")
 		{
-			if ((*data)["natives"]->is_exist("windows"))
+			if (data["natives"].is_exist("windows"))
 			{
-				std::string replace_string = (*(*data)["natives"])["windows"]->to_string();
+				std::string replace_string = data["natives"]["windows"].to_string();
 				Additionals::String::replace(replace_string, "${arch}", arch_type);
 				return replace_string;
 			}
@@ -804,9 +734,9 @@ std::string MinecraftCpp::get_natives(Json::JsonValue data)
 		}
 		else if (OS == "mac")
 		{
-			if ((*data)["natives"]->is_exist("osx"))
+			if (data["natives"].is_exist("osx"))
 			{
-				std::string replace_string = (*(*data)["natives"])["osx"]->to_string();
+				std::string replace_string = data["natives"]["osx"].to_string();
 				Additionals::String::replace(replace_string, "${arch}", arch_type);
 				return replace_string;
 			}
@@ -817,9 +747,9 @@ std::string MinecraftCpp::get_natives(Json::JsonValue data)
 		}
 		else
 		{
-			if ((*data)["natives"]->is_exist("linux"))
+			if (data["natives"].is_exist("linux"))
 			{
-				std::string replace_string = (*(*data)["natives"])["linux"]->to_string();
+				std::string replace_string = data["natives"]["linux"].to_string();
 				Additionals::String::replace(replace_string, "${arch}", arch_type);
 				return replace_string;
 			}
@@ -881,14 +811,14 @@ std::string MinecraftCpp::replace_arguments(std::string argstr, Json::JsonValue 
 	Additionals::String::replace(argstr, "${launcher_version}", options.get("launcherVersion", std::string("null")));
 	Additionals::String::replace(argstr, "${classpath}", options.classpath);
 	Additionals::String::replace(argstr, "${auth_player_name}", options.get("username", std::string("{username}")));
-	Additionals::String::replace(argstr, "${version_name}", (*versionData)["id"]->to_string());
+	Additionals::String::replace(argstr, "${version_name}", versionData["id"].to_string());
 	Additionals::String::replace(argstr, "${game_directory}", options.get("gameDirectory", path));
 	Additionals::String::replace(argstr, "${assets_root}", Join({ path, "assets" }));
-	Additionals::String::replace(argstr, "${assets_index_name}", (*versionData)["assets"] != nullptr ? (*versionData)["assets"]->to_string() : (*versionData)["id"]->to_string());
+	Additionals::String::replace(argstr, "${assets_index_name}", versionData["assets"] != nullptr ? versionData["assets"].to_string() : versionData["id"].to_string());
 	Additionals::String::replace(argstr, "${auth_uuid}", options.get("uuid", std::string("{uuid}")));
 	Additionals::String::replace(argstr, "${auth_access_token}", options.get("token", std::string("{token}")));
 	Additionals::String::replace(argstr, "${user_type}", "mojang");
-	Additionals::String::replace(argstr, "${version_type}", (*versionData)["type"]->to_string());
+	Additionals::String::replace(argstr, "${version_type}", versionData["type"].to_string());
 	Additionals::String::replace(argstr, "${user_properties}", "{}");
 	Additionals::String::replace(argstr, "${resolution_width}", options.get("resolutionWidth", std::string("854")));
 	Additionals::String::replace(argstr, "${resolution_height}", options.get("resolutionHeight", std::string("480")));
@@ -942,10 +872,10 @@ bool MinecraftCpp::install_libraries(Json::JsonValue data, const std::string& pa
 	*/
 
 	callback->OnProgress(NULL, NULL, NULL, L"Download Libraries");
-	callback->OnProgress(NULL, NULL, NULL, std::to_wstring((*data)["libraries"]->get_count() - 1).c_str());
+	callback->OnProgress(NULL, NULL, NULL, std::to_wstring(data["libraries"].get_count() - 1).c_str());
 
 	int count = -1;
-	for (auto& var : (*data)["libraries"]->get_value_list())
+	for (auto& var : data["libraries"].get_array())
 	{
 		++count;
 
@@ -961,16 +891,16 @@ bool MinecraftCpp::install_libraries(Json::JsonValue data, const std::string& pa
 		std::string currentPath = Join({ path, "libraries" });
 		std::string downloadUrl = "";
 
-		if (var->is_exist("url"))
+		if (var.is_exist("url"))
 		{
-			if (Additionals::String::EndsWith((*var)["url"]->to_string(), "/"))
+			if (Additionals::String::EndsWith(var["url"].to_string(), "/"))
 			{
-				std::string download_string = Additionals::String::rtrim_copy((*var)["url"]->to_string(), '/');
+				std::string download_string = Additionals::String::rtrim_copy(var["url"].to_string(), '/');
 				downloadUrl = download_string;
 			}
 			else
 			{
-				downloadUrl = (*var)["url"]->to_string();
+				downloadUrl = var["url"].to_string();
 			}
 		}
 		else
@@ -982,11 +912,11 @@ bool MinecraftCpp::install_libraries(Json::JsonValue data, const std::string& pa
 		std::string name;
 		std::string version;
 
-		if ((*var)["name"] != nullptr)
+		if (var["name"] != nullptr)
 		{
-			libPath = Additionals::String::split((*var)["name"]->to_string(), ':')[0];
-			name = Additionals::String::split((*var)["name"]->to_string(), ':')[1];
-			version = Additionals::String::split((*var)["name"]->to_string(), ':')[2];
+			libPath = Additionals::String::split(var["name"].to_string(), ':')[0];
+			name = Additionals::String::split(var["name"].to_string(), ':')[1];
+			version = Additionals::String::split(var["name"].to_string(), ':')[2];
 		}
 		else
 		{
@@ -1028,24 +958,24 @@ bool MinecraftCpp::install_libraries(Json::JsonValue data, const std::string& pa
 		//Try to download the lib
 		DownloadFile(downloadUrl, Join({ currentPath, jarFilename }), callback);
 
-		if (!var->is_exist("downloads"))
+		if (!var.is_exist("downloads"))
 		{
-			if (var->is_exist("extract"))
+			if (var.is_exist("extract"))
 			{
-				extract_natives_file(Join({ currentPath, jarFilenameNative }), Join({ path, "versions", (*data)["id"]->to_string(), "natives" }), (*var)["extract"]);
+				extract_natives_file(Join({ currentPath, jarFilenameNative }), Join({ path, "versions", data["id"].to_string(), "natives" }), var["extract"]);
 			}
 			continue;
 		}
-		if ((*var)["downloads"]->is_exist("artifact"))
+		if (var["downloads"].is_exist("artifact"))
 		{
-			DownloadFile((*(*(*var)["downloads"])["artifact"])["url"]->to_string(), Join({ path, "libraries", (*(*(*var)["downloads"])["artifact"])["path"]->to_string() }), callback);
+			DownloadFile(var["downloads"]["artifact"]["url"].to_string(), Join({ path, "libraries", var["downloads"]["artifact"]["path"].to_string() }), callback);
 		}
 		if (native != "")
 		{
-			DownloadFile((*(*(*(*var)["downloads"])["classifiers"])[native])["url"]->to_string(), Join({ currentPath, jarFilenameNative }), callback);
-			if ((*var)["extract"])
+			DownloadFile(var["downloads"]["classifiers"][native]["url"].to_string(), Join({ currentPath, jarFilenameNative }), callback);
+			if (var["extract"] != nullptr)
 			{
-				extract_natives_file(Join({ currentPath, jarFilenameNative }), Join({ path, "versions", (*data)["id"]->to_string(), "natives" }), (*var)["extract"]);
+				extract_natives_file(Join({ currentPath, jarFilenameNative }), Join({ path, "versions", data["id"].to_string(), "natives" }), var["extract"]);
 			}
 		}
 		callback->OnProgress(count, NULL, NULL, NULL);
@@ -1069,9 +999,9 @@ bool MinecraftCpp::extract_natives_file(const std::string& filename, const std::
 
 	foreach(QZipReader::FileInfo var, zArchive.fileInfoList())
 	{
-		for (auto& var2 : (*extract_data)["exclude"]->get_value_list())
+		for (auto& var2 : extract_data["exclude"].get_array())
 		{
-			if (Additionals::Path::getFileNameFromPath(var.filePath.toStdString())._Starts_with(var2->to_string()))
+			if (Additionals::Path::getFileNameFromPath(var.filePath.toStdString())._Starts_with(var2.to_string()))
 			{
 				continue;
 			}
@@ -1099,7 +1029,7 @@ bool MinecraftCpp::install_assets(Json::JsonValue data, const std::string& path,
 	Install all assets
 	*/
 	// Old versions dosen't have this
-	if (!data->is_exist("assetIndex"))
+	if (!data.is_exist("assetIndex"))
 	{
 		return false;
 	}
@@ -1107,28 +1037,30 @@ bool MinecraftCpp::install_assets(Json::JsonValue data, const std::string& path,
 
 	// Download all assets
 	Json::JsonParcer jsonParcer;
-	DownloadFile((*(*data)["assetIndex"])["url"]->to_string(), Join({ path, "assets", "indexes", ((*data)["assets"]->to_string() + ".json") }), callback);
-	Json::JsonValue assets_data = jsonParcer.ParseFile(Join({ path, "assets", "indexes", ((*data)["assets"]->to_string() + ".json") }));
+	DownloadFile(data["assetIndex"]["url"].to_string(), Join({ path, "assets", "indexes", (data["assets"].to_string() + ".json") }), callback);
+	Json::JsonValue assets_data = jsonParcer.ParseFile(Join({ path, "assets", "indexes", (data["assets"].to_string() + ".json") }));
 
 	// The assets has a hash. e.g. c4dbabc820f04ba685694c63359429b22e3a62b5
 	// With this hash, it can be download from https://resources.download.minecraft.net/c4/c4dbabc820f04ba685694c63359429b22e3a62b5
 	// And saved at assets/objects/c4/c4dbabc820f04ba685694c63359429b22e3a62b5
-	//callback.get("setMax", empty)(len(assets_data["objects"]) - 1)
+
+	callback->OnProgress(NULL, assets_data["objects"].get_count() - 1, NULL, NULL);
+
 	int count = 0;
-	for (auto& var : (*assets_data)["objects"]->get_value())
+	for (auto& var : assets_data["objects"].get_object())
 	{
 		DDIC::Download::Files::download_file
 		(
 			(
 				"https://resources.download.minecraft.net/" +
-				(*var.second)["hash"]->to_string().substr(0, 2) +
+				var.second["hash"].to_string().substr(0, 2) +
 				"/" +
-				(*var.second)["hash"]->to_string()
+				var.second["hash"].to_string()
 				),
 			(
 				path + '\\' + "assets" + '\\' + "objects" + '\\' +
-				(*var.second)["hash"]->to_string().substr(0, 2) + '\\' +
-				(*var.second)["hash"]->to_string()
+				var.second["hash"].to_string().substr(0, 2) + '\\' +
+				var.second["hash"].to_string()
 				),
 			callback
 		);
@@ -1136,6 +1068,7 @@ bool MinecraftCpp::install_assets(Json::JsonValue data, const std::string& path,
 		++count;
 		callback->OnProgress(count, NULL, NULL, NULL);
 	}
+	callback->OnProgress(NULL, NULL, 6, NULL);
 	return true;
 }
 
@@ -1152,7 +1085,7 @@ bool MinecraftCpp::install_jvm_runtime(const std::string& jvm_version, const std
 	Json::JsonValue manifest_data = jsonParcer.ParseFile(download_path.c_str());
 
 	// Check if the jvm version exists
-	if (!(*manifest_data)[platform_string]->is_exist(jvm_version))
+	if (!manifest_data[platform_string].is_exist(jvm_version))
 	{
 		std::cout << "Version Not Found" << jvm_version << std::endl;
 
@@ -1160,34 +1093,34 @@ bool MinecraftCpp::install_jvm_runtime(const std::string& jvm_version, const std
 	}
 
 	// Check if there is a platform manifest
-	if ((*(*manifest_data)[platform_string])[jvm_version]->get_count() == 0)
+	if (manifest_data[platform_string][jvm_version].get_count() == 0)
 	{
 		return false;
 	}
 
-	Json::JsonValue platform_manifest = jsonParcer.ParseFile(DownloadFile((*(*(*(*(*manifest_data)[platform_string])[jvm_version])[0])[L"manifest"])[L"url"]->to_string()).c_str());
+	Json::JsonValue platform_manifest = jsonParcer.ParseFile(DownloadFile(manifest_data[platform_string][jvm_version][0]["manifest"]["url"].to_string()).c_str());
 	std::string base_path = Join({ minecraft_directory, "runtime", jvm_version, platform_string, jvm_version });
 
 	// Download all files of the runtime
 	//callback.get("setMax", empty)(len(platform_manifest["files"]) - 1)
 	int count = 0;
-	for (auto& var : (*platform_manifest)["files"]->get_value())
+	for (auto& var : platform_manifest["files"].get_object())
 	{
 		std::string current_path = Join({ base_path, var.first });
-		if ((*var.second)["type"]->to_string() == "file")
+		if (var.second["type"].to_string() == "file")
 		{
 			// Prefer downloading the compresses file
-			if ((*var.second)["downloads"]->is_exist("lzma"))
+			if (var.second["downloads"].is_exist("lzma"))
 			{
-				DownloadFile((*(*(*var.second)["downloads"])["lzma"])["url"]->to_string(), current_path, callback, true);
+				DownloadFile(var.second["downloads"]["lzma"]["url"].to_string(), current_path, callback, true);
 			}
 			else
 			{
-				DownloadFile((*(*(*var.second)["downloads"])["raw"])["url"]->to_string(), current_path, callback);
+				DownloadFile(var.second["downloads"]["raw"]["url"].to_string(), current_path, callback);
 			}
 
 			// Make files executable on unix systems
-			if ((*var.second)["executable"])
+			if (var.second["executable"] != nullptr)
 			{
 				if (std::filesystem::exists(current_path))
 				{
@@ -1198,11 +1131,11 @@ bool MinecraftCpp::install_jvm_runtime(const std::string& jvm_version, const std
 				}
 			}
 		}
-		else if ((*var.second)["type"]->to_string() == "directory")
+		else if (var.second["type"].to_string() == "directory")
 		{
 			int outp = std::filesystem::create_directories(current_path);
 		}
-		else if ((*var.second)["type"]->to_string() == "link")
+		else if (var.second["type"].to_string() == "link")
 		{
 			//TODO os.symlink(value["target"], current_path)
 		}
@@ -1212,7 +1145,7 @@ bool MinecraftCpp::install_jvm_runtime(const std::string& jvm_version, const std
 	// Create the.version file
 	std::string path = Join({ minecraft_directory, "runtime", jvm_version, platform_string, ".version" });
 
-	(*(*(*(*(*manifest_data)[platform_string])[jvm_version])[0])["version"])["name"]->SaveJsonToFile(path, 4);
+	manifest_data[platform_string][jvm_version][0]["version"]["name"].save_json_to_file(path, 4);
 
 	return true;
 }
@@ -1228,9 +1161,9 @@ std::string MinecraftCpp::get_arguments(
 	*/
 
 	std::string arglist = "";
-	if (data->get_type() == Json::JsonTypes::Array)
+	if (data.get_type() == Json::JsonTypes::Array)
 	{
-		for (auto& var : data->get_value_list())
+		for (auto& var : data.get_array())
 		{
 			// Rules might has 2 different names in different versions.json
 			if (!parse_rule_list(var, "compatibilityRules", options))
@@ -1242,26 +1175,26 @@ std::string MinecraftCpp::get_arguments(
 				continue;
 			}
 			// var could be the argument
-			if (var->get_type() == Json::JsonTypes::String)
+			if (var.get_type() == Json::JsonTypes::String)
 			{
-				arglist += MinecraftCpp::replace_arguments(var->to_string(), versionData, path, options);
+				arglist += MinecraftCpp::replace_arguments(var.to_string(), versionData, path, options);
 				arglist += " ";
 			}
 			else
 			{
 				// Sometimes  var["value"] is the argument
-				if ((*var)["value"]->get_type() == Json::JsonTypes::String)
+				if (var["value"].get_type() == Json::JsonTypes::String)
 				{
-					arglist += MinecraftCpp::replace_arguments((*var)["value"]->to_string(), versionData, path, options);
+					arglist += MinecraftCpp::replace_arguments(var["value"].to_string(), versionData, path, options);
 					arglist += " ";
 				}
 				// Sometimes var["value"] is a list of arguments
 				else
 				{
-					for (auto& v : (*var)["value"]->get_value())
+					for (auto& v : var["value"].get_object())
 					{
-						std::string val = v.second->to_string();
-						val = replace_arguments(v.second->to_string(), versionData, path, options);
+						std::string val = v.second.to_string();
+						val = replace_arguments(v.second.to_string(), versionData, path, options);
 						arglist += val;
 						arglist += " ";
 					}
@@ -1271,7 +1204,7 @@ std::string MinecraftCpp::get_arguments(
 	}
 	else
 	{
-		for (auto& var : data->get_value())
+		for (auto& var : data.get_object())
 		{
 			// Rules might has 2 different names in different versions.json
 			if (!parse_rule_list(var.second, "compatibilityRules", options))
@@ -1283,26 +1216,26 @@ std::string MinecraftCpp::get_arguments(
 				continue;
 			}
 			// var could be the argument
-			if (var.second->get_type() == Json::JsonTypes::String)
+			if (var.second.get_type() == Json::JsonTypes::String)
 			{
-				arglist += MinecraftCpp::replace_arguments(var.second->to_string(), versionData, path, options);
+				arglist += MinecraftCpp::replace_arguments(var.second.to_string(), versionData, path, options);
 				arglist += " ";
 			}
 			else
 			{
 				// Sometimes  var["value"] is the argument
-				if (var.second->operator[]("value")->get_type() == Json::JsonTypes::String)
+				if (var.second["value"].get_type() == Json::JsonTypes::String)
 				{
-					arglist += MinecraftCpp::replace_arguments(var.second->operator[]("value")->to_string(), versionData, path, options);
+					arglist += MinecraftCpp::replace_arguments(var.second["value"].to_string(), versionData, path, options);
 					arglist += " ";
 				}
 				// Sometimes var["value"] is a list of arguments
 				else
 				{
-					for (auto& v : var.second->operator[]("value")->get_value())
+					for (auto& v : var.second["value"].get_object())
 					{
-						std::string val = v.second->to_string();
-						val = replace_arguments(v.second->to_string(), versionData, path, options);
+						std::string val = v.second.to_string();
+						val = replace_arguments(v.second.to_string(), versionData, path, options);
 						arglist += val;
 						arglist += " ";
 					}
@@ -1321,7 +1254,7 @@ std::string MinecraftCpp::get_arguments_string(Json::JsonValue versionData, cons
 	*/
 	std::string arglist = "";
 
-	for (auto& var : Additionals::String::split((*versionData)["minecraftArguments"]->to_string(), ' '))
+	for (auto& var : Additionals::String::split(versionData["minecraftArguments"].to_string(), ' '))
 	{
 		var = replace_arguments(var, versionData, path, options);
 		arglist += var + " ";
@@ -1381,10 +1314,10 @@ bool MinecraftCpp::forge::install_forge_version(const std::string& versionid, co
 		}
 	}
 
-	std::string forge_version_id = (*version_data)["version"]->to_string();
+	std::string forge_version_id = version_data["version"].to_string();
 
 	// Make sure, the base version is installed
-	install_minecraft_version((*version_data)["minecraft"]->to_string(), path, callback);
+	install_minecraft_version(version_data["minecraft"].to_string(), path, callback);
 
 	// Install all needed libs from install_profile.json
 	install_libraries(version_data, path, callback);
@@ -1529,27 +1462,27 @@ bool MinecraftCpp::forge::forge_processors(
 	int random_num = 1 + (rand() % 100000);
 	std::string path = minecraft_directory;
 
-	Json::JsonValue argument_vars = std::make_shared<Json::JsonObject>();
-	Json::JsonValue value_ = std::make_shared<Json::JsonString>(Join({ path, "versions", (*data)["minecraft"]->to_string(), ((*data)["minecraft"]->to_string() + ".jar") }));
-	argument_vars->add_value("{MINECRAFT_JAR}", value_);
+	Json::JsonValue argument_vars = Json::JsonValue(std::unordered_map<std::string, Json::JsonValue>());
+	Json::JsonValue value_ = Json::JsonValue(Join({ path, "versions", data["minecraft"].to_string(), (data["minecraft"].to_string() + ".jar") }));
+	argument_vars.add_value("{MINECRAFT_JAR}", value_);
 
-	for (auto& var : (*data)["data"]->get_value())
+	for (auto& var : data["data"].get_object())
 	{
-		if ((*var.second)["client"]->to_string()._Starts_with("[") && Additionals::String::EndsWith((*var.second)["client"]->to_string(), "]"))
+		if (var.second["client"].to_string()._Starts_with("[") && Additionals::String::EndsWith(var.second["client"].to_string(), "]"))
 		{
-			(*argument_vars)["{" + var.first + "}"]->operator=(get_data_library_path((*var.second)["client"]->to_string(), path));
+			argument_vars["{" + var.first + "}"] = get_data_library_path(var.second["client"].to_string(), path);
 		}
 		else
 		{
-			(*argument_vars)["{" + var.first + "}"]->operator=((*var.second)["client"]);
+			argument_vars["{" + var.first + "}"] = var.second["client"];
 		}
 	}
 	std::string root_path = Additionals::TempFile::get_tempdir_SYSTEM() + "forge-root-" + std::to_string(random_num);
 
-	argument_vars->replaceValue("{INSTALLER}", installer_path);
-	argument_vars->replaceValue("{BINPATCH}", lzma_path);
-	argument_vars->replaceValue("{ROOT}", root_path);
-	argument_vars->replaceValue("{SIDE}", "client");
+	argument_vars.replace_value("{INSTALLER}", installer_path);
+	argument_vars.replace_value("{BINPATCH}", lzma_path);
+	argument_vars.replace_value("{ROOT}", root_path);
+	argument_vars.replace_value("{SIDE}", "client");
 
 	/*(*argument_vars)["{INSTALLER}"]->operator=(std::wstring(installer_path));
 	(*argument_vars)["{BINPATCH}"]->operator=(std::wstring(lzma_path));
@@ -1570,33 +1503,33 @@ bool MinecraftCpp::forge::forge_processors(
 	//callback->OnProgress(NULL, (*data)["processors"]->to_int(), NULL, NULL);
 
 	int count = -1;
-	for (auto& var : (*data)["processors"]->get_value_list())
+	for (auto& var : data["processors"].get_array())
 	{
 		++count;
 
-		if (!((*var)["sides"]->is_exist("client")) || !((*var)["sides"] == var ? true : false))
+		if (!(var["sides"].is_exist("client")) || !(var["sides"] == var ? true : false))
 		{
 			// Skip server side only processors
 			continue;
 		}
-		callback->OnProgress(NULL, NULL, NULL, (L"Running processor " + (*var)["jar"]->to_stringW()).c_str());
+		callback->OnProgress(NULL, NULL, NULL, (L"Running processor " + var["jar"].to_stringW()).c_str());
 
 		// Get the classpath
 		std::string classpath = "";
-		for (auto& var2 : (*var)["classpath"]->get_value_list())
+		for (auto& var2 : var["classpath"].get_array())
 		{
-			classpath = classpath + get_library_path(var2->to_string(), path) + classpath_seperator;
+			classpath = classpath + get_library_path(var2.to_string(), path) + classpath_seperator;
 		}
 
-		classpath = classpath + get_library_path((*var)["jar"]->to_string(), path);
-		std::string mainclass = get_jar_mainclass(get_library_path((*var)["jar"]->to_string(), path));
+		classpath = classpath + get_library_path(var["jar"].to_string(), path);
+		std::string mainclass = get_jar_mainclass(get_library_path(var["jar"].to_string(), path));
 		std::vector<std::string> command;
 		command[0] = java == "" ? "java" : java + "-cp", classpath, mainclass;
 
 		std::string variable = "";
-		for (auto& var2 : (*var)["args"]->get_value_list())
+		for (auto& var2 : var["args"].get_array())
 		{
-			variable = (*argument_vars)[var2->to_string()] == nullptr ? var2->to_string() : (*argument_vars)[var2->to_string()]->to_string();
+			variable = argument_vars[var2.to_string()] == nullptr ? var2.to_string() : argument_vars[var2.to_string()].to_string();
 			if (variable._Starts_with("[") && Additionals::String::EndsWith(variable, "]"))
 			{
 				command.push_back(get_library_path(variable, path));
@@ -1607,11 +1540,11 @@ bool MinecraftCpp::forge::forge_processors(
 			}
 		}
 
-		for (auto& var2 : argument_vars->get_value())
+		for (auto& var2 : argument_vars.get_object())
 		{
 			for (size_t i = 0; i < command.size(); i++)
 			{
-				std::replace(command.begin(), command.end(), var2.first, var2.second->to_string());
+				std::replace(command.begin(), command.end(), var2.first, var2.second.to_string());
 				//command[i] = command[i].insert(libPart.first, libPart.second->to_string());
 			}
 		}
@@ -1726,9 +1659,9 @@ bool MinecraftCpp::fabric::_is_version_valid(const std::string& version, const s
 	{
 		return true;
 	}
-	for (auto& i : get_version_list()->get_value_list())
+	for (auto& i : get_version_list().get_array())
 	{
-		if ((*i)["id"]->to_string() == version)
+		if (i["id"].to_string() == version)
 		{
 			return true;
 		}
@@ -1742,9 +1675,9 @@ bool MinecraftCpp::fabric::_is_minecraft_version_supported(const std::string& ve
 	Checks if a Minecraft version supported by fabric
 	*/
 	Json::JsonValue minecraft_versions = get_all_minecraft_versions();
-	for (auto& i : minecraft_versions->get_value_list())
+	for (auto& i : minecraft_versions.get_array())
 	{
-		if ((*i)["version"]->to_string() == version)
+		if (i["version"].to_string() == version)
 		{
 			return true;
 		}
@@ -1768,7 +1701,7 @@ std::string MinecraftCpp::fabric::get_latest_loader_version()
 	Get the latest loader version
 	*/
 	Json::JsonValue loader_versions = get_all_loader_versions();
-	return (*(*loader_versions)[0])["version"]->to_string();
+	return loader_versions[0]["version"].to_string();
 }
 
 Json::JsonValue MinecraftCpp::fabric::get_all_loader_versions()
@@ -1787,7 +1720,7 @@ std::string MinecraftCpp::fabric::get_latest_installer_version()
 	Returns the latest installer version
 	*/
 	std::string FABRIC_INSTALLER_MAVEN_URL = "https://maven.fabricmc.net/net/fabricmc/fabric-installer/maven-metadata.xml";
-	return (*parse_maven_metadata(FABRIC_INSTALLER_MAVEN_URL))["latest"]->to_string();
+	return parse_maven_metadata(FABRIC_INSTALLER_MAVEN_URL)["latest"].to_string();
 }
 
 Json::JsonValue MinecraftCpp::fabric::parse_maven_metadata(const std::string& url)
@@ -1796,7 +1729,7 @@ Json::JsonValue MinecraftCpp::fabric::parse_maven_metadata(const std::string& ur
 	Parses a maven metadata file
 	*/
 
-	Json::JsonValue data = std::make_shared<Json::JsonObject>();
+	Json::JsonValue data = Json::JsonValue(std::unordered_map<std::string, Json::JsonValue>());
 	std::string text;
 
 	std::string destenation_file = Additionals::TempFile::get_tempdir_SYSTEM();
@@ -1855,7 +1788,7 @@ Json::JsonValue MinecraftCpp::fabric::parse_maven_metadata(const std::string& ur
 	{
 		// matches[0] содержит всю найденную строку, matches[1] содержит текст между тегами
 		std::string result = mathc[1];
-		data->add_value(std::make_pair("release", std::make_shared<Json::JsonString>(result)));
+		data.add_value(std::make_pair("release", Json::JsonValue(result)));
 	}
 
 	pattern = R"(<latest>(.*?)</latest>)";
@@ -1863,17 +1796,17 @@ Json::JsonValue MinecraftCpp::fabric::parse_maven_metadata(const std::string& ur
 	{
 		// matches[0] содержит всю найденную строку, matches[1] содержит текст между тегами
 		std::string result = mathc[1];
-		data->add_value(std::make_pair("latest", std::make_shared<Json::JsonString>(result)));
+		data.add_value(std::make_pair("latest", Json::JsonValue(result)));
 	}
 
-	data->add_value(std::make_pair("versions", std::make_shared<Json::JsonArray>()));
+	data.add_value(std::make_pair("versions", Json::JsonValue(std::vector<Json::JsonValue>())));
 
 	pattern = R"(<version>(.*?)</version>)";
 	while (std::regex_search(text, mathc, pattern))
 	{
 		// matches[0] содержит всю найденную строку, matches[1] содержит текст между тегами
 		std::string result = mathc[1];
-		(*data)["versions"]->add_value(std::make_shared<Json::JsonString>(result));
+		data["versions"].add_value(Json::JsonValue(result));
 
 		text = mathc.suffix();
 	}

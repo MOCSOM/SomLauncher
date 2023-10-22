@@ -15,14 +15,14 @@ ServerChanger::ServerChanger(QWidget* parent, std::string config_path)
 	Json::JsonValue json_parce = json_serv.ParseFile("SERVERS.json");
 	Json::JsonValue parce_config = json_serv.ParseFile(this->config_path);
 
-	for (int i = 0; i < (*json_parce)["servers"]->get_count(); ++i)
+	for (int i = 0; i < json_parce["servers"].get_count(); ++i)
 	{
-		this->item = new QListWidgetItem((*(*(*json_parce)["servers"])[i])["name"]->to_string().c_str(), ui.listWidget_changeserver);
+		this->item = new QListWidgetItem(json_parce["servers"][i]["name"].to_string().c_str(), ui.listWidget_changeserver);
 		this->item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
 		this->item->setCheckState(Qt::Unchecked);
 	}
 
-	if (ui.listWidget_changeserver->item((*(*parce_config)["user"])["server"]->to_int())->text() == "")
+	if (ui.listWidget_changeserver->item(parce_config["user"]["server"].to_int())->text() == "")
 	{
 		ui.pushButton_apply->setEnabled(false);
 	}
@@ -31,7 +31,7 @@ ServerChanger::ServerChanger(QWidget* parent, std::string config_path)
 		ui.pushButton_apply->setEnabled(true);
 	}
 
-	ui.listWidget_changeserver->item((*(*parce_config)["user"])["server"]->to_int())->setCheckState(Qt::Checked);
+	ui.listWidget_changeserver->item(parce_config["user"]["server"].to_int())->setCheckState(Qt::Checked);
 }
 
 ServerChanger::~ServerChanger()
@@ -43,11 +43,11 @@ void ServerChanger::onClickedpushButton_apply()
 {
 	Json::JsonParcer json_config;
 	Json::JsonValue config_parce = json_config.ParseFile(this->config_path);
-	(*(*config_parce)["user"])["server"]->operator=(this->index);
+	config_parce["user"]["server"] = this->index;
 
-	std::cout << "Server is: " << (*(*config_parce)["user"])["server"]->to_string() << std::endl;
+	std::cout << "Server is: " << config_parce["user"]["server"].to_string() << std::endl;
 
-	config_parce->SaveJsonToFile(this->config_path, 4);
+	config_parce.save_json_to_file(this->config_path, 4);
 
 	std::cout << "Server saved" << std::endl;
 

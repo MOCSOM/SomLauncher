@@ -3,11 +3,11 @@
 void SomLauncherMainWindow::start_minecraft_params()
 {
 	Logger << "Config loaded" << std::endl;
-	Logger << (*(*this->config_parce)["user"])["name"]->to_string() << std::endl;
-	Logger << (*(*this->config_parce)["user"])["memory"]->to_string() << std::endl;
-	Logger << (*(*this->config_parce)["user"])["mcdir"]->to_string() << std::endl;
-	Logger << (*(*this->config_parce)["user"])["isInstallMods"]->to_string() << std::endl;
-	Logger << (*(*this->config_parce)["user"])["server"]->to_string() << std::endl;
+	Logger << this->config_parce["user"]["name"].to_string() << std::endl;
+	Logger << this->config_parce["user"]["memory"].to_string() << std::endl;
+	Logger << this->config_parce["user"]["mcdir"].to_string() << std::endl;
+	Logger << this->config_parce["user"]["isInstallMods"].to_string() << std::endl;
+	Logger << this->config_parce["user"]["server"].to_string() << std::endl;
 
 	std::string java = "";
 	std::string core = "";
@@ -15,14 +15,14 @@ void SomLauncherMainWindow::start_minecraft_params()
 
 	this->configureOptions();
 
-	switch ((*(*this->config_parce)["user"])["server"]->to_int())
+	switch (this->config_parce["user"]["server"].to_int())
 	{
 	case 0:
 	{
-		java = (*(*(*servers_parce)["servers"])[0])["java"]->to_string();
-		core = (*(*(*servers_parce)["servers"])[0])["core"]->to_string();
-		version = (*(*(*servers_parce)["servers"])[0])["version"]->to_string();
-		std::string launch_version = install_minecraft(version, core, (*(*(*this->servers_parce)["servers"])[0])["loaderVersion"]->to_string(), java, (*(*this->config_parce)["user"])["mcdir"]->to_string(), this->options);
+		java = this->servers_parce["servers"][0]["java"].to_string();
+		core = this->servers_parce["servers"][0]["core"].to_string();
+		version = this->servers_parce["servers"][0]["version"].to_string();
+		std::string launch_version = install_minecraft(version, core, this->servers_parce["servers"][0]["loaderVersion"].to_string(), java, this->config_parce["user"]["mcdir"].to_string(), this->options);
 		std::string command = MinecraftCpp::get_minecraft_command__(launch_version, this->minecraft_core_dir_path, options);
 		qInfo() << command;
 
@@ -34,10 +34,10 @@ void SomLauncherMainWindow::start_minecraft_params()
 	}
 	case 1:
 	{
-		java = (*(*(*servers_parce)["servers"])[1])["java"]->to_string();
-		core = (*(*(*servers_parce)["servers"])[1])["core"]->to_string();
-		version = (*(*(*servers_parce)["servers"])[1])["version"]->to_string();
-		std::string launch_version = install_minecraft(version, core, (*(*(*this->servers_parce)["servers"])[1])["loaderVersion"]->to_string(), java, (*(*this->config_parce)["user"])["mcdir"]->to_string(), this->options);
+		java = this->servers_parce["servers"][1]["java"].to_string();
+		core = this->servers_parce["servers"][1]["core"].to_string();
+		version = this->servers_parce["servers"][1]["version"].to_string();
+		std::string launch_version = install_minecraft(version, core, this->servers_parce["servers"][1]["loaderVersion"].to_string(), java, this->config_parce["user"]["mcdir"].to_string(), this->options);
 
 		std::string command = MinecraftCpp::get_minecraft_command__(launch_version, this->minecraft_core_dir_path, options);
 		qInfo() << command;
@@ -50,10 +50,10 @@ void SomLauncherMainWindow::start_minecraft_params()
 	}
 	case 2:
 	{
-		java = (*(*(*servers_parce)["servers"])[2])["java"]->to_string();
-		core = (*(*(*servers_parce)["servers"])[2])["core"]->to_string();
-		version = (*(*(*servers_parce)["servers"])[2])["version"]->to_string();
-		std::string launch_version = install_minecraft(version, core, (*(*(*this->servers_parce)["servers"])[2])["loaderVersion"]->to_string(), java, (*(*this->config_parce)["user"])["mcdir"]->to_string(), this->options);
+		java = servers_parce["servers"][2]["java"].to_string();
+		core = servers_parce["servers"][2]["core"].to_string();
+		version = servers_parce["servers"][2]["version"].to_string();
+		std::string launch_version = install_minecraft(version, core, this->servers_parce["servers"][2]["loaderVersion"].to_string(), java, this->config_parce["user"]["mcdir"].to_string(), this->options);
 
 		std::string command = MinecraftCpp::get_minecraft_command__(launch_version, this->minecraft_core_dir_path, options);
 		std::cout << command << std::endl;
@@ -66,11 +66,11 @@ void SomLauncherMainWindow::start_minecraft_params()
 	}
 	case 3:
 	{
-		java = (*(*(*servers_parce)["servers"])[3])["java"]->to_string();
-		core = (*(*(*servers_parce)["servers"])[3])["core"]->to_string();
-		version = (*(*(*servers_parce)["servers"])[3])["version"]->to_string();
+		java = this->servers_parce["servers"][3]["java"].to_string();
+		core = this->servers_parce["servers"][3]["core"].to_string();
+		version = this->servers_parce["servers"][3]["version"].to_string();
 
-		std::string launch_version = install_minecraft(version, core, (*(*(*this->servers_parce)["servers"])[3])["loaderVersion"]->to_string(), java, (*(*this->config_parce)["user"])["mcdir"]->to_string(), this->options);
+		std::string launch_version = install_minecraft(version, core, this->servers_parce["servers"][3]["loaderVersion"].to_string(), java, this->config_parce["user"]["mcdir"].to_string(), this->options);
 
 		std::string command = MinecraftCpp::get_minecraft_command__(launch_version, this->minecraft_core_dir_path, options);
 		std::cout << command << std::endl;
@@ -146,7 +146,7 @@ bool SomLauncherMainWindow::isConfigExist()
 
 void SomLauncherMainWindow::createConfig()
 {
-	std::filesystem::copy("SOMCONFIG_template.json", this->config_path, std::filesystem::copy_options::overwrite_existing);
+	std::filesystem::copy(this->template_config_path, this->config_path, std::filesystem::copy_options::overwrite_existing);
 }
 
 void SomLauncherMainWindow::configureOptions()
@@ -163,7 +163,7 @@ void SomLauncherMainWindow::configureOptions()
 	this->options.launcherName = this->launcher_name;
 	this->options.launcherVersion = this->launcher_version;
 	this->options.username = this->username;
-	this->options.jvmArguments = "-Xms1024M -Xmx" + std::to_string((*(*this->config_parce)["user"])["memory"]->to_int()) + "M";
+	this->options.jvmArguments = "-Xms1024M -Xmx" + this->config_parce["user"]["memory"].to_string() + "M";
 	this->options.executablePath = "";
 	this->options.uuid = "uuu";
 	this->options.token = "uuu";
@@ -244,7 +244,7 @@ ServerTypes SomLauncherMainWindow::getServerType()
 
 std::string SomLauncherMainWindow::getCurrentServerName()
 {
-	return (*(*(*this->servers_parce)["servers"])[(*(*this->config_parce)["user"])["server"]->to_int()])["name"]->to_string();
+	return this->servers_parce["servers"][this->config_parce["user"]["server"].to_int()]["name"].to_string();
 }
 
 std::string SomLauncherMainWindow::getLatestVersionFromGithub()
@@ -278,15 +278,15 @@ std::string SomLauncherMainWindow::getLatestVersionFromGithub()
 
 std::string SomLauncherMainWindow::getCurrentVersionFromConfig()
 {
-	return (*(*this->config_parce)["launcher"])["verison"]->to_string();
+	return this->config_parce["launcher"]["verison"].to_string();
 }
 
 void SomLauncherMainWindow::setCurrentVersionFromGithub()
 {
 	if (getCurrentVersionFromConfig() == "")
 	{
-		(*(*(*this->config_parce)["launcher"])["verison"]) = getLatestVersionFromGithub();
-		this->config_parce->SaveJsonToFile(this->config_path, 4);
+		this->config_parce["launcher"]["verison"] = getLatestVersionFromGithub();
+		this->config_parce.save_json_to_file(this->config_path, 4);
 	}
 }
 

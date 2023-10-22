@@ -3,7 +3,7 @@
 
 #include "ui_SettingsDialog.h"
 
-#include "../../SomJsonLib/SomJson.h"
+#include "../../MocJsonLib/SomJson.h"
 #include "../Minecraft/Minecraftus.h"
 
 #include <string>

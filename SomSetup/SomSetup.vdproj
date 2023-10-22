@@ -63,6 +63,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_42BA6BC7648D4140892F8EA7D117A551"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_453E766241E3E1EF2091F8C3C2BCDA67"
         "OwnerKey" = "8:_34B24EA6487A4E298A1A1282EF6D025B"
         "MsmSig" = "8:_UNDEFINED"
@@ -99,6 +105,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_A674C201843A4136AAF1D2D602BAE735"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_AA873A7EB19E439188199B760E64A984"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -124,6 +136,12 @@
         "Entry"
         {
         "MsmKey" = "8:_BB857BDBC3F9901F9AB2FA9BE58BC364"
+        "OwnerKey" = "8:_34B24EA6487A4E298A1A1282EF6D025B"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C310C1776EAFF5ED4CBE8269E68A9D0B"
         "OwnerKey" = "8:_34B24EA6487A4E298A1A1282EF6D025B"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -378,6 +396,26 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_42BA6BC7648D4140892F8EA7D117A551"
+            {
+            "SourcePath" = "8:..\\x64\\Release\\SERVERS.json"
+            "TargetName" = "8:SERVERS.json"
+            "Tag" = "8:"
+            "Folder" = "8:_05F01DAAB8364CA695ACCE8AFE368FB5"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_453E766241E3E1EF2091F8C3C2BCDA67"
             {
             "SourcePath" = "8:api-ms-win-crt-runtime-l1-1-0.dll"
@@ -498,6 +536,26 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A674C201843A4136AAF1D2D602BAE735"
+            {
+            "SourcePath" = "8:..\\x64\\Release\\SOMCONFIG_template.json"
+            "TargetName" = "8:SOMCONFIG_template.json"
+            "Tag" = "8:"
+            "Folder" = "8:_05F01DAAB8364CA695ACCE8AFE368FB5"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_AA873A7EB19E439188199B760E64A984"
             {
             "SourcePath" = "8:..\\x64\\Release\\Qt6Network.dll"
@@ -595,6 +653,26 @@
             "PackageAs" = "3:1"
             "Register" = "3:4"
             "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C310C1776EAFF5ED4CBE8269E68A9D0B"
+            {
+            "SourcePath" = "8:Qt6Network.dll"
+            "TargetName" = "8:Qt6Network.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_05F01DAAB8364CA695ACCE8AFE368FB5"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -767,15 +845,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:SomLauncher"
-        "ProductCode" = "8:{3D1A2CAC-4AD8-4A84-AA05-8AE7DE57BDA4}"
-        "PackageCode" = "8:{4CB27BC0-180A-4DAD-90FE-B6DE6CB27872}"
+        "ProductCode" = "8:{D454FA07-AE0E-469D-9747-C6700BACC3C2}"
+        "PackageCode" = "8:{1FD57383-B3D2-47A2-82D4-6BFA47C54CDC}"
         "UpgradeCode" = "8:{2F4DD2DA-A459-452A-9810-E6E933EA4CEB}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.0"
+        "ProductVersion" = "8:0.1.0"
         "Manufacturer" = "8:.SomSomSom"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -1387,7 +1465,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_34B24EA6487A4E298A1A1282EF6D025B"
             {
-            "SourcePath" = "8:..\\x64\\Release\\SomLauncherCpp.exe"
+            "SourcePath" = "8:..\\x64\\Debug\\SomLauncherCpp.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_05F01DAAB8364CA695ACCE8AFE368FB5"

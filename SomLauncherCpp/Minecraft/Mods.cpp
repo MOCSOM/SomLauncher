@@ -4,9 +4,9 @@ bool MinecraftCpp::modpacks::download::database::installModPack(const Json::Json
 	const std::filesystem::path& path_to_download, std::unique_ptr<CallbackNull> callback) noexcept
 {
 	Json::JsonValue urls = json_from_server;
-	for (std::pair<const std::string, Json::JsonValue> elem : urls->get_value())
+	for (std::pair<const std::string, Json::JsonValue> elem : urls.get_object())
 	{
-		std::string downloaded_path = DownloadFile(elem.second->to_string(),
+		std::string downloaded_path = DownloadFile(elem.second.to_string(),
 			path_to_download.u8string(), callback.get());
 	}
 

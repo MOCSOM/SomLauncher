@@ -5,7 +5,7 @@
 #include "ui_ServerWidget.h"
 #include <qbuttongroup.h>
 
-#include "../../SomJsonLib/SomJson.h"
+#include "../../MocJsonLib/SomJson.h"
 
 class ServerWidget : public QWidget
 {
