@@ -28,6 +28,7 @@ void SomLauncherMainWindow::start_minecraft_params()
 
 		this->close();
 
+		std::filesystem::current_path(this->minecraft_core_dir_path);
 		MinecraftCpp::start_minecraft("", command);
 
 		break;
@@ -44,6 +45,7 @@ void SomLauncherMainWindow::start_minecraft_params()
 
 		this->close();
 
+		std::filesystem::current_path(this->minecraft_core_dir_path);
 		MinecraftCpp::start_minecraft("", command);
 
 		break;
@@ -60,6 +62,7 @@ void SomLauncherMainWindow::start_minecraft_params()
 
 		this->close();
 
+		std::filesystem::current_path(this->minecraft_core_dir_path);
 		MinecraftCpp::start_minecraft("", command);
 
 		break;
@@ -77,6 +80,7 @@ void SomLauncherMainWindow::start_minecraft_params()
 
 		this->close();
 
+		std::filesystem::current_path(this->minecraft_core_dir_path);
 		MinecraftCpp::start_minecraft("", command);
 
 		break;

@@ -38,6 +38,7 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget* parent)
 
 	if (isVersionOld())
 	{
+		Logger << "Start updater" << std::endl;
 	}
 
 	this->recomended_memory = 3072;
