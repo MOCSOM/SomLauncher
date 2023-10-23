@@ -113,6 +113,7 @@ void SomLauncherMainWindow::_settingUiChanges()
 	_settingServerType();
 
 	ui.progressBar_ahtung->setHidden(true);
+	ui.label_download_status_change->setHidden(true);
 }
 
 void SomLauncherMainWindow::_settingCurrentServerName()
@@ -242,6 +243,7 @@ void SomLauncherMainWindow::onClickpushButton_startgame()
 	Logger << "pushButton_startgame clicked" << std::endl;
 
 	ui.progressBar_ahtung->setHidden(false);
+	ui.label_download_status_change->setHidden(false);
 
 	ui.pushButton_startgame->setDisabled(true);
 	ui.pushButton_settings->setDisabled(true);

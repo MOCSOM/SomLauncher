@@ -24,7 +24,7 @@ void SomLauncherMainWindow::start_minecraft_params()
 		version = this->servers_parce["servers"][0]["version"].to_string();
 		std::string launch_version = install_minecraft(version, core, this->servers_parce["servers"][0]["loaderVersion"].to_string(), java, this->config_parce["user"]["mcdir"].to_string(), this->options);
 		std::string command = MinecraftCpp::get_minecraft_command__(launch_version, this->minecraft_core_dir_path, options);
-		qInfo() << command;
+		Logger << command;
 
 		this->close();
 
@@ -107,8 +107,9 @@ std::string SomLauncherMainWindow::install_minecraft(
 	std::string launch_version;
 	std::string install_version;
 
-	CallbackDict* callback = new CallbackDict();
+	std::shared_ptr<CallbackDict> callback = std::make_shared<CallbackDict>();
 	callback->setQProgressBar(ui.progressBar_ahtung);
+	callback->setQLabelProggress(ui.label_download_status_change);
 
 	if (loader_mame == "forge" || loader_mame == "Forge")
 	{
@@ -116,7 +117,7 @@ std::string SomLauncherMainWindow::install_minecraft(
 		install_version = version + "-" + loader_version;
 
 		MinecraftCpp::forge::install_forge_version(
-			install_version, this->minecraft_core_dir_path, callback, options.executablePath);
+			install_version, this->minecraft_core_dir_path, callback.get(), options.executablePath);
 
 		return launch_version;
 	}
@@ -125,7 +126,7 @@ std::string SomLauncherMainWindow::install_minecraft(
 		launch_version = std::string("fabric") + "-" + "loader" + "-" + loader_version + "-" + version;
 
 		MinecraftCpp::fabric::install_fabric_version(
-			version, this->minecraft_core_dir_path, loader_version, callback, options.executablePath);
+			version, this->minecraft_core_dir_path, loader_version, callback.get(), options.executablePath);
 
 		return launch_version;
 	}
@@ -250,7 +251,7 @@ std::string SomLauncherMainWindow::getCurrentServerName()
 std::string SomLauncherMainWindow::getLatestVersionFromGithub()
 {
 	QUrl url("https://api.github.com/repos/MOCSOM/SomLauncher/tags");
-	qInfo() << url.toString();
+	Logger << url.toString().toStdString() << std::endl;
 	QNetworkRequest request(url);
 	request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 	QNetworkAccessManager nam;

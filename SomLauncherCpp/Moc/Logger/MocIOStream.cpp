@@ -42,7 +42,9 @@ int moc::MocOStream::MocStreamBuf::overflow(int_type c)
 	}
 	else if (c != EOF)
 	{
-		std::cout.put(c);
+		qInstallMessageHandler(customHandler);
+		qInfo() << static_cast<char>(c);
+		//std::cout.put(c);
 	}
 	return c;
 }
@@ -74,4 +76,10 @@ moc::MocOStream& moc::operator<<(MocOStream& out, LPCWSTR text)
 	std::string wstr_to_convert = Additionals::Convectors::ConvertLPCWSTRToString(text);
 	out << wstr_to_convert;
 	return out;
+}
+
+void customHandler(QtMsgType type, const QMessageLogContext& context, const QString& msg)
+{
+	fprintf(stderr, msg.toStdString().c_str());
+	fflush(stderr);
 }

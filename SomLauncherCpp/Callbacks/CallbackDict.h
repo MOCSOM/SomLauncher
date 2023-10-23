@@ -3,6 +3,7 @@
 
 #include <qprogressbar.h>
 #include <qcoreapplication.h>
+#include <qlabel.h>
 
 #include <windows.h>
 #include <tchar.h>
@@ -33,6 +34,7 @@ public:
 
 public:
 	void setQProgressBar(QProgressBar* progress_bar);
+	void setQLabelProggress(QLabel* progress_label);
 
 	/// <summary>
 	///
@@ -86,6 +88,7 @@ private:
 	int m_percentLast = -1;
 	moc::SomLogger Logger;
 	QProgressBar* progress_bar = nullptr;
+	QLabel* proggress_label = nullptr;
 
 public:
 	CallbackDict() = default;
@@ -94,6 +97,7 @@ public:
 
 	inline void setLogger(moc::SomLogger logger);
 	void setQProgressBar(QProgressBar* progress_bar);
+	void setQLabelProggress(QLabel* progress_label);
 
 	// This one is called by URLDownloadToFile
 	STDMETHOD(OnProgress)(/* [in] */ ULONG ulProgress, /* [in] */ ULONG ulProgressMax, /* [in] */ ULONG ulStatusCode, /* [in] */ LPCWSTR wszStatusText) override;

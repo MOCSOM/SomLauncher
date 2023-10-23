@@ -1,9 +1,9 @@
 {
     "user": {
-        "memory": 7168,
         "name": "debug",
-        "server": 0,
+        "memory": 7168,
         "wight": 854,
+        "server": 0,
         "hight": 480,
         "mcdir": "",
         "isInstallMods": false

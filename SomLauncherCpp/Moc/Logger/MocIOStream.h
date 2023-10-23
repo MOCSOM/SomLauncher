@@ -14,6 +14,8 @@
 
 #include "../../../SomAdditionalsLib/Additionals.h"
 
+void customHandler(QtMsgType type, const QMessageLogContext& context, const QString& msg);
+
 namespace moc
 {
 	class MocOStream : public std::ostream
@@ -64,6 +66,7 @@ namespace moc
 	};
 
 	using SomLogger = MocOStream;
+	//using SomLogger = QMessageLogger(static_cast<const char*>("C:\\Users\\alkor\\source\\repos\\SomLauncher\\SomLauncherCpp\\Moc\\Logger\\MocIOStream.h"), 67, static_cast<const char*>(__FUNCSIG__)).info();
 
 	MocOStream& operator<<(MocOStream& out, LPCWSTR text);
 }

@@ -50,6 +50,11 @@ void CallbackDict::setQProgressBar(QProgressBar* progress_bar)
 	this->progress_bar = progress_bar;
 }
 
+void CallbackDict::setQLabelProggress(QLabel* progress_label)
+{
+	this->proggress_label = progress_label;
+}
+
 STDMETHODIMP_(HRESULT __stdcall) CallbackDict::OnProgress(ULONG ulProgress, ULONG ulProgressMax,
 	ULONG ulStatusCode, LPCWSTR wszStatusText)
 {
@@ -58,24 +63,29 @@ STDMETHODIMP_(HRESULT __stdcall) CallbackDict::OnProgress(ULONG ulProgress, ULON
 	switch (ulStatusCode)
 	{
 	case BINDSTATUS_FINDINGRESOURCE:
-		//Logger << "Finding resource..." << std::endl;
+		// Finding resource...
 		break;
 	case BINDSTATUS_CONNECTING:
-		//Logger << "Connecting..." << std::endl;
+		// Connecting...
 		break;
 	case BINDSTATUS_SENDINGREQUEST:
-		//System::Console::WriteLine("Sending request...");
+		// Sending request...
 		break;
 	case BINDSTATUS_MIMETYPEAVAILABLE:
-		//System::Console::WriteLine("Mime type available");
+		// Mime type available
 		break;
 	case BINDSTATUS_CACHEFILENAMEAVAILABLE:
-		//System::Console::WriteLine("Cache filename available");
+		// Cache filename available
 		break;
 	case BINDSTATUS_BEGINDOWNLOADDATA:
-		//Logger << "Begin download" << std::endl;
+		// Begin download
 		break;
 	case BINDSTATUS_DOWNLOADINGDATA:
+		if (this->proggress_label != nullptr)
+		{
+			this->proggress_label->setText(Additionals::Convectors::ConvertLPCWSTRToString(wszStatusText).c_str());
+		}
+
 	case BINDSTATUS_ENDDOWNLOADDATA:
 	{
 		int percent = static_cast<int>(100.0 * static_cast<double>(ulProgress)
@@ -90,6 +100,11 @@ STDMETHODIMP_(HRESULT __stdcall) CallbackDict::OnProgress(ULONG ulProgress, ULON
 		{
 			Logger << " End download ";
 			Logger << wszStatusText << std::endl;
+			if (this->proggress_label != nullptr)
+			{
+				this->proggress_label->setText(Additionals::Convectors::ConvertLPCWSTRToString(wszStatusText).c_str());
+			}
+
 			m_percentLast = -1;
 		}
 	}
@@ -98,6 +113,7 @@ STDMETHODIMP_(HRESULT __stdcall) CallbackDict::OnProgress(ULONG ulProgress, ULON
 	default:
 	{
 		//Logger << "Status code : " << ulStatusCode << std::endl << std::endl;
+		break;
 	}
 	}
 
@@ -148,5 +164,9 @@ HRESULT CallbackDict::setConsoleBar(ULONG& ulProgress, ULONG& ulProgressMax, ULO
 }
 
 void CallbackNull::setQProgressBar(QProgressBar* progress_bar)
+{
+}
+
+void CallbackNull::setQLabelProggress(QLabel* progress_label)
 {
 }

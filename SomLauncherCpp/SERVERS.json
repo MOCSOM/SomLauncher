@@ -8,7 +8,7 @@
 {
 	"servers":[
 		{
-			"name": "Olds Tut?",
+			"name": "Просто не удачный день",
 			"java": "8",
 			"core": "forge",
 			"version": "1.12.2",
