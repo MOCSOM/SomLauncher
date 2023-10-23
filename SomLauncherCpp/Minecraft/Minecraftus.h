@@ -5,6 +5,8 @@
 #include "../Callbacks/CallbackDict.h"
 #include "../../MocJsonLib/SomJson.h"
 #include "../../SomAdditionalsLib/Additionals.h"
+#include "../Hashes/sha1.h"
+
 #include <initializer_list>
 //#include <stdio.h>
 
@@ -77,8 +79,32 @@ namespace MinecraftCpp
 	bool install_libraries(Json::JsonValue data, const std::string& path, CallbackNull* callback);
 	bool extract_natives_file(const std::string& filename, const std::string& extract_path, Json::JsonValue extract_data);
 	bool install_assets(Json::JsonValue data, const std::string& path, CallbackNull* callback);
+
+	/// <summary>
+	/// Installs the given jvm runtime. callback is the same dict as in the install module.
+	/// </summary>
+	/// <param name="jvm_version">- The Name of the JVM version</param>
+	/// <param name="minecraft_directory">- The path to your Minecraft directory</param>
+	/// <param name="callback">- the same dict as for :func:`~minecraft_launcher_lib.install.install_minecraft_version`</param>
+	/// <returns>void</returns>
 	bool install_jvm_runtime(const std::string& jvm_version, const std::string& minecraft_directory,
 		CallbackNull* callback = new CallbackNull());
+
+	/// <summary>
+	/// Raises a FileOutsideMinecraftDirectory if the Path is not in the given Directory
+	/// </summary>
+	/// <param name="minecraft_directory"></param>
+	/// <param name="path"></param>
+	/// <returns></returns>
+	bool check_path_inside_minecraft_directory(const std::string& minecraft_directory, const std::string& path);
+
+	/// <summary>
+	/// Calculate the sha1 checksum of a file
+	/// Source: https://stackoverflow.com/questions/22058048/hashing-a-file-in-python
+	/// </summary>
+	/// <param name="path"></param>
+	/// <returns></returns>
+	std::string get_sha1_hash(const std::filesystem::path& path);
 
 	namespace forge
 	{

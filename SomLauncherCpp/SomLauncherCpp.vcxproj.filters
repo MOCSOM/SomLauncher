@@ -130,6 +130,9 @@
     <ClInclude Include="Upgrader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Hashes\sha1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="all.json" />

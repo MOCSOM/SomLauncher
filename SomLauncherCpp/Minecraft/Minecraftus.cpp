@@ -285,8 +285,6 @@ Json::JsonValue MinecraftCpp::inherit_json(Json::JsonValue original_data, const 
 		}
 	}
 
-	std::cout << new_data["libraries"].to_string() << std::endl;
-
 	return new_data;
 }
 
@@ -340,7 +338,6 @@ std::string MinecraftCpp::get_minecraft_command__(const std::string& version, co
 	}
 	options.nativesDirectory = options.get("nativesDirectory", Join({ minecraft_directory, "versions", data["id"].to_string(), "natives" }));
 	//options.nativesDirectory = JoinW({ minecraft_directory, L"versions", data["id"]->to_stringW(), L"natives" });
-	std::cout << data.to_string() << std::endl << data["libraries"].get_count() << std::endl;
 	options.classpath = MinecraftCpp::get_libraries(data, minecraft_directory);
 
 	std::string command = "";
@@ -1103,33 +1100,38 @@ bool MinecraftCpp::install_jvm_runtime(const std::string& jvm_version, const std
 
 	// Download all files of the runtime
 	//callback.get("setMax", empty)(len(platform_manifest["files"]) - 1)
+	callback->OnProgress(NULL, platform_manifest["files"].get_count() - 1, NULL, NULL);
 	int count = 0;
+	std::vector<std::filesystem::path> file_list;
 	for (auto& var : platform_manifest["files"].get_object())
 	{
-		std::string current_path = Join({ base_path, var.first });
+		std::filesystem::path current_path = Join({ base_path, var.first });
+
 		if (var.second["type"].to_string() == "file")
 		{
 			// Prefer downloading the compresses file
 			if (var.second["downloads"].is_exist("lzma"))
 			{
-				DownloadFile(var.second["downloads"]["lzma"]["url"].to_string(), current_path, callback, true);
+				DownloadFile(var.second["downloads"]["lzma"]["url"].to_string(), current_path.u8string(), callback, true);
 			}
 			else
 			{
-				DownloadFile(var.second["downloads"]["raw"]["url"].to_string(), current_path, callback);
+				DownloadFile(var.second["downloads"]["raw"]["url"].to_string(), current_path.u8string(), callback);
 			}
 
 			// Make files executable on unix systems
 			if (var.second["executable"] != nullptr)
 			{
-				if (std::filesystem::exists(current_path))
+				if (std::filesystem::exists(current_path) && OS == "linux")
 				{
 					std::string command = "chmod ";
 					command += "+x ";
-					command += current_path;
+					command += current_path.u8string();
 					system(command.c_str());
 				}
 			}
+
+			file_list.push_back(var.first);
 		}
 		else if (var.second["type"].to_string() == "directory")
 		{
@@ -1137,17 +1139,68 @@ bool MinecraftCpp::install_jvm_runtime(const std::string& jvm_version, const std
 		}
 		else if (var.second["type"].to_string() == "link")
 		{
-			//TODO os.symlink(value["target"], current_path)
+			check_path_inside_minecraft_directory(minecraft_directory, Join({ base_path, var.second["target"].to_string() }));
+
+			if (!std::filesystem::is_directory(current_path.parent_path()))
+			{
+				int outp = std::filesystem::create_directories(current_path);
+			}
+
+			try
+			{
+				std::filesystem::create_symlink(var.second["target"].to_string(), current_path);
+			}
+			catch (const std::exception& exc)
+			{
+			}
 		}
-		// callback.get("setProgress", empty)(count)
+		callback->OnProgress(count, NULL, NULL, NULL);
 		++count;
 	}
+	callback->OnProgress(NULL, NULL, 6, NULL);
+
 	// Create the.version file
 	std::string path = Join({ minecraft_directory, "runtime", jvm_version, platform_string, ".version" });
-
 	manifest_data[platform_string][jvm_version][0]["version"]["name"].save_json_to_file(path, 4);
 
+	// Writes the .sha1 file
+	// It has the structure {path} /#// {sha1} {creation time in nanoseconds}
+	std::string sha1_path = Join({ minecraft_directory, "runtime", jvm_version, platform_string, std::string("jvm_version") + ".sha1" });
+	check_path_inside_minecraft_directory(minecraft_directory, sha1_path);
+	//with open(sha1_path, "w", encoding = "utf-8") as f :
+	std::ofstream file = std::ofstream(sha1_path);
+	for (auto& current_file : file_list)
+	{
+		std::filesystem::path current_path = Join({ base_path, current_file.u8string() });
+		std::filesystem::file_time_type _ctime = std::filesystem::last_write_time(current_path);
+		std::string sha1 = get_sha1_hash(current_path);
+
+		auto sctp = std::chrono::time_point_cast<std::chrono::system_clock::duration>(_ctime -
+			std::filesystem::file_time_type::clock::now()
+			+ std::chrono::system_clock::now());
+
+		std::time_t tt = std::chrono::system_clock::to_time_t(sctp);
+		std::tm* gmt = std::gmtime(&tt);
+		std::stringstream buffer;
+		buffer << std::put_time(gmt, "%A, %d %B %Y %H:%M");
+		std::string formattedFileTime = buffer.str();
+
+		file << current_file << " /#// " << sha1 << " " << formattedFileTime << "\n";
+	}
+	file.close();
+
 	return true;
+}
+
+bool MinecraftCpp::check_path_inside_minecraft_directory(const std::string& minecraft_directory, const std::string& path)
+{
+	if (!std::filesystem::absolute(path).u8string()._Starts_with(std::filesystem::absolute(minecraft_directory).u8string()))
+		return false;//throw FileOutsideMinecraftDirectory(os.path.abspath(path), os.path.abspath(minecraft_directory));
+}
+
+std::string MinecraftCpp::get_sha1_hash(const std::filesystem::path& path)
+{
+	return SHA1::from_file(path.u8string());
 }
 
 std::string MinecraftCpp::get_arguments(
@@ -1483,11 +1536,6 @@ bool MinecraftCpp::forge::forge_processors(
 	argument_vars.replace_value("{BINPATCH}", lzma_path);
 	argument_vars.replace_value("{ROOT}", root_path);
 	argument_vars.replace_value("{SIDE}", "client");
-
-	/*(*argument_vars)["{INSTALLER}"]->operator=(std::wstring(installer_path));
-	(*argument_vars)["{BINPATCH}"]->operator=(std::wstring(lzma_path));
-	(*argument_vars)["{ROOT}"]->operator=(std::wstring(root_path));
-	(*argument_vars)["{SIDE}"]->operator=("client");*/
 
 	std::string classpath_seperator = "";
 	if (OS == "windows")
