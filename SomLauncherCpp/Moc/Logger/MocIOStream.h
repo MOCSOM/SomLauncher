@@ -4,10 +4,13 @@
 #include <qplaintextedit.h>
 #include <qsharedpointer.h>
 #include <qlogging.h>
+#include <qfile.h>
 
 #include <iostream>
 #include <string>
 #include <streambuf>
+#include <ctime>
+#include <chrono>
 
 #include <windows.h>
 #include <cstring>
@@ -66,9 +69,15 @@ namespace moc
 	};
 
 	using SomLogger = MocOStream;
-	//using SomLogger = QMessageLogger(static_cast<const char*>("C:\\Users\\alkor\\source\\repos\\SomLauncher\\SomLauncherCpp\\Moc\\Logger\\MocIOStream.h"), 67, static_cast<const char*>(__FUNCSIG__)).info();
+	//using SomLogger = QMessageLogger(static_cast<const char*>("C:\\Users\\alkor\\source\\repos\\SomLauncher\\SomLauncherCpp\\Moc\\qInfo\\MocIOStream.h"), 67, static_cast<const char*>(__FUNCSIG__)).info();
 
 	MocOStream& operator<<(MocOStream& out, LPCWSTR text);
+	QDebug& operator<<(QDebug& out, const LPCWSTR text);
+}
+
+namespace std
+{
+	QTextStream& endl(QTextStream& ostr);
 }
 
 #endif /*ARCHIVES_H_*/

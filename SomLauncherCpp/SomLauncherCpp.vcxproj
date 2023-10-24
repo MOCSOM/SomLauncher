@@ -168,6 +168,7 @@
     <ClCompile Include="basic_xml.cpp" />
     <ClCompile Include="Callbacks\CallbackDict.cpp" />
     <ClCompile Include="Databases\SQLBased.cpp" />
+    <ClCompile Include="Exceptions\FileOutsideMinecraftDirectoryException.cpp" />
     <ClCompile Include="Form\MainWindowExtensions.cpp" />
     <ClCompile Include="Form\ServerChangerForm.cpp" />
     <ClCompile Include="Form\ServerWidget.cpp" />
@@ -194,6 +195,8 @@
     <QtMoc Include="Form\ServerChangerForm.h" />
     <QtMoc Include="Form\ServerWidget.h" />
     <QtMoc Include="Form\SettingsDialog.h" />
+    <ClInclude Include="Exceptions\FileOutsideMinecraftDirectoryException.h" />
+    <ClInclude Include="Exceptions\TerminateProgrammException.h" />
     <ClInclude Include="Hashes\sha1.h" />
     <ClInclude Include="Minecraft\Mods.h" />
     <ClInclude Include="Moc\Logger\MocIOStream.h" />

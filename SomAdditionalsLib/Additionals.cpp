@@ -275,6 +275,29 @@ wchar_t* Additionals::String::strdogA(const char* ref_str, const char* str_to_ad
 	return new_str;
 }
 
+char* Additionals::String::strdogA(std::initializer_list<const char*> list)
+{
+	char* path = nullptr;
+	bool isFirst = true;
+
+	for (auto& elem : list)
+	{
+		if (isFirst)
+		{
+			path = const_cast<char*>(elem);
+			isFirst = false;
+		}
+		else
+		{
+			//wchar_t* temp = StrDogW(path, elem);
+			//delete[] path;
+			path = Additionals::String::Char::strdogA(path, elem);
+		}
+	}
+
+	return path;
+}
+
 wchar_t* Additionals::String::strdogW(std::initializer_list<const wchar_t*> list)
 {
 	wchar_t* path = nullptr;
@@ -610,4 +633,36 @@ wchar_t* Additionals::TempFile::_get_default_tempdir()
 	}
 
 	return nullptr;
+}
+
+char* Additionals::String::Char::strdogA(const char* ref_str, const char* str_to_add)
+{
+	if (ref_str == nullptr || ref_str[0] == '\0')
+	{
+		size_t to_add_size = strlen(str_to_add);
+		char* new_str = new char[to_add_size + 1];
+		for (size_t j = 0; j < to_add_size; ++j)
+		{
+			new_str[j] = static_cast<wchar_t>(str_to_add[j]);
+		}
+		new_str[to_add_size] = L'\0';
+		return new_str;
+	}
+
+	size_t ref_size = strlen(ref_str);
+	size_t to_add_size = strlen(str_to_add);
+	char* new_str = new char[ref_size + to_add_size + 1];
+
+	for (size_t i = 0; i < ref_size; ++i)
+	{
+		new_str[i] = static_cast<char>(ref_str[i]);
+	}
+
+	for (size_t j = 0; j < to_add_size; ++j)
+	{
+		new_str[ref_size + j] = static_cast<char>(str_to_add[j]);
+	}
+	new_str[ref_size + to_add_size] = L'\0';
+
+	return new_str;
 }

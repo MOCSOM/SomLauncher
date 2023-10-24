@@ -794,6 +794,17 @@
                         {
                         }
                     }
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_A58476F8335D44D68BD04A2AD7C9EB2B"
+                    {
+                    "Name" = "8:somlogs"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_08750C1A095A45FDAB1E7EAE6B6447BF"
+                        "Folders"
+                        {
+                        }
+                    }
                     "{9EF0B969-E518-4E46-987F-47570745A589}:_C73A2C9D2D2A40E3B45557AB18DBA615"
                     {
                     "Name" = "8:resources"
@@ -845,15 +856,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:SomLauncher"
-        "ProductCode" = "8:{D454FA07-AE0E-469D-9747-C6700BACC3C2}"
-        "PackageCode" = "8:{1FD57383-B3D2-47A2-82D4-6BFA47C54CDC}"
-        "UpgradeCode" = "8:{2F4DD2DA-A459-452A-9810-E6E933EA4CEB}"
+        "ProductCode" = "8:{BBDD8337-918B-49D8-8A7B-84BD9D0A8C17}"
+        "PackageCode" = "8:{47372008-E1AC-467D-A8CB-078EAF027AD5}"
+        "UpgradeCode" = "8:{9A834AF5-03B6-4E0B-AB4C-73A8C3249A36}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
-        "RemovePreviousVersions" = "11:FALSE"
+        "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:0.1.0"
+        "ProductVersion" = "8:0.2.4"
         "Manufacturer" = "8:.SomSomSom"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -1465,7 +1476,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_34B24EA6487A4E298A1A1282EF6D025B"
             {
-            "SourcePath" = "8:..\\x64\\Debug\\SomLauncherCpp.exe"
+            "SourcePath" = "8:..\\x64\\Release\\SomLauncherCpp.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_05F01DAAB8364CA695ACCE8AFE368FB5"
@@ -1519,34 +1530,6 @@
                 {
                 }
             }
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_AB9EF0685B094EF297AD535B1D53EB7F"
-            {
-            "SourcePath" = "8:"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_05F01DAAB8364CA695ACCE8AFE368FB5"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            "ProjectOutputGroupRegister" = "3:1"
-            "OutputConfiguration" = "8:"
-            "OutputGroupCanonicalName" = "8:Built"
-            "OutputProjectGuid" = "8:{B41CA7D7-F328-4E65-802C-A9CCF77055B0}"
-            "ShowKeyOutput" = "11:TRUE"
-                "ExcludeFilters"
-                {
-                }
-            }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_BFF9406896E94A4794B087AE31C2A4EE"
             {
             "SourcePath" = "8:"
@@ -1575,7 +1558,7 @@
                 {
                 }
             }
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_DBFA6810C45448AA8A16693F0C036610"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_DD03314AC6C34F39A304FDDA677BE005"
             {
             "SourcePath" = "8:"
             "TargetName" = "8:"
@@ -1596,8 +1579,8 @@
             "IsolateTo" = "8:"
             "ProjectOutputGroupRegister" = "3:1"
             "OutputConfiguration" = "8:"
-            "OutputGroupCanonicalName" = "8:LocalizedResourceDlls"
-            "OutputProjectGuid" = "8:{B41CA7D7-F328-4E65-802C-A9CCF77055B0}"
+            "OutputGroupCanonicalName" = "8:Built"
+            "OutputProjectGuid" = "8:{C3B81459-BB44-4DED-97E5-AF78D104BFBD}"
             "ShowKeyOutput" = "11:TRUE"
                 "ExcludeFilters"
                 {

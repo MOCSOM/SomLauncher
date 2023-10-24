@@ -6,6 +6,7 @@
 #include "../../MocJsonLib/SomJson.h"
 #include "../../SomAdditionalsLib/Additionals.h"
 #include "../Hashes/sha1.h"
+#include "../Exceptions/FileOutsideMinecraftDirectoryException.h"
 
 #include <initializer_list>
 //#include <stdio.h>

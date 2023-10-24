@@ -1,0 +1,9 @@
+[6:0:21] [__cdecl SomLauncherMainWindow::SomLauncherMainWindow(class QWidget *)\INFO]: ui setup completed 
+[6:0:21] [class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > __cdecl SomLauncherMainWindow::getLatestVersionFromGithub(void)\INFO]: "https://api.github.com/repos/MOCSOM/SomLauncher/tags" 
+[7:0:21] [class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > __cdecl SomLauncherMainWindow::getLatestVersionFromGithub(void)\INFO]: "https://api.github.com/repos/MOCSOM/SomLauncher/tags" 
+[12:0:21] [void __cdecl SomLauncherMainWindow::mouseEnterframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse enter 
+[12:0:21] [void __cdecl SomLauncherMainWindow::mouseLeaveframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse leave 
+[12:0:21] [void __cdecl SomLauncherMainWindow::mouseEnterframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse enter 
+[12:0:21] [void __cdecl SomLauncherMainWindow::mouseLeaveframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse leave 
+[13:0:21] [void __cdecl SomLauncherMainWindow::mouseEnterframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse enter 
+[13:0:21] [void __cdecl SomLauncherMainWindow::mouseLeaveframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse leave 

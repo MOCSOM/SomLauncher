@@ -12,7 +12,7 @@ class SomInstallerMainWindow : public QMainWindow
 	Q_OBJECT
 
 public:
-	SomInstallerMainWindow(QWidget* parent = nullptr);
+	explicit SomInstallerMainWindow(QWidget* parent = nullptr);
 	~SomInstallerMainWindow();
 private:
 	Ui::SomInstallerMainWindow ui;

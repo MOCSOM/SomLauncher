@@ -40,11 +40,6 @@ void SomProgressBarr::set_prog_bar(unsigned curr_val, unsigned max_val,
 	}*/
 }
 
-inline void CallbackDict::setLogger(moc::SomLogger logger)
-{
-	this->Logger.setQtPlainText(logger.getQtPlainText());
-}
-
 void CallbackDict::setQProgressBar(QProgressBar* progress_bar)
 {
 	this->progress_bar = progress_bar;
@@ -98,8 +93,8 @@ STDMETHODIMP_(HRESULT __stdcall) CallbackDict::OnProgress(ULONG ulProgress, ULON
 		}
 		if (ulStatusCode == BINDSTATUS_ENDDOWNLOADDATA)
 		{
-			Logger << " End download ";
-			Logger << wszStatusText << std::endl;
+			qInfo() << " End download "
+				<< Additionals::Convectors::ConvertLPCWSTRToString(wszStatusText) << std::endl;
 			if (this->proggress_label != nullptr)
 			{
 				this->proggress_label->setText(Additionals::Convectors::ConvertLPCWSTRToString(wszStatusText).c_str());
@@ -112,7 +107,7 @@ STDMETHODIMP_(HRESULT __stdcall) CallbackDict::OnProgress(ULONG ulProgress, ULON
 
 	default:
 	{
-		//Logger << "Status code : " << ulStatusCode << std::endl << std::endl;
+		//qInfo << "Status code : " << ulStatusCode << std::endl << std::endl;
 		break;
 	}
 	}
@@ -128,11 +123,11 @@ HRESULT CallbackDict::setConsoleBar(ULONG& ulProgress, ULONG& ulProgressMax, ULO
 	{
 		if (wszStatusText != NULL)
 		{
-			Logger << wszStatusText << std::endl;
+			qInfo() << Additionals::Convectors::ConvertLPCWSTRToString(wszStatusText) << std::endl;
 		}
 		else
 		{
-			Logger << wszStatusText << std::endl;
+			qInfo() << Additionals::Convectors::ConvertLPCWSTRToString(wszStatusText) << std::endl;
 		}
 		return S_OK;
 	}

@@ -2,12 +2,12 @@
 
 void SomLauncherMainWindow::start_minecraft_params()
 {
-	Logger << "Config loaded" << std::endl;
-	Logger << this->config_parce["user"]["name"].to_string() << std::endl;
-	Logger << this->config_parce["user"]["memory"].to_string() << std::endl;
-	Logger << this->config_parce["user"]["mcdir"].to_string() << std::endl;
-	Logger << this->config_parce["user"]["isInstallMods"].to_string() << std::endl;
-	Logger << this->config_parce["user"]["server"].to_string() << std::endl;
+	qInfo() << "Config loaded" << std::endl;
+	qInfo() << this->config_parce["user"]["name"].to_string() << std::endl;
+	qInfo() << this->config_parce["user"]["memory"].to_string() << std::endl;
+	qInfo() << this->config_parce["user"]["mcdir"].to_string() << std::endl;
+	qInfo() << this->config_parce["user"]["isInstallMods"].to_string() << std::endl;
+	qInfo() << this->config_parce["user"]["server"].to_string() << std::endl;
 
 	std::string java = "";
 	std::string core = "";
@@ -24,7 +24,7 @@ void SomLauncherMainWindow::start_minecraft_params()
 		version = this->servers_parce["servers"][0]["version"].to_string();
 		std::string launch_version = install_minecraft(version, core, this->servers_parce["servers"][0]["loaderVersion"].to_string(), java, this->config_parce["user"]["mcdir"].to_string(), this->options);
 		std::string command = MinecraftCpp::get_minecraft_command__(launch_version, this->minecraft_core_dir_path, options);
-		Logger << command;
+		qInfo() << command;
 
 		this->close();
 
@@ -41,7 +41,7 @@ void SomLauncherMainWindow::start_minecraft_params()
 		std::string launch_version = install_minecraft(version, core, this->servers_parce["servers"][1]["loaderVersion"].to_string(), java, this->config_parce["user"]["mcdir"].to_string(), this->options);
 
 		std::string command = MinecraftCpp::get_minecraft_command__(launch_version, this->minecraft_core_dir_path, options);
-		qInfo() << command;
+		qInfo() << command << std::endl;
 
 		this->close();
 
@@ -58,7 +58,7 @@ void SomLauncherMainWindow::start_minecraft_params()
 		std::string launch_version = install_minecraft(version, core, this->servers_parce["servers"][2]["loaderVersion"].to_string(), java, this->config_parce["user"]["mcdir"].to_string(), this->options);
 
 		std::string command = MinecraftCpp::get_minecraft_command__(launch_version, this->minecraft_core_dir_path, options);
-		std::cout << command << std::endl;
+		qInfo() << command << std::endl;
 
 		this->close();
 
@@ -76,7 +76,7 @@ void SomLauncherMainWindow::start_minecraft_params()
 		std::string launch_version = install_minecraft(version, core, this->servers_parce["servers"][3]["loaderVersion"].to_string(), java, this->config_parce["user"]["mcdir"].to_string(), this->options);
 
 		std::string command = MinecraftCpp::get_minecraft_command__(launch_version, this->minecraft_core_dir_path, options);
-		std::cout << command << std::endl;
+		qInfo() << command << std::endl;
 
 		this->close();
 
@@ -255,7 +255,7 @@ std::string SomLauncherMainWindow::getCurrentServerName()
 std::string SomLauncherMainWindow::getLatestVersionFromGithub()
 {
 	QUrl url("https://api.github.com/repos/MOCSOM/SomLauncher/tags");
-	Logger << url.toString().toStdString() << std::endl;
+	qInfo() << url.toString().toStdString() << std::endl;
 	QNetworkRequest request(url);
 	request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 	QNetworkAccessManager nam;

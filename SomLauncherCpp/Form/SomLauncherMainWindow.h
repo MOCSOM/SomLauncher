@@ -26,6 +26,7 @@
 #include "../Minecraft/Minecraftus.h"
 #include "../Moc/Logger/MocIOStream.h"
 #include "../Servers/ServerTypes.h"
+#include "../Exceptions/TerminateProgrammException.h"
 
 #include "ui_SomLauncherMainWindow.h"
 
@@ -144,8 +145,6 @@ signals:
 
 private:
 	Ui::SomLauncherMainWindowClass ui;
-
-	moc::SomLogger Logger;
 };
 
 #endif /*MAINWINDOW_H_*/

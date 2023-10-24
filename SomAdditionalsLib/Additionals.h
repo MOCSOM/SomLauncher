@@ -45,12 +45,17 @@ namespace Additionals
 
 	namespace String
 	{
+		namespace Char
+		{
+			char* strdogA(const char* ref_str, const char* str_to_add);
+		}
 		wchar_t* strdogW(const wchar_t* ref_str, const wchar_t* str_to_add);
 
 		wchar_t* strdogWA(const wchar_t* ref_str, const char* str_to_add);
 		wchar_t* strdogAW(const char* ref_str, const wchar_t* str_to_add);
 		wchar_t* strdogA(const char* ref_str, const char* str_to_add);
 
+		char* strdogA(std::initializer_list<const char*> list);
 		wchar_t* strdogW(std::initializer_list<const wchar_t*> list);
 
 		std::vector<std::string> split(const std::string& s, const char& seperator, const int& count = 0);

@@ -1195,7 +1195,7 @@ bool MinecraftCpp::install_jvm_runtime(const std::string& jvm_version, const std
 bool MinecraftCpp::check_path_inside_minecraft_directory(const std::string& minecraft_directory, const std::string& path)
 {
 	if (!std::filesystem::absolute(path).u8string()._Starts_with(std::filesystem::absolute(minecraft_directory).u8string()))
-		return false;//throw FileOutsideMinecraftDirectory(os.path.abspath(path), os.path.abspath(minecraft_directory));
+		throw FileOutsideMinecraftDirectoryException(std::filesystem::absolute(path), std::filesystem::absolute(minecraft_directory));
 }
 
 std::string MinecraftCpp::get_sha1_hash(const std::filesystem::path& path)

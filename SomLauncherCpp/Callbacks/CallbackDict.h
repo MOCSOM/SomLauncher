@@ -86,7 +86,6 @@ class CallbackDict : public CallbackNull
 {
 private:
 	int m_percentLast = -1;
-	moc::SomLogger Logger;
 	QProgressBar* progress_bar = nullptr;
 	QLabel* proggress_label = nullptr;
 
@@ -95,7 +94,6 @@ public:
 	//CallbackDict(CallbackNull other) {}
 	~CallbackDict() = default;
 
-	inline void setLogger(moc::SomLogger logger);
 	void setQProgressBar(QProgressBar* progress_bar);
 	void setQLabelProggress(QLabel* progress_label);
 

@@ -78,8 +78,62 @@ moc::MocOStream& moc::operator<<(MocOStream& out, LPCWSTR text)
 	return out;
 }
 
+QDebug& moc::operator<<(QDebug& out, const LPCWSTR text)
+{
+	std::string wstr_to_convert = Additionals::Convectors::ConvertLPCWSTRToString(text);
+	out << wstr_to_convert;
+	return out;
+}
+
 void customHandler(QtMsgType type, const QMessageLogContext& context, const QString& msg)
 {
-	fprintf(stderr, msg.toStdString().c_str());
-	fflush(stderr);
+	QByteArray localMsg = msg.toLocal8Bit();
+	const char* file = context.file ? context.file : "";
+	const char* function = context.function ? context.function : "";
+
+	QFile outFile("somlogs\\last_log.txt");
+	outFile.open(QIODevice::WriteOnly | QIODevice::Append);
+
+	QTextStream textStream(&outFile);
+
+	std::time_t t = std::time(0);   // get time now
+	std::tm* now = std::localtime(&t);
+
+	switch (type)
+	{
+	case QtDebugMsg:
+		std::fstream(stdout) << "[Debug]: " << localMsg.constData();
+		textStream << "[" << now->tm_sec << ":" << now->tm_min << ":" << now->tm_hour << "]"
+			<< " " << "[" << function << "\\" << "DEBUG]: " << localMsg.constData();
+		break;
+	case QtInfoMsg:
+		std::fstream(stdout) << "[Info]: " << localMsg.constData();
+		textStream << "[" << now->tm_sec << ":" << now->tm_min << ":" << now->tm_hour << "]"
+			<< " " << "[" << function << "\\" << "INFO]: " << localMsg.constData();
+		break;
+	case QtWarningMsg:
+		std::fstream(stdout) << "[Warnig]: " << localMsg.constData() << std::endl;
+		textStream << "[" << now->tm_sec << ":" << now->tm_min << ":" << now->tm_hour << "]"
+			<< " " << "[" << function << "\\" << "WARNING]: " << localMsg.constData() << std::endl;
+		break;
+	case QtCriticalMsg:
+		std::fstream(stdout) << "[Critical]: " << localMsg.constData() << std::endl;
+		textStream << "[" << now->tm_sec << ":" << now->tm_min << ":" << now->tm_hour << "]"
+			<< " " << "[" << function << "\\" << "CRITICAL]: " << localMsg.constData() << std::endl;
+		break;
+	case QtFatalMsg:
+		std::fstream(stdout) << "[Fatal]: " << localMsg.constData() << std::endl;
+		textStream << "[" << now->tm_sec << ":" << now->tm_min << ":" << now->tm_hour << "]"
+			<< " " << "[" << function << "\\" << "FATAL]: " << localMsg.constData() << std::endl;
+		break;
+	}
+
+	outFile.close();
+}
+
+QTextStream& std::endl(QTextStream& ostr)
+{
+	ostr << '\n';
+	ostr.flush();
+	return ostr;
 }
