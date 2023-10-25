@@ -236,6 +236,10 @@
       <Project>{63fda220-d21d-441c-b2e5-f17d86fe29e7}</Project>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\som.ico" />
+    <Image Include="resources\som.png" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
     <Import Project="$(QtMsBuild)\qt.targets" />

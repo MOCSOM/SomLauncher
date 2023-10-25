@@ -27,6 +27,18 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_0505D52B565946F8ABAEC536EB829231"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_05C7426F82924A76A36456C5FF749A89"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_07F191B53B5F6B594CFD7E7FB5A71B0D"
         "OwnerKey" = "8:_34B24EA6487A4E298A1A1282EF6D025B"
         "MsmSig" = "8:_UNDEFINED"
@@ -58,12 +70,6 @@
         "Entry"
         {
         "MsmKey" = "8:_34B24EA6487A4E298A1A1282EF6D025B"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_42BA6BC7648D4140892F8EA7D117A551"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -101,6 +107,12 @@
         {
         "MsmKey" = "8:_7FC17CD9C6634C31E90D170E8B066E58"
         "OwnerKey" = "8:_34B24EA6487A4E298A1A1282EF6D025B"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_80883310ADE74C82B5AE59B883429185"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -296,6 +308,46 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0505D52B565946F8ABAEC536EB829231"
+            {
+            "SourcePath" = "8:..\\SomLauncherCpp\\resources\\som.ico"
+            "TargetName" = "8:som.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_C73A2C9D2D2A40E3B45557AB18DBA615"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_05C7426F82924A76A36456C5FF749A89"
+            {
+            "SourcePath" = "8:..\\SomLauncherCpp\\resources\\som.png"
+            "TargetName" = "8:som.png"
+            "Tag" = "8:"
+            "Folder" = "8:_C73A2C9D2D2A40E3B45557AB18DBA615"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_07F191B53B5F6B594CFD7E7FB5A71B0D"
             {
             "SourcePath" = "8:api-ms-win-crt-locale-l1-1-0.dll"
@@ -394,26 +446,6 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_42BA6BC7648D4140892F8EA7D117A551"
-            {
-            "SourcePath" = "8:..\\x64\\Release\\SERVERS.json"
-            "TargetName" = "8:SERVERS.json"
-            "Tag" = "8:"
-            "Folder" = "8:_05F01DAAB8364CA695ACCE8AFE368FB5"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_453E766241E3E1EF2091F8C3C2BCDA67"
@@ -534,6 +566,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_80883310ADE74C82B5AE59B883429185"
+            {
+            "SourcePath" = "8:..\\SomLauncherCpp\\SERVERS.json"
+            "TargetName" = "8:SERVERS.json"
+            "Tag" = "8:"
+            "Folder" = "8:_05F01DAAB8364CA695ACCE8AFE368FB5"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A674C201843A4136AAF1D2D602BAE735"
@@ -856,15 +908,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:SomLauncher"
-        "ProductCode" = "8:{BBDD8337-918B-49D8-8A7B-84BD9D0A8C17}"
-        "PackageCode" = "8:{47372008-E1AC-467D-A8CB-078EAF027AD5}"
+        "ProductCode" = "8:{CCA266B6-893D-423E-9405-DEB7459B6A3E}"
+        "PackageCode" = "8:{84C5589A-737D-4800-BD63-02E648D41DEB}"
         "UpgradeCode" = "8:{9A834AF5-03B6-4E0B-AB4C-73A8C3249A36}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:0.2.4"
+        "ProductVersion" = "8:0.2.6"
         "Manufacturer" = "8:.SomSomSom"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -977,10 +1029,10 @@
         }
         "Shortcut"
         {
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_773530D5E98D4151A6934675B1D54037"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_66701F9A63CC408B8F3B866BA6136247"
             {
             "Name" = "8:SomLauncher"
-            "Arguments" = "8:/[CHECKBOXSHURTCUTDESK]=1"
+            "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
@@ -988,7 +1040,7 @@
             "Target" = "8:_34B24EA6487A4E298A1A1282EF6D025B"
             "Folder" = "8:_3BA3E16D6FC148BABDFE1D8589462602"
             "WorkingFolder" = "8:_05F01DAAB8364CA695ACCE8AFE368FB5"
-            "Icon" = "8:"
+            "Icon" = "8:_0505D52B565946F8ABAEC536EB829231"
             "Feature" = "8:"
             }
         }

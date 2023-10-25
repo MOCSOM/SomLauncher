@@ -97,7 +97,7 @@ namespace MinecraftCpp
 	/// <param name="minecraft_directory"></param>
 	/// <param name="path"></param>
 	/// <returns></returns>
-	bool check_path_inside_minecraft_directory(const std::string& minecraft_directory, const std::string& path);
+	void check_path_inside_minecraft_directory(const std::string& minecraft_directory, const std::string& path);
 
 	/// <summary>
 	/// Calculate the sha1 checksum of a file

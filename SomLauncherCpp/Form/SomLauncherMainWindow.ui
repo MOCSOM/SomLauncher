@@ -43,6 +43,13 @@
   <property name="windowTitle">
    <string>SomLauncher</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../resources/som.ico</normaloff>../resources/som.ico</iconset>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:0.784091, y2:0.744, stop:0 rgba(235, 80, 109, 255), stop:1 rgba(149, 106, 133, 255));</string>
+  </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="HoveredFrame" name="frame_topslidemenu">
     <property name="geometry">
@@ -279,6 +286,18 @@
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>142</width>
+             <height>80</height>
+            </size>
+           </property>
+           <property name="pixmap">
+            <pixmap>../resources/som.png</pixmap>
+           </property>
+           <property name="scaledContents">
+            <bool>true</bool>
            </property>
           </widget>
          </item>

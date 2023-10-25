@@ -41,7 +41,7 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget* parent)
 	if (isVersionOld())
 	{
 		qInfo() << "Start updater" << std::endl;
-		throw TerminateProgrammException(0);
+		throw TerminateProgrammException(47);
 	}
 
 	this->recomended_memory = 3072;
@@ -67,8 +67,15 @@ void SomLauncherMainWindow::_parcingConfigs()
 
 void SomLauncherMainWindow::_settingUiChanges()
 {
-	QPixmap background = QPixmap(this->background_gif.c_str());
-	ui.labeltest->setPixmap(background);
+	QIcon icon("resources\\som.ico");
+	this->setWindowIcon(icon);
+
+	QPixmap pixmap("resources\\som.png");
+	ui.label_logo->setPixmap(pixmap);
+
+	/*QPixmap background = QPixmap(this->background_gif.c_str());
+	ui.labeltest->setPixmap(background);*/
+	//ui.centralWidget->setStyleSheet("background: linear-gradient(135deg, rgb(194, 183, 119), rgb(255, 143, 31));");
 
 	ui.pushButton_game->setStyleSheet("text-align:bottom;");
 	ui.pushButton_servers->setStyleSheet("text-align:bottom;");
@@ -251,6 +258,8 @@ void SomLauncherMainWindow::onClickpushButton_startgame()
 
 	ui.pushButton_startgame->setDisabled(true);
 	ui.pushButton_settings->setDisabled(true);
+	ui.pushButton_checkupdates->setDisabled(true);
+	ui.pushButton_changeserver->setDisabled(true);
 
 	std::function<void()> myFunction =
 		[this]()

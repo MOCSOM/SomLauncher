@@ -1,9 +1,42 @@
-[6:0:21] [__cdecl SomLauncherMainWindow::SomLauncherMainWindow(class QWidget *)\INFO]: ui setup completed 
-[6:0:21] [class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > __cdecl SomLauncherMainWindow::getLatestVersionFromGithub(void)\INFO]: "https://api.github.com/repos/MOCSOM/SomLauncher/tags" 
-[7:0:21] [class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > __cdecl SomLauncherMainWindow::getLatestVersionFromGithub(void)\INFO]: "https://api.github.com/repos/MOCSOM/SomLauncher/tags" 
-[12:0:21] [void __cdecl SomLauncherMainWindow::mouseEnterframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse enter 
-[12:0:21] [void __cdecl SomLauncherMainWindow::mouseLeaveframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse leave 
-[12:0:21] [void __cdecl SomLauncherMainWindow::mouseEnterframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse enter 
-[12:0:21] [void __cdecl SomLauncherMainWindow::mouseLeaveframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse leave 
-[13:0:21] [void __cdecl SomLauncherMainWindow::mouseEnterframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse enter 
-[13:0:21] [void __cdecl SomLauncherMainWindow::mouseLeaveframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse leave 
+[5:0:4] [__cdecl SomLauncherMainWindow::SomLauncherMainWindow(class QWidget *)\INFO]: ui setup completed 
+[6:0:4] [class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > __cdecl SomLauncherMainWindow::getLatestVersionFromGithub(void)\INFO]: "https://api.github.com/repos/MOCSOM/SomLauncher/tags" 
+[7:0:4] [class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > __cdecl SomLauncherMainWindow::getLatestVersionFromGithub(void)\INFO]: "https://api.github.com/repos/MOCSOM/SomLauncher/tags" 
+[12:0:4] [void __cdecl SomLauncherMainWindow::mouseEnterframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse enter 
+[13:0:4] [void __cdecl SomLauncherMainWindow::mouseLeaveframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse leave 
+[15:0:4] [void __cdecl SomLauncherMainWindow::mouseEnterframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse enter 
+[15:0:4] [void __cdecl SomLauncherMainWindow::onClickedpushButton_servers(void)\INFO]: pushButton_servers clicked 
+[16:0:4] [void __cdecl SomLauncherMainWindow::onClickedpushButton_game(void)\INFO]: pushButton_game clicked 
+[17:0:4] [void __cdecl SomLauncherMainWindow::onClickedpushButton_news(void)\INFO]: pushButton_news clicked 
+[18:0:4] [void __cdecl SomLauncherMainWindow::onClickedpushButton_aboutus(void)\INFO]: pushButton_aboutus clicked 
+[19:0:4] [void __cdecl SomLauncherMainWindow::onClickedpushButton_game(void)\INFO]: pushButton_game clicked 
+[20:0:4] [void __cdecl SomLauncherMainWindow::onClickedpushButton_settings(void)\INFO]: pushButton_settings clicked 
+[20:0:4] [void __cdecl QWindowsWindow::setGeometry(const class QRect &)\WARNING]: QWindowsWindow::setGeometry: Unable to set geometry 509x531+694+259 (frame: 527x578+685+221) on QWidgetWindow/"SettingsDialogWindow" on "\\.\DISPLAY1". Resulting geometry: 509x539+694+259 (frame: 527x586+685+221) margins: 9, 38, 9, 9 minimum size: 259x431 MINMAXINFO(maxSize=POINT(x=0, y=0), maxpos=POINT(x=0, y=0), maxtrack=POINT(x=0, y=0), mintrack=POINT(x=342, y=586)))
+[20:0:4] [void __cdecl SomLauncherMainWindow::mouseLeaveframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse leave 
+[27:0:4] [void __cdecl SomLauncherMainWindow::mouseEnterframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse enter 
+[27:0:4] [void __cdecl SomLauncherMainWindow::mouseLeaveframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse leave 
+[29:0:4] [void __cdecl SomLauncherMainWindow::mouseEnterframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse enter 
+[29:0:4] [void __cdecl SomLauncherMainWindow::mouseLeaveframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse leave 
+[29:0:4] [void __cdecl SomLauncherMainWindow::mouseEnterframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse enter 
+[29:0:4] [void __cdecl SomLauncherMainWindow::mouseLeaveframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse leave 
+[29:0:4] [void __cdecl SomLauncherMainWindow::mouseEnterframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse enter 
+[29:0:4] [void __cdecl SomLauncherMainWindow::mouseLeaveframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse leave 
+[29:0:4] [void __cdecl SomLauncherMainWindow::mouseEnterframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse enter 
+[29:0:4] [void __cdecl SomLauncherMainWindow::mouseLeaveframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse leave 
+[30:0:4] [void __cdecl SomLauncherMainWindow::mouseEnterframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse enter 
+[30:0:4] [void __cdecl SomLauncherMainWindow::mouseLeaveframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse leave 
+[31:0:4] [void __cdecl SomLauncherMainWindow::mouseEnterframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse enter 
+[32:0:4] [void __cdecl SomLauncherMainWindow::mouseLeaveframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse leave 
+[40:0:4] [void __cdecl SomLauncherMainWindow::mouseEnterframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse enter 
+[40:0:4] [void __cdecl SomLauncherMainWindow::mouseLeaveframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse leave 
+[42:0:4] [void __cdecl SomLauncherMainWindow::mouseEnterframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse enter 
+[42:0:4] [void __cdecl SomLauncherMainWindow::mouseLeaveframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse leave 
+[42:0:4] [void __cdecl SomLauncherMainWindow::mouseEnterframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse enter 
+[42:0:4] [void __cdecl SomLauncherMainWindow::mouseLeaveframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse leave 
+[42:0:4] [void __cdecl SomLauncherMainWindow::mouseEnterframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse enter 
+[43:0:4] [void __cdecl SomLauncherMainWindow::mouseLeaveframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse leave 
+[43:0:4] [void __cdecl SomLauncherMainWindow::mouseEnterframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse enter 
+[43:0:4] [void __cdecl SomLauncherMainWindow::mouseLeaveframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse leave 
+[44:0:4] [void __cdecl SomLauncherMainWindow::mouseEnterframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse enter 
+[45:0:4] [void __cdecl SomLauncherMainWindow::mouseLeaveframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse leave 
+[57:0:4] [void __cdecl SomLauncherMainWindow::mouseEnterframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse enter 
+[57:0:4] [void __cdecl SomLauncherMainWindow::mouseLeaveframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse leave 

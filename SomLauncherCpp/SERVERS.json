@@ -6,42 +6,42 @@
 //	"loaderVersion":["","","",""]
 //}
 {
-	"servers":[
-		{
-			"name": "Просто не удачный день",
-			"java": "8",
-			"core": "forge",
-			"version": "1.12.2",
-			"loaderVersion": "14.23.5.2860",
-			"modPackVersion": "",
-			"description": "Не следует, однако забывать, что консультация с широким активом представляет собой интересный эксперимент проверки направлений прогрессивного развития. Задача организации, в особенности же укрепление и развитие структуры позволяет оценить значение позиций, занимаемых участниками в отношении поставленных задач. Равным образом новая модель организационной деятельности представляет собой интересный эксперимент проверки модели развития. Задача организации, в особенности же реализация намеченных плановых заданий способствует подготовки и реализации направлений прогрессивного развития. Равным образом постоянное информационно-пропагандистское обеспечение нашей деятельности играет важную роль в формировании новых предложений."
-		},
-		{
-			"name": "Create Aeronautics",
-			"java": "17",
-			"core": "fabric",
-			"version": "1.18.2",
-			"loaderVersion": "0.14.22",
-			"modPackVersion": "",
-			"description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec hendrerit condimentum tellus id congue. Donec consequat vestibulum lorem, a pretium lectus egestas sed. Aliquam posuere malesuada orci, et interdum quam feugiat vitae. Cras efficitur felis sapien, commodo consectetur neque viverra ut. Vestibulum lacinia ullamcorper quam. In sed scelerisque leo. Donec ultrices neque vel fermentum venenatis. Praesent consectetur nibh lectus, quis suscipit lectus laoreet eget. Etiam lobortis efficitur tincidunt."
-		},
-		{
-			"name": "Vanilla",
-			"java": "8",
-			"core": "fabric",
-			"version": "1.20.0",
-			"loaderVersion": "",
-			"modPackVersion": "",
-			"description": ""
-		},
-		{
-			"name": "GregTech",
-			"java": "8",
-			"core": "",
-			"version": "1.18.2",
-			"loaderVersion": "",
-			"modPackVersion": "",
-			"description": ""
-		}
-	]
+  "servers": [
+    {
+      "name": "forge 1.12.2",
+      "java": "8",
+      "core": "forge",
+      "version": "1.12.2",
+      "loaderVersion": "14.23.5.2860",
+      "modPackVersion": "",
+      "description": "Не следует, однако забывать, что консультация с широким активом представляет собой интересный эксперимент проверки направлений прогрессивного развития. Задача организации, в особенности же укрепление и развитие структуры позволяет оценить значение позиций, занимаемых участниками в отношении поставленных задач. Равным образом новая модель организационной деятельности представляет собой интересный эксперимент проверки модели развития. Задача организации, в особенности же реализация намеченных плановых заданий способствует подготовки и реализации направлений прогрессивного развития. Равным образом постоянное информационно-пропагандистское обеспечение нашей деятельности играет важную роль в формировании новых предложений."
+    },
+    {
+      "name": "fabric 1.18.2",
+      "java": "17",
+      "core": "fabric",
+      "version": "1.18.2",
+      "loaderVersion": "0.14.22",
+      "modPackVersion": "",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec hendrerit condimentum tellus id congue. Donec consequat vestibulum lorem, a pretium lectus egestas sed. Aliquam posuere malesuada orci, et interdum quam feugiat vitae. Cras efficitur felis sapien, commodo consectetur neque viverra ut. Vestibulum lacinia ullamcorper quam. In sed scelerisque leo. Donec ultrices neque vel fermentum venenatis. Praesent consectetur nibh lectus, quis suscipit lectus laoreet eget. Etiam lobortis efficitur tincidunt."
+    },
+    {
+      "name": "fabric 1.20.1",
+      "java": "17",
+      "core": "fabric",
+      "version": "1.20.1",
+      "loaderVersion": "0.14.24",
+      "modPackVersion": "",
+      "description": ""
+    },
+    {
+      "name": "GregTech",
+      "java": "8",
+      "core": "",
+      "version": "1.18.2",
+      "loaderVersion": "",
+      "modPackVersion": "",
+      "description": ""
+    }
+  ]
 }

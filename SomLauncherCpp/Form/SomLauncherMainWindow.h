@@ -58,7 +58,7 @@ private:
 	std::string server_changer_button_text = "";
 
 	std::string background_gif = "minecraft2.gif";
-	std::string all_modpacks_url = "";
+	std::string mocsom_site_url = "https://mocsom.site/";
 
 	MinecraftCpp::option::MinecraftOptions options;
 	MinecraftCpp::option::MinecraftOptions default_options = options;
@@ -102,7 +102,7 @@ public:
 		std::string loader_version,
 		std::string java,
 		std::string mcdir,
-		MinecraftCpp::option::MinecraftOptions options);
+		MinecraftCpp::option::MinecraftOptions& options);
 
 	bool isConfigExist();
 	void createConfig();

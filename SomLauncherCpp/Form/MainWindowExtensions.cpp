@@ -1,4 +1,4 @@
-#include "SomLauncherMainWindow.h"
+﻿#include "SomLauncherMainWindow.h"
 
 void SomLauncherMainWindow::start_minecraft_params()
 {
@@ -57,6 +57,7 @@ void SomLauncherMainWindow::start_minecraft_params()
 		version = servers_parce["servers"][2]["version"].to_string();
 		std::string launch_version = install_minecraft(version, core, this->servers_parce["servers"][2]["loaderVersion"].to_string(), java, this->config_parce["user"]["mcdir"].to_string(), this->options);
 
+		//FIXME: нехватает библиотек или в аргументе -DFabricMcEmu=
 		std::string command = MinecraftCpp::get_minecraft_command__(launch_version, this->minecraft_core_dir_path, options);
 		qInfo() << command << std::endl;
 
@@ -98,7 +99,7 @@ std::string SomLauncherMainWindow::install_minecraft(
 	std::string loader_version,
 	std::string java,
 	std::string mcdir,
-	MinecraftCpp::option::MinecraftOptions options)
+	MinecraftCpp::option::MinecraftOptions& options)
 {
 	checkJava(options, java);
 
@@ -184,7 +185,15 @@ void SomLauncherMainWindow::checkJava(MinecraftCpp::option::MinecraftOptions& op
 
 	if (java_verison == "")
 	{
-		options.executablePath = DDIC::Download::Files::getInstalledJavaInDirectory(this->minecraft_core_dir_path) + "\\" + "bin" + "\\" + "java.exe";
+		std::string java_path = DDIC::Download::Files::getInstalledJavaInDirectory(this->minecraft_core_dir_path);
+
+		if (java_path == "")
+		{
+			options.executablePath = DDIC::Download::Files::getInstalledJavaInDirectory();
+			return;
+		}
+
+		options.executablePath = java_path + "\\" + "bin" + "\\" + "java.exe";
 
 		return;
 	}
@@ -219,7 +228,7 @@ void SomLauncherMainWindow::checkJava(MinecraftCpp::option::MinecraftOptions& op
 		{
 			if (var.second == java_verison)
 			{
-				options.executablePath = var.first + "\\" + "bin" + "\\" + "java.exe";
+				options.executablePath = "\"" + var.first + "\\" + "bin" + "\\" + "java.exe" + "\"";
 			}
 		}
 	}
@@ -228,8 +237,17 @@ void SomLauncherMainWindow::checkJava(MinecraftCpp::option::MinecraftOptions& op
 size_t SomLauncherMainWindow::getMinecraftModsCount()
 {
 	size_t count = 0;
+	std::filesystem::directory_iterator directory;
 
-	std::filesystem::directory_iterator directory(this->minecraft_core_dir_path + "\\" + "mods");
+	try
+	{
+		directory = std::filesystem::directory_iterator(this->minecraft_core_dir_path + "\\" + "mods");
+	}
+	catch (const std::exception&)
+	{
+		return count;
+	}
+
 	for (std::filesystem::directory_entry elem : directory)
 	{
 		if (elem.is_regular_file())

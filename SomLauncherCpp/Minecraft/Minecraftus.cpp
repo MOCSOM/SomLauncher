@@ -1192,7 +1192,7 @@ bool MinecraftCpp::install_jvm_runtime(const std::string& jvm_version, const std
 	return true;
 }
 
-bool MinecraftCpp::check_path_inside_minecraft_directory(const std::string& minecraft_directory, const std::string& path)
+void MinecraftCpp::check_path_inside_minecraft_directory(const std::string& minecraft_directory, const std::string& path)
 {
 	if (!std::filesystem::absolute(path).u8string()._Starts_with(std::filesystem::absolute(minecraft_directory).u8string()))
 		throw FileOutsideMinecraftDirectoryException(std::filesystem::absolute(path), std::filesystem::absolute(minecraft_directory));
@@ -1626,13 +1626,13 @@ int MinecraftCpp::fabric::install_fabric_version(const std::string& minecraft_ve
 	// Check if the given version exists
 	if (!_is_version_valid(minecraft_version, minecraft_directory))
 	{
-		std::perror(("Version Not Found" + minecraft_version).c_str());
+		qFatal() << "Version Not Found " << minecraft_version;
 		return -1;
 	}
 	// Check if the given Minecraft version supported
 	if (!_is_minecraft_version_supported(minecraft_version))
 	{
-		std::perror(("Unsupported Version" + minecraft_version).c_str());
+		qFatal() << "Unsupported Version " << minecraft_version;
 		return -1;
 	}
 	// Get latest loader version if not given
@@ -1654,7 +1654,7 @@ int MinecraftCpp::fabric::install_fabric_version(const std::string& minecraft_ve
 	callback->OnProgress(NULL, NULL, NULL, L"Running fabric installer");
 	std::vector<std::string> command;
 
-	command.push_back(java == "" ? "java" : java);
+	command.push_back(java == "" ? "java" : "\"" + java + "\"");
 	command.push_back("-jar");
 	command.push_back(installer_path);
 	command.push_back("client");
@@ -1677,18 +1677,18 @@ int MinecraftCpp::fabric::install_fabric_version(const std::string& minecraft_ve
 
 	if (result != 0)
 	{
-		std::perror(("External Program Error" + command_string).c_str());
+		qFatal() << "External Program Error " << command_string;
 		return -1;
 	}
 
 	// Удаляем файл с помощью std::remove()
 	if (std::remove(installer_path.c_str()) != 0)
 	{
-		std::perror("Ошибка при удалении файла");
+		qFatal() << "Ошибка при удалении файла";
 	}
 	else
 	{
-		std::cout << "Файл успешно удален." << std::endl;
+		qInfo() << "Файл успешно удален." << std::endl;
 	}
 
 	// Install all libs of fabric
@@ -1707,7 +1707,8 @@ bool MinecraftCpp::fabric::_is_version_valid(const std::string& version, const s
 	{
 		return true;
 	}
-	for (auto& i : get_version_list().get_array())
+	Json::JsonValue arr = get_version_list();
+	for (auto& i : arr.get_array())
 	{
 		if (i["id"].to_string() == version)
 		{
