@@ -359,7 +359,7 @@ Json::SomJson Json::SomJson::operator+(const Json::SomJson& value)
 
 bool Json::SomJson::operator==(const std::nullptr_t& null)
 {
-	if (this->value->is_null)
+	if (this->value == nullptr)
 	{
 		return true;
 	}
@@ -531,6 +531,13 @@ Json::SomJson::Node::Node(bool bool_value)
 }
 
 Json::SomJson::Node::Node(std::string string_value)
+{
+	this->type = Json::JsonTypes::String;
+	this->string_value = string_value;
+	this->is_null = false;
+}
+
+Json::SomJson::Node::Node(const char* string_value)
 {
 	this->type = Json::JsonTypes::String;
 	this->string_value = string_value;

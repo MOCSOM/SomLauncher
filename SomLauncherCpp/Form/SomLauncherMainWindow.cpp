@@ -67,14 +67,27 @@ void SomLauncherMainWindow::_parcingConfigs()
 
 void SomLauncherMainWindow::_settingUiChanges()
 {
+	QFile styleFile(this->style_sheet.c_str());
+	styleFile.open(QFile::ReadOnly);
+
+	// Apply the loaded stylesheet
+	QString style(styleFile.readAll());
+	this->setStyleSheet(style);
+
 	QIcon icon("resources\\som.ico");
 	this->setWindowIcon(icon);
 
 	QPixmap pixmap("resources\\som.png");
 	ui.label_logo->setPixmap(pixmap);
 
-	/*QPixmap background = QPixmap(this->background_gif.c_str());
-	ui.labeltest->setPixmap(background);*/
+	QPixmap background = QPixmap(this->background.c_str());
+
+	/*QGraphicsBlurEffect* blur = new QGraphicsBlurEffect;
+	blur->setBlurRadius(8);
+
+	background.fromImage(applyEffectToImage(background.toImage(), blur));*/
+
+	ui.labeltest->setPixmap(background);
 	//ui.centralWidget->setStyleSheet("background: linear-gradient(135deg, rgb(194, 183, 119), rgb(255, 143, 31));");
 
 	ui.pushButton_game->setStyleSheet("text-align:bottom;");
@@ -350,8 +363,10 @@ void SomLauncherMainWindow::saveSettings()
 	if (this->settings_dialog->getReintsallModsState() == true)
 	{
 		this->is_install_mods = true;
-		config_parce["user"]["isInstallMods"] = this->is_install_mods;
+		this->config_parce["user"]["isInstallMods"] = this->is_install_mods;
+		qInfo() << "isInstallMods is: " << this->config_parce["user"]["isInstallMods"].to_string() << std::endl;
 	}
+	qInfo() << "isInstallMods is: " << this->config_parce["user"]["isInstallMods"].to_string() << std::endl;
 
 	this->curret_memory = memory_value;
 
@@ -418,6 +433,12 @@ void SomLauncherMainWindow::pageChangedSlidedWidget(int value)
 		ui.gridLayout_page_game->addWidget(ui.progressBar_ahtung, 2, 0, 1, 1);
 		ui.progressBar_ahtung->setGeometry(this->progressBar_ahtung_geometry);
 	}
+}
+
+void SomLauncherMainWindow::setReinstallMods(bool state)
+{
+	qInfo() << "setReinstallMods " << state << std::endl;
+	this->config_parce["user"]["isInstallMods"] = state;
 }
 
 void SomLauncherMainWindow::setOptionsValuesFromConfig()

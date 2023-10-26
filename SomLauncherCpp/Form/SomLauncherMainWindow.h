@@ -33,6 +33,7 @@
 #include "../QObjects/ClickableLabel.h"
 #include "../QObjects/HoveredFrame.h"
 #include "../QObjects/Threads/FunThread.h"
+#include "../QObjects/Images/ImageEditing.h"
 
 #include "ServerChangerForm.h"
 #include "ServerWidget.h"
@@ -57,8 +58,9 @@ private:
 
 	std::string server_changer_button_text = "";
 
-	std::string background_gif = "minecraft2.gif";
+	std::string background = "resources\\background_normal2.png";
 	std::string mocsom_site_url = "https://mocsom.site/";
+	std::string style_sheet = "Form\\StyleSheets\\Wstartpage.qss";
 
 	MinecraftCpp::option::MinecraftOptions options;
 	MinecraftCpp::option::MinecraftOptions default_options = options;
@@ -96,7 +98,9 @@ public:
 	void _settingServerType();
 
 	void start_minecraft_params();
+	void setupInstallMinecraft(const size_t& index);
 	std::string install_minecraft(
+		const std::filesystem::path& install_path,
 		std::string version,
 		std::string loader_mame,
 		std::string loader_version,
@@ -107,7 +111,7 @@ public:
 	bool isConfigExist();
 	void createConfig();
 	void configureOptions();
-	void checkJava(MinecraftCpp::option::MinecraftOptions& options, std::string java_verison = "");
+	void checkJava(MinecraftCpp::option::MinecraftOptions& options, std::string java_verison = "", CallbackNull* callback = new CallbackNull);
 	void setOptionsValuesFromConfig();
 	size_t getMinecraftModsCount();
 	ServerTypes getServerType();
@@ -139,6 +143,8 @@ private slots:
 	void updateProgressBar(int value);
 
 	void pageChangedSlidedWidget(int value);
+
+	void setReinstallMods(bool state);
 
 signals:
 	void updateSignal();

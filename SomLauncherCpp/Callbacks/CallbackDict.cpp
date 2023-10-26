@@ -97,7 +97,7 @@ STDMETHODIMP_(HRESULT __stdcall) CallbackDict::OnProgress(ULONG ulProgress, ULON
 				<< Additionals::Convectors::ConvertLPCWSTRToString(wszStatusText) << std::endl;
 			if (this->proggress_label != nullptr)
 			{
-				this->proggress_label->setText(Additionals::Convectors::ConvertLPCWSTRToString(wszStatusText).c_str());
+				this->proggress_label->setText("47");
 			}
 
 			m_percentLast = -1;
@@ -121,13 +121,10 @@ HRESULT CallbackDict::setConsoleBar(ULONG& ulProgress, ULONG& ulProgressMax, ULO
 {
 	if (ulProgress == NULL && ulProgressMax == NULL && ulStatusCode == NULL)
 	{
-		if (wszStatusText != NULL)
+		qInfo() << Additionals::Convectors::ConvertLPCWSTRToString(wszStatusText) << std::endl;
+		if (this->proggress_label != nullptr)
 		{
-			qInfo() << Additionals::Convectors::ConvertLPCWSTRToString(wszStatusText) << std::endl;
-		}
-		else
-		{
-			qInfo() << Additionals::Convectors::ConvertLPCWSTRToString(wszStatusText) << std::endl;
+			//this->proggress_label->setText(Additionals::Convectors::ConvertLPCWSTRToString(wszStatusText).c_str());
 		}
 		return S_OK;
 	}

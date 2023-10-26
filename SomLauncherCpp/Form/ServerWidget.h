@@ -5,6 +5,7 @@
 #include "ui_ServerWidget.h"
 #include <qbuttongroup.h>
 
+#include "../Moc/Logger/MocIOStream.h"
 #include "../../MocJsonLib/SomJson.h"
 
 class ServerWidget : public QWidget

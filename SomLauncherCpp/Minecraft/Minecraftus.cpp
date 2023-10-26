@@ -513,35 +513,36 @@ bool MinecraftCpp::start_minecraft(const std::string& java_path, const std::stri
 	path = java_path + " ";
 	path = path + args;
 
-	//STARTUPINFO si;
-	//PROCESS_INFORMATION pi;
-	//bool out;
+	std::unique_ptr<wchar_t[]> buffer = Additionals::Convectors::ConvertStringToWcharUniqPtr(args);
+	LPWSTR szPath = buffer.get();
+	STARTUPINFO si;
+	memset(&si, 0, sizeof(si));
+	si.cb = sizeof(si);
+	PROCESS_INFORMATION pi;
+	memset(&pi, 0, sizeof(pi));
+	if (CreateProcessW(NULL, szPath, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi))
+	{
+		// программа запущена, ждем её завершения
 
-	//ZeroMemory(&si, sizeof(si));
-	//si.cb = sizeof(si);
-	//ZeroMemory(&pi, sizeof(pi));
+		DWORD dwWait = WaitForSingleObject(pi.hProcess, INFINITE);
+		if (dwWait == WAIT_OBJECT_0)
+		{
+			qInfo() << "Programm has been closed" << std::endl;
+			// программа благополучно завершилась
+		}
+		else if (dwWait == WAIT_ABANDONED)
+		{
+			qInfo() << "Programm has been adadonde" << std::endl;
+			// программа была насильно "прибита"
+		}
+		//  else ну и может быть другие варианты ожидания
 
-	//out = CreateProcessW(
-	//    java_path,           // Module name
-	//    args,           // Command line
-	//    NULL,           // Process handle not inheritable
-	//    NULL,           // Thread handle not inheritable
-	//    FALSE,          // Set handle inheritance to FALSE
-	//    0,              // Creation flags
-	//    NULL,           // Use parent's environment block
-	//    NULL,           // Use parent's starting directory
-	//    &si,            // Pointer to STARTUPINFO structure
-	//    &pi             // Pointer to PROCESS_INFORMATION structure
-	//);
+		CloseHandle(pi.hProcess);
+		CloseHandle(pi.hThread);
+	}
 
-	//// Wait until child process exits.
-	//WaitForSingleObject(pi.hProcess, INFINITE);
-
-	//// Close process and thread handles.
-	//CloseHandle(pi.hProcess);
-	//CloseHandle(pi.hThread);
-
-	return system(path.c_str());
+	//return system(path.c_str());
+	return 0;
 }
 
 std::string MinecraftCpp::get_classpath_separator()
@@ -1034,13 +1035,18 @@ bool MinecraftCpp::install_assets(Json::JsonValue data, const std::string& path,
 
 	// Download all assets
 	Json::JsonParcer jsonParcer;
-	DownloadFile(data["assetIndex"]["url"].to_string(), Join({ path, "assets", "indexes", (data["assets"].to_string() + ".json") }), callback);
+	DownloadFile(
+		data["assetIndex"]["url"].to_string(),
+		Join({ path, "assets", "indexes", (data["assets"].to_string() + ".json") }),
+		callback,
+		data["assetIndex"]["sha1"].to_string()
+	);
 	Json::JsonValue assets_data = jsonParcer.ParseFile(Join({ path, "assets", "indexes", (data["assets"].to_string() + ".json") }));
 
 	// The assets has a hash. e.g. c4dbabc820f04ba685694c63359429b22e3a62b5
 	// With this hash, it can be download from https://resources.download.minecraft.net/c4/c4dbabc820f04ba685694c63359429b22e3a62b5
 	// And saved at assets/objects/c4/c4dbabc820f04ba685694c63359429b22e3a62b5
-
+	//return true;
 	callback->OnProgress(NULL, assets_data["objects"].get_count() - 1, NULL, NULL);
 
 	int count = 0;
@@ -1059,7 +1065,8 @@ bool MinecraftCpp::install_assets(Json::JsonValue data, const std::string& path,
 				var.second["hash"].to_string().substr(0, 2) + '\\' +
 				var.second["hash"].to_string()
 				),
-			callback
+			callback,
+			var.second["hash"].to_string()
 		);
 
 		++count;
@@ -1112,11 +1119,11 @@ bool MinecraftCpp::install_jvm_runtime(const std::string& jvm_version, const std
 			// Prefer downloading the compresses file
 			if (var.second["downloads"].is_exist("lzma"))
 			{
-				DownloadFile(var.second["downloads"]["lzma"]["url"].to_string(), current_path.u8string(), callback, true);
+				DownloadFile(var.second["downloads"]["lzma"]["url"].to_string(), current_path.u8string(), callback, var.second["downloads"]["raw"]["sha1"].to_string(), true);
 			}
 			else
 			{
-				DownloadFile(var.second["downloads"]["raw"]["url"].to_string(), current_path.u8string(), callback);
+				DownloadFile(var.second["downloads"]["raw"]["url"].to_string(), current_path.u8string(), callback, var.second["downloads"]["raw"]["sha1"].to_string());
 			}
 
 			// Make files executable on unix systems

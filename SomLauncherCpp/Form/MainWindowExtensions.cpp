@@ -9,80 +9,31 @@ void SomLauncherMainWindow::start_minecraft_params()
 	qInfo() << this->config_parce["user"]["isInstallMods"].to_string() << std::endl;
 	qInfo() << this->config_parce["user"]["server"].to_string() << std::endl;
 
-	std::string java = "";
-	std::string core = "";
-	std::string version = "";
-
 	this->configureOptions();
 
 	switch (this->config_parce["user"]["server"].to_int())
 	{
 	case 0:
 	{
-		java = this->servers_parce["servers"][0]["java"].to_string();
-		core = this->servers_parce["servers"][0]["core"].to_string();
-		version = this->servers_parce["servers"][0]["version"].to_string();
-		std::string launch_version = install_minecraft(version, core, this->servers_parce["servers"][0]["loaderVersion"].to_string(), java, this->config_parce["user"]["mcdir"].to_string(), this->options);
-		std::string command = MinecraftCpp::get_minecraft_command__(launch_version, this->minecraft_core_dir_path, options);
-		qInfo() << command;
-
-		this->close();
-
-		std::filesystem::current_path(this->minecraft_core_dir_path);
-		MinecraftCpp::start_minecraft("", command);
+		setupInstallMinecraft(0);
 
 		break;
 	}
 	case 1:
 	{
-		java = this->servers_parce["servers"][1]["java"].to_string();
-		core = this->servers_parce["servers"][1]["core"].to_string();
-		version = this->servers_parce["servers"][1]["version"].to_string();
-		std::string launch_version = install_minecraft(version, core, this->servers_parce["servers"][1]["loaderVersion"].to_string(), java, this->config_parce["user"]["mcdir"].to_string(), this->options);
-
-		std::string command = MinecraftCpp::get_minecraft_command__(launch_version, this->minecraft_core_dir_path, options);
-		qInfo() << command << std::endl;
-
-		this->close();
-
-		std::filesystem::current_path(this->minecraft_core_dir_path);
-		MinecraftCpp::start_minecraft("", command);
+		setupInstallMinecraft(1);
 
 		break;
 	}
 	case 2:
 	{
-		java = servers_parce["servers"][2]["java"].to_string();
-		core = servers_parce["servers"][2]["core"].to_string();
-		version = servers_parce["servers"][2]["version"].to_string();
-		std::string launch_version = install_minecraft(version, core, this->servers_parce["servers"][2]["loaderVersion"].to_string(), java, this->config_parce["user"]["mcdir"].to_string(), this->options);
-
-		//FIXME: нехватает библиотек или в аргументе -DFabricMcEmu=
-		std::string command = MinecraftCpp::get_minecraft_command__(launch_version, this->minecraft_core_dir_path, options);
-		qInfo() << command << std::endl;
-
-		this->close();
-
-		std::filesystem::current_path(this->minecraft_core_dir_path);
-		MinecraftCpp::start_minecraft("", command);
+		setupInstallMinecraft(2);
 
 		break;
 	}
 	case 3:
 	{
-		java = this->servers_parce["servers"][3]["java"].to_string();
-		core = this->servers_parce["servers"][3]["core"].to_string();
-		version = this->servers_parce["servers"][3]["version"].to_string();
-
-		std::string launch_version = install_minecraft(version, core, this->servers_parce["servers"][3]["loaderVersion"].to_string(), java, this->config_parce["user"]["mcdir"].to_string(), this->options);
-
-		std::string command = MinecraftCpp::get_minecraft_command__(launch_version, this->minecraft_core_dir_path, options);
-		qInfo() << command << std::endl;
-
-		this->close();
-
-		std::filesystem::current_path(this->minecraft_core_dir_path);
-		MinecraftCpp::start_minecraft("", command);
+		setupInstallMinecraft(3);
 
 		break;
 	}
@@ -93,7 +44,37 @@ void SomLauncherMainWindow::start_minecraft_params()
 	}
 }
 
+void SomLauncherMainWindow::setupInstallMinecraft(const size_t& index)
+{
+	std::string java = this->servers_parce["servers"][index]["java"].to_string();
+	std::string core = this->servers_parce["servers"][index]["core"].to_string();
+	std::string version = this->servers_parce["servers"][index]["version"].to_string();
+	std::string name = this->servers_parce["servers"][index]["name"].to_string();
+
+	name.erase(Additionals::String::remove_if(name.begin(), name.end(), isspace));
+
+	std::filesystem::path instance_path = this->minecraft_core_dir_path + "\\" + name;
+
+	std::string launch_version = install_minecraft(
+		instance_path,
+		version,
+		core,
+		this->servers_parce["servers"][index]["loaderVersion"].to_string(),
+		java,
+		this->config_parce["user"]["mcdir"].to_string(),
+		this->options);
+
+	std::string command = MinecraftCpp::get_minecraft_command__(launch_version, instance_path.u8string(), options);
+	qInfo() << command;
+
+	this->close();
+
+	std::filesystem::current_path(instance_path);
+	MinecraftCpp::start_minecraft("", command);
+}
+
 std::string SomLauncherMainWindow::install_minecraft(
+	const std::filesystem::path& install_path,
 	std::string version,
 	std::string loader_mame,
 	std::string loader_version,
@@ -101,10 +82,7 @@ std::string SomLauncherMainWindow::install_minecraft(
 	std::string mcdir,
 	MinecraftCpp::option::MinecraftOptions& options)
 {
-	checkJava(options, java);
-
-	Json::JsonParcer parecer_modpack;
-	Json::JsonValue data_modpack = parecer_modpack.ParseFile(this->minecraft_core_dir_path);
+	//Json::JsonValue data_modpack = parecer_modpack.ParseFile(this->minecraft_core_dir_path);
 
 	/* minecraft_version = 1.12.2 + "-" + forge_version = 14.23.5.2860 */
 	//wchar_t* launch_varsion = L"1.12.2-forge-14.23.5.2860";
@@ -116,13 +94,15 @@ std::string SomLauncherMainWindow::install_minecraft(
 	callback->setQProgressBar(ui.progressBar_ahtung);
 	callback->setQLabelProggress(ui.label_download_status_change);
 
+	checkJava(options, java, callback.get());
+
 	if (loader_mame == "forge" || loader_mame == "Forge")
 	{
 		launch_version = version + "-" + loader_mame + "-" + loader_version;
 		install_version = version + "-" + loader_version;
 
 		MinecraftCpp::forge::install_forge_version(
-			install_version, this->minecraft_core_dir_path, callback.get(), options.executablePath);
+			install_version, install_path.u8string(), callback.get(), options.executablePath);
 
 		return launch_version;
 	}
@@ -131,7 +111,7 @@ std::string SomLauncherMainWindow::install_minecraft(
 		launch_version = std::string("fabric") + "-" + "loader" + "-" + loader_version + "-" + version;
 
 		MinecraftCpp::fabric::install_fabric_version(
-			version, this->minecraft_core_dir_path, loader_version, callback.get(), options.executablePath);
+			version, install_path.u8string(), loader_version, callback.get(), options.executablePath);
 
 		return launch_version;
 	}
@@ -179,7 +159,7 @@ void SomLauncherMainWindow::configureOptions()
 	this->default_options = this->options;
 }
 
-void SomLauncherMainWindow::checkJava(MinecraftCpp::option::MinecraftOptions& options, std::string java_verison)
+void SomLauncherMainWindow::checkJava(MinecraftCpp::option::MinecraftOptions& options, std::string java_verison, CallbackNull* callback)
 {
 	std::string java_dir = "";
 
@@ -202,7 +182,7 @@ void SomLauncherMainWindow::checkJava(MinecraftCpp::option::MinecraftOptions& op
 	{
 		if (!DDIC::Download::Java::check_downloaded_version_java(this->minecraft_core_dir_path, java_verison))
 		{
-			java_dir = DDIC::Download::Java::install(java_verison, this->minecraft_core_dir_path);
+			java_dir = DDIC::Download::Java::install(java_verison, this->minecraft_core_dir_path, callback);
 			options.executablePath = java_dir + "\\" + "bin" + "\\" + "java.exe";
 		}
 		else

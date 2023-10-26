@@ -43,6 +43,7 @@ namespace Json
 			Node(long long number_value);
 			Node(bool bool_value);
 			Node(std::string string_value);
+			Node(const char* string_value);
 			Node(std::nullptr_t null_value);
 			Node(std::unordered_map<std::string, Json::SomJson> object_value);
 			Node(std::vector<Json::SomJson> array_value);

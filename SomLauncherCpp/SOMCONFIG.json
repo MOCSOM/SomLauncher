@@ -1,8 +1,8 @@
 {
     "user": {
-        "memory": 7168,
+        "memory": 7002,
         "name": "debug",
-        "server": 2,
+        "server": 1,
         "wight": 854,
         "hight": 480,
         "mcdir": "",

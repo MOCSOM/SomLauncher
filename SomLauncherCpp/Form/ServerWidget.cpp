@@ -36,7 +36,7 @@ void ServerWidget::radioButtonChecked(bool checked)
 {
 	if (checked == true)
 	{
-		std::cout << "radioButtonChecked true" << std::endl;
+		qInfo() << "radioButtonChecked true" << std::endl;
 		QString style = R"(#widget_selecter {border-style: solid;
  border-width : 1.2px;
  border-color: red;})";
@@ -44,7 +44,7 @@ void ServerWidget::radioButtonChecked(bool checked)
 	}
 	else
 	{
-		std::cout << "radioButtonChecked false" << std::endl;
+		qInfo() << "radioButtonChecked false" << std::endl;
 		QString style = R"(#widget_selecter {border-style: solid;
  border-width : 0px;
  border-color: red;})";

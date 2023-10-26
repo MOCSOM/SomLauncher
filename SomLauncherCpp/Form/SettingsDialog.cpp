@@ -7,6 +7,8 @@ SettingsDialog::SettingsDialog(Json::JsonValue data, MinecraftCpp::option::Minec
 
 	this->account_data = data;
 
+	ui.label_modreinstall_notifiy->setStyleSheet("#label_modreinstall_notifiy{color: rgb(255, 0, 0);}");
+
 	QPalette palette = ui.label_modreinstall_notifiy->palette();
 	palette.setColor(ui.label_modreinstall_notifiy->backgroundRole(), Qt::red);
 	palette.setColor(ui.label_modreinstall_notifiy->foregroundRole(), Qt::red);
@@ -23,6 +25,9 @@ SettingsDialog::SettingsDialog(Json::JsonValue data, MinecraftCpp::option::Minec
 	QObject::connect(ui.pushButton_toDefault, &QPushButton::clicked, this, &SettingsDialog::setToDefaultButtonClicked);
 
 	QObject::connect(ui.checkBox_reinstall_modpack, &QPushButton::clicked, this, &SettingsDialog::reinstallModPackIsChecked);
+
+	QObject::connect(ui.toolButton_game_path, &QToolButton::clicked, this, &SettingsDialog::onClickToolBotton_getminecraft_core);
+	QObject::connect(ui.toolButton_java_path, &QToolButton::clicked, this, &SettingsDialog::onClickToolBotton_getjava_path);
 }
 
 SettingsDialog::~SettingsDialog()
@@ -91,6 +96,20 @@ bool SettingsDialog::getReintsallModsState()
 	return ui.checkBox_reinstall_modpack->isChecked();
 }
 
+std::filesystem::path SettingsDialog::getPathFromWindowSelector(const QFileDialog::FileMode& type,
+	const QFileDialog::Option& option, const QList<QString>& file_types_display)
+{
+	QFileDialog dialog(this);
+	dialog.setFileMode(type);
+	dialog.setOptions(option);
+	dialog.setNameFilters(file_types_display);
+
+	if (dialog.exec())
+		return dialog.getExistingDirectory().toStdString();
+
+	return std::filesystem::path();
+}
+
 std::string SettingsDialog::getJavaPath()
 {
 	return ui.lineEdit_java_path->text().toStdString();
@@ -113,12 +132,38 @@ void SettingsDialog::reinstallModPackIsChecked()
 	if (ui.label_modreinstall_notifiy->isHidden())
 	{
 		ui.label_modreinstall_notifiy->setHidden(false);
+		emit reinstallMods(true);
 	}
 	else
 	{
 		ui.label_modreinstall_notifiy->setHidden(true);
+		emit reinstallMods(false);
+	}
+}
+
+void SettingsDialog::onClickToolBotton_getminecraft_core()
+{
+	qInfo() << "onClickToolBotton_getminecraft_core" << std::endl;
+	std::filesystem::path path = getPathFromWindowSelector(QFileDialog::Directory, QFileDialog::ShowDirsOnly);
+	if (path.empty())
+	{
+		return;
+	}
+	ui.lineEdit_game_path->setText(path.u8string().c_str());
+}
+
+void SettingsDialog::onClickToolBotton_getjava_path()
+{
+	qInfo() << "onClickToolBotton_getjava_path" << std::endl;
+
+	std::filesystem::path path = getPathFromWindowSelector(QFileDialog::FileMode::ExistingFile,
+		QFileDialog::Option::ReadOnly, { "Java executeble file (*.exe)" });
+	if (path.empty())
+	{
+		return;
 	}
 
+	ui.lineEdit_java_path->setText(path.u8string().c_str());
 }
 
 void SettingsDialog::setMemoryLableValue(int value)

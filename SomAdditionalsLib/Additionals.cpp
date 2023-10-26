@@ -19,6 +19,16 @@ wchar_t* Additionals::Convectors::ConvertStringToWcharPtr(const std::string& str
 	return (&Buffer[0]);
 }
 
+std::unique_ptr<wchar_t[]> Additionals::Convectors::ConvertStringToWcharUniqPtr(const std::string& str)
+{
+	UINT CodePage = CP_ACP;
+	DWORD const BuffSize = MultiByteToWideChar(CodePage, 0, str.c_str(), -1, NULL, 0);
+	if (!BuffSize) return NULL;
+	std::unique_ptr<wchar_t[]> Buffer = std::make_unique<wchar_t[]>(BuffSize);
+	if (!MultiByteToWideChar(CodePage, 0, str.c_str(), -1, &Buffer[0], BuffSize)) return NULL;
+	return Buffer;
+}
+
 std::string Additionals::Convectors::ConvertWcharPtrToString(const wchar_t* str)
 {
 	std::wstring ws(str);

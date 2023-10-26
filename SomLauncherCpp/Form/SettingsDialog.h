@@ -38,10 +38,17 @@ public:
 
 	bool getReintsallModsState();
 
+	std::filesystem::path getPathFromWindowSelector(
+		const QFileDialog::FileMode& type = QFileDialog::FileMode::AnyFile,
+		const QFileDialog::Option& option = QFileDialog::Option::DontConfirmOverwrite,
+		const QList<QString>& file_types_display = {});
+
 signals:
 	void acceptButtonClicked();
 signals:
 	void setToDefaultButtonClicked();
+signals:
+	void reinstallMods(bool state);
 
 private slots:
 	void setMemoryLableValue(int value);
@@ -49,6 +56,9 @@ private slots:
 	void saveSettings();
 
 	void reinstallModPackIsChecked();
+
+	void onClickToolBotton_getminecraft_core();
+	void onClickToolBotton_getjava_path();
 
 private:
 	Ui::SettingsDialog ui;

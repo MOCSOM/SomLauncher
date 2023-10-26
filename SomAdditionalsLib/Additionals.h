@@ -34,6 +34,7 @@ namespace Additionals
 	namespace Convectors
 	{
 		wchar_t* ConvertStringToWcharPtr(const std::string& str);
+		std::unique_ptr<wchar_t[]> ConvertStringToWcharUniqPtr(const std::string& str);
 		std::string ConvertWcharPtrToString(const wchar_t* str);
 		std::string ConvertWStringToString(const std::wstring& str);
 		std::wstring ConvertStringToWString(const std::string& str);
@@ -90,6 +91,16 @@ namespace Additionals
 		// trim from both ends (copying)
 		static inline std::string trim_copy(std::string s);
 		static inline std::string trim_copy(std::string s, const char& symbol);
+
+		template<typename T, typename P>
+		T remove_if(T beg, T end, P pred)
+		{
+			T dest = beg;
+			for (T itr = beg; itr != end; ++itr)
+				if (!pred(*itr))
+					*(dest++) = *itr;
+			return dest;
+		}
 	}
 
 	namespace Path

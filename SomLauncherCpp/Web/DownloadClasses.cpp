@@ -10,7 +10,7 @@
 //}
 
 std::string DDIC::Download::Files::download_file(const std::string& s_url,
-	const std::string& d_file, CallbackNull* callback, bool lzma_compressed)
+	const std::string& d_file, CallbackNull* callback, const std::string& sha1, bool lzma_compressed)
 {
 	//callback = const_cast<CallbackNull>(callback);
 	std::string destenation_file;
@@ -63,7 +63,45 @@ std::string DDIC::Download::Files::download_file(const std::string& s_url,
 			destenation_file = ff + "\\" + url;
 		}
 	}
+
+	if (std::filesystem::is_regular_file(destenation_file))
+	{
+		if (sha1 == "")
+		{
+			return destenation_file;
+		}
+		callback->OnProgress(NULL, NULL, 6, Additionals::Convectors::ConvertStringToWString("Checking checksum " + destenation_file).c_str());
+		if (SHA1::from_file(destenation_file) == sha1)
+		{
+			return destenation_file;
+		}
+	}
+
 	HRESULT download_result = URLDownloadToFileA(NULL, s_url.c_str(), destenation_file.c_str(), NULL, callback);
+
+	if (lzma_compressed)
+	{
+		/*System::IO::Compression::ZipArchive^ zArchive = System::IO::Compression::ZipFile::OpenRead(System::String(d_file).ToString());
+		System::IO::Compression::ZipFileExtensions::ExtractToDirectory(zArchive, System::String(d_file).ToString());*/
+	}
+
+	if (sha1 != "")
+	{
+		std::string check_sum = SHA1::from_file(destenation_file);
+		if (check_sum != sha1)
+		{
+			callback->OnProgress(NULL, NULL, NULL, Additionals::Convectors::ConvertStringToWString(
+				"Invalid checksum " +
+				s_url + " in " +
+				destenation_file + " with " +
+				sha1 + " checksum " + check_sum).c_str());
+
+			/*throw std::runtime_error("Invalid checksum " +
+				s_url + " in " +
+				destenation_file + " with " +
+				sha1 + " checksum " + check_sum);*/
+		}
+	}
 
 	if (S_OK == download_result)
 	{
@@ -74,11 +112,6 @@ std::string DDIC::Download::Files::download_file(const std::string& s_url,
 	{
 		callback->OnProgress(NULL, NULL, NULL, Additionals::Convectors::ConvertStringToWString("Unable to Download the file: " + s_url + "\nto: " + d_file).c_str());
 		return "";
-	}
-	if (lzma_compressed)
-	{
-		/*System::IO::Compression::ZipArchive^ zArchive = System::IO::Compression::ZipFile::OpenRead(System::String(d_file).ToString());
-		System::IO::Compression::ZipFileExtensions::ExtractToDirectory(zArchive, System::String(d_file).ToString());*/
 	}
 }
 
@@ -232,11 +265,11 @@ std::string DDIC::Download::Java::install(const std::string& version, const std:
 		}
 		bool del = DeleteFileA(fifa.c_str());
 
-		std::cout << "Deleted archive status: " << del << std::endl;
+		callback->OnProgress(NULL, NULL, NULL, (L"Deleted archive status: " + std::to_wstring(del)).c_str());
 	}
 	/*System::Console::WriteLine("Installation of java completed");*/
 
-	std::cout << "Installation of java completed" << std::endl;
+	callback->OnProgress(NULL, NULL, NULL, L"Installation of java completed");
 
 	return jdk_dir;
 }
