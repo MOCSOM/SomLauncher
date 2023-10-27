@@ -34,6 +34,7 @@
 #include "../QObjects/HoveredFrame.h"
 #include "../QObjects/Threads/FunThread.h"
 #include "../QObjects/Images/ImageEditing.h"
+#include "../QObjects/SignalLabel.h"
 
 #include "ServerChangerForm.h"
 #include "ServerWidget.h"
@@ -141,6 +142,7 @@ private slots:
 	void saveSettings();
 
 	void updateProgressBar(int value);
+	void updateProgressLabel(const QString& text);
 
 	void pageChangedSlidedWidget(int value);
 

@@ -92,7 +92,7 @@
     <ClCompile Include="QObjects\Images\ImageEditing.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SignalLabel.cpp">
+    <ClCompile Include="QObjects\SignalLabel.cpp">
       <Filter>Custom Qt Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -183,7 +183,7 @@
     <QtMoc Include="Form\SomLauncherMainWindow.h">
       <Filter>Custom Qt Files</Filter>
     </QtMoc>
-    <QtMoc Include="SignalLabel.h">
+    <QtMoc Include="QObjects\SignalLabel.h">
       <Filter>Custom Qt Files</Filter>
     </QtMoc>
   </ItemGroup>

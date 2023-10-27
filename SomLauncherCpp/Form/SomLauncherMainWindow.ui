@@ -382,7 +382,7 @@
        </widget>
       </item>
       <item row="3" column="0">
-       <widget class="QLabel" name="label_download_status_change">
+       <widget class="SignalLabel" name="label_download_status_change">
         <property name="text">
          <string>download_status</string>
         </property>
@@ -489,6 +489,11 @@
    <extends>QFrame</extends>
    <header>../../../QObjects/HoveredFrame.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>SignalLabel</class>
+   <extends>QLabel</extends>
+   <header>../../../QObjects/SignalLabel.h</header>
   </customwidget>
  </customwidgets>
  <resources>

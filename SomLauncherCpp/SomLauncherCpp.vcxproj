@@ -181,10 +181,10 @@
     <ClCompile Include="QObjects\ClickableLabel.cpp" />
     <ClCompile Include="QObjects\HoveredFrame.cpp" />
     <ClCompile Include="QObjects\Images\ImageEditing.cpp" />
+    <ClCompile Include="QObjects\SignalLabel.cpp" />
     <ClCompile Include="QObjects\SomSlider.cpp" />
     <ClCompile Include="QObjects\Threads\FunThread.cpp" />
     <ClCompile Include="Servers\ServerTypes.cpp" />
-    <ClCompile Include="SignalLabel.cpp" />
     <ClCompile Include="Upgrader.cpp" />
     <ClCompile Include="Web\DownloadClasses.cpp" />
   </ItemGroup>
@@ -203,10 +203,10 @@
     <ClInclude Include="Minecraft\Mods.h" />
     <ClInclude Include="Moc\Logger\MocIOStream.h" />
     <ClInclude Include="QObjects\Images\ImageEditing.h" />
+    <QtMoc Include="QObjects\SignalLabel.h" />
     <ClInclude Include="QObjects\SomSlider.h" />
     <QtMoc Include="QObjects\Threads\FunThread.h" />
     <ClInclude Include="Servers\ServerTypes.h" />
-    <QtMoc Include="SignalLabel.h" />
     <ClInclude Include="Upgrader.h" />
     <ClInclude Include="Web\DownloadClasses.h" />
     <QtMoc Include="Form\SomLauncherMainWindow.h" />

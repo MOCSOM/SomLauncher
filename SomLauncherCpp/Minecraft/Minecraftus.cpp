@@ -256,13 +256,18 @@ Json::JsonValue MinecraftCpp::inherit_json(Json::JsonValue original_data, const 
 	std::string path_inh_json = Join({ path, "versions", inherit_version.to_string(), (inherit_version.to_string() + ".json") });
 	Json::JsonParcer json_inherit;
 	Json::JsonValue new_data = json_inherit.ParseFile(path_inh_json);
+
+	qInfo() << original_data["mainClass"].to_string() << std::endl;
+
 	for (auto& var : original_data.get_object())
 	{
-		if (new_data.is_exist(var.first) && var.second.get_type() == Json::JsonTypes::Array && new_data[var.first].get_type() == Json::JsonTypes::Array)
+		if (var.second.get_type() == Json::JsonTypes::Array &&
+			new_data.is_exist(var.first) ? new_data[var.first].get_type() == Json::JsonTypes::Array : false)
 		{
 			new_data[var.first] = var.second + new_data[var.first];
 		}
-		else if (var.second.get_type() == Json::JsonTypes::Object && new_data[var.first].get_type() == Json::JsonTypes::Object)
+		else if (var.second.get_type() == Json::JsonTypes::Object &&
+			new_data.is_exist(var.first) ? new_data[var.first].get_type() == Json::JsonTypes::Object : false)
 		{
 			for (auto& variable : var.second.get_object())
 			{
@@ -284,6 +289,8 @@ Json::JsonValue MinecraftCpp::inherit_json(Json::JsonValue original_data, const 
 			}
 		}
 	}
+
+	qInfo() << new_data["mainClass"].to_string() << std::endl;
 
 	return new_data;
 }
@@ -315,7 +322,7 @@ Json::JsonValue MinecraftCpp::get_version_list()
 	return returnlist;
 }
 
-std::string MinecraftCpp::get_minecraft_command__(const std::string& version, const std::string& minecraft_directory,
+std::vector<std::string> MinecraftCpp::get_minecraft_command__(const std::string& version, const std::string& minecraft_directory,
 	MinecraftCpp::option::MinecraftOptions options)
 {
 	/*
@@ -324,8 +331,8 @@ std::string MinecraftCpp::get_minecraft_command__(const std::string& version, co
 	if (!std::filesystem::exists(Join({ minecraft_directory, "versions", version, (version + ".json") })) ||
 		!std::filesystem::is_directory(Join({ minecraft_directory, "versions", version })))
 	{
-		std::cout << "Version Not Found" << version << std::endl;
-		return "";
+		qFatal() << "Version Not Found" << version;
+		return {};
 	}
 
 	Json::JsonParcer json_parcer;
@@ -336,71 +343,60 @@ std::string MinecraftCpp::get_minecraft_command__(const std::string& version, co
 	{
 		data = MinecraftCpp::inherit_json(orig_data, minecraft_directory); //FIXME: Баг: библиотеки(лист) не приравниваются, в функции всё норм
 	}
+	qInfo() << data.to_string() << std::endl;
 	options.nativesDirectory = options.get("nativesDirectory", Join({ minecraft_directory, "versions", data["id"].to_string(), "natives" }));
 	//options.nativesDirectory = JoinW({ minecraft_directory, L"versions", data["id"]->to_stringW(), L"natives" });
 	options.classpath = MinecraftCpp::get_libraries(data, minecraft_directory);
 
-	std::string command = "";
+	std::vector<std::string> command;
 
 	// Add Java executable
 	if (options.executablePath != "")
 	{
-		command += options.executablePath;
-		command += " ";
+		command.push_back(options.executablePath);
 	}
 	else if (data.is_exist("javaVersion"))
 	{
 		std::string java_path = MinecraftCpp::get_executable_path(data["javaVersion"]["component"].to_string(), minecraft_directory);
 		if (java_path == "")
 		{
-			command += "java";
-			command += " ";
+			command.push_back("java");
 		}
 		else
 		{
-			command += java_path;
-			command += " ";
+			command.push_back(java_path);
 		}
 	}
 	else
 	{
-		command += "java";
-		command += " ";
-	}
-	if (options.jvmArguments != "")
-	{
-		command += options.jvmArguments;
-		command += " ";
+		command.push_back(options.get("defaultExecutablePath", std::string("java")));
 	}
 
+	if (options.jvmArguments != "")
+	{
+		command.push_back(options.jvmArguments);
+	}
+
+	qInfo() << data.to_string() << std::endl;
 	// Newer Versions have jvmArguments in version.json
-	if (data.is_exist("arguments") && data["arguments"].get_type() == Json::JsonTypes::Object)
+	if (data.is_exist("arguments") ? data["arguments"].get_type() == Json::JsonTypes::Object : false)
 	{
 		if (data["arguments"].is_exist("jvm"))
 		{
-			command += MinecraftCpp::get_arguments(data["arguments"]["jvm"], data, minecraft_directory, options);
-			command += " ";
+			command.push_back(MinecraftCpp::get_arguments(data["arguments"]["jvm"], data, minecraft_directory, options));
 		}
 		else
 		{
-			command += "-Djava.library.path=";
-			command += options.nativesDirectory;
-			command += " ";
-			command += "-cp";
-			command += " ";
-			command += options.classpath;
-			command += " ";
+			command.push_back("-Djava.library.path=" + options.nativesDirectory);
+			command.push_back("-cp");
+			command.push_back(options.classpath);
 		}
 	}
 	else
 	{
-		command += "-Djava.library.path=";
-		command += options.nativesDirectory;
-		command += " ";
-		command += "-cp";
-		command += " ";
-		command += options.classpath;
-		command += " ";
+		command.push_back("-Djava.library.path=" + options.nativesDirectory);
+		command.push_back("-cp");
+		command.push_back(options.classpath);
 	}
 
 	if (options.get("enableLoggingConfig", false))
@@ -412,37 +408,32 @@ std::string MinecraftCpp::get_minecraft_command__(const std::string& version, co
 				std::string logger_file = Join({ minecraft_directory, "assets", "log_configs", data["logging"]["client"]["file"]["id"].to_string() });
 				std::string data_replacer = data["logging"]["client"]["argument"].to_string();
 				Additionals::String::replace(data_replacer, "${path}", logger_file);
-				command += data_replacer;
+				command.push_back(data_replacer);
 			}
 		}
 	}
 
-	command += data["mainClass"].to_string();
-	command += " ";
+	command.push_back(data["mainClass"].to_string());
+
 	if (data.is_exist("minecraftArguments"))
 	{
 		// For older versions
-		command += MinecraftCpp::get_arguments_string(data, minecraft_directory, options);
-		command += " ";
+		command.push_back(MinecraftCpp::get_arguments_string(data, minecraft_directory, options));
 	}
 	else
 	{
-		command += MinecraftCpp::get_arguments(data["arguments"]["game"], data, minecraft_directory, options);
-		command += " ";
+		command.push_back(MinecraftCpp::get_arguments(data["arguments"]["game"], data, minecraft_directory, options));
 	}
 
 	if (options.server != "")
 	{
-		command += "--server";
-		command += " ";
-		command += options.server;
-		command += " ";
+		command.push_back("--server");
+		command.push_back(options.server);
+
 		if (options.port != "")
 		{
-			command += "--port";
-			command += " ";
-			command += options.port;
-			command += " ";
+			command.push_back("--port");
+			command.push_back(options.port);
 		}
 	}
 
@@ -466,18 +457,18 @@ std::string MinecraftCpp::get_libraries(Json::JsonValue data, const std::string&
 			continue;
 		}
 
-		libstr += (MinecraftCpp::get_library_path(elem["name"].to_string(), path) + classpath_seperator);
+		libstr += MinecraftCpp::get_library_path(elem["name"].to_string(), path) + classpath_seperator;
 		native = MinecraftCpp::get_natives(elem);
 
 		if (native != "")
 		{
 			if (elem.is_exist("downloads"))
 			{
-				libstr += (Join({ path, "libraries", elem["downloads"]["classifiers"][native]["path"].to_string() }) + classpath_seperator);
+				libstr += Join({ path, "libraries", elem["downloads"]["classifiers"][native]["path"].to_string() }) + classpath_seperator;
 			}
 			else
 			{
-				libstr += (MinecraftCpp::get_library_path((elem["name"].to_string() + ("-" + native)), path) + classpath_seperator);
+				libstr += MinecraftCpp::get_library_path((elem["name"].to_string() + ("-" + native)), path) + classpath_seperator;
 			}
 		}
 	}
@@ -804,6 +795,49 @@ std::string MinecraftCpp::replace_arguments(std::string argstr, Json::JsonValue 
 	Replace all 20 placeholder in arguments with the needed value
 	*/
 
+	/*if (Additionals::String::replace(argstr, "${natives_directory}", options.nativesDirectory))
+		return argstr;
+	if (Additionals::String::replace(argstr, "${launcher_name}", options.get("launcherName", std::string("null"))))
+		return argstr;
+	if (Additionals::String::replace(argstr, "${launcher_version}", options.get("launcherVersion", std::string("null"))))
+		return argstr;
+	if (Additionals::String::replace(argstr, "${classpath}", options.classpath))
+		return argstr;
+	if (Additionals::String::replace(argstr, "${auth_player_name}", options.get("username", std::string("{username}"))))
+		return argstr;
+	if (Additionals::String::replace(argstr, "${version_name}", versionData["id"].to_string()))
+		return argstr;
+	if (Additionals::String::replace(argstr, "${game_directory}", options.get("gameDirectory", path)))
+		return argstr;
+	if (Additionals::String::replace(argstr, "${assets_root}", Join({ path, "assets" })))
+		return argstr;
+	if (Additionals::String::replace(argstr, "${assets_index_name}", versionData["assets"] != nullptr ? versionData["assets"].to_string() : versionData["id"].to_string()))
+		return argstr;
+	if (Additionals::String::replace(argstr, "${auth_uuid}", options.get("uuid", std::string("{uuid}"))))
+		return argstr;
+	if (Additionals::String::replace(argstr, "${auth_access_token}", options.get("token", std::string("{token}"))))
+		return argstr;
+	if (Additionals::String::replace(argstr, "${user_type}", "mojang"))
+		return argstr;
+	if (Additionals::String::replace(argstr, "${version_type}", versionData["type"].to_string()))
+		return argstr;
+	if (Additionals::String::replace(argstr, "${user_properties}", "{}"))
+		return argstr;
+	if (Additionals::String::replace(argstr, "${resolution_width}", options.get("resolutionWidth", std::string("854"))))
+		return argstr;
+	if (Additionals::String::replace(argstr, "${resolution_height}", options.get("resolutionHeight", std::string("480"))))
+		return argstr;
+	if (Additionals::String::replace(argstr, "${game_assets}", Join({ path, "assets", "virtual", "legacy" })))
+		return argstr;
+	if (Additionals::String::replace(argstr, "${auth_session}", options.get("token", std::string("{token}"))))
+		return argstr;
+	if (Additionals::String::replace(argstr, "${library_directory}", Join({ path, "libraries" })))
+		return argstr;
+	if (Additionals::String::replace(argstr, "${classpath_separator}", MinecraftCpp::get_classpath_separator()))
+		return argstr;
+
+	return std::string();*/
+
 	Additionals::String::replace(argstr, "${natives_directory}", options.nativesDirectory);
 	Additionals::String::replace(argstr, "${launcher_name}", options.get("launcherName", std::string("null")));
 	Additionals::String::replace(argstr, "${launcher_version}", options.get("launcherVersion", std::string("null")));
@@ -824,6 +858,10 @@ std::string MinecraftCpp::replace_arguments(std::string argstr, Json::JsonValue 
 	Additionals::String::replace(argstr, "${auth_session}", options.get("token", std::string("{token}")));
 	Additionals::String::replace(argstr, "${library_directory}", Join({ path, "libraries" }));
 	Additionals::String::replace(argstr, "${classpath_separator}", MinecraftCpp::get_classpath_separator());
+	Additionals::String::replace(argstr, "${quickPlayPath}", options.get("quickPlayPath", std::string("quickPlayPath")));
+	Additionals::String::replace(argstr, "${quickPlaySingleplayer}", options.get("quickPlaySingleplayer", std::string("quickPlaySingleplayer")));
+	Additionals::String::replace(argstr, "${quickPlayMultiplayer}", options.get("quickPlayMultiplayer", std::string("quickPlayMultiplayer")));
+	Additionals::String::replace(argstr, "${quickPlayRealms}", options.get("quickPlayRealms", std::string("quickPlayRealms")));
 
 	return argstr;
 }
@@ -1211,7 +1249,7 @@ std::string MinecraftCpp::get_sha1_hash(const std::filesystem::path& path)
 }
 
 std::string MinecraftCpp::get_arguments(
-	Json::JsonValue data,
+	Json::JsonValue& data,
 	Json::JsonValue versionData,
 	const std::string& path,
 	MinecraftCpp::option::MinecraftOptions options)
@@ -1225,16 +1263,6 @@ std::string MinecraftCpp::get_arguments(
 	{
 		for (auto& var : data.get_array())
 		{
-			// Rules might has 2 different names in different versions.json
-			if (!parse_rule_list(var, "compatibilityRules", options))
-			{
-				continue;
-			}
-			if (!parse_rule_list(var, "rules", options))
-			{
-				continue;
-			}
-			// var could be the argument
 			if (var.get_type() == Json::JsonTypes::String)
 			{
 				arglist += MinecraftCpp::replace_arguments(var.to_string(), versionData, path, options);
@@ -1242,19 +1270,30 @@ std::string MinecraftCpp::get_arguments(
 			}
 			else
 			{
-				// Sometimes  var["value"] is the argument
+				// Rules might has 2 different names in different versions.json
+				if (var.is_exist("compatibilityRules") && !parse_rule_list(var, "compatibilityRules", options))
+				{
+					continue;
+				}
+				if (var.is_exist("rules") && !parse_rule_list(var, "rules", options))
+				{
+					continue;
+				}
+
+				// var could be the argument
 				if (var["value"].get_type() == Json::JsonTypes::String)
 				{
-					arglist += MinecraftCpp::replace_arguments(var["value"].to_string(), versionData, path, options);
+					qInfo() << "data " << data.to_string() << std::endl;
+					qInfo() << "var " << var.to_string() << std::endl;
+					std::string replace = MinecraftCpp::replace_arguments(var["value"].to_string(), versionData, path, options);
+					arglist += replace;
 					arglist += " ";
 				}
-				// Sometimes var["value"] is a list of arguments
 				else
 				{
 					for (auto& v : var["value"].get_object())
 					{
-						std::string val = v.second.to_string();
-						val = replace_arguments(v.second.to_string(), versionData, path, options);
+						std::string val = replace_arguments(v.second.to_string(), versionData, path, options);
 						arglist += val;
 						arglist += " ";
 					}
@@ -1264,38 +1303,38 @@ std::string MinecraftCpp::get_arguments(
 	}
 	else
 	{
-		for (auto& var : data.get_object())
+		for (auto& var : data.get_array())
 		{
-			// Rules might has 2 different names in different versions.json
-			if (!parse_rule_list(var.second, "compatibilityRules", options))
+			if (var.get_type() == Json::JsonTypes::String)
 			{
-				continue;
-			}
-			if (!parse_rule_list(var.second, "rules", options))
-			{
-				continue;
-			}
-			// var could be the argument
-			if (var.second.get_type() == Json::JsonTypes::String)
-			{
-				arglist += MinecraftCpp::replace_arguments(var.second.to_string(), versionData, path, options);
-				arglist += " ";
+				arglist += MinecraftCpp::replace_arguments(var.to_string(), versionData, path, options);
 			}
 			else
 			{
-				// Sometimes  var["value"] is the argument
-				if (var.second["value"].get_type() == Json::JsonTypes::String)
+				// Rules might has 2 different names in different versions.json
+				if (var.is_exist("compatibilityRules") && !parse_rule_list(var, "compatibilityRules", options))
 				{
-					arglist += MinecraftCpp::replace_arguments(var.second["value"].to_string(), versionData, path, options);
+					continue;
+				}
+				if (var.is_exist("rules") && !parse_rule_list(var, "rules", options))
+				{
+					continue;
+				}
+
+				// var could be the argument
+				if (var["value"].get_type() == Json::JsonTypes::String)
+				{
+					qInfo() << "data " << data.to_string() << std::endl;
+					qInfo() << "var " << var.to_string() << std::endl;
+					std::string replace = MinecraftCpp::replace_arguments(var["value"].to_string(), versionData, path, options);
+					arglist += replace;
 					arglist += " ";
 				}
-				// Sometimes var["value"] is a list of arguments
 				else
 				{
-					for (auto& v : var.second["value"].get_object())
+					for (auto& v : var["value"].get_object())
 					{
-						std::string val = v.second.to_string();
-						val = replace_arguments(v.second.to_string(), versionData, path, options);
+						std::string val = replace_arguments(v.second.to_string(), versionData, path, options);
 						arglist += val;
 						arglist += " ";
 					}
@@ -1388,8 +1427,9 @@ bool MinecraftCpp::forge::install_forge_version(const std::string& versionid, co
 
 	// Extract forge libs from the installer
 	std::string forge_lib_path = Join({ path, "libraries", "net", "minecraftforge", "forge", versionid });
-	extract_file(zArchive, ("maven/net/minecraftforge/forge/" + versionid + "/forge-" + versionid + ".jar"), (forge_lib_path + ("forge-" + versionid + ".jar")));
+	extract_file(zArchive, ("maven/net/minecraftforge/forge/" + versionid + "/forge-" + versionid + ".jar"), (forge_lib_path + "\\" + ("forge-" + versionid + ".jar")));
 	extract_file(zArchive, ("maven/net/minecraftforge/forge/" + versionid + "/forge-" + versionid + "-universal.jar"), Join({ forge_lib_path, ("forge-" + versionid + "-universal.jar") }));
+	extract_file(zArchive, (versionid + "/forge-" + versionid + "-universal.jar"), Join({ forge_lib_path, ("forge-" + versionid + ".jar") }));
 
 	// Extract the client.lzma
 	std::string lzma_path = Additionals::TempFile::get_tempdir_SYSTEM() + ("lzma-" + std::to_string(random_num) + ".tmp");
@@ -1661,7 +1701,7 @@ int MinecraftCpp::fabric::install_fabric_version(const std::string& minecraft_ve
 	callback->OnProgress(NULL, NULL, NULL, L"Running fabric installer");
 	std::vector<std::string> command;
 
-	command.push_back(java == "" ? "java" : "\"" + java + "\"");
+	command.push_back(java == "" ? "java" : java);
 	command.push_back("-jar");
 	command.push_back(installer_path);
 	command.push_back("client");
@@ -1671,6 +1711,7 @@ int MinecraftCpp::fabric::install_fabric_version(const std::string& minecraft_ve
 	command.push_back(minecraft_version);
 	command.push_back("-loader");
 	command.push_back(loader_version);
+	command.push_back("-launcher win32");
 	command.push_back("-noprofile");
 	command.push_back("-snapshot");
 
@@ -1680,22 +1721,24 @@ int MinecraftCpp::fabric::install_fabric_version(const std::string& minecraft_ve
 		command_string += arg + " ";
 	}
 
-	int result = std::system(command_string.c_str());
+	//int result = std::system(command_string.c_str());
 
-	if (result != 0)
+	MinecraftCpp::start_minecraft("", command_string);
+
+	/*if (result != 0)
 	{
 		qFatal() << "External Program Error " << command_string;
 		return -1;
-	}
+	}*/
 
 	// Удаляем файл с помощью std::remove()
 	if (std::remove(installer_path.c_str()) != 0)
 	{
-		qFatal() << "Ошибка при удалении файла";
+		qFatal() << "Error to delete installer file";
 	}
 	else
 	{
-		qInfo() << "Файл успешно удален." << std::endl;
+		qInfo() << "Installer file sucsesful delete" << std::endl;
 	}
 
 	// Install all libs of fabric

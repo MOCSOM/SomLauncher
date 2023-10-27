@@ -45,7 +45,7 @@ void CallbackDict::setQProgressBar(QProgressBar* progress_bar)
 	this->progress_bar = progress_bar;
 }
 
-void CallbackDict::setQLabelProggress(QLabel* progress_label)
+void CallbackDict::setQLabelProggress(SignalLabel* progress_label)
 {
 	this->proggress_label = progress_label;
 }
@@ -78,7 +78,7 @@ STDMETHODIMP_(HRESULT __stdcall) CallbackDict::OnProgress(ULONG ulProgress, ULON
 	case BINDSTATUS_DOWNLOADINGDATA:
 		if (this->proggress_label != nullptr)
 		{
-			this->proggress_label->setText(Additionals::Convectors::ConvertLPCWSTRToString(wszStatusText).c_str());
+			emit this->proggress_label->textChanged(Additionals::Convectors::ConvertLPCWSTRToString(wszStatusText).c_str());
 		}
 
 	case BINDSTATUS_ENDDOWNLOADDATA:
@@ -97,7 +97,7 @@ STDMETHODIMP_(HRESULT __stdcall) CallbackDict::OnProgress(ULONG ulProgress, ULON
 				<< Additionals::Convectors::ConvertLPCWSTRToString(wszStatusText) << std::endl;
 			if (this->proggress_label != nullptr)
 			{
-				this->proggress_label->setText("47");
+				emit this->proggress_label->textChanged(Additionals::Convectors::ConvertLPCWSTRToString(wszStatusText).c_str());
 			}
 
 			m_percentLast = -1;
@@ -124,7 +124,7 @@ HRESULT CallbackDict::setConsoleBar(ULONG& ulProgress, ULONG& ulProgressMax, ULO
 		qInfo() << Additionals::Convectors::ConvertLPCWSTRToString(wszStatusText) << std::endl;
 		if (this->proggress_label != nullptr)
 		{
-			//this->proggress_label->setText(Additionals::Convectors::ConvertLPCWSTRToString(wszStatusText).c_str());
+			emit this->proggress_label->textChanged(Additionals::Convectors::ConvertLPCWSTRToString(wszStatusText).c_str());
 		}
 		return S_OK;
 	}
@@ -159,6 +159,6 @@ void CallbackNull::setQProgressBar(QProgressBar* progress_bar)
 {
 }
 
-void CallbackNull::setQLabelProggress(QLabel* progress_label)
+void CallbackNull::setQLabelProggress(SignalLabel* progress_label)
 {
 }

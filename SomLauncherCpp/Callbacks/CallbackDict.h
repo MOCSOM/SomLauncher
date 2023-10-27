@@ -5,13 +5,15 @@
 #include <qcoreapplication.h>
 #include <qlabel.h>
 
+#include "../../../QObjects/SignalLabel.h"
+
 #include <windows.h>
 #include <tchar.h>
 
 #include <iostream>
 #include <memory>
 
-#include <../../../Moc/Logger/MocIOStream.h>
+#include "../../../Moc/Logger/MocIOStream.h"
 
 #pragma comment(lib, "Urlmon.lib")
 
@@ -34,7 +36,7 @@ public:
 
 public:
 	void setQProgressBar(QProgressBar* progress_bar);
-	void setQLabelProggress(QLabel* progress_label);
+	void setQLabelProggress(SignalLabel* progress_label);
 
 	/// <summary>
 	///
@@ -87,7 +89,7 @@ class CallbackDict : public CallbackNull
 private:
 	int m_percentLast = -1;
 	QProgressBar* progress_bar = nullptr;
-	QLabel* proggress_label = nullptr;
+	SignalLabel* proggress_label = nullptr;
 
 public:
 	CallbackDict() = default;
@@ -95,7 +97,7 @@ public:
 	~CallbackDict() = default;
 
 	void setQProgressBar(QProgressBar* progress_bar);
-	void setQLabelProggress(QLabel* progress_label);
+	void setQLabelProggress(SignalLabel* progress_label);
 
 	// This one is called by URLDownloadToFile
 	STDMETHOD(OnProgress)(/* [in] */ ULONG ulProgress, /* [in] */ ULONG ulProgressMax, /* [in] */ ULONG ulStatusCode, /* [in] */ LPCWSTR wszStatusText) override;

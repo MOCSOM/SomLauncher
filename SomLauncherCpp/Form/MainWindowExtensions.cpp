@@ -64,13 +64,17 @@ void SomLauncherMainWindow::setupInstallMinecraft(const size_t& index)
 		this->config_parce["user"]["mcdir"].to_string(),
 		this->options);
 
-	std::string command = MinecraftCpp::get_minecraft_command__(launch_version, instance_path.u8string(), options);
+	std::vector<std::string> command = MinecraftCpp::get_minecraft_command__(launch_version, instance_path.u8string(), options);
 	qInfo() << command;
+
+	std::ostringstream imploded;
+	std::copy(command.begin(), command.end(),
+		std::ostream_iterator<std::string>(imploded, " "));
 
 	this->close();
 
 	std::filesystem::current_path(instance_path);
-	MinecraftCpp::start_minecraft("", command);
+	MinecraftCpp::start_minecraft("", imploded.str());
 }
 
 std::string SomLauncherMainWindow::install_minecraft(

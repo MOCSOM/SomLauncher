@@ -281,6 +281,8 @@ void SomLauncherMainWindow::onClickpushButton_startgame()
 		};
 
 	connect(ui.progressBar_ahtung, &QProgressBar::valueChanged, this, &SomLauncherMainWindow::updateProgressBar);
+	connect(ui.label_download_status_change, &SignalLabel::textChanged, this, &SomLauncherMainWindow::updateProgressLabel);
+
 	download_thread = new FunctionThread(myFunction);
 	download_thread->start();
 }
@@ -439,6 +441,11 @@ void SomLauncherMainWindow::setReinstallMods(bool state)
 {
 	qInfo() << "setReinstallMods " << state << std::endl;
 	this->config_parce["user"]["isInstallMods"] = state;
+}
+
+void SomLauncherMainWindow::updateProgressLabel(const QString& text)
+{
+	ui.label_download_status_change->setText(text);
 }
 
 void SomLauncherMainWindow::setOptionsValuesFromConfig()

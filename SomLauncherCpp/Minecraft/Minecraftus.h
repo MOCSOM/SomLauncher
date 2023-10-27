@@ -61,7 +61,7 @@ namespace MinecraftCpp
 
 	Json::JsonValue get_version_list();
 
-	std::string get_minecraft_command__(
+	std::vector<std::string> get_minecraft_command__(
 		const std::string& version,
 		const std::string& minecraft_directory,
 		MinecraftCpp::option::MinecraftOptions options);
@@ -140,7 +140,7 @@ namespace MinecraftCpp
 	}
 
 	std::string get_arguments(
-		Json::JsonValue data,
+		Json::JsonValue& data,
 		Json::JsonValue versionData,
 		const std::string& path,
 		MinecraftCpp::option::MinecraftOptions options);
