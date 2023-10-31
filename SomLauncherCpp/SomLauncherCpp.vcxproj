@@ -175,6 +175,7 @@
     <ClCompile Include="Form\SettingsDialog.cpp" />
     <ClCompile Include="Form\SomLauncherMainWindow.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Minecraft\CommandBuilder.cpp" />
     <ClCompile Include="Minecraft\Minecraftus.cpp" />
     <ClCompile Include="Minecraft\Mods.cpp" />
     <ClCompile Include="Moc\Logger\MocIOStream.cpp" />
@@ -200,6 +201,7 @@
     <ClInclude Include="Exceptions\FileOutsideMinecraftDirectoryException.h" />
     <ClInclude Include="Exceptions\TerminateProgrammException.h" />
     <ClInclude Include="Hashes\sha1.h" />
+    <ClInclude Include="Minecraft\CommandBuilder.h" />
     <ClInclude Include="Minecraft\Mods.h" />
     <ClInclude Include="Moc\Logger\MocIOStream.h" />
     <ClInclude Include="QObjects\Images\ImageEditing.h" />
@@ -220,6 +222,7 @@
     <None Include="all.json" />
     <None Include="cpp.hint" />
     <None Include="DATA.json" />
+    <None Include="resources\StyleSheets\Wstartpage_modyfied.qss" />
     <None Include="SERVERS.json" />
     <None Include="SOMCONFIG_template.json" />
     <None Include="SomLauncherCpp.pro" />

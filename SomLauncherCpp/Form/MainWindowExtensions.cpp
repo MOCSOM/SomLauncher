@@ -64,6 +64,7 @@ void SomLauncherMainWindow::setupInstallMinecraft(const size_t& index)
 		this->config_parce["user"]["mcdir"].to_string(),
 		this->options);
 
+	options.gameDirectory = instance_path.u8string();
 	std::vector<std::string> command = MinecraftCpp::get_minecraft_command__(launch_version, instance_path.u8string(), options);
 	qInfo() << command;
 
@@ -116,6 +117,10 @@ std::string SomLauncherMainWindow::install_minecraft(
 
 		MinecraftCpp::fabric::install_fabric_version(
 			version, install_path.u8string(), loader_version, callback.get(), options.executablePath);
+
+		std::filesystem::copy_file(Join({ install_path.u8string(), "versions", version, version + ".jar" }),
+			Join({ install_path.u8string(), "versions", launch_version, launch_version + ".jar" }),
+			std::filesystem::copy_options::overwrite_existing);
 
 		return launch_version;
 	}

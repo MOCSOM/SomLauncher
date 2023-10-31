@@ -9,6 +9,8 @@
 #include <exception>
 #include <filesystem>
 
+//#pragma ignore E2422
+
 int main(int argc, char* argv[])
 {
 	int returned_id = -1;

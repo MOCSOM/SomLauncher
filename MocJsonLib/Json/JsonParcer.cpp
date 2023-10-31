@@ -71,13 +71,19 @@ Json::JsonValue Json::JsonParcer::ParseFile(const std::string& filename)
 
 Json::JsonValue Json::JsonParcer::ParseJson(const std::string& json_str)
 {
-	_pos = 0;
-	return ParseValue(json_str);
+	Json::JsonParcer parcer;
+	parcer._pos = 0;
+	return parcer.ParseValue(json_str);
 }
 
-Json::JsonValue Json::JsonParcer::ParseUrl(const std::string& url)
+Json::JsonValue Json::JsonParcer::ParseUrl(const std::string& url, const std::filesystem::path& destination)
 {
 	std::string destenation_file = Additionals::TempFile::get_tempdir_SYSTEM();
+
+	if (destination == "")
+	{
+		destenation_file = destination.u8string();
+	}
 
 	{
 		std::string replace_url = url;
@@ -90,7 +96,10 @@ Json::JsonValue Json::JsonParcer::ParseUrl(const std::string& url)
 	if (resurl == S_OK)
 	{
 		Json::JsonValue return_val = ParseFile(destenation_file);
-		DeleteFileA(destenation_file.c_str());
+		if (destination == "")
+		{
+			std::remove(destenation_file.c_str());
+		}
 		return return_val;
 	}
 	else

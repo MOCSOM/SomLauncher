@@ -30,7 +30,6 @@ Json::SomJson::SomJson()
 Json::SomJson::SomJson(Node json)
 {
 	this->value = std::make_shared<Node>(json);
-	this->value->is_null = false;
 }
 
 Json::SomJson::SomJson(const Json::SomJson& json)
@@ -38,14 +37,12 @@ Json::SomJson::SomJson(const Json::SomJson& json)
 	if (json.value != nullptr)
 	{
 		this->value = json.value;
-		this->value->is_null = json.value->is_null;
 	}
 }
 
 Json::SomJson::SomJson(std::nullptr_t null)
 {
 	this->value = std::make_shared<Node>();
-	this->value->is_null = true;
 }
 
 Json::SomJson::~SomJson()
@@ -326,7 +323,6 @@ Json::SomJson& Json::SomJson::operator=(const Json::SomJson& value)
 	if (value.value != nullptr)
 	{
 		this->value = value.value;
-		this->value->is_null = value.value->is_null;
 	}
 	return *this;
 }
@@ -499,70 +495,60 @@ Json::SomJson::Node::Node(long double number_value)
 {
 	this->type = Json::JsonTypes::Number;
 	this->number_value = number_value;
-	this->is_null = false;
 }
 
 Json::SomJson::Node::Node(double number_value)
 {
 	this->type = Json::JsonTypes::Number;
 	this->number_value = number_value;
-	this->is_null = false;
 }
 
 Json::SomJson::Node::Node(int number_value)
 {
 	this->type = Json::JsonTypes::Number;
 	this->number_value = static_cast<long double>(number_value);
-	this->is_null = false;
 }
 
 Json::SomJson::Node::Node(long long number_value)
 {
 	this->type = Json::JsonTypes::Number;
 	this->number_value = static_cast<long double>(number_value);
-	this->is_null = false;
 }
 
 Json::SomJson::Node::Node(bool bool_value)
 {
 	this->type = Json::JsonTypes::Bool;
 	this->bool_value = bool_value;
-	this->is_null = false;
 }
 
 Json::SomJson::Node::Node(std::string string_value)
 {
 	this->type = Json::JsonTypes::String;
 	this->string_value = string_value;
-	this->is_null = false;
 }
 
 Json::SomJson::Node::Node(const char* string_value)
 {
 	this->type = Json::JsonTypes::String;
 	this->string_value = string_value;
-	this->is_null = false;
 }
 
 Json::SomJson::Node::Node(std::nullptr_t null_value)
 {
 	this->type = Json::JsonTypes::Null;
 	this->null_value = null_value;
-	this->is_null = false;
 }
 
 Json::SomJson::Node::Node(std::unordered_map<std::string, Json::SomJson> object_value)
 {
 	this->type = Json::JsonTypes::Object;
 	this->object_value = object_value;
-	this->is_null = false;
 }
 
 Json::SomJson::Node::Node(std::vector<Json::SomJson> array_value)
 {
 	this->type = Json::JsonTypes::Array;
 	this->array_value = array_value;
-	this->is_null = false;
 }
 
 bool Json::SomJson::Node::operator==(const Node& value) const
@@ -626,7 +612,11 @@ bool Json::SomJson::Node::operator!=(const Node& value) const
 
 size_t Json::SomJson::get_count()
 {
-	if (this->get_type() == Json::JsonTypes::Object)
+	if (this->value == nullptr || this->get_type() == Json::JsonTypes::NotImplemented)
+	{
+		return 0;
+	}
+	else if (this->get_type() == Json::JsonTypes::Object)
 	{
 		return this->value->object_value.size();
 	}
@@ -634,10 +624,7 @@ size_t Json::SomJson::get_count()
 	{
 		return this->value->array_value.size();
 	}
-	else if (this->get_type() == Json::JsonTypes::NotImplemented || this->value->is_null)
-	{
-		return 0;
-	}
+	
 	return 1;
 }
 

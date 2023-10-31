@@ -27,6 +27,7 @@
 #include "../Moc/Logger/MocIOStream.h"
 #include "../Servers/ServerTypes.h"
 #include "../Exceptions/TerminateProgrammException.h"
+#include "../Minecraft/CommandBuilder.h"
 
 #include "ui_SomLauncherMainWindow.h"
 
@@ -61,7 +62,7 @@ private:
 
 	std::string background = "resources\\background_normal2.png";
 	std::string mocsom_site_url = "https://mocsom.site/";
-	std::string style_sheet = "Form\\StyleSheets\\Wstartpage.qss";
+	std::string style_sheet = "resources\\StyleSheets\\Wstartpage_modyfied.qss";
 
 	MinecraftCpp::option::MinecraftOptions options;
 	MinecraftCpp::option::MinecraftOptions default_options = options;

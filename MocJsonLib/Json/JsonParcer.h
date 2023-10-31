@@ -27,10 +27,10 @@ namespace Json
 	public:
 		JsonParcer() {}
 
-		Json::JsonValue ParseFile(const std::wstring& filename);
-		Json::JsonValue ParseFile(const std::string& filename);
-		Json::JsonValue ParseJson(const std::string& json_str);
-		Json::JsonValue ParseUrl(const std::string& url);
+		static Json::JsonValue ParseFile(const std::wstring& filename);
+		static Json::JsonValue ParseFile(const std::string& filename);
+		static Json::JsonValue ParseJson(const std::string& json_str);
+		static Json::JsonValue ParseUrl(const std::string& url, const std::filesystem::path& destination = "");
 
 	private:
 		void SkipWhitespace(const std::string& json_str);

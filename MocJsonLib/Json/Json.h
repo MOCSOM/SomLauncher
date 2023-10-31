@@ -34,8 +34,6 @@ namespace Json
 			std::unordered_map<std::string, Json::SomJson> object_value = {};
 			std::vector<Json::SomJson> array_value = {};
 
-			bool is_null = true;
-
 			Node();
 			Node(long double number_value);
 			Node(double number_value);
@@ -57,10 +55,11 @@ namespace Json
 		class SomIterator
 		{
 			friend class Json::SomJson;
+			friend struct Json::SomJson::Node;
 
 		public:
 			typedef ITERATOR iterator_type;
-			typedef std::random_access_iterator_tag iterator_category; //категория итератора может быть иной, но должна соответствовать стандарту
+			typedef std::forward_iterator_tag iterator_category; //категория итератора может быть иной, но должна соответствовать стандарту
 			typedef iterator_type value_type;
 			typedef iterator_type& reference;
 			typedef iterator_type* pointer;
@@ -188,13 +187,25 @@ namespace Json
 	template<typename ITERATOR>
 	inline SomJson::SomIterator<ITERATOR>& SomJson::SomIterator<ITERATOR>::operator++() noexcept
 	{
-		++this->value;
+		//++this->value;
+		//if (this->value->type == Json::JsonTypes::Object)
+		//{
+		//	for (auto& i = this->value->object_value.begin();
+		//		i <= this->value->object_value.find((*i).first->string_value); ++i)
+		//	{
+		//		this->value = (*(++i)).second;
+		//	}
+		//}
+		//else if (this->value->type == Json::JsonTypes::Array)
+		//{
+		//	//this->value = this->value->array_value[++this->value->array_value.size()];
+		//}
 		return *this;
 	}
 	template<typename ITERATOR>
 	inline SomJson::SomIterator<ITERATOR> SomJson::SomIterator<ITERATOR>::operator++(int) noexcept
 	{
-		++this->value;
+		++(*this);
 		SomIterator<ITERATOR> temp = *this;
 		return temp;
 	}

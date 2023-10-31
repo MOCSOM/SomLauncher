@@ -7,6 +7,7 @@
 #include "../../SomAdditionalsLib/Additionals.h"
 #include "../Hashes/sha1.h"
 #include "../Exceptions/FileOutsideMinecraftDirectoryException.h"
+#include "CommandBuilder.h"
 
 #include <initializer_list>
 //#include <stdio.h>
@@ -23,6 +24,7 @@
 #include <sstream>
 #include <chrono>
 #include <regex>
+#include <set>
 
 namespace MinecraftCpp
 {
@@ -30,6 +32,15 @@ namespace MinecraftCpp
 	{
 		struct MinecraftOptions
 		{
+			enum ProcessPriority
+			{
+				LOW,
+				BELOW_NORMAL,
+				NORMAL,
+				ABOVE_NORMAL,
+				HIGH
+			};
+
 			MinecraftOptions() {}
 			~MinecraftOptions() {}
 
@@ -51,15 +62,20 @@ namespace MinecraftCpp
 			bool		enableLoggingConfig = NULL;
 			std::string classpath = "";
 			std::string NULLES = "";
+			ProcessPriority process_priority = NORMAL;
 
 			// get (поле, стандарт)
 			std::string get(const std::string& param, const std::string& writ = "");
+			MinecraftOptions::ProcessPriority getProcessPriority(const std::string& param,
+				const MinecraftOptions::ProcessPriority& writ = NORMAL);
 			bool get(const std::string& param, bool writ = NULL);
 			bool is_exist(const std::string& param);
 		};
 	}
 
 	Json::JsonValue get_version_list();
+
+	//std::vector<std::string> generateCommandLine(const std::filesystem::path& nativeFolder, MinecraftCpp::option::MinecraftOptions& options);
 
 	std::vector<std::string> get_minecraft_command__(
 		const std::string& version,
