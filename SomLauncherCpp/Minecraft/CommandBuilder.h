@@ -8,12 +8,13 @@
 #include <regex>
 
 #include "Minecraftus.h"
+#include "Utils/Lang.h"
 
 class CommandBuilder
 {
 private:
-	const std::regex UNSTABLE_OPTION_PATTERN;
-	const std::regex UNSTABLE_BOOLEAN_OPTION_PATTERN;
+	std::regex UNSTABLE_OPTION_PATTERN = std::regex("-XX:(?<key>[a-zA-Z0-9]+)=(?<value>.*)", std::regex_constants::basic);
+	std::regex UNSTABLE_BOOLEAN_OPTION_PATTERN = std::regex("-XX:(?<value>[+\\-])(?<key>[a-zA-Z0-9]+)", std::regex_constants::basic);
 
 	std::vector<std::string> raw;
 
@@ -24,8 +25,6 @@ public:
 	std::string parse(const std::string& s);
 
 	CommandBuilder& add(const std::vector<std::string>& args);
-	template<class... ARGS>
-	CommandBuilder& add(ARGS... args);
 
 	CommandBuilder& addAll(const std::vector<std::string>& args);
 
@@ -63,15 +62,5 @@ private:
 
 	std::string toShellStringLiteral(const std::string& s);
 };
-
-template<class ...ARGS>
-inline CommandBuilder& CommandBuilder::add(ARGS ...args)
-{
-	for (const std::string& s : args)
-	{
-		raw.push_back(s);
-	}
-	return *this;
-}
 
 #endif // !COMMANDBUILDER_H_

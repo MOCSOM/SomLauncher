@@ -24,15 +24,15 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>qrc;rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Minecraft">
+      <UniqueIdentifier>{c0a20697-8c72-4604-b121-5dcd320c5596}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Callbacks\CallbackDict.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Minecraft\Minecraftus.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Web\DownloadClasses.cpp">
@@ -95,15 +95,18 @@
     <ClCompile Include="QObjects\SignalLabel.cpp">
       <Filter>Custom Qt Files</Filter>
     </ClCompile>
+    <ClCompile Include="Minecraft\Minecraftus.cpp">
+      <Filter>Minecraft</Filter>
+    </ClCompile>
     <ClCompile Include="Minecraft\CommandBuilder.cpp">
+      <Filter>Minecraft</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Game\LibrariesDownloadInfo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Minecraft\Minecraftus.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Web\DownloadClasses.h">
@@ -154,8 +157,71 @@
     <ClInclude Include="Callbacks\CallbackDict.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Minecraft\CommandBuilder.h">
+    <ClInclude Include="Minecraft\Utils\StringUtils.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Utils\JavaVersion.h">
+      <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Minecraftus.h">
+      <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\MinecraftOptions.h">
+      <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\CommandBuilder.h">
+      <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Game\Arguments.h">
+      <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Game\Argument.h">
+      <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Game\CompatibilityRule.h">
+      <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Game\OSRestriction.h">
+      <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Utils\Platform\OperatingSystem.h">
+      <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Game\RuledArgument.h">
+      <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Game\StringArgument.h">
+      <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Utils\Lang.h">
+      <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Utils\Auth\AuthInfo.h">
+      <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Version.h">
+      <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Game\Library.h">
+      <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Utils\Validation.h">
+      <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Game\Artifact.h">
+      <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Game\LibrariesDownloadInfo.h">
+      <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Game\LibraryDownloadInfo.h">
+      <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Game\DownloadInfo.h">
+      <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Game\ExtractRules.h">
+      <Filter>Minecraft</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -65,12 +65,6 @@ std::string MinecraftCpp::option::MinecraftOptions::get(const std::string& param
 	}
 }
 
-MinecraftCpp::option::MinecraftOptions::ProcessPriority MinecraftCpp::option::MinecraftOptions::getProcessPriority(
-	const std::string& param, const MinecraftCpp::option::MinecraftOptions::ProcessPriority& writ)
-{
-	return process_priority;
-}
-
 bool MinecraftCpp::option::MinecraftOptions::get(const std::string& param, bool writ)
 {
 	bool field = false;
@@ -328,259 +322,295 @@ Json::JsonValue MinecraftCpp::get_version_list()
 	return returnlist;
 }
 
-//std::vector<std::string> MinecraftCpp::generateCommandLine(const std::filesystem::path& nativeFolder,
-//	MinecraftCpp::option::MinecraftOptions& options)
-//{
-//	CommandBuilder res;
-//
-//	switch (options.getProcessPriority("process_priority"))
-//	{
-//	case option::MinecraftOptions::HIGH:
-//		if (OS == "windows")
-//		{
-//			// res.add("cmd", "/C", "start", "unused title", "/B", "/high");
-//		}
-//		else if (OS == "linux" || OS == "mac")
-//		{
-//			res.add("nice", "-n", "-5");
-//		}
-//		break;
-//	case option::MinecraftOptions::ABOVE_NORMAL:
-//		if (OS == "windows")
-//		{
-//			// res.add("cmd", "/C", "start", "unused title", "/B", "/abovenormal");
-//		}
-//		else if (OS == "linux" || OS == "mac")
-//		{
-//			res.add("nice", "-n", "-1");
-//		}
-//		break;
-//	case option::MinecraftOptions::NORMAL:
-//		// do nothing
-//		break;
-//	case option::MinecraftOptions::BELOW_NORMAL:
-//		if (OS == "windows")
-//		{
-//			// res.add("cmd", "/C", "start", "unused title", "/B", "/belownormal");
-//		}
-//		else if (OS == "linux" || OS == "mac")
-//		{
-//			res.add("nice", "-n", "1");
-//		}
-//		break;
-//	case option::MinecraftOptions::LOW:
-//		if (OS == "windows")
-//		{
-//			// res.add("cmd", "/C", "start", "unused title", "/B", "/low");
-//		}
-//		else if (OS == "linux" || OS == "mac")
-//		{
-//			res.add({ "nice", "-n", "5" });
-//		}
-//		break;
-//	}
-//
-//	// Executable
-//	if (!options.getWrapper().empty())
-//		res.addAllWithoutParsing(StringUtils::tokenize(options.getWrapper()));
-//
-//	res.add(options.getJava().getBinary());
-//
-//	res.addAllWithoutParsing(options.getOverrideJavaArguments());
-//
-//	Proxy proxy = options.getProxy();
-//	if (proxy && options.getProxyUser().empty() && options.getProxyPass().empty())
-//	{
-//		auto address = std::any_cast<InetSocketAddress>(proxy.address());
-//		if (address) {
-//			std::string host = address->getHostString();
-//			int port = address->getPort();
-//			if (proxy.type() == Proxy::Type::HTTP)
-//			{
-//				res.addDefault("-Dhttp.proxyHost=", host);
-//				res.addDefault("-Dhttp.proxyPort=", std::to_string(port));
-//				res.addDefault("-Dhttps.proxyHost=", host);
-//				res.addDefault("-Dhttps.proxyPort=", std::to_string(port));
-//			}
-//			else if (proxy.type() == Proxy::Type::SOCKS)
-//			{
-//				res.addDefault("-DsocksProxyHost=", host);
-//				res.addDefault("-DsocksProxyPort=", std::to_string(port));
-//			}
-//		}
-//	}
-//
-//	if (options.getMaxMemory() > 0)
-//		res.addDefault("-Xmx", std::to_string(options.getMaxMemory()) + "m");
-//
-//	if (options.getMinMemory() > 0 && (options.getMaxMemory() <= 0 || options.getMinMemory() <= options.getMaxMemory()))
-//		res.addDefault("-Xms", std::to_string(options.getMinMemory()) + "m");
-//
-//	if (options.getMetaspace() > 0)
-//	{
-//		if (options.getJava().getParsedVersion() < JavaVersion::JAVA_8)
-//			res.addDefault("-XX:PermSize=", std::to_string(options.getMetaspace()) + "m");
-//		else
-//			res.addDefault("-XX:MetaspaceSize=", std::to_string(options.getMetaspace()) + "m");
-//	}
-//
-//	res.addAllDefaultWithoutParsing(options.getJavaArguments());
-//
-//	std::string encoding = OperatingSystem::NATIVE_CHARSET;
-//	std::string fileEncoding = res.addDefault("-Dfile.encoding=", encoding);
-//	if (fileEncoding != "-Dfile.encoding=COMPAT")
-//	{
-//		try
-//		{
-//			encoding = fileEncoding.substr(strlen("-Dfile.encoding="));
-//		}
-//		catch (const std::exception& ex)
-//		{
-//			qWarning() << "Bad file encoding" << ex.what();
-//		}
-//	}
-//	res.addDefault("-Dsun.stdout.encoding=", encoding);
-//	res.addDefault("-Dsun.stderr.encoding=", encoding);
-//
-//	// Fix RCE vulnerability of log4j2
-//	res.addDefault("-Djava.rmi.server.useCodebaseOnly=", "true");
-//	res.addDefault("-Dcom.sun.jndi.rmi.object.trustURLCodebase=", "false");
-//	res.addDefault("-Dcom.sun.jndi.cosnaming.object.trustURLCodebase=", "false");
-//
-//	std::string formatMsgNoLookups = res.addDefault("-Dlog4j2.formatMsgNoLookups=", "true");
-//	if (formatMsgNoLookups != "-Dlog4j2.formatMsgNoLookups=false" && isUsingLog4j()) {
-//		res.addDefault("-Dlog4j.configurationFile=", getLog4jConfigurationFile().getAbsolutePath());
-//	}
-//
-//	// Default JVM Args
-//	if (!options.isNoGeneratedJVMArgs()) {
-//		appendJvmArgs(res);
-//
-//		res.addDefault("-Dminecraft.client.jar=", repository.getVersionJar(version).toString());
-//
-//		if (OperatingSystem::CURRENT_OS == OperatingSystem::OSX) {
-//			res.addDefault("-Xdock:name=", "Minecraft " + version.getId());
-//			auto minecraftIcns = repository.getAssetObject(version.getId(), version.getAssetIndex().getId(), "icons/minecraft.icns");
-//			if (minecraftIcns) {
-//				res.addDefault("-Xdock:icon=", minecraftIcns->toAbsolutePath().toString());
-//			}
-//		}
-//
-//		if (OperatingSystem::CURRENT_OS != OperatingSystem::WINDOWS)
-//			res.addDefault("-Duser.home=", options.getGameDir().getParent());
-//
-//		// Using G1GC with its settings by default
-//		if (options.getJava().getParsedVersion() >= JavaVersion::JAVA_8 &&
-//			!res.noneMatch([](const std::string& arg) { return arg == "-XX:-UseG1GC" || (arg.starts_with("-XX:+Use") && arg.ends_with("GC")); })) {
-//			res.addUnstableDefault("UnlockExperimentalVMOptions", true);
-//			res.addUnstableDefault("UseG1GC", true);
-//			res.addUnstableDefault("G1NewSizePercent", "20");
-//			res.addUnstableDefault("G1ReservePercent", "20");
-//			res.addUnstableDefault("MaxGCPauseMillis", "50");
-//			res.addUnstableDefault("G1HeapRegionSize", "32m");
-//		}
-//
-//		res.addUnstableDefault("UseAdaptiveSizePolicy", false);
-//		res.addUnstableDefault("OmitStackTraceInFastThrow", false);
-//		res.addUnstableDefault("DontCompileHugeMethods", false);
-//
-//		// As 32-bit JVM allocate 320KB for stack by default rather than 64-bit version allocating 1MB,
-//		// causing Minecraft 1.13 crashed accounting for java.lang.StackOverflowError.
-//		if (options.getJava().getBits() == Bits::BIT_32) {
-//			res.addDefault("-Xss", "1m");
-//		}
-//
-//		if (options.getJava().getParsedVersion() == JavaVersion::JAVA_16)
-//			res.addDefault("--illegal-access=", "permit");
-//
-//		res.addDefault("-Dfml.ignoreInvalidMinecraftCertificates=", "true");
-//		res.addDefault("-Dfml.ignorePatchDiscrepancies=", "true");
-//	}
-//
-//	std::set<std::string> classpath = repository.getClasspath(version);
-//
-//	std::filesystem::path jar = repository.getVersionJar(version);
-//	if (!std::filesystem::exists(jar) || !std::filesystem::is_regular_file(jar))
-//		throw std::runtime_error("Minecraft jar does not exist");
-//	classpath.insert(jar.string());
-//
-//	// Provided Minecraft arguments
-//	std::filesystem::path gameAssets = repository.getActualAssetDirectory(version.getId(), version.getAssetIndex().getId());
-//	std::map<std::string, std::string> configuration = getConfigurations();
-//	configuration["${classpath}"] = Join({ classpath, get_classpath_separator() });
-//	configuration["${game_assets}"] = gameAssets.string();
-//	configuration["${assets_root}"] = gameAssets.string();
-//
-//	// lwjgl assumes path to native libraries encoded by ASCII.
-//	// Here is a workaround for this issue: https://github.com/huanghongxun/HMCL/issues/1141.
-//	std::string nativeFolderPath = nativeFolder.string();
-//	std::filesystem::path tempNativeFolder;
-//	if ((OperatingSystem::CURRENT_OS == OperatingSystem::LINUX || OperatingSystem::CURRENT_OS == OperatingSystem::OSX) &&
-//		!StringUtils::isASCII(nativeFolderPath)) {
-//		tempNativeFolder = std::filesystem::path("/tmp/hmcl-natives-" + boost::uuids::to_string(boost::uuids::random_generator()()));
-//		nativeFolderPath = tempNativeFolder.string() + std::filesystem::path::preferred_separator + nativeFolderPath;
-//	}
-//	configuration["${natives_directory}"] = nativeFolderPath;
-//
-//	res.addAll(Arguments::parseArguments(version.getArguments().map(Arguments::getJvm).orElseGet(this::getDefaultJVMArguments), configuration));
-//	Arguments argumentsFromAuthInfo = authInfo.getLaunchArguments(options);
-//	if (argumentsFromAuthInfo && argumentsFromAuthInfo.getJvm() && !argumentsFromAuthInfo.getJvm().empty())
-//		res.addAll(Arguments::parseArguments(argumentsFromAuthInfo.getJvm(), configuration));
-//
-//	for (const std::string& javaAgent : options.getJavaAgents()) {
-//		res.add("-javaagent:" + javaAgent);
-//	}
-//
-//	res.add(version.getMainClass());
-//
-//	res.addAll(Arguments::parseStringArguments(version.getMinecraftArguments().map(StringUtils::tokenize).orElseGet([]() { return std::vector<std::string>(); }), configuration));
-//
-//	std::map<std::string, bool> features = getFeatures();
-//	version.getArguments().map(Arguments::getGame).ifPresent(arguments = > res.addAll(Arguments::parseArguments(arguments, configuration, features));
-//	if (version.getMinecraftArguments().isPresent()) {
-//		res.addAll(Arguments::parseArguments(this.getDefaultGameArguments(), configuration, features));
-//	}
-//	if (argumentsFromAuthInfo && argumentsFromAuthInfo.getGame() && !argumentsFromAuthInfo.getGame().empty())
-//		res.addAll(Arguments::parseArguments(argumentsFromAuthInfo.getGame(), configuration, features));
-//
-//	if (!options.getServerIp().empty()) {
-//		std::vector<std::string> args = StringUtils::split(options.getServerIp(), ':');
-//		if (version.compareTo(Version("1.20")) < 0) {
-//			res.add("--server");
-//			res.add(args[0]);
-//			res.add("--port");
-//			res.add(args.size() > 1 ? args[1] : "25565");
-//		}
-//		else {
-//			res.add("--quickPlayMultiplayer");
-//			res.add(args[0] + ":" + (args.size() > 1 ? args[1] : "25565"));
-//		}
-//	}
-//
-//	if (options.isFullscreen())
-//		res.add("--fullscreen");
-//
-//	if (options.getProxy() && options.getProxy().type() == Proxy::Type::SOCKS) {
-//		auto address = std::any_cast<InetSocketAddress>(options.getProxy().address());
-//		if (address) {
-//			res.add("--proxyHost");
-//			res.add(address->getHostString());
-//			res.add("--proxyPort");
-//			res.add(std::to_string(address->getPort()));
-//			if (!options.getProxyUser().empty() && !options.getProxyPass().empty()) {
-//				res.add("--proxyUser");
-//				res.add(options.getProxyUser());
-//				res.add("--proxyPass");
-//				res.add(options.getProxyPass());
-//			}
-//		}
-//	}
-//
-//	res.addAllWithoutParsing(Arguments::parseStringArguments(options.getGameArguments(), configuration));
-//
-//	res.removeIf([=](const std::string& it) { return getForbiddens().containsKey(it) && getForbiddens().get(it).get(); });
-//	return Command(res, tempNativeFolder, encoding);
-//}
+std::vector<std::string> MinecraftCpp::generateCommandLine(const std::filesystem::path& nativeFolder,
+	MinecraftCpp::option::LaunchOptions& options)
+{
+	CommandBuilder res;
+	Version version;
+
+	switch (options.processPriority)
+	{
+	case option::ProcessPriority::HIGH:
+		if (OS == "windows")
+		{
+			// res.add("cmd", "/C", "start", "unused title", "/B", "/high");
+		}
+		else if (OS == "linux" || OS == "mac")
+		{
+			res.add({ "nice", "-n", "-5" });
+		}
+		break;
+	case option::ProcessPriority::ABOVE_NORMAL:
+		if (OS == "windows")
+		{
+			// res.add("cmd", "/C", "start", "unused title", "/B", "/abovenormal");
+		}
+		else if (OS == "linux" || OS == "mac")
+		{
+			res.add({ "nice", "-n", "-1" });
+		}
+		break;
+	case option::ProcessPriority::NORMAL:
+		// do nothing
+		break;
+	case option::ProcessPriority::BELOW_NORMAL:
+		if (OS == "windows")
+		{
+			// res.add("cmd", "/C", "start", "unused title", "/B", "/belownormal");
+		}
+		else if (OS == "linux" || OS == "mac")
+		{
+			res.add({ "nice", "-n", "1" });
+		}
+		break;
+	case option::ProcessPriority::LOW:
+		if (OS == "windows")
+		{
+			// res.add("cmd", "/C", "start", "unused title", "/B", "/low");
+		}
+		else if (OS == "linux" || OS == "mac")
+		{
+			res.add({ "nice", "-n", "5" });
+		}
+		break;
+	}
+
+	// Executable
+	if (!options.wrapper.empty())
+		res.addAllWithoutParsing(StringUtils::tokenize(options.wrapper));
+
+	res.add({ options.java });
+
+	res.addAllWithoutParsing({ options.noGeneratedJVMArgs, "" });
+
+	//TODO: proxy
+	/*Proxy proxy = options.getProxy();
+	if (proxy && options.getProxyUser().empty() && options.getProxyPass().empty())
+	{
+		auto address = std::any_cast<InetSocketAddress>(proxy.address());
+		if (address) {
+			std::string host = address->getHostString();
+			int port = address->getPort();
+			if (proxy.type() == Proxy::Type::HTTP)
+			{
+				res.addDefault("-Dhttp.proxyHost=", host);
+				res.addDefault("-Dhttp.proxyPort=", std::to_string(port));
+				res.addDefault("-Dhttps.proxyHost=", host);
+				res.addDefault("-Dhttps.proxyPort=", std::to_string(port));
+			}
+			else if (proxy.type() == Proxy::Type::SOCKS)
+			{
+				res.addDefault("-DsocksProxyHost=", host);
+				res.addDefault("-DsocksProxyPort=", std::to_string(port));
+			}
+		}
+	}*/
+
+	/*if (options.getMaxMemory() > 0)
+		res.addDefault("-Xmx", std::to_string(options.getMaxMemory()) + "m");
+
+	if (options.getMinMemory() > 0 && (options.getMaxMemory() <= 0 || options.getMinMemory() <= options.getMaxMemory()))
+		res.addDefault("-Xms", std::to_string(options.getMinMemory()) + "m");*/
+
+	if (options.metaspace > 0)
+	{
+		if (options.java < "8")
+			res.addDefault("-XX:PermSize=", std::to_string(options.metaspace) + "m");
+		else
+			res.addDefault("-XX:MetaspaceSize=", std::to_string(options.metaspace) + "m");
+	}
+
+	res.addAllDefaultWithoutParsing(options.javaArguments);
+
+	std::string encoding = OS;
+	std::string fileEncoding = res.addDefault("-Dfile.encoding=", encoding);
+	if (fileEncoding != "-Dfile.encoding=COMPAT")
+	{
+		try
+		{
+			encoding = fileEncoding.substr(strlen("-Dfile.encoding="));
+		}
+		catch (const std::exception& ex)
+		{
+			qWarning() << "Bad file encoding" << ex.what();
+		}
+	}
+	res.addDefault("-Dsun.stdout.encoding=", encoding);
+	res.addDefault("-Dsun.stderr.encoding=", encoding);
+
+	// Fix RCE vulnerability of log4j2
+	res.addDefault("-Djava.rmi.server.useCodebaseOnly=", "true");
+	res.addDefault("-Dcom.sun.jndi.rmi.object.trustURLCodebase=", "false");
+	res.addDefault("-Dcom.sun.jndi.cosnaming.object.trustURLCodebase=", "false");
+
+	//std::string formatMsgNoLookups = res.addDefault("-Dlog4j2.formatMsgNoLookups=", "true");
+	/*if (formatMsgNoLookups != "-Dlog4j2.formatMsgNoLookups=false" && isUsingLog4j()) {
+		res.addDefault("-Dlog4j.configurationFile=", getLog4jConfigurationFile().getAbsolutePath());
+	}*/
+
+	// Default JVM Args
+	if (!options.noGeneratedJVMArgs) {
+		//appendJvmArgs(res);
+
+		res.addDefault("-Dminecraft.client.jar=", options.gameDir.u8string() + "\\" + "versions" + "\\" + options.versionName);
+
+		/*if (OS == "mac") {
+			res.addDefault("-Xdock:name=", "Minecraft " + version.getId());
+			auto minecraftIcns = repository.getAssetObject(version.getId(), version.getAssetIndex().getId(), "icons/minecraft.icns");
+			if (minecraftIcns) {
+				res.addDefault("-Xdock:icon=", minecraftIcns->toAbsolutePath().toString());
+			}
+		}*/
+
+		if (OS != "windows")
+			res.addDefault("-Duser.home=", options.gameDir.parent_path().u8string());
+
+		// Using G1GC with its settings by default
+		if (options.java >= "8" &&
+			!res.noneMatch([](const std::string& arg) { return arg == "-XX:-UseG1GC" || (arg._Starts_with("-XX:+Use") && Additionals::String::EndsWith(arg, "GC")); })) {
+			res.addUnstableDefault("UnlockExperimentalVMOptions", true);
+			res.addUnstableDefault("UseG1GC", true);
+			res.addUnstableDefault("G1NewSizePercent", "20");
+			res.addUnstableDefault("G1ReservePercent", "20");
+			res.addUnstableDefault("MaxGCPauseMillis", "50");
+			res.addUnstableDefault("G1HeapRegionSize", "32m");
+		}
+
+		res.addUnstableDefault("UseAdaptiveSizePolicy", false);
+		res.addUnstableDefault("OmitStackTraceInFastThrow", false);
+		res.addUnstableDefault("DontCompileHugeMethods", false);
+
+		// As 32-bit JVM allocate 320KB for stack by default rather than 64-bit version allocating 1MB,
+		// causing Minecraft 1.13 crashed accounting for java.lang.StackOverflowError.
+		/*if (options.getJava().getBits() == Bits::BIT_32) {
+			res.addDefault("-Xss", "1m");
+		}*/
+
+		if (options.java == "16")
+			res.addDefault("--illegal-access=", "permit");
+
+		res.addDefault("-Dfml.ignoreInvalidMinecraftCertificates=", "true");
+		res.addDefault("-Dfml.ignorePatchDiscrepancies=", "true");
+	}
+
+	std::string minecraft_directory = options.gameDir.u8string();
+	std::string minecraft_version = options.versionName;
+
+	Json::JsonValue data = Json::JsonParcer::ParseFile(Join({ minecraft_directory, "versions", minecraft_version, (minecraft_version + ".json") }));
+
+	if (data.is_exist("inheritsFrom"))
+	{
+		data = MinecraftCpp::inherit_json(data, minecraft_directory);
+	}
+	std::string classpath = MinecraftCpp::get_libraries(data, minecraft_directory);;
+
+	std::filesystem::path jar = Join({ minecraft_directory, "versions", minecraft_version, (minecraft_version + ".jar") });
+	if (!std::filesystem::exists(jar) || !std::filesystem::is_regular_file(jar))
+		throw std::runtime_error("Minecraft jar does not exist");
+	classpath += jar.u8string();
+
+	// Provided Minecraft arguments
+	std::filesystem::path gameAssets = Join({ minecraft_directory, "assets", "indexes" });
+
+	std::map<std::string, std::string> configuration = version.getConfigurations(options.auth_info, options, minecraft_directory, version);
+	configuration["${classpath}"] = Join({ classpath, get_classpath_separator() });
+	configuration["${game_assets}"] = gameAssets.string();
+	configuration["${assets_root}"] = gameAssets.string();
+
+	// lwjgl assumes path to native libraries encoded by ASCII.
+	// Here is a workaround for this issue: https://github.com/huanghongxun/HMCL/issues/1141.
+	std::string nativeFolderPath = nativeFolder.string();
+	std::filesystem::path tempNativeFolder;
+	if ((OS == "linux" || OS == "mac") &&
+		!StringUtils::isASCII(nativeFolderPath))
+	{
+		tempNativeFolder = std::filesystem::path("/tmp/natives-" + std::to_string(options.auth_info.getUUID().Data1));
+		nativeFolderPath = tempNativeFolder.string() + "\\" + nativeFolderPath;
+	}
+	configuration["${natives_directory}"] = nativeFolderPath;
+
+	res.addAll(Arguments::parseArguments(version.arguments.getJvm(), configuration));
+
+	Arguments argumentsFromAuthInfo = nullptr /*options.auth_info.getLaunchArguments(options)*/;
+	if (!argumentsFromAuthInfo.getGame().empty() && !argumentsFromAuthInfo.getJvm().empty())
+		res.addAll(Arguments::parseArguments(argumentsFromAuthInfo.getJvm(), configuration));
+
+	for (const std::string& javaAgent : options.javaAgents)
+	{
+		res.add({ "-javaagent:" + javaAgent });
+	}
+
+	res.add({ version.mainClass });
+
+	res.addAll(Arguments::parseStringArguments(options.gameArguments, configuration));
+
+	std::map<std::string, bool> features;
+	features["has_custom_resolution"] = options.height != 0 && options.width != 0;
+
+	res.addAll(Arguments::parseArguments(version.arguments.getGame(), configuration, features));
+	if (!options.gameArguments.empty())
+	{
+		std::map<std::string, bool> mad = { std::make_pair("has_custom_resolution", true) };
+		std::vector<std::shared_ptr<Argument>> game;
+		game.push_back(std::make_shared<RuledArgument>
+			(std::vector<CompatibilityRule> {
+			CompatibilityRule(CompatibilityRule::Action::ALLOW, nullptr, &mad)
+		},
+				std::vector<std::string>{"--width", "${resolution_width}", "--height", "${resolution_height}"}
+		));
+		res.addAll(Arguments::parseArguments(game, configuration, features));
+	}
+	if (!argumentsFromAuthInfo.getGame().empty() && !argumentsFromAuthInfo.getJvm().empty())
+		res.addAll(Arguments::parseArguments(argumentsFromAuthInfo.getGame(), configuration, features));
+
+	/*if (!options.serverIp.empty())
+	{
+		std::vector<std::string> args = Additionals::String::split(options.serverIp, ':');
+		if (version.compareTo(Version("1.20")) < 0)
+		{
+			res.add("--server");
+			res.add(args[0]);
+			res.add("--port");
+			res.add(args.size() > 1 ? args[1] : "25565");
+		}
+		else
+		{
+			res.add("--quickPlayMultiplayer");
+			res.add(args[0] + ":" + (args.size() > 1 ? args[1] : "25565"));
+		}
+	}*/
+
+	if (options.fullscreen)
+		res.add({ "--fullscreen" });
+
+	//TODO: Proxy
+	/*if (options.getProxy() && options.getProxy().type() == Proxy::Type::SOCKS) {
+		auto address = std::any_cast<InetSocketAddress>(options.getProxy().address());
+		if (address) {
+			res.add("--proxyHost");
+			res.add(address->getHostString());
+			res.add("--proxyPort");
+			res.add(std::to_string(address->getPort()));
+			if (!options.getProxyUser().empty() && !options.getProxyPass().empty()) {
+				res.add("--proxyUser");
+				res.add(options.getProxyUser());
+				res.add("--proxyPass");
+				res.add(options.getProxyPass());
+			}
+		}
+	}*/
+
+	res.addAllWithoutParsing(Arguments::parseStringArguments(options.gameArguments, configuration));
+
+	/*res.removeIf(
+		[=](const std::string& it)
+		{
+			return std::pair("-Xincgc", ()->options.getJava().getParsedVersion() >= JavaVersion.JAVA_9);
+		}
+	);*/
+
+	return res.asList();
+}
 
 std::vector<std::string> MinecraftCpp::get_minecraft_command__(const std::string& version, const std::string& minecraft_directory,
 	MinecraftCpp::option::MinecraftOptions options)
@@ -596,12 +626,11 @@ std::vector<std::string> MinecraftCpp::get_minecraft_command__(const std::string
 	}
 
 	Json::JsonParcer json_parcer;
-	Json::JsonValue orig_data = json_parcer.ParseFile(Join({ minecraft_directory, "versions", version, (version + ".json") }));
-	Json::JsonValue data;
+	Json::JsonValue data = json_parcer.ParseFile(Join({ minecraft_directory, "versions", version, (version + ".json") }));
 
-	if (orig_data.is_exist("inheritsFrom"))
+	if (data.is_exist("inheritsFrom"))
 	{
-		data = MinecraftCpp::inherit_json(orig_data, minecraft_directory);
+		data = MinecraftCpp::inherit_json(data, minecraft_directory);
 	}
 	qInfo() << data.to_string() << std::endl;
 	options.nativesDirectory = options.get("nativesDirectory", Join({ minecraft_directory, "versions", data["id"].to_string(), "natives" }));
@@ -1927,6 +1956,8 @@ int MinecraftCpp::fabric::install_fabric_version(const std::string& minecraft_ve
 	*/
 
 	std::string loader = loader_version;
+	std::string fabric_minecraft_version = "fabric-loader-" + loader_version + "-" + minecraft_version;
+	std::string fabric_dir = Join({ minecraft_directory, "versions", fabric_minecraft_version });
 
 	// Check if the given version exists
 	if (!_is_version_valid(minecraft_version, minecraft_directory))
@@ -1946,20 +1977,21 @@ int MinecraftCpp::fabric::install_fabric_version(const std::string& minecraft_ve
 		loader = get_latest_loader_version();
 	}
 	// Make sure the Minecraft version is installed
-	//install_minecraft_version(minecraft_version, minecraft_directory, callback = callback);
+	install_minecraft_version(minecraft_version, minecraft_directory, callback = callback);
+
+	std::filesystem::create_directories(fabric_dir);
+
 	// Get installer version
 	std::string installer_version = get_latest_installer_version();
-
-	std::string fabric_minecraft_version = "fabric-loader-" + loader_version + "-" + minecraft_version;
 
 	std::string libraries_url = "https://meta.fabricmc.net/v2/versions/loader/"
 		+ minecraft_version + "/" + loader_version + "/profile/json";
 
-	Json::JsonValue libraries_json = Json::JsonParcer::ParseUrl(libraries_url, minecraft_directory + "\\" + "versions" + "\\" + fabric_minecraft_version);
+	Json::JsonValue libraries_json = Json::JsonParcer::ParseUrl(libraries_url, fabric_dir + "\\" + fabric_minecraft_version + ".json");
 
-	//libraries_json = inherit_json(libraries_json, minecraft_directory);
+	libraries_json = inherit_json(libraries_json, minecraft_directory);
+	install_libraries(libraries_json, minecraft_directory, callback);
 	install_minecraft_version(fabric_minecraft_version, minecraft_directory, callback = callback);
-	//install_libraries(libraries_json, minecraft_directory, callback);
 
 	//std::string installer_download_url = "https://maven.fabricmc.net/net/fabricmc/fabric-installer/" + installer_version + "\\fabric-installer-" + installer_version + ".jar";
 	//// Generate a temporary path for downloading the installer

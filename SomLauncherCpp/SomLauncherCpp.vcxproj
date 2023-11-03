@@ -96,6 +96,7 @@
     <AllProjectBMIsArePublic>true</AllProjectBMIsArePublic>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <ExternalIncludePath>$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|Win32'">
   </PropertyGroup>
@@ -114,6 +115,12 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Link />
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
     <ClCompile>
@@ -176,6 +183,7 @@
     <ClCompile Include="Form\SomLauncherMainWindow.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Minecraft\CommandBuilder.cpp" />
+    <ClCompile Include="Minecraft\Game\LibrariesDownloadInfo.cpp" />
     <ClCompile Include="Minecraft\Minecraftus.cpp" />
     <ClCompile Include="Minecraft\Mods.cpp" />
     <ClCompile Include="Moc\Logger\MocIOStream.cpp" />
@@ -202,7 +210,27 @@
     <ClInclude Include="Exceptions\TerminateProgrammException.h" />
     <ClInclude Include="Hashes\sha1.h" />
     <ClInclude Include="Minecraft\CommandBuilder.h" />
+    <ClInclude Include="Minecraft\Game\Argument.h" />
+    <ClInclude Include="Minecraft\Game\Arguments.h" />
+    <ClInclude Include="Minecraft\Game\Artifact.h" />
+    <ClInclude Include="Minecraft\Game\CompatibilityRule.h" />
+    <ClInclude Include="Minecraft\Game\DownloadInfo.h" />
+    <ClInclude Include="Minecraft\Game\ExtractRules.h" />
+    <ClInclude Include="Minecraft\Game\LibrariesDownloadInfo.h" />
+    <ClInclude Include="Minecraft\Game\Library.h" />
+    <ClInclude Include="Minecraft\Game\LibraryDownloadInfo.h" />
+    <ClInclude Include="Minecraft\Game\OSRestriction.h" />
+    <ClInclude Include="Minecraft\Game\RuledArgument.h" />
+    <ClInclude Include="Minecraft\Game\StringArgument.h" />
+    <ClInclude Include="Minecraft\MinecraftOptions.h" />
     <ClInclude Include="Minecraft\Mods.h" />
+    <ClInclude Include="Minecraft\Utils\Auth\AuthInfo.h" />
+    <ClInclude Include="Minecraft\Utils\JavaVersion.h" />
+    <ClInclude Include="Minecraft\Utils\Lang.h" />
+    <ClInclude Include="Minecraft\Utils\Platform\OperatingSystem.h" />
+    <ClInclude Include="Minecraft\Utils\StringUtils.h" />
+    <ClInclude Include="Minecraft\Utils\Validation.h" />
+    <ClInclude Include="Minecraft\Version.h" />
     <ClInclude Include="Moc\Logger\MocIOStream.h" />
     <ClInclude Include="QObjects\Images\ImageEditing.h" />
     <QtMoc Include="QObjects\SignalLabel.h" />

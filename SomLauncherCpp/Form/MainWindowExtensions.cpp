@@ -68,6 +68,16 @@ void SomLauncherMainWindow::setupInstallMinecraft(const size_t& index)
 	std::vector<std::string> command = MinecraftCpp::get_minecraft_command__(launch_version, instance_path.u8string(), options);
 	qInfo() << command;
 
+	//MinecraftCpp::option::LaunchOptions _options;
+	//_options.gameDir = options.gameDirectory;
+	//_options.javaArguments = { options.jvmArguments };
+	//_options.java = options.executablePath;
+	//_options.maxMemory = this->max_memory;
+	//_options.minMemory = 1024;
+	//_options.versionName = version;
+
+	//std::vector<std::string> command = MinecraftCpp::generateCommandLine(instance_path.u8string(), _options);
+
 	std::ostringstream imploded;
 	std::copy(command.begin(), command.end(),
 		std::ostream_iterator<std::string>(imploded, " "));
@@ -115,12 +125,12 @@ std::string SomLauncherMainWindow::install_minecraft(
 	{
 		launch_version = std::string("fabric") + "-" + "loader" + "-" + loader_version + "-" + version;
 
-		MinecraftCpp::fabric::install_fabric_version(
+		/*MinecraftCpp::fabric::install_fabric_version(
 			version, install_path.u8string(), loader_version, callback.get(), options.executablePath);
 
 		std::filesystem::copy_file(Join({ install_path.u8string(), "versions", version, version + ".jar" }),
 			Join({ install_path.u8string(), "versions", launch_version, launch_version + ".jar" }),
-			std::filesystem::copy_options::overwrite_existing);
+			std::filesystem::copy_options::overwrite_existing);*/
 
 		return launch_version;
 	}

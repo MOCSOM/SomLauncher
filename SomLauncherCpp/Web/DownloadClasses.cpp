@@ -105,12 +105,13 @@ std::string DDIC::Download::Files::download_file(const std::string& s_url,
 
 	if (S_OK == download_result)
 	{
-		callback->OnProgress(NULL, NULL, NULL, Additionals::Convectors::ConvertStringToWString("The file is saved as: " + d_file + "\n").c_str());
+		callback->OnProgress(NULL, NULL, NULL, Additionals::Convectors::ConvertStringToWString("The file is saved as: " + d_file).c_str());
 		return destenation_file;
 	}
 	else
 	{
-		callback->OnProgress(NULL, NULL, NULL, Additionals::Convectors::ConvertStringToWString("Unable to Download the file: " + s_url + "\nto: " + d_file).c_str());
+		callback->OnProgress(NULL, NULL, NULL, Additionals::Convectors::ConvertStringToWString("Unable to Download the file: " + s_url).c_str());
+		callback->OnProgress(NULL, NULL, NULL, Additionals::Convectors::ConvertStringToWString("to: " + d_file).c_str());
 		return "";
 	}
 }

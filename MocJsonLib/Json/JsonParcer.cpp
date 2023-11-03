@@ -100,6 +100,11 @@ Json::JsonValue Json::JsonParcer::ParseUrl(const std::string& url, const std::fi
 		{
 			std::remove(destenation_file.c_str());
 		}
+		else
+		{
+			std::filesystem::copy_file(destenation_file, destination, std::filesystem::copy_options::overwrite_existing);
+			std::remove(destenation_file.c_str());
+		}
 		return return_val;
 	}
 	else

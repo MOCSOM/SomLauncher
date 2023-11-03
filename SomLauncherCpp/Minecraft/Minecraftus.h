@@ -8,6 +8,14 @@
 #include "../Hashes/sha1.h"
 #include "../Exceptions/FileOutsideMinecraftDirectoryException.h"
 #include "CommandBuilder.h"
+#include "MinecraftOptions.h"
+#include "Utils/StringUtils.h"
+#include "Game/Arguments.h"
+#include "Utils/Auth/AuthInfo.h"
+#include "Game/RuledArgument.h"
+#include "Game/CompatibilityRule.h"
+#include "Version.h"
+#include "Utils/Lang.h"
 
 #include <initializer_list>
 //#include <stdio.h>
@@ -32,15 +40,6 @@ namespace MinecraftCpp
 	{
 		struct MinecraftOptions
 		{
-			enum ProcessPriority
-			{
-				LOW,
-				BELOW_NORMAL,
-				NORMAL,
-				ABOVE_NORMAL,
-				HIGH
-			};
-
 			MinecraftOptions() {}
 			~MinecraftOptions() {}
 
@@ -66,8 +65,6 @@ namespace MinecraftCpp
 
 			// get (поле, стандарт)
 			std::string get(const std::string& param, const std::string& writ = "");
-			MinecraftOptions::ProcessPriority getProcessPriority(const std::string& param,
-				const MinecraftOptions::ProcessPriority& writ = NORMAL);
 			bool get(const std::string& param, bool writ = NULL);
 			bool is_exist(const std::string& param);
 		};
@@ -75,7 +72,7 @@ namespace MinecraftCpp
 
 	Json::JsonValue get_version_list();
 
-	//std::vector<std::string> generateCommandLine(const std::filesystem::path& nativeFolder, MinecraftCpp::option::MinecraftOptions& options);
+	std::vector<std::string> generateCommandLine(const std::filesystem::path& nativeFolder, MinecraftCpp::option::LaunchOptions& options);
 
 	std::vector<std::string> get_minecraft_command__(
 		const std::string& version,
