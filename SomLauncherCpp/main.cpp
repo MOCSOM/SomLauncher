@@ -3,6 +3,7 @@
 
 #include "Exceptions/TerminateProgrammException.h"
 #include "Web/DownloadClasses.h"
+#include "Databases/SQLBased.h"
 
 #include <qexception.h>
 #include <qmessagebox.h>

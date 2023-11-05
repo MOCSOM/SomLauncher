@@ -96,7 +96,9 @@
     <AllProjectBMIsArePublic>true</AllProjectBMIsArePublic>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <ExternalIncludePath>$(ExternalIncludePath)</ExternalIncludePath>
+    <ExternalIncludePath>$(ExternalIncludePath);C:\Users\alkor\source\github\libpqxx\build\include;C:\Users\alkor\source\github\libpqxx\include;C:\Program Files (x86)\PostgreSQL\10\include;C:\Program Files (x86)\PostgreSQL\10\include\server;</ExternalIncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);C:\Users\alkor\source\github\libpqxx\build\include;C:\Users\alkor\source\github\libpqxx\include;C:\Program Files (x86)\PostgreSQL\10\include;C:\Users\alkor\source\github\libpqxx\src;C:\Program Files (x86)\PostgreSQL\10\include\server</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);C:\Users\alkor\source\github\libpqxx\build\include;C:\Users\alkor\source\github\libpqxx\include;C:\Program Files (x86)\PostgreSQL\10\include;C:\Program Files (x86)\PostgreSQL\10\include\server;</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|Win32'">
   </PropertyGroup>
@@ -116,10 +118,11 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Link />
     <ClCompile>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\alkor\source\github\libpqxx\build\include;C:\Users\alkor\source\github\libpqxx\include;C:\Program Files (x86)\PostgreSQL\10\include;C:\Program Files (x86)\PostgreSQL\10\include\server;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);C:\Users\alkor\source\github\libpqxx\build\include;C:\Users\alkor\source\github\libpqxx\include;C:\Program Files (x86)\PostgreSQL\10\include;C:\Program Files (x86)\PostgreSQL\10\include\server;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies);$(Qt_LIBS_);Ws2_32.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">

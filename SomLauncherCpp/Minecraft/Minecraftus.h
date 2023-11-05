@@ -80,6 +80,7 @@ namespace MinecraftCpp
 		MinecraftCpp::option::MinecraftOptions options);
 
 	bool start_minecraft(const std::string& java_path = "", const std::string& args = "");
+	void start_minecraft(const std::vector<std::string>& command);
 	std::string get_classpath_separator();
 	bool parse_single_rule(Json::JsonValue rule, MinecraftCpp::option::MinecraftOptions options);
 	bool parse_rule_list(Json::JsonValue data, const std::string& rule_string, MinecraftCpp::option::MinecraftOptions options);
