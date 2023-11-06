@@ -16,6 +16,7 @@
 #include "Game/CompatibilityRule.h"
 #include "Version.h"
 #include "Utils/Lang.h"
+#include "NativesInstaller.h"
 
 #include <initializer_list>
 //#include <stdio.h>

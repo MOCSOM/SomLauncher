@@ -794,14 +794,13 @@ bool MinecraftCpp::start_minecraft(const std::string& java_path, const std::stri
 	path = path + args;
 
 	std::unique_ptr<wchar_t[]> buffer = Additionals::Convectors::ConvertStringToWcharUniqPtr(args);
-	LPWSTR szPath = buffer.get();
 	STARTUPINFO si;
 	memset(&si, 0, sizeof(si));
 	si.cb = sizeof(si);
 	PROCESS_INFORMATION pi;
 	memset(&pi, 0, sizeof(pi));
 	qInfo() << "Programm args setting complete" << std::endl;
-	if (CreateProcessW(NULL, szPath, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi))
+	if (CreateProcessW(NULL, buffer.get(), NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi))
 	{
 		// программа запущена, ждем её завершения
 		qInfo() << "Programm has been started" << std::endl;
@@ -2003,7 +2002,7 @@ int MinecraftCpp::fabric::install_fabric_version(const std::string& minecraft_ve
 
 	std::string loader = loader_version;
 	std::string fabric_minecraft_version = "fabric-loader-" + loader_version + "-" + minecraft_version;
-	std::string fabric_dir = Join({ minecraft_directory, "versions", fabric_minecraft_version });
+	std::string fabric_version_dir = Join({ minecraft_directory, "versions", fabric_minecraft_version });
 
 	// Check if the given version exists
 	if (!_is_version_valid(minecraft_version, minecraft_directory))
@@ -2025,7 +2024,7 @@ int MinecraftCpp::fabric::install_fabric_version(const std::string& minecraft_ve
 	// Make sure the Minecraft version is installed
 	install_minecraft_version(minecraft_version, minecraft_directory, callback = callback);
 
-	std::filesystem::create_directories(fabric_dir);
+	std::filesystem::create_directories(fabric_version_dir);
 
 	// Get installer version
 	std::string installer_version = get_latest_installer_version();
@@ -2033,43 +2032,44 @@ int MinecraftCpp::fabric::install_fabric_version(const std::string& minecraft_ve
 	std::string libraries_url = "https://meta.fabricmc.net/v2/versions/loader/"
 		+ minecraft_version + "/" + loader_version + "/profile/json";
 
-	Json::JsonValue libraries_json = Json::JsonParcer::ParseUrl(libraries_url, fabric_dir + "\\" + fabric_minecraft_version + ".json");
+	Json::JsonValue libraries_json = Json::JsonParcer::ParseUrl(libraries_url, fabric_version_dir + "\\" + fabric_minecraft_version + ".json");
 
 	libraries_json = inherit_json(libraries_json, minecraft_directory);
 	install_libraries(libraries_json, minecraft_directory, callback);
+	MinecraftCpp::natives::downloadNatives(fabric_version_dir + "\\" + "natives", callback);
 	install_minecraft_version(fabric_minecraft_version, minecraft_directory, callback = callback);
 
-	//std::string installer_download_url = "https://maven.fabricmc.net/net/fabricmc/fabric-installer/" + installer_version + "\\fabric-installer-" + installer_version + ".jar";
-	//// Generate a temporary path for downloading the installer
-	//int random_num = 100 + (rand() % 10000);
-	//std::string installer_path = std::filesystem::temp_directory_path().string() + "fabric-installer-" + std::to_string(random_num) + ".tmp";
-	//// Download the installer
-	//DownloadFile(installer_download_url, installer_path, callback = callback);
-	//// Run the installer see https ://fabricmc.net/wiki/install#cli_installation
-	//callback->OnProgress(NULL, NULL, NULL, L"Running fabric installer");
-	//std::vector<std::string> command;
+	std::string installer_download_url = "https://maven.fabricmc.net/net/fabricmc/fabric-installer/" + installer_version + "\\fabric-installer-" + installer_version + ".jar";
+	// Generate a temporary path for downloading the installer
+	int random_num = 100 + (rand() % 10000);
+	std::string installer_path = std::filesystem::temp_directory_path().string() + "fabric-installer-" + std::to_string(random_num) + ".tmp";
+	// Download the installer
+	DownloadFile(installer_download_url, installer_path, callback = callback);
+	// Run the installer see https ://fabricmc.net/wiki/install#cli_installation
+	callback->OnProgress(NULL, NULL, NULL, L"Running fabric installer");
+	std::vector<std::string> command;
 
-	//command.push_back(java == "" ? "java" : java);
-	//command.push_back("-jar");
-	//command.push_back(installer_path);
-	//command.push_back("client");
-	//command.push_back("-dir");
-	//command.push_back(minecraft_directory);
-	//command.push_back("-mcversion");
-	//command.push_back(minecraft_version);
-	//command.push_back("-loader");
-	//command.push_back(loader_version);
-	//command.push_back("-launcher win32");
-	//command.push_back("-noprofile");
-	//command.push_back("-snapshot");
+	command.push_back(java == "" ? "java" : java);
+	command.push_back("-jar");
+	command.push_back(installer_path);
+	command.push_back("client");
+	command.push_back("-dir");
+	command.push_back(minecraft_directory);
+	command.push_back("-mcversion");
+	command.push_back(minecraft_version);
+	command.push_back("-loader");
+	command.push_back(loader_version);
+	command.push_back("-launcher win32");
+	command.push_back("-noprofile");
+	command.push_back("-snapshot");
 
-	//std::string command_string;
-	//for (const auto& arg : command)
-	//{
-	//	command_string += arg + " ";
-	//}
+	std::string command_string;
+	for (const auto& arg : command)
+	{
+		command_string += arg + " ";
+	}
 
-	//MinecraftCpp::start_minecraft("", command_string);
+	MinecraftCpp::start_minecraft("", command_string);
 
 	/*if (result != 0)
 	{

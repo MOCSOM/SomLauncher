@@ -189,6 +189,7 @@
     <ClCompile Include="Minecraft\Game\LibrariesDownloadInfo.cpp" />
     <ClCompile Include="Minecraft\Minecraftus.cpp" />
     <ClCompile Include="Minecraft\Mods.cpp" />
+    <ClCompile Include="Minecraft\NativesInstaller.cpp" />
     <ClCompile Include="Moc\Logger\MocIOStream.cpp" />
     <ClCompile Include="QObjects\ClickableLabel.cpp" />
     <ClCompile Include="QObjects\HoveredFrame.cpp" />
@@ -227,6 +228,7 @@
     <ClInclude Include="Minecraft\Game\StringArgument.h" />
     <ClInclude Include="Minecraft\MinecraftOptions.h" />
     <ClInclude Include="Minecraft\Mods.h" />
+    <ClInclude Include="Minecraft\NativesInstaller.h" />
     <ClInclude Include="Minecraft\Utils\Auth\AuthInfo.h" />
     <ClInclude Include="Minecraft\Utils\JavaVersion.h" />
     <ClInclude Include="Minecraft\Utils\Lang.h" />
