@@ -17,6 +17,8 @@ std::vector<std::filesystem::path> MinecraftCpp::natives::getNativesUrls()
 
 void MinecraftCpp::natives::downloadNatives(const std::filesystem::path& path, CallbackNull* callback)
 {
+	std::filesystem::create_directory(path);
+
 	for (auto& elem : getNativesUrls())
 	{
 		DownloadFile(elem.u8string(), path.u8string(), callback);
