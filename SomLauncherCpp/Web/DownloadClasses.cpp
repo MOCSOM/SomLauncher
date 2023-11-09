@@ -132,11 +132,6 @@ inline std::string DDIC::Download::Files::download_file(const std::string& s_url
 //    }
 //}
 
-bool DDIC::Download::Files::download_all_files(const std::string& s_url_dir, CallbackNull callback)
-{
-	return false;
-}
-
 int DDIC::Download::Files::_get_java_exist_ver(const std::string& direct)
 {
 	std::vector<std::string> dirs = Additionals::Path::get_directories(direct);

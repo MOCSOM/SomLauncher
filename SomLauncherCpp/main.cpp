@@ -1,7 +1,6 @@
 #include "Form/SomLauncherMainWindow.h"
 #include <QtWidgets/QApplication>
 
-#include "Exceptions/TerminateProgrammException.h"
 #include "Web/DownloadClasses.h"
 #include "Databases/SQLBased.h"
 
@@ -9,8 +8,6 @@
 #include <qmessagebox.h>
 #include <exception>
 #include <filesystem>
-
-//#pragma ignore E2422
 
 int main(int argc, char* argv[])
 {
@@ -29,32 +26,28 @@ int main(int argc, char* argv[])
 
 		SomLauncherMainWindow window;
 
+		QObject::connect(&window, &SomLauncherMainWindow::updateSignal,
+			[=]() -> int
+			{
+				qInfo() << "connect updateSignal" << std::endl;
+				return system(DownloadFile("https://mocsom.site/setups/SomSetup.msi").c_str());
+			});
+
 		window.show();
 		returned_id = application.exec();
-	}
-	catch (const TerminateProgrammException& exc)
-	{
-		if (exc.getReturnedId() != 47)
-		{
-			return exc.getReturnedId();
-		}
-		else
-		{
-			return system(DownloadFile("https://mocsom.site/setups/SomSetup.msi").c_str());
-		}
 	}
 	catch (const QException& exc)
 	{
 		qWarning() << "qexception " << exc.what();
 		QMessageBox messageBox;
-		messageBox.critical(0, "QError", exc.what());
+		messageBox.critical(0, "Error in qt", exc.what());
 		messageBox.setFixedSize(500, 200);
 	}
 	catch (const std::exception& exc)
 	{
 		qWarning() << "exception " << exc.what();
 		QMessageBox messageBox;
-		messageBox.critical(0, "Error", exc.what());
+		messageBox.critical(0, "Error in std", exc.what());
 		messageBox.setFixedSize(500, 200);
 	}
 

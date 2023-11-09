@@ -35,6 +35,19 @@ QWidget
 	color: #000000;
 }
 
+QWidget:disabled
+{
+	/*background-color: transparent;
+	color: #fff;
+	border-color: #000000;*/
+	
+	/*background-color:#18062a;
+	color: #000000;*/
+	
+	background-color: #444444;
+	color: #666666;
+}
+
 /*-----QFrame-----*/
 QFrame
 {

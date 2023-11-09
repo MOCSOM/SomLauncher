@@ -96,9 +96,9 @@
     <AllProjectBMIsArePublic>true</AllProjectBMIsArePublic>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <ExternalIncludePath>$(ExternalIncludePath);C:\Users\alkor\source\github\libpqxx\build\include;C:\Users\alkor\source\github\libpqxx\include;C:\Program Files (x86)\PostgreSQL\10\include;C:\Program Files (x86)\PostgreSQL\10\include\server;</ExternalIncludePath>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);C:\Users\alkor\source\github\libpqxx\build\include;C:\Users\alkor\source\github\libpqxx\include;C:\Program Files (x86)\PostgreSQL\10\include;C:\Users\alkor\source\github\libpqxx\src;C:\Program Files (x86)\PostgreSQL\10\include\server</IncludePath>
-    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);C:\Users\alkor\source\github\libpqxx\build\include;C:\Users\alkor\source\github\libpqxx\include;C:\Program Files (x86)\PostgreSQL\10\include;C:\Program Files (x86)\PostgreSQL\10\include\server;</LibraryPath>
+    <ExternalIncludePath>$(ExternalIncludePath)</ExternalIncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|Win32'">
   </PropertyGroup>
@@ -118,11 +118,12 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Link />
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\alkor\source\github\libpqxx\build\include;C:\Users\alkor\source\github\libpqxx\include;C:\Program Files (x86)\PostgreSQL\10\include;C:\Program Files (x86)\PostgreSQL\10\include\server;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);C:\Program Files\MySQL\MySQL Connector C++ 8.2\include\jdbc</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>$(Qt_DEFINES_);%(PreprocessorDefinitions);STATIC_CONCPP</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);C:\Users\alkor\source\github\libpqxx\build\include;C:\Users\alkor\source\github\libpqxx\include;C:\Program Files (x86)\PostgreSQL\10\include;C:\Program Files (x86)\PostgreSQL\10\include\server;</AdditionalLibraryDirectories>
-      <AdditionalDependencies>%(AdditionalDependencies);$(Qt_LIBS_);Ws2_32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);C:\Program Files\MySQL\MySQL Connector C++ 8.2\lib64\vs14</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies);$(Qt_LIBS_);mysqlcppconn-static.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">

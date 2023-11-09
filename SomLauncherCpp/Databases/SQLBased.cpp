@@ -150,3 +150,44 @@ int sqlbase::postgresql::connect()
 	//pqxx::connection con;
 	return 0;
 }
+
+QSqlDatabase& sqlbase::mysql::connect(
+	const std::string& host_name,
+	const std::string& database_name,
+	const std::string& user_name,
+	const std::string& password)
+{
+	QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
+	db.setHostName(host_name.c_str());
+	db.setDatabaseName(database_name.c_str());
+	db.setUserName(user_name.c_str());
+	db.setPassword(password.c_str());
+
+	bool ok = db.open();
+	if (ok)
+	{
+		return db;
+	}
+	else
+	{
+		//TODO: error handler
+		return db;
+	}
+}
+
+QSqlQuery& sqlbase::mysql::getQuerry(const QSqlDatabase& database, const std::string& querry)
+{
+	QSqlQuery querry_from_db = QSqlQuery(database);
+	querry_from_db.prepare(querry.c_str());
+
+	bool ok = querry_from_db.exec();
+	if (ok)
+	{
+		return querry_from_db;
+	}
+	else
+	{
+		//TODO: error handler
+		return querry_from_db;
+	}
+}

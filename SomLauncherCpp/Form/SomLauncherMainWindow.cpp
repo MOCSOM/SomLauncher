@@ -41,7 +41,7 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget* parent)
 	if (isVersionOld())
 	{
 		qInfo() << "Start updater" << std::endl;
-		throw TerminateProgrammException(47);
+		emit this->updateSignal();
 	}
 
 	this->recomended_memory = 3072;
@@ -169,6 +169,8 @@ void SomLauncherMainWindow::_settingConnections()
 		});
 
 	QObject::connect(ui.stackedWidget_bottommenu, &QStackedWidget::currentChanged, this, &SomLauncherMainWindow::pageChangedSlidedWidget);
+
+	QObject::connect(ui.pushButton_checkupdates, &QPushButton::released, this, &SomLauncherMainWindow::onClickedPushButton_check_update);
 }
 
 void SomLauncherMainWindow::_settingMemory()
@@ -273,6 +275,8 @@ void SomLauncherMainWindow::onClickpushButton_startgame()
 	ui.pushButton_settings->setDisabled(true);
 	ui.pushButton_checkupdates->setDisabled(true);
 	ui.pushButton_changeserver->setDisabled(true);
+	//ui.scrollArea_servers->setDisabled(true);
+	ui.scrollAreaWidgetContents->setDisabled(true);
 
 	std::function<void()> myFunction =
 		[this]()
@@ -434,6 +438,16 @@ void SomLauncherMainWindow::pageChangedSlidedWidget(int value)
 	{
 		ui.gridLayout_page_game->addWidget(ui.progressBar_ahtung, 2, 0, 1, 1);
 		ui.progressBar_ahtung->setGeometry(this->progressBar_ahtung_geometry);
+	}
+}
+
+void SomLauncherMainWindow::onClickedPushButton_check_update()
+{
+	qInfo() << "onClickedPushButton_check_update" << std::endl;
+	if (isVersionOld())
+	{
+		qInfo() << "Start updater" << std::endl;
+		emit this->updateSignal();
 	}
 }
 
