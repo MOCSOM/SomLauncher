@@ -28,6 +28,8 @@
 #include "../Servers/ServerTypes.h"
 #include "../Exceptions/TerminateProgrammException.h"
 #include "../Minecraft/CommandBuilder.h"
+#include "../Client/StartProcess.h"
+#include "../Minecraft/Mods.h"
 
 #include "ui_SomLauncherMainWindow.h"
 
@@ -40,6 +42,8 @@
 #include "ServerChangerForm.h"
 #include "ServerWidget.h"
 #include "SettingsDialog.h"
+#include "TopSlideFrameWidget.h"
+#include "NewsViewWidget.h"
 
 // Use to convert bytes to MB
 constexpr int MEM_DIV = 1024 * 1024;
@@ -70,6 +74,7 @@ private:
 
 	Json::JsonValue config_parce;
 	Json::JsonValue servers_parce;
+	Json::JsonValue account_data;
 
 	Json::JsonParcer global_parcer;
 
@@ -77,6 +82,9 @@ private:
 	int recomended_memory = 1024;
 	int uses_memory = 1024;
 	int curret_memory = recomended_memory;
+
+	TopSlideFrameWidget* top_frame = nullptr;
+	QPropertyAnimation* top_frame_animation = nullptr;
 
 	QList<QSharedPointer<ServerWidget>> widget_list;
 
@@ -108,7 +116,12 @@ public:
 		std::string loader_version,
 		std::string java,
 		std::string mcdir,
-		MinecraftCpp::option::MinecraftOptions& options);
+		MinecraftCpp::option::MinecraftOptions& options,
+		std::shared_ptr<CallbackNull> callback = std::make_shared<CallbackNull>());
+
+	void installMods(const std::filesystem::path& install_path, const std::string& modpack_name,
+		const std::string& version,
+		std::shared_ptr<CallbackNull> callback = std::make_shared<CallbackNull>());
 
 	bool isConfigExist();
 	void createConfig();
@@ -123,6 +136,7 @@ public:
 	std::string getCurrentVersionFromConfig();
 	void setCurrentVersionFromGithub();
 	bool isVersionOld();
+	void setAccountData(const Json::JsonValue& data);
 
 private slots:
 	void onClickedpushButton_game();

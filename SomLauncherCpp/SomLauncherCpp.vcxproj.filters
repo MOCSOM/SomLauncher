@@ -107,6 +107,21 @@
     <ClCompile Include="Minecraft\NativesInstaller.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Form\LoginAccountForm.cpp">
+      <Filter>Custom Qt Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Form\NewsViewWidget.cpp">
+      <Filter>Custom Qt Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Form\SingleNewsItemWidget.cpp">
+      <Filter>Custom Qt Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\StartProcess.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Form\TopSlideFrameWidget.cpp">
+      <Filter>Custom Qt Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -229,6 +244,12 @@
     <ClInclude Include="Minecraft\NativesInstaller.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Client\StartProcess.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Encryption\PBKDF2SHA256.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="all.json" />
@@ -267,6 +288,18 @@
     <QtMoc Include="QObjects\SignalLabel.h">
       <Filter>Custom Qt Files</Filter>
     </QtMoc>
+    <QtMoc Include="Form\LoginAccountForm.h">
+      <Filter>Custom Qt Files</Filter>
+    </QtMoc>
+    <QtMoc Include="Form\NewsViewWidget.h">
+      <Filter>Custom Qt Files</Filter>
+    </QtMoc>
+    <QtMoc Include="Form\SingleNewsItemWidget.h">
+      <Filter>Custom Qt Files</Filter>
+    </QtMoc>
+    <QtMoc Include="Form\TopSlideFrameWidget.h">
+      <Filter>Custom Qt Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="Form\SomLauncherMainWindow.ui">
@@ -279,6 +312,18 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="Form\SettingsDialog.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="Form\LoginAccountForm.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="Form\NewsViewWidget.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="Form\SingleNewsItemWidget.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="Form\TopSlideFrameWidget.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>

@@ -94,11 +94,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <AllProjectIncludesArePublic>true</AllProjectIncludesArePublic>
     <AllProjectBMIsArePublic>true</AllProjectBMIsArePublic>
+    <ExecutablePath>C:\Users\alkor\source\libs\dlls\$(PlatformTarget)\$(Configuration)\bin;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <ExternalIncludePath>$(ExternalIncludePath)</ExternalIncludePath>
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+    <ExecutablePath>C:\Users\alkor\source\libs\dlls\$(PlatformTarget)\$(Configuration)\bin;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|Win32'">
   </PropertyGroup>
@@ -106,24 +108,24 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(Qt_INCLUDEPATH_)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files\MySQL\MySQL Connector C++ 8.2\include\jdbc;C:\Users\alkor\source\libs\dlls\$(PlatformTarget)\$(Configuration)\include;C:\Program Files\PostgreSQL\16\include;C:\boost\boost_1_82_0;$(Qt_INCLUDEPATH_)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>$(Qt_DEFINES_);%(PreprocessorDefinitions);STATIC_CONCPP</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
-      <AdditionalLibraryDirectories>
-      </AdditionalLibraryDirectories>
-      <AdditionalDependencies>%(AdditionalDependencies);$(Qt_LIBS_)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\alkor\source\libs\dlls\$(PlatformTarget)\$(Configuration)\lib;%(AdditionalLibraryDirectories);C:\Program Files\MySQL\MySQL Connector C++ 8.2\lib64\vs14\debug</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies);$(Qt_LIBS_);mysqlcppconn-static.lib;libcrypto.lib;libssl.lib;wsock2.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Link />
     <ClCompile>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);C:\Program Files\MySQL\MySQL Connector C++ 8.2\include\jdbc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files\MySQL\MySQL Connector C++ 8.2\include\jdbc;C:\Users\alkor\source\libs\dlls\$(PlatformTarget)\$(Configuration)\include;C:\Program Files\PostgreSQL\16\include;C:\boost\boost_1_82_0;$(Qt_INCLUDEPATH_)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>$(Qt_DEFINES_);%(PreprocessorDefinitions);STATIC_CONCPP</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);C:\Program Files\MySQL\MySQL Connector C++ 8.2\lib64\vs14</AdditionalLibraryDirectories>
-      <AdditionalDependencies>%(AdditionalDependencies);$(Qt_LIBS_);mysqlcppconn-static.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\alkor\source\libs\dlls\$(PlatformTarget)\$(Configuration)\lib;%(AdditionalLibraryDirectories);C:\Program Files\MySQL\MySQL Connector C++ 8.2\lib64\vs14;C:\Program Files (x86)\PostgreSQL\10\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies);$(Qt_LIBS_);mysqlcppconn-static.lib;libcrypto.lib;libssl.lib;wsock2.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
@@ -178,13 +180,18 @@
     <ClCompile Include="Archives\Archives.cpp" />
     <ClCompile Include="basic_xml.cpp" />
     <ClCompile Include="Callbacks\CallbackDict.cpp" />
+    <ClCompile Include="Client\StartProcess.cpp" />
     <ClCompile Include="Databases\SQLBased.cpp" />
     <ClCompile Include="Exceptions\FileOutsideMinecraftDirectoryException.cpp" />
+    <ClCompile Include="Form\LoginAccountForm.cpp" />
     <ClCompile Include="Form\MainWindowExtensions.cpp" />
+    <ClCompile Include="Form\NewsViewWidget.cpp" />
     <ClCompile Include="Form\ServerChangerForm.cpp" />
     <ClCompile Include="Form\ServerWidget.cpp" />
     <ClCompile Include="Form\SettingsDialog.cpp" />
+    <ClCompile Include="Form\SingleNewsItemWidget.cpp" />
     <ClCompile Include="Form\SomLauncherMainWindow.cpp" />
+    <ClCompile Include="Form\TopSlideFrameWidget.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Minecraft\CommandBuilder.cpp" />
     <ClCompile Include="Minecraft\Game\LibrariesDownloadInfo.cpp" />
@@ -207,12 +214,18 @@
     <ClInclude Include="Archives\qzipreader_p.h" />
     <ClInclude Include="Archives\qzipwriter_p.h" />
     <ClInclude Include="basic_xml.h" />
+    <ClInclude Include="Client\StartProcess.h" />
     <ClInclude Include="Databases\SQLBased.h" />
     <QtMoc Include="Form\ServerChangerForm.h" />
     <QtMoc Include="Form\ServerWidget.h" />
     <QtMoc Include="Form\SettingsDialog.h" />
+    <ClInclude Include="Encryption\PBKDF2SHA256.h" />
     <ClInclude Include="Exceptions\FileOutsideMinecraftDirectoryException.h" />
     <ClInclude Include="Exceptions\TerminateProgrammException.h" />
+    <QtMoc Include="Form\LoginAccountForm.h" />
+    <QtMoc Include="Form\NewsViewWidget.h" />
+    <QtMoc Include="Form\SingleNewsItemWidget.h" />
+    <QtMoc Include="Form\TopSlideFrameWidget.h" />
     <ClInclude Include="Hashes\sha1.h" />
     <ClInclude Include="Minecraft\CommandBuilder.h" />
     <ClInclude Include="Minecraft\Game\Argument.h" />
@@ -263,10 +276,14 @@
     <None Include="TODO_List.md" />
   </ItemGroup>
   <ItemGroup>
+    <QtUic Include="Form\LoginAccountForm.ui" />
+    <QtUic Include="Form\NewsViewWidget.ui" />
     <QtUic Include="Form\ServerChangerForm.ui" />
     <QtUic Include="Form\ServerWidget.ui" />
     <QtUic Include="Form\SettingsDialog.ui" />
+    <QtUic Include="Form\SingleNewsItemWidget.ui" />
     <QtUic Include="Form\SomLauncherMainWindow.ui" />
+    <QtUic Include="Form\TopSlideFrameWidget.ui" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MocJsonLib\MocJsonLib.vcxproj">

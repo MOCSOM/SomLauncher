@@ -786,90 +786,6 @@ std::chrono::system_clock::time_point MinecraftCpp::_parseDateTime(const std::st
 	return std::chrono::system_clock::from_time_t(std::mktime(&t));
 }
 
-bool MinecraftCpp::start_minecraft(const std::string& java_path, const std::string& args)
-{
-	std::string path;
-
-	path = java_path + " ";
-	path = path + args;
-
-	std::unique_ptr<wchar_t[]> buffer = Additionals::Convectors::ConvertStringToWcharUniqPtr(args);
-	STARTUPINFO si;
-	memset(&si, 0, sizeof(si));
-	si.cb = sizeof(si);
-	PROCESS_INFORMATION pi;
-	memset(&pi, 0, sizeof(pi));
-	qInfo() << "Programm args setting complete" << std::endl;
-	if (CreateProcessW(NULL, buffer.get(), NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi))
-	{
-		// программа запущена, ждем её завершения
-		qInfo() << "Programm has been started" << std::endl;
-		DWORD dwWait = WaitForSingleObject(pi.hProcess, INFINITE);
-		if (dwWait == WAIT_OBJECT_0)
-		{
-			qInfo() << "Programm has been closed" << std::endl;
-			// программа благополучно завершилась
-		}
-		else if (dwWait == WAIT_ABANDONED)
-		{
-			qInfo() << "Programm has been adadonde" << std::endl;
-			// программа была насильно "прибита"
-		}
-		//  else ну и может быть другие варианты ожидания
-
-		CloseHandle(pi.hProcess);
-		CloseHandle(pi.hThread);
-	}
-	else
-	{
-		qWarning() << "Programm isnt starting" << std::endl;
-	}
-
-	//return system(path.c_str());
-	return 0;
-}
-
-void MinecraftCpp::start_minecraft(const std::vector<std::string>& command)
-{
-	std::ostringstream imploded;
-	std::copy(command.begin(), command.end(),
-		std::ostream_iterator<std::string>(imploded, " "));
-
-	std::unique_ptr<wchar_t[]> buffer = Additionals::Convectors::ConvertStringToWcharUniqPtr(imploded.str());
-
-	LPWSTR szPath = buffer.get();
-	STARTUPINFO si;
-	memset(&si, 0, sizeof(si));
-	si.cb = sizeof(si);
-	PROCESS_INFORMATION pi;
-	memset(&pi, 0, sizeof(pi));
-	qInfo() << "Programm args setting complete" << std::endl;
-	if (CreateProcessW(NULL, szPath, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi))
-	{
-		// программа запущена, ждем её завершения
-		qInfo() << "Programm has been started" << std::endl;
-		DWORD dwWait = WaitForSingleObject(pi.hProcess, INFINITE);
-		if (dwWait == WAIT_OBJECT_0)
-		{
-			qInfo() << "Programm has been closed" << std::endl;
-			// программа благополучно завершилась
-		}
-		else if (dwWait == WAIT_ABANDONED)
-		{
-			qInfo() << "Programm has been adadonde" << std::endl;
-			// программа была насильно "прибита"
-		}
-		//  else ну и может быть другие варианты ожидания
-
-		CloseHandle(pi.hProcess);
-		CloseHandle(pi.hThread);
-	}
-	else
-	{
-		qWarning() << "Programm isnt starting" << std::endl;
-	}
-}
-
 std::string MinecraftCpp::get_classpath_separator()
 {
 	/*
@@ -2063,13 +1979,7 @@ int MinecraftCpp::fabric::install_fabric_version(const std::string& minecraft_ve
 	command.push_back("-noprofile");
 	command.push_back("-snapshot");
 
-	std::string command_string;
-	for (const auto& arg : command)
-	{
-		command_string += arg + " ";
-	}
-
-	MinecraftCpp::start_minecraft("", command_string);
+	client::startProcess(command);
 
 	/*if (result != 0)
 	{

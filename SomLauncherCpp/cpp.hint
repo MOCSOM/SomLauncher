@@ -6,3 +6,4 @@
 #define slots Q_SLOTS
 #define STDMETHODIMP_(type)
 #define _WIN32
+#define signals

@@ -27,13 +27,13 @@ namespace MinecraftCpp
 				/// <returns>true - если всё нормально
 				/// false - если произошла ошибка</returns>
 				bool installModPackManualy(const std::string& archive_url, const std::filesystem::path& path,
-					std::unique_ptr<CallbackNull> callback = std::make_unique<CallbackNull>()) noexcept;
+					std::shared_ptr<CallbackNull> callback = std::make_shared<CallbackNull>()) noexcept;
 			}
 			namespace database
 			{
 				bool installModPack(
 					const Json::JsonValue& json_from_server, const std::filesystem::path& path_to_download,
-					std::unique_ptr<CallbackNull> callback = std::make_unique<CallbackNull>()) noexcept;
+					std::shared_ptr<CallbackNull> callback = std::make_shared<CallbackNull>()) noexcept;
 			}
 		}
 

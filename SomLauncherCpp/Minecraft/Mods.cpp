@@ -1,7 +1,7 @@
 ﻿#include "Mods.h"
 
 bool MinecraftCpp::modpacks::download::database::installModPack(const Json::JsonValue& json_from_server,
-	const std::filesystem::path& path_to_download, std::unique_ptr<CallbackNull> callback) noexcept
+	const std::filesystem::path& path_to_download, std::shared_ptr<CallbackNull> callback) noexcept
 {
 	Json::JsonValue urls = json_from_server;
 	for (std::pair<const std::string, Json::JsonValue> elem : urls.get_object())
@@ -62,7 +62,7 @@ bool MinecraftCpp::modpacks::deletemods::deleteAllMods(const std::filesystem::pa
 }
 
 bool MinecraftCpp::modpacks::download::manual::installModPackManualy(const std::string& archive_url,
-	const std::filesystem::path& path, std::unique_ptr<CallbackNull> callback) noexcept
+	const std::filesystem::path& path, std::shared_ptr<CallbackNull> callback) noexcept
 {
 	std::string downloaded_arhcive_path = DownloadFile(archive_url,
 		Additionals::TempFile::get_tempdir_SYSTEM(), callback.get());

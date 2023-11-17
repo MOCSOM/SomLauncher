@@ -3,8 +3,6 @@
 SomLauncherMainWindow::SomLauncherMainWindow(QWidget* parent)
 	: QMainWindow(parent)
 {
-	qInstallMessageHandler(customHandler);
-
 	ui.setupUi(this);
 	qInfo() << "ui setup completed" << std::endl;
 
@@ -29,9 +27,9 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget* parent)
 
 	this->settings_dialog = std::make_unique<SettingsDialog>(Json::JsonValue(), this->options, this); //TODO: Сделать отправку данных о акке
 
-	_settingConnections();
-
 	_settingUiChanges();
+
+	_settingConnections();
 
 	QObject::connect(this->server_radio_button_group.get(), &QButtonGroup::buttonToggled,
 		this, &SomLauncherMainWindow::groupButtonsClicked);
@@ -67,9 +65,16 @@ void SomLauncherMainWindow::_parcingConfigs()
 
 void SomLauncherMainWindow::_settingUiChanges()
 {
+	ui.stackedWidget_bottommenu->setCurrentIndex(0);
+
+	this->top_frame = new TopSlideFrameWidget(this);
+	this->top_frame->setGeometry(QRect(30, -90, 741, 131));
+	this->top_frame->raise();
+
+	this->top_frame_animation = new QPropertyAnimation(this->top_frame, "geometry", this);
+
 	QFile styleFile(this->style_sheet.c_str());
 	styleFile.open(QFile::ReadOnly);
-
 	// Apply the loaded stylesheet
 	QString style(styleFile.readAll());
 	this->setStyleSheet(style);
@@ -90,10 +95,8 @@ void SomLauncherMainWindow::_settingUiChanges()
 	ui.labeltest->setPixmap(background);
 	//ui.centralWidget->setStyleSheet("background: linear-gradient(135deg, rgb(194, 183, 119), rgb(255, 143, 31));");
 
-	ui.pushButton_game->setStyleSheet("text-align:bottom;");
-	ui.pushButton_servers->setStyleSheet("text-align:bottom;");
-	ui.pushButton_news->setStyleSheet("text-align:bottom;");
-	ui.pushButton_aboutus->setStyleSheet("text-align:bottom;");
+	this->top_frame->setMainButtonsTextAlightButtom();
+	this->top_frame->changeLabelsCurrencyCountAndAccountName();
 
 	this->server_changer_button_text = ui.pushButton_changeserver->text().toStdString();
 	ui.pushButton_changeserver->setText((this->server_changer_button_text +
@@ -130,6 +133,9 @@ void SomLauncherMainWindow::_settingUiChanges()
 		}
 	}
 
+	NewsViewWidget* news_view = new NewsViewWidget();
+	ui.gridLayout_page_news->addWidget(news_view);
+
 	_settingCurrentServerName();
 
 	_settingModsCount();
@@ -147,19 +153,19 @@ void SomLauncherMainWindow::_settingCurrentServerName()
 
 void SomLauncherMainWindow::_settingConnections()
 {
-	QObject::connect(ui.pushButton_game, &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_game);
-	QObject::connect(ui.pushButton_servers, &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_servers);
-	QObject::connect(ui.pushButton_news, &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_news);
-	QObject::connect(ui.pushButton_aboutus, &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_aboutus);
+	QObject::connect(this->top_frame->getPushButtonGame(), &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_game);
+	QObject::connect(this->top_frame->getPushButtonServers(), &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_servers);
+	QObject::connect(this->top_frame->getPushButtonNews(), &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_news);
+	QObject::connect(this->top_frame->getPushButtonAboutUs(), &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_aboutus);
 	QObject::connect(ui.pushButton_changeserver, &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_changeserver);
-	QObject::connect(ui.pushButton_settings, &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_settings);
+	QObject::connect(this->top_frame->getPushButtonSettings(), &QPushButton::released, this, &SomLauncherMainWindow::onClickedpushButton_settings);
 
 	QObject::connect(ui.pushButton_startgame, &QPushButton::released, this, &SomLauncherMainWindow::onClickpushButton_startgame);
 
-	QObject::connect(ui.label_profile, &ClickableLabel::clicked, this, &SomLauncherMainWindow::onClickedpushLable_profile);
+	//QObject::connect(this->top_frame->getLabelProfile(), &ClickableLabel::clicked, this, &SomLauncherMainWindow::onClickedpushLable_profile);
 
-	QObject::connect(ui.frame_topslidemenu, &HoveredFrame::Enter, this, &SomLauncherMainWindow::mouseEnterframe_topslidemenu);
-	QObject::connect(ui.frame_topslidemenu, &HoveredFrame::Leave, this, &SomLauncherMainWindow::mouseLeaveframe_topslidemenu);
+	QObject::connect(this->top_frame->getFrame(), &HoveredFrame::Enter, this, &SomLauncherMainWindow::mouseEnterframe_topslidemenu);
+	QObject::connect(this->top_frame->getFrame(), &HoveredFrame::Leave, this, &SomLauncherMainWindow::mouseLeaveframe_topslidemenu);
 
 	QObject::connect(this->settings_dialog.get(), &SettingsDialog::acceptButtonClicked, this, &SomLauncherMainWindow::saveSettings);
 	QObject::connect(this->settings_dialog.get(), &SettingsDialog::setToDefaultButtonClicked,
@@ -272,14 +278,14 @@ void SomLauncherMainWindow::onClickpushButton_startgame()
 	ui.label_download_status_change->setHidden(false);
 
 	ui.pushButton_startgame->setDisabled(true);
-	ui.pushButton_settings->setDisabled(true);
+	this->top_frame->getPushButtonSettings()->setDisabled(true);
 	ui.pushButton_checkupdates->setDisabled(true);
 	ui.pushButton_changeserver->setDisabled(true);
 	//ui.scrollArea_servers->setDisabled(true);
 	ui.scrollAreaWidgetContents->setDisabled(true);
 
-	std::function<void()> myFunction =
-		[this]()
+	std::function<void()> start_minecraft_thread_func =
+		[this]() -> void
 		{
 			start_minecraft_params();
 		};
@@ -287,7 +293,7 @@ void SomLauncherMainWindow::onClickpushButton_startgame()
 	connect(ui.progressBar_ahtung, &QProgressBar::valueChanged, this, &SomLauncherMainWindow::updateProgressBar);
 	connect(ui.label_download_status_change, &SignalLabel::textChanged, this, &SomLauncherMainWindow::updateProgressLabel);
 
-	download_thread = new FunctionThread(myFunction);
+	download_thread = new FunctionThread(start_minecraft_thread_func);
 	download_thread->start();
 }
 
@@ -295,39 +301,32 @@ void SomLauncherMainWindow::mouseEnterframe_topslidemenu()
 {
 	qInfo() << "frame_topslidemenu mouse enter" << std::endl;
 
-	if (ui.frame_topslidemenu->geometry() != QRect(30, 0, 741, 131))
+	if (this->top_frame->geometry() != QRect(30, 0, 741, 131))
 	{
-		QPropertyAnimation* animation = new QPropertyAnimation(ui.frame_topslidemenu, "geometry");
-		animation->setDuration(100);
-		animation->setStartValue(ui.frame_topslidemenu->geometry());
-		animation->setEndValue(QRect(30, 0, 741, 131));
-		animation->start();
+		this->top_frame_animation->setDuration(100);
+		this->top_frame_animation->setStartValue(this->top_frame->geometry());
+		this->top_frame_animation->setEndValue(QRect(30, 0, 741, 131));
+		this->top_frame_animation->start();
 	}
 
-	ui.pushButton_game->setStyleSheet("text-align:center;");
-	ui.pushButton_servers->setStyleSheet("text-align:center;");
-	ui.pushButton_news->setStyleSheet("text-align:center;");
-	ui.pushButton_aboutus->setStyleSheet("text-align:center;");
+	this->top_frame->setMainButtonsTextAlightCenter();
+	this->top_frame->changeLabelsCurrencyCountAndAccountName();
 }
 
 void SomLauncherMainWindow::mouseLeaveframe_topslidemenu()
 {
 	qInfo() << "frame_topslidemenu mouse leave" << std::endl;
 
-	if (ui.frame_topslidemenu->geometry() != QRect(30, -90, 741, 131))
+	if (this->top_frame->geometry() != QRect(30, -90, 741, 131))
 	{
-		QPropertyAnimation* animation = new QPropertyAnimation(ui.frame_topslidemenu, "geometry");
-		animation->setDuration(100);
-		animation->setStartValue(ui.frame_topslidemenu->geometry());
-		animation->setEndValue(QRect(30, -90, 741, 131));
-		animation->start();
+		this->top_frame_animation->setDuration(100);
+		this->top_frame_animation->setStartValue(this->top_frame->geometry());
+		this->top_frame_animation->setEndValue(QRect(30, -90, 741, 131));
+		this->top_frame_animation->start();
 	}
 
-	//animation->finished();
-	ui.pushButton_game->setStyleSheet("text-align:bottom;");
-	ui.pushButton_servers->setStyleSheet("text-align:bottom;");
-	ui.pushButton_news->setStyleSheet("text-align:bottom;");
-	ui.pushButton_aboutus->setStyleSheet("text-align:bottom;");
+	this->top_frame->setMainButtonsTextAlightButtom();
+	this->top_frame->changeLabelsCurrencyCountAndAccountName();
 }
 
 void SomLauncherMainWindow::groupButtonsClicked(QAbstractButton* id, bool status)

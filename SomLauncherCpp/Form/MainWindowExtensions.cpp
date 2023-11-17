@@ -55,6 +55,10 @@ void SomLauncherMainWindow::setupInstallMinecraft(const size_t& index)
 
 	std::filesystem::path instance_path = this->minecraft_core_dir_path + "\\" + name;
 
+	std::shared_ptr<CallbackDict> callback = std::make_shared<CallbackDict>();
+	callback->setQProgressBar(ui.progressBar_ahtung);
+	callback->setQLabelProggress(ui.label_download_status_change);
+
 	std::string launch_version = install_minecraft(
 		instance_path,
 		version,
@@ -62,7 +66,11 @@ void SomLauncherMainWindow::setupInstallMinecraft(const size_t& index)
 		this->servers_parce["servers"][index]["loaderVersion"].to_string(),
 		java,
 		this->config_parce["user"]["mcdir"].to_string(),
-		this->options);
+		this->options,
+		callback
+	);
+
+	installMods(instance_path / "mods", "0", "0");
 
 	options.gameDirectory = instance_path.u8string();
 	std::vector<std::string> command = MinecraftCpp::get_minecraft_command__(launch_version, instance_path.u8string(), options);
@@ -81,7 +89,7 @@ void SomLauncherMainWindow::setupInstallMinecraft(const size_t& index)
 	this->close();
 
 	std::filesystem::current_path(instance_path);
-	MinecraftCpp::start_minecraft(command);
+	client::startProcess(command);
 }
 
 std::string SomLauncherMainWindow::install_minecraft(
@@ -91,7 +99,8 @@ std::string SomLauncherMainWindow::install_minecraft(
 	std::string loader_version,
 	std::string java,
 	std::string mcdir,
-	MinecraftCpp::option::MinecraftOptions& options)
+	MinecraftCpp::option::MinecraftOptions& options,
+	std::shared_ptr<CallbackNull> callback)
 {
 	//Json::JsonValue data_modpack = parecer_modpack.ParseFile(this->minecraft_core_dir_path);
 
@@ -100,10 +109,6 @@ std::string SomLauncherMainWindow::install_minecraft(
 
 	std::string launch_version;
 	std::string install_version;
-
-	std::shared_ptr<CallbackDict> callback = std::make_shared<CallbackDict>();
-	callback->setQProgressBar(ui.progressBar_ahtung);
-	callback->setQLabelProggress(ui.label_download_status_change);
 
 	checkJava(options, java, callback.get());
 
@@ -131,6 +136,13 @@ std::string SomLauncherMainWindow::install_minecraft(
 		return launch_version;
 	}
 	return std::string();
+}
+
+void SomLauncherMainWindow::installMods(const std::filesystem::path& install_path,
+	const std::string& modpack_name, const std::string& version,
+	std::shared_ptr<CallbackNull> callback)
+{
+	//MinecraftCpp::modpacks::download::database::installModPack(, install_path, callback);
 }
 
 bool SomLauncherMainWindow::isConfigExist()
@@ -315,4 +327,9 @@ bool SomLauncherMainWindow::isVersionOld()
 		return true;
 	}
 	return false;
+}
+
+void SomLauncherMainWindow::setAccountData(const Json::JsonValue& data)
+{
+	this->account_data = data;
 }

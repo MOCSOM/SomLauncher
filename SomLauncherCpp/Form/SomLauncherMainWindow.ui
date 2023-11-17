@@ -51,112 +51,6 @@
    <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:0.784091, y2:0.744, stop:0 rgba(235, 80, 109, 255), stop:1 rgba(149, 106, 133, 255));</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="HoveredFrame" name="frame_topslidemenu">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>-90</y>
-      <width>741</width>
-      <height>131</height>
-     </rect>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::StyledPanel</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Raised</enum>
-    </property>
-    <layout class="QGridLayout" name="gridLayout_frame_topslidemenu" columnstretch="2,2,2,2,3">
-     <item row="0" column="1">
-      <widget class="QPushButton" name="pushButton_servers">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>Серверы</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0">
-      <widget class="QPushButton" name="pushButton_game">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>Игра</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="2">
-      <widget class="QPushButton" name="pushButton_news">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>Новости</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="4">
-      <widget class="QWidget" name="widget_account" native="true">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <widget class="ClickableLabel" name="label_profile">
-        <property name="geometry">
-         <rect>
-          <x>100</x>
-          <y>80</y>
-          <width>81</width>
-          <height>20</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Профиль  ⯆</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="pushButton_settings">
-        <property name="geometry">
-         <rect>
-          <x>100</x>
-          <y>10</y>
-          <width>75</width>
-          <height>24</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Настройки</string>
-        </property>
-       </widget>
-      </widget>
-     </item>
-     <item row="0" column="3">
-      <widget class="QPushButton" name="pushButton_aboutus">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>О нас</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
    <widget class="QStackedWidget" name="stackedWidget_bottommenu">
     <property name="geometry">
      <rect>
@@ -417,8 +311,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>98</width>
-           <height>28</height>
+           <width>757</width>
+           <height>397</height>
           </rect>
          </property>
          <layout class="QGridLayout" name="gridLayout_scrollArea_servers"/>
@@ -428,18 +322,14 @@
      </layout>
     </widget>
     <widget class="QWidget" name="page_news">
-     <layout class="QGridLayout" name="gridLayout_page_news">
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>TextLabel</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
+     <layout class="QGridLayout" name="gridLayout_page_news"/>
     </widget>
     <widget class="QWidget" name="page_aboutus">
-     <layout class="QGridLayout" name="gridLayout_page_aboutus"/>
+     <layout class="QGridLayout" name="gridLayout_page_aboutus">
+      <item row="0" column="0">
+       <widget class="QPlainTextEdit" name="plainTextEdit_aboutus"/>
+      </item>
+     </layout>
     </widget>
    </widget>
    <widget class="QLabel" name="label_minecraft_directory">
@@ -473,23 +363,11 @@
    </widget>
    <zorder>labeltest</zorder>
    <zorder>stackedWidget_bottommenu</zorder>
-   <zorder>frame_topslidemenu</zorder>
    <zorder>label_minecraft_directory</zorder>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
-  <customwidget>
-   <class>ClickableLabel</class>
-   <extends>QLabel</extends>
-   <header>../../../QObjects/ClickableLabel.h</header>
-  </customwidget>
-  <customwidget>
-   <class>HoveredFrame</class>
-   <extends>QFrame</extends>
-   <header>../../../QObjects/HoveredFrame.h</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>SignalLabel</class>
    <extends>QLabel</extends>
