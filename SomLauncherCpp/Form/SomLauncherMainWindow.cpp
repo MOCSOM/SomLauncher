@@ -25,14 +25,9 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget* parent)
 
 	setOptionsValuesFromConfig();
 
-	this->settings_dialog = std::make_unique<SettingsDialog>(Json::JsonValue(), this->options, this); //TODO: Сделать отправку данных о акке
-
 	_settingUiChanges();
 
 	_settingConnections();
-
-	QObject::connect(this->server_radio_button_group.get(), &QButtonGroup::buttonToggled,
-		this, &SomLauncherMainWindow::groupButtonsClicked);
 
 	setCurrentVersionFromGithub();
 
@@ -44,6 +39,11 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget* parent)
 
 	this->recomended_memory = 3072;
 	this->curret_memory = this->config_parce["user"]["memory"].to_int();
+}
+
+SomLauncherMainWindow::~SomLauncherMainWindow()
+{
+	this->database_connection->close();
 }
 
 void SomLauncherMainWindow::_settingMinecraftStandartPath()
@@ -59,8 +59,19 @@ void SomLauncherMainWindow::_settingMinecraftStandartPath()
 
 void SomLauncherMainWindow::_parcingConfigs()
 {
-	this->servers_parce = this->global_parcer.ParseFile(this->servers_json);
 	this->config_parce = this->global_parcer.ParseFile(this->config_path);
+}
+
+void SomLauncherMainWindow::_parcingServers()
+{
+	//setConnectionWithDatabase();
+	this->servers_parce = getServersFromDatabase();
+	//this->database_connection->close();
+}
+
+void SomLauncherMainWindow::_parcingServers(sql::Connection* connect)
+{
+	this->servers_parce = getServersFromDatabase(connect);
 }
 
 void SomLauncherMainWindow::_settingUiChanges()
@@ -99,51 +110,62 @@ void SomLauncherMainWindow::_settingUiChanges()
 	this->top_frame->changeLabelsCurrencyCountAndAccountName();
 
 	this->server_changer_button_text = ui.pushButton_changeserver->text().toStdString();
-	ui.pushButton_changeserver->setText((this->server_changer_button_text +
-		this->servers_parce["servers"][this->config_parce["user"]["server"].to_int()]["name"].to_string() +
-		")").c_str());
+
+	//_settingServersWidgets();
 
 	ui.label_minecraft_directory->setText(this->minecraft_core_dir_path.c_str());
 
-	//ui.scrollAreaWidgetContents->setAttribute(Qt::WA_TranslucentBackground);
-	ui.scrollArea_servers->setStyleSheet("background-color: transparent;");
-
-	this->server_radio_button_group = std::make_unique<QButtonGroup>();
-
-	for (int i = 0; i < this->servers_parce["servers"].get_count(); ++i)
-	{
-		QSharedPointer<ServerWidget> widget = QSharedPointer<ServerWidget>::create(this->server_radio_button_group.get(), this->servers_parce["servers"][i]);
-
-		this->widget_list.append(widget);
-
-		if (this->config_parce["user"]["server"].get_type() != Json::JsonTypes::Null && this->config_parce["user"]["server"].to_int() == i)
-		{
-			widget->setStatusServer(true);
-		}
-	}
-
-	int index = 0;
-	for (int i = 0; i < (this->servers_parce["servers"].get_count() - 1) / 2 + 1; ++i)
-	{
-		for (int j = 0; j < (this->servers_parce["servers"].get_count() - 1) / 2 + 1; ++j)
-		{
-			ui.gridLayout_scrollArea_servers->addWidget(this->widget_list[index].get(), i, j);
-
-			++index;
-		}
-	}
-
 	NewsViewWidget* news_view = new NewsViewWidget();
 	ui.gridLayout_page_news->addWidget(news_view);
-
-	_settingCurrentServerName();
-
-	_settingModsCount();
 
 	_settingServerType();
 
 	ui.progressBar_ahtung->setHidden(true);
 	ui.label_download_status_change->setHidden(true);
+}
+
+void SomLauncherMainWindow::_settingServersWidgets()
+{
+	try
+	{
+		ui.pushButton_changeserver->setText((this->server_changer_button_text +
+			this->servers_parce["servers"][this->config_parce["user"]["server"].to_int()]["name"].to_string() +
+			")").c_str());
+
+		ui.scrollArea_servers->setStyleSheet("background-color: transparent;");
+
+		this->server_radio_button_group = std::make_unique<QButtonGroup>();
+
+		for (int i = 0; i < this->servers_parce["servers"].get_count(); ++i)
+		{
+			QSharedPointer<ServerWidget> widget = QSharedPointer<ServerWidget>::create(this->server_radio_button_group.get(), this->servers_parce["servers"][i]);
+
+			this->widget_list.append(widget);
+
+			if (this->config_parce["user"]["server"].get_type() != Json::JsonTypes::Null && this->config_parce["user"]["server"].to_int() == i)
+			{
+				widget->setStatusServer(true);
+			}
+		}
+
+		int index = 0;
+		for (int i = 0; i < (this->servers_parce["servers"].get_count() - 1) / 2 + 1; ++i)
+		{
+			for (int j = 0; j < (this->servers_parce["servers"].get_count()) / 2 + 1; ++j)
+			{
+				ui.gridLayout_scrollArea_servers->addWidget(this->widget_list[index].get(), i, j);
+
+				++index;
+			}
+		}
+
+		QObject::connect(this->server_radio_button_group.get(), &QButtonGroup::buttonToggled,
+			this, &SomLauncherMainWindow::groupButtonsClicked);
+	}
+	catch (const std::exception& exc)
+	{
+		qWarning() << exc.what();
+	}
 }
 
 void SomLauncherMainWindow::_settingCurrentServerName()
@@ -166,13 +188,6 @@ void SomLauncherMainWindow::_settingConnections()
 
 	QObject::connect(this->top_frame->getFrame(), &HoveredFrame::Enter, this, &SomLauncherMainWindow::mouseEnterframe_topslidemenu);
 	QObject::connect(this->top_frame->getFrame(), &HoveredFrame::Leave, this, &SomLauncherMainWindow::mouseLeaveframe_topslidemenu);
-
-	QObject::connect(this->settings_dialog.get(), &SettingsDialog::acceptButtonClicked, this, &SomLauncherMainWindow::saveSettings);
-	QObject::connect(this->settings_dialog.get(), &SettingsDialog::setToDefaultButtonClicked,
-		this, [=]() -> void
-		{
-			this->settings_dialog->setToDefault(default_options, recomended_memory);
-		});
 
 	QObject::connect(ui.stackedWidget_bottommenu, &QStackedWidget::currentChanged, this, &SomLauncherMainWindow::pageChangedSlidedWidget);
 
@@ -197,6 +212,17 @@ void SomLauncherMainWindow::_settingServerType()
 {
 	ServerTypes type = getServerType();
 	ui.label_client_type->setText(ServerTypesToString(type).c_str());
+}
+
+void SomLauncherMainWindow::_settingAccountDataInUi()
+{
+	for (auto& elem : account_data.get_array())
+	{
+		if (elem.is_exist("username"))
+		{
+			this->top_frame->getLabelProfile()->setText(elem["username"].to_string().c_str());
+		}
+	}
 }
 
 void SomLauncherMainWindow::onClickedpushButton_game()
@@ -231,7 +257,7 @@ void SomLauncherMainWindow::onClickedpushButton_changeserver()
 {
 	qInfo() << "pushButton_changeserver clicked" << std::endl;
 
-	ServerChanger dialog(this, this->config_path);
+	ServerChanger dialog(this, this->config_path, this->servers_parce);
 
 	QObject::connect(&dialog, &ServerChanger::accepted,
 		this, [=]() -> void

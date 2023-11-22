@@ -17,12 +17,13 @@ class ServerChanger : public QDialog
 private:
 	std::string server = "";
 	std::string config_path = "";
+	Json::JsonValue json_parce;
 	int index = -1;
 
 	QListWidgetItem* item = nullptr;
 
 public:
-	explicit ServerChanger(QWidget* parent = nullptr, std::string config_path = "");
+	explicit ServerChanger(QWidget* parent = nullptr, std::string config_path = "", Json::JsonValue server_parce = Json::JsonValue());
 	~ServerChanger();
 
 private slots:

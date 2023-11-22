@@ -114,18 +114,18 @@
     <Link>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <AdditionalLibraryDirectories>C:\Users\alkor\source\libs\dlls\$(PlatformTarget)\$(Configuration)\lib;%(AdditionalLibraryDirectories);C:\Program Files\MySQL\MySQL Connector C++ 8.2\lib64\vs14\debug</AdditionalLibraryDirectories>
-      <AdditionalDependencies>%(AdditionalDependencies);$(Qt_LIBS_);mysqlcppconn-static.lib;libcrypto.lib;libssl.lib;wsock2.lib</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies);$(Qt_LIBS_);mysqlcppconn-static.lib;libcrypto.lib;libssl.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Link />
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Program Files\MySQL\MySQL Connector C++ 8.2\include\jdbc;C:\Users\alkor\source\libs\dlls\$(PlatformTarget)\$(Configuration)\include;C:\Program Files\PostgreSQL\16\include;C:\boost\boost_1_82_0;$(Qt_INCLUDEPATH_)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\alkor\source\github\libnbtplusplus\include;C:\Program Files\MySQL\MySQL Connector C++ 8.2\include\jdbc;C:\Users\alkor\source\libs\dlls\$(PlatformTarget)\$(Configuration)\include;C:\Program Files\PostgreSQL\16\include;C:\boost\boost_1_82_0;$(Qt_INCLUDEPATH_)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>$(Qt_DEFINES_);%(PreprocessorDefinitions);STATIC_CONCPP</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>C:\Users\alkor\source\libs\dlls\$(PlatformTarget)\$(Configuration)\lib;%(AdditionalLibraryDirectories);C:\Program Files\MySQL\MySQL Connector C++ 8.2\lib64\vs14;C:\Program Files (x86)\PostgreSQL\10\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>%(AdditionalDependencies);$(Qt_LIBS_);mysqlcppconn-static.lib;libcrypto.lib;libssl.lib;wsock2.lib</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies);$(Qt_LIBS_);mysqlcppconn-static.lib;libcrypto.lib;libssl.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
@@ -182,6 +182,7 @@
     <ClCompile Include="Callbacks\CallbackDict.cpp" />
     <ClCompile Include="Client\StartProcess.cpp" />
     <ClCompile Include="Databases\SQLBased.cpp" />
+    <ClCompile Include="Encryption\PBKDF2SHA256.cpp" />
     <ClCompile Include="Exceptions\FileOutsideMinecraftDirectoryException.cpp" />
     <ClCompile Include="Form\LoginAccountForm.cpp" />
     <ClCompile Include="Form\MainWindowExtensions.cpp" />
@@ -198,6 +199,7 @@
     <ClCompile Include="Minecraft\Minecraftus.cpp" />
     <ClCompile Include="Minecraft\Mods.cpp" />
     <ClCompile Include="Minecraft\NativesInstaller.cpp" />
+    <ClCompile Include="Minecraft\Servers\ServerDatConfiguration.cpp" />
     <ClCompile Include="Moc\Logger\MocIOStream.cpp" />
     <ClCompile Include="QObjects\ClickableLabel.cpp" />
     <ClCompile Include="QObjects\HoveredFrame.cpp" />
@@ -243,6 +245,7 @@
     <ClInclude Include="Minecraft\MinecraftOptions.h" />
     <ClInclude Include="Minecraft\Mods.h" />
     <ClInclude Include="Minecraft\NativesInstaller.h" />
+    <ClInclude Include="Minecraft\Servers\ServerDatConfiguration.h" />
     <ClInclude Include="Minecraft\Utils\Auth\AuthInfo.h" />
     <ClInclude Include="Minecraft\Utils\JavaVersion.h" />
     <ClInclude Include="Minecraft\Utils\Lang.h" />

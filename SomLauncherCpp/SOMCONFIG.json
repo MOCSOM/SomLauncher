@@ -1,11 +1,12 @@
 {
     "user": {
-        "name": "debug",
-        "memory": 7002,
-        "wight": 854,
-        "server": 2,
-        "hight": 480,
+        "memory": 7168,
+        "name": "NanLeb",
         "mcdir": "",
+        "password": "pbkdf2_sha256$600000$1bd5bde3.gbge.5g38.c4ce.e3ced19f272d$tPiJxUxC1gojJBF39XkRdKvl+wNfMyoH8YYwroTRNOw=",
+        "server": 1,
+        "wight": 854,
+        "hight": 480,
         "isInstallMods": false
     },
     "launcher": {

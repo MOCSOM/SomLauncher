@@ -30,6 +30,8 @@
 #include "../Minecraft/CommandBuilder.h"
 #include "../Client/StartProcess.h"
 #include "../Minecraft/Mods.h"
+#include "../Databases/SQLBased.h"
+#include "../Minecraft/Servers/ServerDatConfiguration.h"
 
 #include "ui_SomLauncherMainWindow.h"
 
@@ -94,18 +96,29 @@ private:
 
 	QRect progressBar_ahtung_geometry;
 
+	sql::Connection* database_connection = nullptr;
+	short int connection_tries = 5;
+
 public:
 	explicit SomLauncherMainWindow(QWidget* parent = nullptr);
-	~SomLauncherMainWindow() = default;
+	~SomLauncherMainWindow();
 
 	void _settingMinecraftStandartPath();
 	void _parcingConfigs();
+	void _parcingServers();
+	void _parcingServers(sql::Connection* connect);
 	void _settingUiChanges();
+	void _settingServersWidgets();
 	void _settingCurrentServerName();
 	void _settingConnections();
 	void _settingMemory();
 	void _settingModsCount();
 	void _settingServerType();
+	void _settingAccountDataInUi();
+
+	void setConnectionWithDatabase();
+	Json::JsonValue getServersFromDatabase();
+	Json::JsonValue getServersFromDatabase(sql::Connection* connect);
 
 	void start_minecraft_params();
 	void setupInstallMinecraft(const size_t& index);
@@ -123,6 +136,7 @@ public:
 		const std::string& version,
 		std::shared_ptr<CallbackNull> callback = std::make_shared<CallbackNull>());
 
+	void createSettingsForm();
 	bool isConfigExist();
 	void createConfig();
 	void configureOptions();
@@ -131,12 +145,14 @@ public:
 	size_t getMinecraftModsCount();
 	ServerTypes getServerType();
 	std::string getCurrentServerName();
+	const std::filesystem::path getConfigPath();
 	void _settingServerNameInChangeServerButton();
 	std::string getLatestVersionFromGithub();
 	std::string getCurrentVersionFromConfig();
 	void setCurrentVersionFromGithub();
 	bool isVersionOld();
 	void setAccountData(const Json::JsonValue& data);
+	std::unique_ptr<SettingsDialog>& getSettingsDialog();
 
 private slots:
 	void onClickedpushButton_game();

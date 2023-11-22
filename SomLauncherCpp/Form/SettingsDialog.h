@@ -14,6 +14,7 @@ class SettingsDialog : public QDialog
 
 private:
 	Json::JsonValue account_data;
+	std::filesystem::path config_path;
 
 	MinecraftCpp::option::MinecraftOptions& option;
 
@@ -29,6 +30,8 @@ public:
 
 	void setJavaPath(const std::string& new_path);
 	void setMinecraftPath(const std::string& new_path);
+
+	void setConfigPath(const std::filesystem::path& config_path);
 
 	int getMemoryValue();
 	std::string getMinecraftPath();
@@ -49,6 +52,8 @@ signals:
 	void setToDefaultButtonClicked();
 signals:
 	void reinstallMods(bool state);
+signals:
+	void logoutSignal();
 
 private slots:
 	void setMemoryLableValue(int value);
@@ -59,6 +64,7 @@ private slots:
 
 	void onClickToolBotton_getminecraft_core();
 	void onClickToolBotton_getjava_path();
+	void onClickPushButtonLogoutFromAccount();
 
 private:
 	Ui::SettingsDialog ui;

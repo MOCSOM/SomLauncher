@@ -5,8 +5,6 @@
 #include "Web/DownloadClasses.h"
 #include "Databases/SQLBased.h"
 
-#include "Encryption/PBKDF2SHA256.h"
-
 #include <qexception.h>
 #include <qmessagebox.h>
 #include <exception>
@@ -16,41 +14,31 @@ int main(int argc, char* argv[])
 {
 	//QApplication application(argc, argv);
 
-	try
-	{
-		sql::Connection* con = nullptr;
-		con = sqlbase::mysql::sqlconnector::connect(
-			"79.174.93.203", "sombd", "somuser", "Vblyfqn_jqk23");
-
-		/*sql::ResultSet* res = nullptr;
-		res = sqlbase::mysql::sqlconnector::sendQuerry(con, "SELECT JSON_OBJECTAGG(JSON_OBJECT('id',id)) FROM users_customuser");
-
-		while (res->next())
-		{
-			std::cout << res->getString(1) << std::endl;
-		}*/
-		//std::cout << sqlbase::mysql::sqlconnector::sqlResultToJson(res);
-	}
-	catch (sql::SQLException& eSQL) {
-		std::cerr << "Failed with exception: " << eSQL.what() << std::endl;
-	}
-
+//	try
+//	{
+//		sql::Connection* con = nullptr;
+//		con = sqlbase::mysql::sqlconnector::connect(
+//			"79.174.93.203", "sombd", "somuser", "Vblyfqn_jqk23");
+//
+//		sql::ResultSet* res = nullptr;
+//		res = sqlbase::mysql::sqlconnector::sendQuerry(con,
+//			R"(SELECT mods_mod.mod_link FROM servers_server
+//INNER JOIN mods_modmodpack ON servers_server.modpack_id_id = mods_modmodpack.modpack_id_id
+//INNER JOIN mods_mod ON mods_modmodpack.mod_id_id = mods_mod.mod_id)");
+//
+//		while (res->next())
+//		{
+//			std::cout << res->getString(1) << std::endl;
+//		}
+//		//std::cout << sqlbase::mysql::sqlconnector::sqlResultToJson(res);
+//	}
+//	catch (sql::SQLException& eSQL) {
+//		std::cerr << "Failed with exception: " << eSQL.what() << std::endl;
+//	}
 	//return application.exec();
-
-	//unsigned char salt[] = { '3','7','5','0','c','5','9','2','f','8','2','5','4','5','2','a','a','4','d','8','5','7','1','5','7','d','0','7','8','4','5','5','\0' };
-	/*QByteArray arr = PBKDF2_SHA256_DJANGO("ShoSha2004",
-		"3750c592f825452aa4d857157d078455", 390000, 32);
-	QByteArray out = arr.toBase64();
-	std::cout << arr.toBase64().data() << std::endl;
-
-	if (std::string("5mgQxlrdtHwtk0izq5Mq8JvY7nXufdQiPxrC+KbnI/0=") == std::string(arr.toBase64().data()))
-	{
-		std::cout << "aaaaaaaaaaaaaaaa" << std::endl;
-	}*/
 
 	int returned_id = -1;
 	QApplication application(argc, argv);
-	sqlbase::mysql::sqlconnector::connect("79.174.93.203", "sombd", "somuser", "Vblyfqn_jqk23");
 
 	qInstallMessageHandler(customHandler);
 	try
@@ -66,6 +54,11 @@ int main(int argc, char* argv[])
 
 		SomLauncherMainWindow main_window;
 		LoginAccountForm account_window(&main_window);
+		account_window.setConfigPath(main_window.getConfigPath());
+		account_window._setPasswordAndLoginInUi();
+
+		//main_window.setConnectionWithDatabase();
+		//std::cout << main_window.getServersFromDatabase().to_string() << std::endl;
 
 		QObject::connect(&main_window, &SomLauncherMainWindow::updateSignal,
 			[=]() -> int
@@ -76,12 +69,30 @@ int main(int argc, char* argv[])
 		);
 
 		QObject::connect(&account_window, &LoginAccountForm::accountDataReceivedSignal,
-			[&main_window](const std::string& json_string_data) -> void
+			[&main_window, &account_window](const std::string& json_string_data) -> void
 			{
 				qInfo() << "accountDataReceivedSignal detected" << std::endl;
 				Json::JsonValue data = Json::JsonParcer::ParseJson(json_string_data);
 				main_window.setAccountData(data);
+				main_window._settingAccountDataInUi();
+				main_window.createSettingsForm();
+				main_window.setConnectionWithDatabase();
+				main_window._parcingServers();
+				main_window._settingServersWidgets();
+				main_window._settingModsCount();
+				main_window._settingCurrentServerName();
+
+				QObject::connect(main_window.getSettingsDialog().get(), &SettingsDialog::logoutSignal,
+					[&main_window, &account_window]() -> void
+					{
+						main_window.close();
+						account_window.earseAllData();
+						account_window.show();
+					}
+				);
+
 				main_window.show();
+				account_window.close();
 			}
 		);
 

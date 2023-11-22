@@ -23,34 +23,28 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
-      <item row="8" column="1">
-       <spacer name="verticalSpacer_3">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
+      <item row="3" column="1">
+       <widget class="QLabel" name="label_login">
+        <property name="text">
+         <string>Почта или логин</string>
         </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>40</height>
-         </size>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
         </property>
-       </spacer>
+       </widget>
       </item>
-      <item row="0" column="1">
-       <spacer name="verticalSpacer_4">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>40</height>
-         </size>
-        </property>
-       </spacer>
+      <item row="4" column="0" colspan="3">
+       <widget class="QLineEdit" name="lineEdit_login"/>
       </item>
-      <item row="8" column="0">
-       <spacer name="horizontalSpacer">
+      <item row="14" column="0">
+       <widget class="ClickableLabel" name="label_remember_password">
+        <property name="text">
+         <string>Не помню пароль</string>
+        </property>
+       </widget>
+      </item>
+      <item row="9" column="2">
+       <spacer name="horizontalSpacer_2">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
@@ -61,43 +55,6 @@
          </size>
         </property>
        </spacer>
-      </item>
-      <item row="1" column="1">
-       <widget class="QLabel" name="label_login_account">
-        <property name="text">
-         <string>Вход в аккаунт</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="1">
-       <widget class="QLabel" name="label_password">
-        <property name="text">
-         <string>Пароль</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="13" column="0">
-       <widget class="ClickableLabel" name="label_remember_password">
-        <property name="text">
-         <string>Не помню пароль</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1">
-       <widget class="QLabel" name="label_login">
-        <property name="text">
-         <string>Почта или логин</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
       </item>
       <item row="2" column="1">
        <spacer name="verticalSpacer">
@@ -112,7 +69,66 @@
         </property>
        </spacer>
       </item>
-      <item row="10" column="1">
+      <item row="5" column="1">
+       <widget class="QLabel" name="label_password">
+        <property name="text">
+         <string>Пароль</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <spacer name="verticalSpacer_4">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLabel" name="label_login_account">
+        <property name="text">
+         <string>Вход в аккаунт</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="12" column="1">
+       <spacer name="verticalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>75</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="9" column="1">
+       <spacer name="verticalSpacer_3">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="11" column="1">
        <widget class="QPushButton" name="pushButton_login">
         <property name="text">
          <string>Вход</string>
@@ -126,15 +142,22 @@
         </property>
        </widget>
       </item>
-      <item row="12" column="0">
+      <item row="13" column="0">
        <widget class="QPushButton" name="pushButton_registration">
         <property name="text">
          <string>Регистрация</string>
         </property>
        </widget>
       </item>
-      <item row="8" column="2">
-       <spacer name="horizontalSpacer_2">
+      <item row="8" column="0" colspan="3">
+       <widget class="QLabel" name="label_wrong_password">
+        <property name="text">
+         <string>Неверный логин или пароль</string>
+        </property>
+       </widget>
+      </item>
+      <item row="9" column="0">
+       <spacer name="horizontalSpacer">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
@@ -146,26 +169,10 @@
         </property>
        </spacer>
       </item>
-      <item row="4" column="0" colspan="3">
-       <widget class="QLineEdit" name="lineEdit_login"/>
-      </item>
-      <item row="11" column="1">
-       <spacer name="verticalSpacer_2">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>75</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
       <item row="7" column="0" colspan="3">
-       <widget class="QLabel" name="label_wrong_password">
+       <widget class="QCheckBox" name="checkBox_remember_password">
         <property name="text">
-         <string>Неверный логин или пароль</string>
+         <string>Запомнить пароль</string>
         </property>
        </widget>
       </item>

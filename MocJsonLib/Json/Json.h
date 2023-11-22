@@ -35,6 +35,7 @@ namespace Json
 			std::vector<Json::SomJson> array_value = {};
 
 			Node();
+			Node(Json::JsonTypes type);
 			Node(long double number_value);
 			Node(double number_value);
 			Node(int number_value);

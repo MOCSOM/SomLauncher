@@ -7,6 +7,14 @@ SettingsDialog::SettingsDialog(Json::JsonValue data, MinecraftCpp::option::Minec
 
 	this->account_data = data;
 
+	for (auto& elem : this->account_data.get_array())
+	{
+		if (elem.is_exist("username"))
+		{
+			ui.label_account_name->setText(elem["username"].to_string().c_str());
+		}
+	}
+
 	ui.label_modreinstall_notifiy->setStyleSheet("#label_modreinstall_notifiy{color: rgb(255, 0, 0);}");
 
 	QPalette palette = ui.label_modreinstall_notifiy->palette();
@@ -28,6 +36,8 @@ SettingsDialog::SettingsDialog(Json::JsonValue data, MinecraftCpp::option::Minec
 
 	QObject::connect(ui.toolButton_game_path, &QToolButton::clicked, this, &SettingsDialog::onClickToolBotton_getminecraft_core);
 	QObject::connect(ui.toolButton_java_path, &QToolButton::clicked, this, &SettingsDialog::onClickToolBotton_getjava_path);
+
+	QObject::connect(ui.pushButton_exit_account, &QToolButton::clicked, this, &SettingsDialog::onClickPushButtonLogoutFromAccount);
 }
 
 SettingsDialog::~SettingsDialog()
@@ -69,6 +79,11 @@ void SettingsDialog::setJavaPath(const std::string& new_path)
 void SettingsDialog::setMinecraftPath(const std::string& new_path)
 {
 	ui.lineEdit_game_path->setText(new_path.c_str());
+}
+
+void SettingsDialog::setConfigPath(const std::filesystem::path& config_path)
+{
+	this->config_path = config_path;
 }
 
 int SettingsDialog::getMemoryValue()
@@ -164,6 +179,16 @@ void SettingsDialog::onClickToolBotton_getjava_path()
 	}
 
 	ui.lineEdit_java_path->setText(path.u8string().c_str());
+}
+
+void SettingsDialog::onClickPushButtonLogoutFromAccount()
+{
+	Json::JsonValue parced_config = Json::JsonParcer::ParseFile(this->config_path);
+	parced_config["user"]["name"] = "";
+	parced_config["user"]["password"] = "";
+	parced_config.save_json_to_file(this->config_path.u8string(), 4);
+	this->close();
+	emit logoutSignal();
 }
 
 void SettingsDialog::setMemoryLableValue(int value)

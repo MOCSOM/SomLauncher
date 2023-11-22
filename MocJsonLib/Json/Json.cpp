@@ -491,6 +491,43 @@ Json::SomJson::Node::Node()
 	this->type = Json::JsonTypes::NotImplemented;
 }
 
+Json::SomJson::Node::Node(Json::JsonTypes type)
+{
+	switch (type)
+	{
+	case Json::JsonTypes::String:
+		this->type = Json::JsonTypes::String;
+		this->string_value = std::string();
+		break;
+	case Json::JsonTypes::Number:
+		this->type = Json::JsonTypes::Number;
+		this->number_value = NULL;
+		break;
+	case Json::JsonTypes::Bool:
+		this->type = Json::JsonTypes::Bool;
+		this->bool_value = NULL;
+		break;
+	case Json::JsonTypes::Array:
+		this->type = Json::JsonTypes::Array;
+		this->array_value = std::vector<SomJson>();
+		break;
+	case Json::JsonTypes::Object:
+		this->type = Json::JsonTypes::Object;
+		this->object_value = std::unordered_map<std::string, Json::SomJson>();
+		break;
+	case Json::JsonTypes::Null:
+		this->type = Json::JsonTypes::Null;
+		this->null_value = std::nullptr_t();
+		break;
+	case Json::JsonTypes::NotImplemented:
+		this->type = Json::JsonTypes::NotImplemented;
+		break;
+	default:
+		this->type = Json::JsonTypes::NotImplemented;
+		break;
+	}
+}
+
 Json::SomJson::Node::Node(long double number_value)
 {
 	this->type = Json::JsonTypes::Number;
@@ -624,7 +661,7 @@ size_t Json::SomJson::get_count()
 	{
 		return this->value->array_value.size();
 	}
-	
+
 	return 1;
 }
 

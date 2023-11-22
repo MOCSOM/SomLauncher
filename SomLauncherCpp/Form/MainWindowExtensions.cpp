@@ -1,5 +1,69 @@
 ﻿#include "SomLauncherMainWindow.h"
 
+void SomLauncherMainWindow::setConnectionWithDatabase()
+{
+	try
+	{
+		this->database_connection = sqlbase::mysql::sqlconnector::connect(
+			"79.174.93.203", "sombd", "somuser", "Vblyfqn_jqk23");
+	}
+	catch (sql::SQLException& exc)
+	{
+		qWarning() << "exception " << exc.what() << " trying again";
+		if (connection_tries != 0)
+		{
+			--connection_tries;
+			setConnectionWithDatabase();
+		}
+	}
+}
+
+Json::JsonValue SomLauncherMainWindow::getServersFromDatabase()
+{
+	sql::ResultSet* res = nullptr;
+	QString querry =
+		"SELECT JSON_OBJECT('servers',JSON_ARRAYAGG(JSON_OBJECT('server_id',server_id, 'name',server_name, 'server_img',server_img, 'description',server_description, 'server_ip',server_ip, 'java',java_versions, 'version',minecraft_version, 'core',loader_core, 'loaderVersion',minimal_loader_version, 'server_type',server_type, 'server_slug',server_slug, 'modpack_id_id',modpack_id_id))) FROM servers_server";
+	try
+	{
+		res = sqlbase::mysql::sqlconnector::sendQuerry(this->database_connection, querry.toStdString());
+	}
+	catch (sql::SQLException& eSQL)
+	{
+		qFatal() << "Failed with exception: " << eSQL.what();
+	}
+	Json::JsonValue returned;
+
+	while (res->next())
+	{
+		//std::cout << res->getString(1) << std::endl;
+		returned = Json::JsonParcer::ParseJson(res->getString(1));
+	}
+	return returned;
+}
+
+Json::JsonValue SomLauncherMainWindow::getServersFromDatabase(sql::Connection* connect)
+{
+	sql::ResultSet* res = nullptr;
+	QString querry =
+		"SELECT JSON_OBJECTAGG('servers',JSON_ARRAY(JSON_OBJECT('server_id',server_id, 'name',server_name, 'server_img',server_img, 'description',server_description, 'server_ip',server_ip, 'java',java_versions, 'version',minecraft_version, 'core',loader_core, 'loaderVersion',minimal_loader_version, 'server_type',server_type, 'server_slug',server_slug, 'modpack_id_id',modpack_id_id))) FROM servers_server";
+	try
+	{
+		res = sqlbase::mysql::sqlconnector::sendQuerry(connect, querry.toStdString());
+	}
+	catch (sql::SQLException& eSQL)
+	{
+		qFatal() << "Failed with exception: " << eSQL.what();
+	}
+	Json::JsonValue returned;
+
+	while (res->next())
+	{
+		//std::cout << res->getString(1) << std::endl;
+		returned = Json::JsonParcer::ParseJson(res->getString(1));
+	}
+	return returned;
+}
+
 void SomLauncherMainWindow::start_minecraft_params()
 {
 	qInfo() << "Config loaded" << std::endl;
@@ -50,6 +114,8 @@ void SomLauncherMainWindow::setupInstallMinecraft(const size_t& index)
 	std::string core = this->servers_parce["servers"][index]["core"].to_string();
 	std::string version = this->servers_parce["servers"][index]["version"].to_string();
 	std::string name = this->servers_parce["servers"][index]["name"].to_string();
+	std::string ip_port = this->servers_parce["servers"][index]["server_ip"].to_string();
+	std::string modpack_id = this->servers_parce["servers"][index]["modpack_id_id"].to_string();
 
 	name.erase(Additionals::String::remove_if(name.begin(), name.end(), isspace));
 
@@ -70,7 +136,9 @@ void SomLauncherMainWindow::setupInstallMinecraft(const size_t& index)
 		callback
 	);
 
-	installMods(instance_path / "mods", "0", "0");
+	installMods(instance_path / "mods", name, "0", callback);
+
+	serversdat::createServersDat(instance_path / "servers.dat", name, ip_port);
 
 	options.gameDirectory = instance_path.u8string();
 	std::vector<std::string> command = MinecraftCpp::get_minecraft_command__(launch_version, instance_path.u8string(), options);
@@ -142,7 +210,33 @@ void SomLauncherMainWindow::installMods(const std::filesystem::path& install_pat
 	const std::string& modpack_name, const std::string& version,
 	std::shared_ptr<CallbackNull> callback)
 {
+	std::string querry = R"(SELECT mods_mod.mod_link FROM servers_server
+INNER JOIN mods_modmodpack ON servers_server.modpack_id_id = mods_modmodpack.modpack_id_id
+INNER JOIN mods_mod ON mods_modmodpack.mod_id_id = mods_mod.mod_id
+WHERE servers_server.server_name LIKE )" + std::string("'%") + modpack_name + "%'";
+
+	sql::ResultSet* result = sqlbase::mysql::sqlconnector::sendQuerry(this->database_connection, querry);
+	while (result->next())
+	{
+		std::string downloaded_path = DownloadFile(result->getString(1),
+			install_path.u8string(), callback.get());
+	}
+
 	//MinecraftCpp::modpacks::download::database::installModPack(, install_path, callback);
+}
+
+void SomLauncherMainWindow::createSettingsForm()
+{
+	this->settings_dialog = std::make_unique<SettingsDialog>(this->account_data, this->options, this);
+
+	this->settings_dialog->setConfigPath(this->config_path);
+
+	QObject::connect(this->settings_dialog.get(), &SettingsDialog::acceptButtonClicked, this, &SomLauncherMainWindow::saveSettings);
+	QObject::connect(this->settings_dialog.get(), &SettingsDialog::setToDefaultButtonClicked,
+		this, [=]() -> void
+		{
+			this->settings_dialog->setToDefault(default_options, recomended_memory);
+		});
 }
 
 bool SomLauncherMainWindow::isConfigExist()
@@ -277,6 +371,11 @@ std::string SomLauncherMainWindow::getCurrentServerName()
 	return this->servers_parce["servers"][this->config_parce["user"]["server"].to_int()]["name"].to_string();
 }
 
+const std::filesystem::path SomLauncherMainWindow::getConfigPath()
+{
+	return std::filesystem::path(this->config_path);
+}
+
 std::string SomLauncherMainWindow::getLatestVersionFromGithub()
 {
 	QUrl url("https://api.github.com/repos/MOCSOM/SomLauncher/tags");
@@ -332,4 +431,9 @@ bool SomLauncherMainWindow::isVersionOld()
 void SomLauncherMainWindow::setAccountData(const Json::JsonValue& data)
 {
 	this->account_data = data;
+}
+
+std::unique_ptr<SettingsDialog>& SomLauncherMainWindow::getSettingsDialog()
+{
+	return this->settings_dialog;
 }
