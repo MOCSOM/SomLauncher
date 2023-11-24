@@ -1,16 +1,2 @@
-[30:35:19] [\INFO]: ui setup completed 
-[30:35:19] [\INFO]: "https://api.github.com/repos/MOCSOM/SomLauncher/tags" 
-[31:35:19] [\INFO]: "https://api.github.com/repos/MOCSOM/SomLauncher/tags" 
-[38:35:19] [\INFO]: accountDataReceivedSignal detected 
-[39:35:19] [\INFO]: frame_topslidemenu mouse enter 
-[39:35:19] [\INFO]: frame_topslidemenu mouse leave 
-[39:35:19] [\INFO]: frame_topslidemenu mouse enter 
-[40:35:19] [\INFO]: frame_topslidemenu mouse leave 
-[40:35:19] [\INFO]: frame_topslidemenu mouse enter 
-[41:35:19] [\INFO]: frame_topslidemenu mouse leave 
-[41:35:19] [\INFO]: frame_topslidemenu mouse enter 
-[41:35:19] [\INFO]: pushButton_servers clicked 
-[41:35:19] [\INFO]: frame_topslidemenu mouse leave 
-[42:35:19] [\INFO]: frame_topslidemenu mouse enter 
-[42:35:19] [\INFO]: pushButton_game clicked 
-[42:35:19] [\INFO]: frame_topslidemenu mouse leave 
+[47:32:20] [__cdecl SomLauncherMainWindow::SomLauncherMainWindow(class QWidget *)\INFO]: ui setup completed 
+[47:32:20] [__cdecl SomLauncherMainWindow::SomLauncherMainWindow(class QWidget *)\INFO]: Config created 

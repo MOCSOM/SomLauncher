@@ -148,8 +148,10 @@ public:
 	const std::filesystem::path getConfigPath();
 	void _settingServerNameInChangeServerButton();
 	std::string getLatestVersionFromGithub();
+	Json::JsonValue getLatestVersionFromDatabase();
 	std::string getCurrentVersionFromConfig();
 	void setCurrentVersionFromGithub();
+	void setCurrentVersionFromDatabase();
 	bool isVersionOld();
 	void setAccountData(const Json::JsonValue& data);
 	std::unique_ptr<SettingsDialog>& getSettingsDialog();

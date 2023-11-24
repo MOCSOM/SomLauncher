@@ -418,6 +418,34 @@ std::string SomLauncherMainWindow::getLatestVersionFromGithub()
 	}
 }
 
+Json::JsonValue SomLauncherMainWindow::getLatestVersionFromDatabase()
+{
+	setConnectionWithDatabase();
+	sql::ResultSet* res = nullptr;
+	QString querry =
+		R"(
+SELECT
+	JSON_ARRAYAGG(JSON_OBJECT('file',file, 'version',version))
+FROM launcher_download_launcher)";
+
+	try
+	{
+		res = sqlbase::mysql::sqlconnector::sendQuerry(this->database_connection, querry.toStdString());
+	}
+	catch (sql::SQLException& eSQL)
+	{
+		qFatal() << "Failed with exception: " << eSQL.what();
+	}
+	Json::JsonValue returned;
+
+	while (res->next())
+	{
+		//std::cout << res->getString(1) << std::endl;
+		returned = Json::JsonParcer::ParseJson(res->getString(1));
+	}
+	return returned;
+}
+
 std::string SomLauncherMainWindow::getCurrentVersionFromConfig()
 {
 	return this->config_parce["launcher"]["verison"].to_string();
@@ -432,9 +460,22 @@ void SomLauncherMainWindow::setCurrentVersionFromGithub()
 	}
 }
 
+void SomLauncherMainWindow::setCurrentVersionFromDatabase()
+{
+	if (getCurrentVersionFromConfig().empty())
+	{
+		this->config_parce["launcher"]["verison"] = getLatestVersionFromDatabase()[0]["version"].to_string();
+		this->config_parce.save_json_to_file(this->config_path, 4);
+	}
+}
+
 bool SomLauncherMainWindow::isVersionOld()
 {
-	if (getCurrentVersionFromConfig() != getLatestVersionFromGithub())
+	/*if (getCurrentVersionFromConfig() != getLatestVersionFromGithub())
+	{
+		return true;
+	}*/
+	if (getCurrentVersionFromConfig() != getLatestVersionFromDatabase()[0]["version"].to_string())
 	{
 		return true;
 	}

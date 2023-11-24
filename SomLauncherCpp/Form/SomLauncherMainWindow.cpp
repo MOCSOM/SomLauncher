@@ -29,7 +29,7 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget* parent)
 
 	_settingConnections();
 
-	setCurrentVersionFromGithub();
+	setCurrentVersionFromDatabase();
 
 	if (isVersionOld())
 	{
