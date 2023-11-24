@@ -61,10 +61,12 @@ int main(int argc, char* argv[])
 		//std::cout << main_window.getServersFromDatabase().to_string() << std::endl;
 
 		QObject::connect(&main_window, &SomLauncherMainWindow::updateSignal,
-			[=]() -> int
+			[=](const std::string& url) -> int
 			{
 				qInfo() << "updateSignal detected" << std::endl;
-				return system(DownloadFile("https://mocsom.site/media/launchers/SomSetup.msi").c_str());
+				std::string download_url = "https://mocsom.site/media" + std::string("/") + url;
+				QApplication::exit(0);
+				return system(DownloadFile(download_url, Additionals::TempFile::get_tempdir_SYSTEM()).c_str());
 			}
 		);
 

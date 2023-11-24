@@ -34,7 +34,7 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget* parent)
 	if (isVersionOld())
 	{
 		qInfo() << "Start updater" << std::endl;
-		emit this->updateSignal();
+		emit this->updateSignal(getLatestVersionFromDatabase()[getLatestVersionFromDatabase().get_array().size() - 1]["file"].to_string());
 	}
 
 	this->recomended_memory = 3072;
@@ -478,7 +478,9 @@ void SomLauncherMainWindow::onClickedPushButton_check_update()
 	if (isVersionOld())
 	{
 		qInfo() << "Start updater" << std::endl;
-		emit this->updateSignal();
+		this->config_parce["launcher"]["verison"] = getLatestVersionFromDatabase()[getLatestVersionFromDatabase().get_array().size() - 1]["version"].to_string();
+		this->config_parce.save_json_to_file(this->config_path, 4);
+		emit this->updateSignal(getLatestVersionFromDatabase()[getLatestVersionFromDatabase().get_array().size() - 1]["file"].to_string());
 	}
 }
 

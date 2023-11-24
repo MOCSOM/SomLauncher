@@ -183,7 +183,7 @@ private slots:
 	void setReinstallMods(bool state);
 
 signals:
-	void updateSignal();
+	void updateSignal(const std::string& newl_laucher_url);
 
 private:
 	Ui::SomLauncherMainWindowClass ui;

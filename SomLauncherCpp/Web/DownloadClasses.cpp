@@ -36,7 +36,17 @@ inline std::string DDIC::Download::Files::download_file(const std::string& s_url
 	}
 
 	std::filesystem::path d_file_path(destenation_file);
+	std::filesystem::path create_file_path = d_file_path;
 	d_file_path = d_file_path.parent_path();
+
+	if (d_file_path != "" && d_file_path.has_filename())
+	{
+		if (!std::filesystem::create_directories(create_file_path.parent_path()))
+		{
+			// Обработка ошибки создания директории
+			int error = GetLastError();
+		}
+	}
 
 	if (d_file_path != "")
 	{
@@ -274,7 +284,8 @@ std::string DDIC::Download::Java::get_download_url(/*wchar_t*& url,*/const std::
 {
 	std::string _version = version;
 	_version = normalize_version(version);
-	if (jre) {
+	if (jre)
+	{
 		//L"https://api.adoptopenjdk.net/v3/binary/latest/"
 
 		/*wchar_t* url = L"https://api.adoptopenjdk.net/v3/binary/latest/";
@@ -289,7 +300,7 @@ std::string DDIC::Download::Java::get_download_url(/*wchar_t*& url,*/const std::
 		url = strdogW(url, L"/normal/adoptopenjdk");*/
 
 		std::string url = Join({
-			"https://api.adoptopenjdk.net/v3/binary/latest/",
+			"https://api.adoptopenjdk.net/v3/binary/latest",
 			_version,
 			"ga",
 			operating_system,
@@ -301,7 +312,8 @@ std::string DDIC::Download::Java::get_download_url(/*wchar_t*& url,*/const std::
 		return url;
 		//L"https://api.adoptopenjdk.net/v3/binary/latest/%s/ga/%s/%s/jre/%s/normal/adoptopenjdk", version, operating_system, arch, impl;
 	}
-	else {
+	else
+	{
 		/*wchar_t* url = L"https://api.adoptopenjdk.net/v3/binary/latest/";
 
 		url = strdogW(url, version);
@@ -314,7 +326,7 @@ std::string DDIC::Download::Java::get_download_url(/*wchar_t*& url,*/const std::
 		url = strdogW(url, L"/normal/adoptopenjdk");*/
 
 		std::string url = Join({
-			"https://api.adoptopenjdk.net/v3/binary/latest/",
+			"https://api.adoptopenjdk.net/v3/binary/latest",
 			_version,
 			"ga",
 			operating_system,

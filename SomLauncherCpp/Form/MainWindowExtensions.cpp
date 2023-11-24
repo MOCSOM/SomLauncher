@@ -118,7 +118,7 @@ void SomLauncherMainWindow::setupInstallMinecraft(const size_t& index)
 	std::string java = this->servers_parce["servers"][index]["java"].to_string();
 	std::string core = this->servers_parce["servers"][index]["core"].to_string();
 	std::string version = this->servers_parce["servers"][index]["version"].to_string();
-	std::string name = this->servers_parce["servers"][index]["name"].to_string();
+	std::string name = this->servers_parce["servers"][index]["server_slug"].to_string();
 	std::string ip_port = this->servers_parce["servers"][index]["server_ip"].to_string();
 	std::string modpack_id = this->servers_parce["servers"][index]["modpack_id_id"].to_string();
 
@@ -216,14 +216,13 @@ void SomLauncherMainWindow::installMods(const std::filesystem::path& install_pat
 	std::shared_ptr<CallbackNull> callback)
 {
 	std::string querry = R"(SELECT mods_mod.mod_link FROM servers_server
-INNER JOIN mods_modmodpack ON servers_server.modpack_id_id = mods_modmodpack.modpack_id_id
-INNER JOIN mods_mod ON mods_modmodpack.mod_id_id = mods_mod.mod_id
-WHERE servers_server.server_name LIKE )" + std::string("'%") + modpack_name + "%'";
+INNER JOIN mods_mod_modpacks ON servers_server.modpack_id_id = mods_mod_modpacks.modpack_id
+INNER JOIN mods_mod ON mods_mod_modpacks.mod_id = mods_mod.mod_id
+WHERE servers_server.server_slug LIKE )" + std::string("'%") + modpack_name + "%'";
 
 	sql::ResultSet* result = sqlbase::mysql::sqlconnector::sendQuerry(this->database_connection, querry);
 	while (result->next())
 	{
-		auto a = result->getString(1);
 		std::string downloaded_path = DownloadFile(result->getString(1),
 			install_path.u8string(), callback.get());
 	}
@@ -464,7 +463,7 @@ void SomLauncherMainWindow::setCurrentVersionFromDatabase()
 {
 	if (getCurrentVersionFromConfig().empty())
 	{
-		this->config_parce["launcher"]["verison"] = getLatestVersionFromDatabase()[0]["version"].to_string();
+		this->config_parce["launcher"]["verison"] = getLatestVersionFromDatabase()[getLatestVersionFromDatabase().get_array().size() - 1]["file"].to_string();
 		this->config_parce.save_json_to_file(this->config_path, 4);
 	}
 }
@@ -475,7 +474,7 @@ bool SomLauncherMainWindow::isVersionOld()
 	{
 		return true;
 	}*/
-	if (getCurrentVersionFromConfig() != getLatestVersionFromDatabase()[0]["version"].to_string())
+	if (getCurrentVersionFromConfig() != getLatestVersionFromDatabase()[getLatestVersionFromDatabase().get_array().size() - 1]["file"].to_string())
 	{
 		return true;
 	}
