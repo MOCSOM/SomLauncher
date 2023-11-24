@@ -102,6 +102,7 @@ void SomLauncherMainWindow::_settingUiChanges()
 	blur->setBlurRadius(8);
 
 	background.fromImage(applyEffectToImage(background.toImage(), blur));*/
+	ui.scrollArea_servers->setStyleSheet("background-color: transparent;");
 
 	ui.labeltest->setPixmap(background);
 	//ui.centralWidget->setStyleSheet("background: linear-gradient(135deg, rgb(194, 183, 119), rgb(255, 143, 31));");
@@ -128,39 +129,44 @@ void SomLauncherMainWindow::_settingServersWidgets()
 {
 	try
 	{
-		ui.pushButton_changeserver->setText((this->server_changer_button_text +
-			this->servers_parce["servers"][this->config_parce["user"]["server"].to_int()]["name"].to_string() +
-			")").c_str());
-
-		ui.scrollArea_servers->setStyleSheet("background-color: transparent;");
-
-		this->server_radio_button_group = std::make_unique<QButtonGroup>();
-
-		for (int i = 0; i < this->servers_parce["servers"].get_count(); ++i)
+		if (this->servers_parce["servers"].get_array().size() > this->config_parce["user"]["server"].to_int())
 		{
-			QSharedPointer<ServerWidget> widget = QSharedPointer<ServerWidget>::create(this->server_radio_button_group.get(), this->servers_parce["servers"][i]);
+			ui.pushButton_changeserver->setText((this->server_changer_button_text +
+				this->servers_parce["servers"][this->config_parce["user"]["server"].to_int()]["name"].to_string() +
+				")").c_str());
 
-			this->widget_list.append(widget);
+			this->server_radio_button_group = std::make_unique<QButtonGroup>();
 
-			if (this->config_parce["user"]["server"].get_type() != Json::JsonTypes::Null && this->config_parce["user"]["server"].to_int() == i)
+			for (int i = 0; i < this->servers_parce["servers"].get_count(); ++i)
 			{
-				widget->setStatusServer(true);
-			}
-		}
+				QSharedPointer<ServerWidget> widget = QSharedPointer<ServerWidget>::create(this->server_radio_button_group.get(), this->servers_parce["servers"][i]);
 
-		int index = 0;
-		for (int i = 0; i < (this->servers_parce["servers"].get_count() - 1) / 2 + 1; ++i)
+				this->widget_list.append(widget);
+
+				if (this->config_parce["user"]["server"].get_type() != Json::JsonTypes::Null && this->config_parce["user"]["server"].to_int() == i)
+				{
+					widget->setStatusServer(true);
+				}
+			}
+
+			int index = 0;
+			for (int i = 0; i < (this->servers_parce["servers"].get_count() - 1) / 2 + 1; ++i)
+			{
+				for (int j = 0; j < (this->servers_parce["servers"].get_count()) / 2 + 1; ++j)
+				{
+					ui.gridLayout_scrollArea_servers->addWidget(this->widget_list[index].get(), i, j);
+
+					++index;
+				}
+			}
+
+			QObject::connect(this->server_radio_button_group.get(), &QButtonGroup::buttonToggled,
+				this, &SomLauncherMainWindow::groupButtonsClicked);
+		}
+		else
 		{
-			for (int j = 0; j < (this->servers_parce["servers"].get_count()) / 2 + 1; ++j)
-			{
-				ui.gridLayout_scrollArea_servers->addWidget(this->widget_list[index].get(), i, j);
-
-				++index;
-			}
+			ui.pushButton_changeserver->setText((this->server_changer_button_text + ")").c_str());
 		}
-
-		QObject::connect(this->server_radio_button_group.get(), &QButtonGroup::buttonToggled,
-			this, &SomLauncherMainWindow::groupButtonsClicked);
 	}
 	catch (const std::exception& exc)
 	{

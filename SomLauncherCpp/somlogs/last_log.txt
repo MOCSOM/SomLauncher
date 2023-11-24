@@ -1,26 +1,16 @@
-[1:26:1] [__cdecl SomLauncherMainWindow::SomLauncherMainWindow(class QWidget *)\INFO]: ui setup completed 
-[1:26:1] [class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > __cdecl SomLauncherMainWindow::getLatestVersionFromGithub(void)\INFO]: "https://api.github.com/repos/MOCSOM/SomLauncher/tags" 
-[2:26:1] [class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > __cdecl SomLauncherMainWindow::getLatestVersionFromGithub(void)\INFO]: "https://api.github.com/repos/MOCSOM/SomLauncher/tags" 
-[14:26:1] [void __cdecl main::<lambda_2>::operator ()(const class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &) const\INFO]: accountDataReceivedSignal detected 
-[25:26:1] [void __cdecl ServerWidget::radioButtonChecked(bool)\INFO]: radioButtonChecked true 
-[27:26:1] [void __cdecl SomLauncherMainWindow::mouseEnterframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse enter 
-[28:26:1] [void __cdecl SomLauncherMainWindow::onClickedpushButton_servers(void)\INFO]: pushButton_servers clicked 
-[28:26:1] [void __cdecl SomLauncherMainWindow::mouseLeaveframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse leave 
-[29:26:1] [void __cdecl ServerWidget::radioButtonChecked(bool)\INFO]: radioButtonChecked false 
-[29:26:1] [void __cdecl SomLauncherMainWindow::groupButtonsClicked(class QAbstractButton *,bool)\INFO]: groupButtons Clicked id:  "admogus"   false 
-[29:26:1] [void __cdecl ServerWidget::radioButtonChecked(bool)\INFO]: radioButtonChecked true 
-[30:26:1] [void __cdecl SomLauncherMainWindow::groupButtonsClicked(class QAbstractButton *,bool)\INFO]: groupButtons Clicked id:  "foqiwhfwq"   true 
-[30:26:1] [void __cdecl SomLauncherMainWindow::groupButtonsClicked(class QAbstractButton *,bool)\INFO]: Server is:  "1" 
-[30:26:1] [void __cdecl SomLauncherMainWindow::groupButtonsClicked(class QAbstractButton *,bool)\INFO]: Server saved 
-[31:26:1] [void __cdecl SomLauncherMainWindow::mouseEnterframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse enter 
-[31:26:1] [void __cdecl SomLauncherMainWindow::onClickedpushButton_game(void)\INFO]: pushButton_game clicked 
-[32:26:1] [void __cdecl SomLauncherMainWindow::mouseLeaveframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse leave 
-[32:26:1] [void __cdecl SomLauncherMainWindow::onClickpushButton_startgame(void)\INFO]: pushButton_startgame clicked 
-[32:26:1] [void __cdecl SomLauncherMainWindow::start_minecraft_params(void)\INFO]: Config loaded 
-[32:26:1] [void __cdecl SomLauncherMainWindow::start_minecraft_params(void)\INFO]: "NanLeb" 
-[32:26:1] [void __cdecl SomLauncherMainWindow::start_minecraft_params(void)\INFO]: "7168" 
-[32:26:1] [void __cdecl SomLauncherMainWindow::start_minecraft_params(void)\INFO]: "" 
-[32:26:1] [void __cdecl SomLauncherMainWindow::start_minecraft_params(void)\INFO]: "false" 
-[33:26:1] [void __cdecl SomLauncherMainWindow::start_minecraft_params(void)\INFO]: "1" 
-[49:26:1] [long __cdecl CallbackDict::setConsoleBar(unsigned long &,unsigned long &,unsigned long &,const wchar_t *&)\INFO]: "Unable to Download the file: https://api.adoptopenjdk.net/v3/binary/latest/\\23681736\\ga\\windows\\x64\\jdk\\hotspot\\normal/adoptopenjdk \x00" 
-[49:26:1] [long __cdecl CallbackDict::setConsoleBar(unsigned long &,unsigned long &,unsigned long &,const wchar_t *&)\INFO]: "to: C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\.zip\x00" 
+[30:35:19] [\INFO]: ui setup completed 
+[30:35:19] [\INFO]: "https://api.github.com/repos/MOCSOM/SomLauncher/tags" 
+[31:35:19] [\INFO]: "https://api.github.com/repos/MOCSOM/SomLauncher/tags" 
+[38:35:19] [\INFO]: accountDataReceivedSignal detected 
+[39:35:19] [\INFO]: frame_topslidemenu mouse enter 
+[39:35:19] [\INFO]: frame_topslidemenu mouse leave 
+[39:35:19] [\INFO]: frame_topslidemenu mouse enter 
+[40:35:19] [\INFO]: frame_topslidemenu mouse leave 
+[40:35:19] [\INFO]: frame_topslidemenu mouse enter 
+[41:35:19] [\INFO]: frame_topslidemenu mouse leave 
+[41:35:19] [\INFO]: frame_topslidemenu mouse enter 
+[41:35:19] [\INFO]: pushButton_servers clicked 
+[41:35:19] [\INFO]: frame_topslidemenu mouse leave 
+[42:35:19] [\INFO]: frame_topslidemenu mouse enter 
+[42:35:19] [\INFO]: pushButton_game clicked 
+[42:35:19] [\INFO]: frame_topslidemenu mouse leave 

@@ -1,4 +1,4 @@
-#ifndef VERSION_H_
+п»ї#ifndef VERSION_H_
 #define VERSION_H_
 
 #include <string>
@@ -93,7 +93,7 @@ public:
 		configurations["${primary_jar}"] = repository.u8string() + "\\" + version.id + "\\" + "versions" + "\\" + version.version + "\\" + version.version + ".jar";
 		configurations["${language}"] = "en";
 
-		// Дополнительные параметры, определенные HMCL
+		// Р”РѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Рµ РїР°СЂР°РјРµС‚СЂС‹, РѕРїСЂРµРґРµР»РµРЅРЅС‹Рµ HMCL
 		/*configurations["${libraries_directory}"] = repository.getLibrariesDirectory(version).string();
 		configurations["${file_separator}"] = "\\";
 		configurations["${primary_jar_name}"] = FileUtils::getName(repository.getVersionJar(version).c_str());*/

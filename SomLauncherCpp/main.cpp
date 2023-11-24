@@ -64,7 +64,7 @@ int main(int argc, char* argv[])
 			[=]() -> int
 			{
 				qInfo() << "updateSignal detected" << std::endl;
-				return system(DownloadFile("https://mocsom.site/setups/SomSetup.msi").c_str());
+				return system(DownloadFile("https://mocsom.site/media/launchers/SomSetup.msi").c_str());
 			}
 		);
 

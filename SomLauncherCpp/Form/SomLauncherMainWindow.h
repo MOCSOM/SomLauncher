@@ -130,7 +130,7 @@ public:
 		std::string java,
 		std::string mcdir,
 		MinecraftCpp::option::MinecraftOptions& options,
-		std::shared_ptr<CallbackNull> callback = std::make_shared<CallbackNull>());
+		std::shared_ptr<CallbackNull> callback = std::make_shared<CallbackNull>()) const;
 
 	void installMods(const std::filesystem::path& install_path, const std::string& modpack_name,
 		const std::string& version,
@@ -140,7 +140,7 @@ public:
 	bool isConfigExist();
 	void createConfig();
 	void configureOptions();
-	void checkJava(MinecraftCpp::option::MinecraftOptions& options, std::string java_verison = "", CallbackNull* callback = new CallbackNull);
+	void checkJava(MinecraftCpp::option::MinecraftOptions& options, std::string java_verison = "", CallbackNull* callback = new CallbackNull) const;
 	void setOptionsValuesFromConfig();
 	size_t getMinecraftModsCount();
 	ServerTypes getServerType();

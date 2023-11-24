@@ -22,7 +22,12 @@ Json::JsonValue SomLauncherMainWindow::getServersFromDatabase()
 {
 	sql::ResultSet* res = nullptr;
 	QString querry =
-		"SELECT JSON_OBJECT('servers',JSON_ARRAYAGG(JSON_OBJECT('server_id',server_id, 'name',server_name, 'server_img',server_img, 'description',server_description, 'server_ip',server_ip, 'java',java_versions, 'version',minecraft_version, 'core',loader_core, 'loaderVersion',minimal_loader_version, 'server_type',server_type, 'server_slug',server_slug, 'modpack_id_id',modpack_id_id))) FROM servers_server";
+		R"(
+SELECT
+	JSON_OBJECT('servers',
+	JSON_ARRAYAGG(JSON_OBJECT('server_id',server_id, 'name',server_name, 'server_img',server_img, 'description',server_description, 'server_ip',server_ip, 'java',java_versions, 'version',minecraft_version, 'core',loader_core, 'loaderVersion',minimal_loader_version, 'server_type',server_type, 'server_slug',server_slug, 'modpack_id_id',modpack_id_id)))
+FROM servers_server)";
+
 	try
 	{
 		res = sqlbase::mysql::sqlconnector::sendQuerry(this->database_connection, querry.toStdString());
@@ -168,7 +173,7 @@ std::string SomLauncherMainWindow::install_minecraft(
 	std::string java,
 	std::string mcdir,
 	MinecraftCpp::option::MinecraftOptions& options,
-	std::shared_ptr<CallbackNull> callback)
+	std::shared_ptr<CallbackNull> callback) const
 {
 	//Json::JsonValue data_modpack = parecer_modpack.ParseFile(this->minecraft_core_dir_path);
 
@@ -218,6 +223,7 @@ WHERE servers_server.server_name LIKE )" + std::string("'%") + modpack_name + "%
 	sql::ResultSet* result = sqlbase::mysql::sqlconnector::sendQuerry(this->database_connection, querry);
 	while (result->next())
 	{
+		auto a = result->getString(1);
 		std::string downloaded_path = DownloadFile(result->getString(1),
 			install_path.u8string(), callback.get());
 	}
@@ -280,7 +286,7 @@ void SomLauncherMainWindow::configureOptions()
 	this->default_options = this->options;
 }
 
-void SomLauncherMainWindow::checkJava(MinecraftCpp::option::MinecraftOptions& options, std::string java_verison, CallbackNull* callback)
+void SomLauncherMainWindow::checkJava(MinecraftCpp::option::MinecraftOptions& options, std::string java_verison, CallbackNull* callback) const
 {
 	std::string java_dir = "";
 
@@ -368,7 +374,14 @@ ServerTypes SomLauncherMainWindow::getServerType()
 
 std::string SomLauncherMainWindow::getCurrentServerName()
 {
-	return this->servers_parce["servers"][this->config_parce["user"]["server"].to_int()]["name"].to_string();
+	if (this->servers_parce["servers"].get_array().size() > this->config_parce["user"]["server"].to_int())
+	{
+		return this->servers_parce["servers"][this->config_parce["user"]["server"].to_int()]["name"].to_string();
+	}
+	else
+	{
+		return "";
+	}
 }
 
 const std::filesystem::path SomLauncherMainWindow::getConfigPath()

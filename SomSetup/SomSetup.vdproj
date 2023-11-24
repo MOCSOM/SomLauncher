@@ -51,19 +51,25 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_13266B43171D4A379239A9590990AC3E"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_14F29CBF4EA2D6DA5C00F95C28648258"
         "OwnerKey" = "8:_34B24EA6487A4E298A1A1282EF6D025B"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_18DC8ADA27AE47C38D7E25180D0399C3"
+        "MsmKey" = "8:_1541B6E609084AAE9EB6FBC677C963C1"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_2567C227A0AB4AC2A4F6E85F06E35052"
+        "MsmKey" = "8:_18DC8ADA27AE47C38D7E25180D0399C3"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -105,7 +111,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_4D728F7E5970F60A4D094AD76E5322F1"
+        "MsmKey" = "8:_512052322F09AED2AADE3A18A9F79E8A"
         "OwnerKey" = "8:_34B24EA6487A4E298A1A1282EF6D025B"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -117,14 +123,20 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_6581E97049494B3FB8A36D04827C3180"
+        "MsmKey" = "8:_5A01F72F806D4C4CAFC7B96970C8956E"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_6AD897DE1628E60EB23EE4D44894963E"
-        "OwnerKey" = "8:_34B24EA6487A4E298A1A1282EF6D025B"
+        "MsmKey" = "8:_5EBE037EC44149EB85299F44E3A31A62"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_69B5A1054EAA4C87B1905924E1E89E56"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -171,19 +183,19 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_A674C201843A4136AAF1D2D602BAE735"
+        "MsmKey" = "8:_878987AAFBF2454982C9D44F2BFC6946"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_AA873A7EB19E439188199B760E64A984"
+        "MsmKey" = "8:_8903FB2D3E5241F6BFA083EC12FA0B6B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_B3C15A9D6A3B4119ADEE1FCD243269CB"
+        "MsmKey" = "8:_90BFFD72DD3D47B580FD6DF36D89CABB"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -207,12 +219,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_C310C1776EAFF5ED4CBE8269E68A9D0B"
-        "OwnerKey" = "8:_34B24EA6487A4E298A1A1282EF6D025B"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_CBE051D0D711B2A078A77F161BF1069C"
         "OwnerKey" = "8:_34B24EA6487A4E298A1A1282EF6D025B"
         "MsmSig" = "8:_UNDEFINED"
@@ -225,13 +231,13 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_E35F48D1F40B5AB5F874FDDB14DAA679"
-        "OwnerKey" = "8:_34B24EA6487A4E298A1A1282EF6D025B"
+        "MsmKey" = "8:_DC2D0694530849D09107F1A0A6F9A564"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_F5C8BB385B6ED67DD6C4C07425B3CFC6"
+        "MsmKey" = "8:_E35F48D1F40B5AB5F874FDDB14DAA679"
         "OwnerKey" = "8:_34B24EA6487A4E298A1A1282EF6D025B"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -433,6 +439,26 @@
             "SourcePath" = "8:..\\SomLauncherCpp\\Form\\StyleSheets\\Fibrary.qss"
             "TargetName" = "8:Fibrary.qss"
             "Tag" = "8:"
+            "Folder" = "8:_88D4BF4A82C14D44A40B079E958AB206"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_13266B43171D4A379239A9590990AC3E"
+            {
+            "SourcePath" = "8:..\\SomLauncherCpp\\resources\\background_normal.png"
+            "TargetName" = "8:background_normal.png"
+            "Tag" = "8:"
             "Folder" = "8:_C73A2C9D2D2A40E3B45557AB18DBA615"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
@@ -468,10 +494,10 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_18DC8ADA27AE47C38D7E25180D0399C3"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1541B6E609084AAE9EB6FBC677C963C1"
             {
-            "SourcePath" = "8:..\\SomLauncherCpp\\Form\\StyleSheets\\Cstartpage.qss"
-            "TargetName" = "8:Cstartpage.qss"
+            "SourcePath" = "8:..\\SomLauncherCpp\\resources\\background.png"
+            "TargetName" = "8:background.png"
             "Tag" = "8:"
             "Folder" = "8:_C73A2C9D2D2A40E3B45557AB18DBA615"
             "Condition" = "8:"
@@ -488,12 +514,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2567C227A0AB4AC2A4F6E85F06E35052"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_18DC8ADA27AE47C38D7E25180D0399C3"
             {
-            "SourcePath" = "8:..\\x64\\Release\\platforms\\qwindows.dll"
-            "TargetName" = "8:qwindows.dll"
+            "SourcePath" = "8:..\\SomLauncherCpp\\Form\\StyleSheets\\Cstartpage.qss"
+            "TargetName" = "8:Cstartpage.qss"
             "Tag" = "8:"
-            "Folder" = "8:_117DAEB580D84E55BEEF41A11CCD2831"
+            "Folder" = "8:_88D4BF4A82C14D44A40B079E958AB206"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -593,7 +619,7 @@
             "SourcePath" = "8:..\\SomLauncherCpp\\Form\\StyleSheets\\Toolery.qss"
             "TargetName" = "8:Toolery.qss"
             "Tag" = "8:"
-            "Folder" = "8:_C73A2C9D2D2A40E3B45557AB18DBA615"
+            "Folder" = "8:_88D4BF4A82C14D44A40B079E958AB206"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -608,10 +634,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4D728F7E5970F60A4D094AD76E5322F1"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_512052322F09AED2AADE3A18A9F79E8A"
             {
-            "SourcePath" = "8:Qt6Gui.dll"
-            "TargetName" = "8:Qt6Gui.dll"
+            "SourcePath" = "8:DNSAPI.dll"
+            "TargetName" = "8:DNSAPI.dll"
             "Tag" = "8:"
             "Folder" = "8:_05F01DAAB8364CA695ACCE8AFE368FB5"
             "Condition" = "8:"
@@ -648,9 +674,29 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6581E97049494B3FB8A36D04827C3180"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5A01F72F806D4C4CAFC7B96970C8956E"
             {
-            "SourcePath" = "8:..\\x64\\Release\\styles\\qwindowsvistastyle.dll"
+            "SourcePath" = "8:..\\SomLauncherCpp\\SOMCONFIG_template.json"
+            "TargetName" = "8:SOMCONFIG_template.json"
+            "Tag" = "8:"
+            "Folder" = "8:_05F01DAAB8364CA695ACCE8AFE368FB5"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5EBE037EC44149EB85299F44E3A31A62"
+            {
+            "SourcePath" = "8:..\\QtFiles\\styles\\qwindowsvistastyle.dll"
             "TargetName" = "8:qwindowsvistastyle.dll"
             "Tag" = "8:"
             "Folder" = "8:_8B12B1C97C2545B8994418DF9E8FE8E2"
@@ -668,12 +714,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6AD897DE1628E60EB23EE4D44894963E"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_69B5A1054EAA4C87B1905924E1E89E56"
             {
-            "SourcePath" = "8:Qt6Core.dll"
-            "TargetName" = "8:Qt6Core.dll"
+            "SourcePath" = "8:..\\QtFiles\\platforms\\qwindows.dll"
+            "TargetName" = "8:qwindows.dll"
             "Tag" = "8:"
-            "Folder" = "8:_05F01DAAB8364CA695ACCE8AFE368FB5"
+            "Folder" = "8:_117DAEB580D84E55BEEF41A11CCD2831"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -685,7 +731,7 @@
             "PackageAs" = "3:1"
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_73DD965F9CDF09B3F3F5D3ACA3C3686C"
@@ -713,7 +759,7 @@
             "SourcePath" = "8:..\\SomLauncherCpp\\Form\\StyleSheets\\Fibers.qss"
             "TargetName" = "8:Fibers.qss"
             "Tag" = "8:"
-            "Folder" = "8:_C73A2C9D2D2A40E3B45557AB18DBA615"
+            "Folder" = "8:_88D4BF4A82C14D44A40B079E958AB206"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -753,7 +799,7 @@
             "SourcePath" = "8:..\\SomLauncherCpp\\Form\\StyleSheets\\Irrorater.qss"
             "TargetName" = "8:Irrorater.qss"
             "Tag" = "8:"
-            "Folder" = "8:_C73A2C9D2D2A40E3B45557AB18DBA615"
+            "Folder" = "8:_88D4BF4A82C14D44A40B079E958AB206"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -813,7 +859,7 @@
             "SourcePath" = "8:..\\SomLauncherCpp\\Form\\StyleSheets\\Diffnes.qss"
             "TargetName" = "8:Diffnes.qss"
             "Tag" = "8:"
-            "Folder" = "8:_C73A2C9D2D2A40E3B45557AB18DBA615"
+            "Folder" = "8:_88D4BF4A82C14D44A40B079E958AB206"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -828,12 +874,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A674C201843A4136AAF1D2D602BAE735"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_878987AAFBF2454982C9D44F2BFC6946"
             {
-            "SourcePath" = "8:..\\x64\\Release\\SOMCONFIG_template.json"
-            "TargetName" = "8:SOMCONFIG_template.json"
+            "SourcePath" = "8:..\\SomLauncherCpp\\resources\\StyleSheets\\Wstartpage_modyfied.qss"
+            "TargetName" = "8:Wstartpage_modyfied.qss"
             "Tag" = "8:"
-            "Folder" = "8:_05F01DAAB8364CA695ACCE8AFE368FB5"
+            "Folder" = "8:_88D4BF4A82C14D44A40B079E958AB206"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -848,32 +894,32 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_AA873A7EB19E439188199B760E64A984"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8903FB2D3E5241F6BFA083EC12FA0B6B"
             {
-            "SourcePath" = "8:..\\x64\\Release\\Qt6Network.dll"
-            "TargetName" = "8:Qt6Network.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_05F01DAAB8364CA695ACCE8AFE368FB5"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B3C15A9D6A3B4119ADEE1FCD243269CB"
-            {
-            "SourcePath" = "8:..\\x64\\Release\\styles\\qwindowsvistastyled.dll"
+            "SourcePath" = "8:..\\QtFiles\\styles\\qwindowsvistastyled.dll"
             "TargetName" = "8:qwindowsvistastyled.dll"
             "Tag" = "8:"
             "Folder" = "8:_8B12B1C97C2545B8994418DF9E8FE8E2"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_90BFFD72DD3D47B580FD6DF36D89CABB"
+            {
+            "SourcePath" = "8:..\\SomLauncherCpp\\resources\\background_normal2.png"
+            "TargetName" = "8:background_normal2.png"
+            "Tag" = "8:"
+            "Folder" = "8:_C73A2C9D2D2A40E3B45557AB18DBA615"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -948,26 +994,6 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C310C1776EAFF5ED4CBE8269E68A9D0B"
-            {
-            "SourcePath" = "8:Qt6Network.dll"
-            "TargetName" = "8:Qt6Network.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_05F01DAAB8364CA695ACCE8AFE368FB5"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CBE051D0D711B2A078A77F161BF1069C"
             {
             "SourcePath" = "8:api-ms-win-crt-filesystem-l1-1-0.dll"
@@ -1008,12 +1034,12 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E35F48D1F40B5AB5F874FDDB14DAA679"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_DC2D0694530849D09107F1A0A6F9A564"
             {
-            "SourcePath" = "8:api-ms-win-crt-convert-l1-1-0.dll"
-            "TargetName" = "8:api-ms-win-crt-convert-l1-1-0.dll"
+            "SourcePath" = "8:..\\QtFiles\\platforms\\qwindowsd.dll"
+            "TargetName" = "8:qwindowsd.dll"
             "Tag" = "8:"
-            "Folder" = "8:_05F01DAAB8364CA695ACCE8AFE368FB5"
+            "Folder" = "8:_117DAEB580D84E55BEEF41A11CCD2831"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1025,13 +1051,13 @@
             "PackageAs" = "3:1"
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F5C8BB385B6ED67DD6C4C07425B3CFC6"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E35F48D1F40B5AB5F874FDDB14DAA679"
             {
-            "SourcePath" = "8:Qt6Widgets.dll"
-            "TargetName" = "8:Qt6Widgets.dll"
+            "SourcePath" = "8:api-ms-win-crt-convert-l1-1-0.dll"
+            "TargetName" = "8:api-ms-win-crt-convert-l1-1-0.dll"
             "Tag" = "8:"
             "Folder" = "8:_05F01DAAB8364CA695ACCE8AFE368FB5"
             "Condition" = "8:"
@@ -1053,7 +1079,7 @@
             "SourcePath" = "8:..\\SomLauncherCpp\\Form\\StyleSheets\\Wstartpage.qss"
             "TargetName" = "8:Wstartpage.qss"
             "Tag" = "8:"
-            "Folder" = "8:_C73A2C9D2D2A40E3B45557AB18DBA615"
+            "Folder" = "8:_88D4BF4A82C14D44A40B079E958AB206"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1126,6 +1152,17 @@
                     "Property" = "8:_11AA53327E344688B1363A47E43CB8EA"
                         "Folders"
                         {
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_88D4BF4A82C14D44A40B079E958AB206"
+                            {
+                            "Name" = "8:StyleSheets"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_E2989E2CA04C401EAAF5583C838F286A"
+                                "Folders"
+                                {
+                                }
+                            }
                         }
                     }
                 }
@@ -1168,15 +1205,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:SomLauncher"
-        "ProductCode" = "8:{183691B8-8C0A-4099-99BA-F6D7451E8B32}"
-        "PackageCode" = "8:{1A620E97-1E53-4363-B1AE-5DE466D99134}"
-        "UpgradeCode" = "8:{7923A736-8871-49DD-92FB-3FD0605C42DA}"
+        "ProductCode" = "8:{2376BA23-8150-4488-86F1-262B0DA4BDE5}"
+        "PackageCode" = "8:{C9A1D787-290F-498F-8954-892A9CA79785}"
+        "UpgradeCode" = "8:{D4780903-7F41-49C6-84B5-F29697C7852C}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:0.2.7"
+        "ProductVersion" = "8:1.0.1"
         "Manufacturer" = "8:.SomSomSom"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"

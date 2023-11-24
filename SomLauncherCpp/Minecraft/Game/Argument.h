@@ -1,4 +1,4 @@
-#ifndef ARGUMENT_H_
+п»ї#ifndef ARGUMENT_H_
 #define ARGUMENT_H_
 
 #include <vector>
@@ -15,7 +15,7 @@ public:
 	virtual std::vector<std::string> toString(const std::map<std::string, std::string>& keys, const std::map<std::string, bool>& features) const = 0;
 
 	virtual std::unique_ptr<Argument> clone() const = 0;
-	// В C++ вместо аннотации @Immutable можно использовать const-квалификаторы и дизайн класса, чтобы обеспечить неизменяемость.
+	// Р’ C++ РІРјРµСЃС‚Рѕ Р°РЅРЅРѕС‚Р°С†РёРё @Immutable РјРѕР¶РЅРѕ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ const-РєРІР°Р»РёС„РёРєР°С‚РѕСЂС‹ Рё РґРёР·Р°Р№РЅ РєР»Р°СЃСЃР°, С‡С‚РѕР±С‹ РѕР±РµСЃРїРµС‡РёС‚СЊ РЅРµРёР·РјРµРЅСЏРµРјРѕСЃС‚СЊ.
 };
 
 #endif // !ARGUMENT_H_
