@@ -9,7 +9,7 @@
 //    return true;
 //}
 
-inline std::string DDIC::Download::Files::download_file(const std::string& s_url,
+std::string DDIC::Download::Files::download_file(const std::string& s_url,
 	const std::string& d_file, CallbackNull* callback, const std::string& sha1, bool lzma_compressed)
 {
 	//callback = const_cast<CallbackNull>(callback);
@@ -88,7 +88,7 @@ inline std::string DDIC::Download::Files::download_file(const std::string& s_url
 		}
 	}
 
-	size_t pos = normal_url.find("https://");
+	/*size_t pos = normal_url.find("https://");
 
 	if (pos != std::string::npos) {
 		pos += 8;
@@ -97,7 +97,7 @@ inline std::string DDIC::Download::Files::download_file(const std::string& s_url
 	while ((pos = normal_url.find("//", pos)) != std::string::npos) {
 		normal_url.replace(pos, 2, "/");
 		pos += 1;
-	}
+	}*/
 
 	//HRESULT download_result = URLDownloadToFileA(NULL, s_url.c_str(), destenation_file.c_str(), NULL, callback);
 	CURL* curl = nullptr;
@@ -320,7 +320,7 @@ std::string DDIC::Download::Java::install(const std::string& version, const std:
 	std::string path_wch = path2 + "\\.zip";
 	std::string path_wch_norm = path2;
 
-	std::string jdk_file2 = path_wch;
+	std::string jdk_file2 = "";
 
 	HRESULT download_result = URLDownloadToFileA(NULL, url.c_str(), path_wch.c_str(), NULL, callback);
 

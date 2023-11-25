@@ -76,7 +76,8 @@ namespace DDIC
 		{
 			//bool _CreateDirectoryIfNotExists(const std::wstring& path);
 
-			inline std::string download_file(const std::string& s_url, const std::string& d_file = "", CallbackNull* callback = new CallbackNull(), const std::string& sha1 = "", bool lzma_compressed = false);
+			//inline std::string download_file(const std::string& s_url, const std::string& d_file = "", CallbackNull* callback = new CallbackNull(), const std::string& sha1 = "", bool lzma_compressed = false);
+			std::string download_file(const std::string& s_url, const std::string& d_file = "", CallbackNull* callback = new CallbackNull(), const std::string& sha1 = "", bool lzma_compressed = false);
 			int _get_java_exist_ver(const std::string& direct);
 			std::vector<std::pair<std::string, std::string>> _get_java_path(const std::string& dir);
 			std::string getInstalledJavaInDirectory(std::string directory_path = "", int version = 0);
