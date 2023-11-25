@@ -320,7 +320,7 @@ std::string DDIC::Download::Java::install(const std::string& version, const std:
 	std::string path_wch = path2 + "\\.zip";
 	std::string path_wch_norm = path2;
 
-	std::string jdk_file2 = "";
+	std::string jdk_file2 = path_wch;
 
 	HRESULT download_result = URLDownloadToFileA(NULL, url.c_str(), path_wch.c_str(), NULL, callback);
 

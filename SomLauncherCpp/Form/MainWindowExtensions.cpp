@@ -236,6 +236,7 @@ WHERE servers_server.server_slug LIKE )" + std::string("'%") + modpack_name + "%
 
 		while (result->next())
 		{
+			std::filesystem::create_directories(install_path);
 			std::string downloaded_path = DownloadFile(result->getString(1),
 				install_path.u8string(), callback.get());
 		}
