@@ -92,11 +92,15 @@ Json::JsonValue Json::JsonParcer::ParseUrl(const std::string& url, const std::fi
 	}
 	std::string normalise_url = url;
 	// Замена двойных косых черт на одиночные
-	size_t pos = normalise_url.find("//");
-	while (pos != std::string::npos)
-	{
+	size_t pos = normalise_url.find("https://");
+
+	if (pos != std::string::npos) {
+		pos += 8;
+	}
+
+	while ((pos = normalise_url.find("//", pos)) != std::string::npos) {
 		normalise_url.replace(pos, 2, "/");
-		pos = normalise_url.find("//", pos + 1);
+		pos += 1;
 	}
 
 	CURL* curl = nullptr;
@@ -106,9 +110,9 @@ Json::JsonValue Json::JsonParcer::ParseUrl(const std::string& url, const std::fi
 	if (curl)
 	{
 		curl_easy_setopt(curl, CURLOPT_URL, normalise_url.c_str());
-		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &write_data);
+		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
 		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &output);
-		curl_easy_setopt(curl, CURLOPT_NOPROGRESS, FALSE);
+		curl_easy_setopt(curl, CURLOPT_NOPROGRESS, TRUE);
 
 		res = curl_easy_perform(curl);
 

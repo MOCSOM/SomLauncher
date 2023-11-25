@@ -34,7 +34,7 @@ namespace Json
 		static Json::JsonValue ParseUrl(const std::string& url, const std::filesystem::path& destination = "");
 
 	private:
-		size_t write_data(char* ptr, size_t size, size_t nmemb, void* userdata);
+		static size_t write_data(char* ptr, size_t size, size_t nmemb, void* userdata);
 		void SkipWhitespace(const std::string& json_str);
 
 		Json::JsonValue ParseValue(const std::string& json_str);

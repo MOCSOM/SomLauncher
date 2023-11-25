@@ -88,12 +88,15 @@ inline std::string DDIC::Download::Files::download_file(const std::string& s_url
 		}
 	}
 
-	// Замена двойных косых черт на одиночные
-	size_t pos = normal_url.find("//");
-	while (pos != std::string::npos)
-	{
+	size_t pos = normal_url.find("https://");
+
+	if (pos != std::string::npos) {
+		pos += 8;
+	}
+
+	while ((pos = normal_url.find("//", pos)) != std::string::npos) {
 		normal_url.replace(pos, 2, "/");
-		pos = normal_url.find("//", pos + 1);
+		pos += 1;
 	}
 
 	//HRESULT download_result = URLDownloadToFileA(NULL, s_url.c_str(), destenation_file.c_str(), NULL, callback);
@@ -293,8 +296,7 @@ size_t DDIC::Download::Files::write_data(char* ptr, size_t size, size_t nmemb, v
 
 int DDIC::Download::Files::progress_func(void* ptr, double TotalToDownload, double NowDownloaded, double TotalToUpload, double NowUploaded)
 {
-	CallbackDict* callback = static_cast<CallbackDict*>(ptr);
-	callback->OnProgress(NULL, NULL, NULL, L"downloading file");
+	CallbackNull* callback = static_cast<CallbackDict*>(ptr);
 	return callback->progress_func(TotalToDownload, NowDownloaded, TotalToUpload, NowUploaded);
 }
 
@@ -318,9 +320,9 @@ std::string DDIC::Download::Java::install(const std::string& version, const std:
 	std::string path_wch = path2 + "\\.zip";
 	std::string path_wch_norm = path2;
 
-	std::string jdk_file2 = "";
+	std::string jdk_file2 = path_wch;
 
-	jdk_file2 = DownloadFile(url, path_wch, callback);
+	HRESULT download_result = URLDownloadToFileA(NULL, url.c_str(), path_wch.c_str(), NULL, callback);
 
 	std::string jdk_file = jdk_file2;
 
@@ -369,15 +371,15 @@ std::string DDIC::Download::Java::get_download_url(/*wchar_t*& url,*/const std::
 		url = strdogW(url, impl);
 		url = strdogW(url, L"/normal/adoptopenjdk");*/
 
-		std::string url = Join({
-			"https://api.adoptopenjdk.net/v3/binary/latest",
-			_version,
-			"ga",
-			operating_system,
-			arch,
-			"jre",
-			impl,
-			"normal/adoptopenjdk " });
+		std::string url =
+			"https://api.adoptopenjdk.net/v3/binary/latest" + std::string("/") +
+			_version + "/" +
+			"ga" + "/" +
+			operating_system + "/" +
+			arch + "/" +
+			"jre" + "/" +
+			impl + "/" +
+			"normal/adoptopenjdk";
 
 		return url;
 		//L"https://api.adoptopenjdk.net/v3/binary/latest/%s/ga/%s/%s/jre/%s/normal/adoptopenjdk", version, operating_system, arch, impl;
@@ -395,15 +397,15 @@ std::string DDIC::Download::Java::get_download_url(/*wchar_t*& url,*/const std::
 		url = strdogW(url, impl);
 		url = strdogW(url, L"/normal/adoptopenjdk");*/
 
-		std::string url = Join({
-			"https://api.adoptopenjdk.net/v3/binary/latest",
-			_version,
-			"ga",
-			operating_system,
-			arch,
-			"jdk",
-			impl,
-			"normal/adoptopenjdk " });
+		std::string url =
+			"https://api.adoptopenjdk.net/v3/binary/latest" + std::string("/") +
+			_version + "/" +
+			"ga" + "/" +
+			operating_system + "/" +
+			arch + "/" +
+			"jdk" + "/" +
+			impl + "/" +
+			"normal/adoptopenjdk";
 
 		return url;
 	}

@@ -2112,11 +2112,9 @@ Json::JsonValue MinecraftCpp::fabric::parse_maven_metadata(const std::string& ur
 		replace_url = Additionals::String::split(url, '/')[Additionals::String::split(url, '/').size() - 1];
 		destenation_file = destenation_file /*+ "\\"*/ + replace_url;
 	}
+	std::string path = DownloadFile(url, destenation_file);
 
-	CURL* curl = nullptr;
-	CURLcode resurl = DDIC::Download::Files::download(curl, url, destenation_file);
-
-	if (resurl == CURLE_OK)
+	if (path != "")
 	{
 		if (!std::filesystem::exists(destenation_file))
 		{
