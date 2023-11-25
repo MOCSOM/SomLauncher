@@ -1,21 +1,2 @@
-[23:14:2] [__cdecl SomLauncherMainWindow::SomLauncherMainWindow(class QWidget *)\INFO]: ui setup completed 
-[29:14:2] [__cdecl SomLauncherMainWindow::SomLauncherMainWindow(class QWidget *)\INFO]: Start updater 
-[33:14:2] [void __cdecl main::<lambda_2>::operator ()(const class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &) const\INFO]: accountDataReceivedSignal detected 
-[33:14:2] [void __cdecl ServerWidget::radioButtonChecked(bool)\INFO]: radioButtonChecked true 
-[35:14:2] [void __cdecl SomLauncherMainWindow::mouseEnterframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse enter 
-[35:14:2] [void __cdecl SomLauncherMainWindow::onClickedpushButton_settings(void)\INFO]: pushButton_settings clicked 
-[35:14:2] [void __cdecl SomLauncherMainWindow::mouseLeaveframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse leave 
-[45:15:2] [void __cdecl SomLauncherMainWindow::mouseEnterframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse enter 
-[45:15:2] [void __cdecl SomLauncherMainWindow::mouseLeaveframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse leave 
-[45:15:2] [void __cdecl SomLauncherMainWindow::mouseEnterframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse enter 
-[46:15:2] [void __cdecl SomLauncherMainWindow::onClickedpushButton_settings(void)\INFO]: pushButton_settings clicked 
-[46:15:2] [void __cdecl SomLauncherMainWindow::mouseLeaveframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse leave 
-[47:15:2] [void __cdecl SomLauncherMainWindow::mouseEnterframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse enter 
-[47:15:2] [void __cdecl SomLauncherMainWindow::mouseLeaveframe_topslidemenu(void)\INFO]: frame_topslidemenu mouse leave 
-[48:15:2] [void __cdecl SomLauncherMainWindow::onClickpushButton_startgame(void)\INFO]: pushButton_startgame clicked 
-[48:15:2] [void __cdecl SomLauncherMainWindow::start_minecraft_params(void)\INFO]: Config loaded 
-[48:15:2] [void __cdecl SomLauncherMainWindow::start_minecraft_params(void)\INFO]: "NanLeb" 
-[48:15:2] [void __cdecl SomLauncherMainWindow::start_minecraft_params(void)\INFO]: "7168" 
-[48:15:2] [void __cdecl SomLauncherMainWindow::start_minecraft_params(void)\INFO]: "" 
-[48:15:2] [void __cdecl SomLauncherMainWindow::start_minecraft_params(void)\INFO]: "false" 
-[48:15:2] [void __cdecl SomLauncherMainWindow::start_minecraft_params(void)\INFO]: "0" 
+[26:3:17] [__cdecl SomLauncherMainWindow::SomLauncherMainWindow(class QWidget *)\INFO]: ui setup completed 
+[26:3:17] [void __cdecl SomLauncherMainWindow::checkJava(struct MinecraftCpp::option::MinecraftOptions &,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >,class CallbackNull *) const\INFO]: Getting installed java in directory... 

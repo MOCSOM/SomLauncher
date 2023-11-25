@@ -14,6 +14,7 @@ inline std::string DDIC::Download::Files::download_file(const std::string& s_url
 {
 	//callback = const_cast<CallbackNull>(callback);
 	std::string destenation_file;
+	std::string normal_url = s_url;
 
 	if (d_file == "")
 	{
@@ -87,10 +88,25 @@ inline std::string DDIC::Download::Files::download_file(const std::string& s_url
 		}
 	}
 
-	HRESULT download_result = URLDownloadToFileA(NULL, s_url.c_str(), destenation_file.c_str(), NULL, callback);
+	// Замена двойных косых черт на одиночные
+	size_t pos = normal_url.find("//");
+	while (pos != std::string::npos)
+	{
+		normal_url.replace(pos, 2, "/");
+		pos = normal_url.find("//", pos + 1);
+	}
+
+	//HRESULT download_result = URLDownloadToFileA(NULL, s_url.c_str(), destenation_file.c_str(), NULL, callback);
+	CURL* curl = nullptr;
+	CURLcode download_result = DDIC::Download::Files::download(curl, normal_url, destenation_file, callback);
 
 	if (lzma_compressed)
 	{
+		if (download_result == CURLE_OK)
+		{
+			callback->OnProgress(NULL, NULL, NULL, Additionals::Convectors::ConvertStringToWString("The file is saved as: " + d_file).c_str());
+			return destenation_file;
+		}
 		/*System::IO::Compression::ZipArchive^ zArchive = System::IO::Compression::ZipFile::OpenRead(System::String(d_file).ToString());
 		System::IO::Compression::ZipFileExtensions::ExtractToDirectory(zArchive, System::String(d_file).ToString());*/
 	}
@@ -113,14 +129,15 @@ inline std::string DDIC::Download::Files::download_file(const std::string& s_url
 		}
 	}
 
-	if (S_OK == download_result)
+	qInfo() << "downloaded with " << download_result << std::endl;
+	if (CURLE_OK == download_result)
 	{
 		callback->OnProgress(NULL, NULL, NULL, Additionals::Convectors::ConvertStringToWString("The file is saved as: " + d_file).c_str());
 		return destenation_file;
 	}
 	else
 	{
-		callback->OnProgress(NULL, NULL, NULL, Additionals::Convectors::ConvertStringToWString("Unable to Download the file: " + s_url).c_str());
+		callback->OnProgress(NULL, NULL, NULL, Additionals::Convectors::ConvertStringToWString("Unable to Download file: " + s_url + " with code: " + std::to_string(download_result)).c_str());
 		callback->OnProgress(NULL, NULL, NULL, Additionals::Convectors::ConvertStringToWString("to: " + d_file).c_str());
 		return "";
 	}
@@ -226,6 +243,59 @@ std::string DDIC::Download::Files::getInstalledJavaInDirectory(std::string direc
 	}
 
 	return std::string();
+}
+
+CURLcode DDIC::Download::Files::download(CURL* curl, const std::string& s_url, const std::string& d_file, CallbackNull* callback)
+{
+	CURLcode res;
+	std::ofstream output(d_file, std::ios::binary);
+	curl = curl_easy_init();
+	if (curl)
+	{
+		curl_easy_setopt(curl, CURLOPT_URL, s_url.c_str());
+		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION,
+			DDIC::Download::Files::write_data);
+		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &output);
+		curl_easy_setopt(curl, CURLOPT_NOPROGRESS, FALSE);
+		curl_easy_setopt(curl, CURLOPT_XFERINFODATA, callback);
+		curl_easy_setopt(curl, CURLOPT_PROGRESSFUNCTION,
+			DDIC::Download::Files::progress_func);
+
+		/*CallbackDict* callback = static_cast<CallbackDict*>(callback);
+		callback->setCurl(curl);*/
+		res = curl_easy_perform(curl);
+
+		curl_easy_cleanup(curl);
+		output.close();
+		return res;
+	}
+	else
+	{
+		qWarning() << "Curl failed init";
+		output.close();
+		return CURLE_FAILED_INIT;
+	}
+
+	output.close();
+}
+
+size_t DDIC::Download::Files::write_data(char* ptr, size_t size, size_t nmemb, void* userdata)
+{
+	std::ofstream* out = static_cast<std::ofstream*>(userdata);
+	size_t nbytes = size * nmemb;
+	out->write(ptr, nbytes);
+
+	//std::string str_out(ptr, nbytes);
+	//qInfo() << str_out << std::endl;
+
+	return nbytes;
+}
+
+int DDIC::Download::Files::progress_func(void* ptr, double TotalToDownload, double NowDownloaded, double TotalToUpload, double NowUploaded)
+{
+	CallbackDict* callback = static_cast<CallbackDict*>(ptr);
+	callback->OnProgress(NULL, NULL, NULL, L"downloading file");
+	return callback->progress_func(TotalToDownload, NowDownloaded, TotalToUpload, NowUploaded);
 }
 
 std::string DDIC::Download::Java::install(const std::string& version, const std::string& path, CallbackNull* callback, const std::string& operating_system, const std::string& arch, const std::string& impl, bool jre)

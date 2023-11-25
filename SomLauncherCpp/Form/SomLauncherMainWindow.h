@@ -154,6 +154,7 @@ public:
 	void setCurrentVersionFromDatabase();
 	bool isVersionOld();
 	void setAccountData(const Json::JsonValue& data);
+	void setUuidFromAccount();
 	std::unique_ptr<SettingsDialog>& getSettingsDialog();
 
 private slots:

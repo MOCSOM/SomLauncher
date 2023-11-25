@@ -90,10 +90,41 @@ Json::JsonValue Json::JsonParcer::ParseUrl(const std::string& url, const std::fi
 		replace_url = Additionals::String::split(url, '/')[Additionals::String::split(url, '/').size() - 1];
 		destenation_file = destenation_file /*+ "\\"*/ + replace_url;
 	}
+	std::string normalise_url = url;
+	// Замена двойных косых черт на одиночные
+	size_t pos = normalise_url.find("//");
+	while (pos != std::string::npos)
+	{
+		normalise_url.replace(pos, 2, "/");
+		pos = normalise_url.find("//", pos + 1);
+	}
 
-	HRESULT resurl = URLDownloadToFileA(NULL, url.c_str(), destenation_file.c_str(), NULL, NULL);
+	CURL* curl = nullptr;
+	CURLcode res;
+	std::ofstream output(destenation_file, std::ios::binary);
+	curl = curl_easy_init();
+	if (curl)
+	{
+		curl_easy_setopt(curl, CURLOPT_URL, normalise_url.c_str());
+		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &write_data);
+		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &output);
+		curl_easy_setopt(curl, CURLOPT_NOPROGRESS, FALSE);
 
-	if (resurl == S_OK)
+		res = curl_easy_perform(curl);
+
+		curl_easy_cleanup(curl);
+		output.close();
+	}
+	else
+	{
+		std::cerr << "Curl failed init" << std::endl;;
+		output.close();
+	}
+
+	output.close();
+	//HRESULT resurl = URLDownloadToFileA(NULL, normalise_url.c_str(), destenation_file.c_str(), NULL, NULL);
+
+	if (res == CURLE_OK)
 	{
 		Json::JsonValue return_val = ParseFile(destenation_file);
 		if (destination == "")
@@ -112,6 +143,15 @@ Json::JsonValue Json::JsonParcer::ParseUrl(const std::string& url, const std::fi
 		std::cerr << "Dont download file in json" << std::endl;
 	}
 	return nullptr;
+}
+
+size_t Json::JsonParcer::write_data(char* ptr, size_t size, size_t nmemb, void* userdata)
+{
+	std::ofstream* out = static_cast<std::ofstream*>(userdata);
+	size_t nbytes = size * nmemb;
+	out->write(ptr, nbytes);
+
+	return nbytes;
 }
 
 void Json::JsonParcer::SkipWhitespace(const std::string& json_str)

@@ -22,14 +22,21 @@ void SomConsole::setloadbar(unsigned curr_val, unsigned max_val, unsigned bar_wi
 void SomProgressBarr::set_prog_bar(unsigned curr_val, unsigned max_val,
 	QProgressBar* progress_bar)
 {
-	if ((curr_val != max_val) && (curr_val % (max_val / 100) != 0))
+	/*int div = (max_val / 100) + 1;
+	unsigned int modul = curr_val % div;
+	if ((curr_val != max_val) && (modul != 0))
 	{
 		return;
-	}
+	}*/
 
-	progress_bar->setMinimum(0);
-	progress_bar->setMaximum(max_val);
-	emit progress_bar->valueChanged(curr_val);
+	//progress_bar->setMinimum(0);
+	//progress_bar->setMaximum(max_val);
+
+	QMetaObject::invokeMethod(progress_bar, "setMinimum", Qt::QueuedConnection, Q_ARG(int, 0));
+	QMetaObject::invokeMethod(progress_bar, "setMaximum", Qt::QueuedConnection, Q_ARG(int, max_val));
+
+	QMetaObject::invokeMethod(progress_bar, "setValue", Qt::QueuedConnection, Q_ARG(int, curr_val));
+	//emit progress_bar->valueChanged(curr_val);
 
 	/*double   ratio = curr_val / static_cast<double>(max_val);
 	unsigned bar_now = static_cast<unsigned>(ratio * 20);
@@ -48,6 +55,54 @@ void CallbackDict::setQProgressBar(QProgressBar* progress_bar)
 void CallbackDict::setQLabelProggress(SignalLabel* progress_label)
 {
 	this->proggress_label = progress_label;
+}
+
+void CallbackDict::setCurl(CURL* curl)
+{
+	this->curl = curl;
+}
+
+int CallbackDict::progress_func(double TotalToDownload, double NowDownloaded, double TotalToUpload, double NowUploaded)
+{
+	// ensure that the file to be downloaded is not empty
+	// because that would cause a division by zero error later on
+
+	if (TotalToDownload <= 0.0)
+	{
+		return 0;
+	}
+
+	// how wide you want the progress meter to be
+	int totaldotz = 40;
+	double fractiondownloaded = NowDownloaded / TotalToDownload;
+	// part of the progressmeter that's already "full"
+	int dotz = (int)round(fractiondownloaded * totaldotz);
+	char* url = nullptr;
+	//curl_easy_getinfo(this->curl, CURLINFO_EFFECTIVE_URL, &url);
+	//QMetaObject::invokeMethod(this->proggress_label, "setText", Qt::QueuedConnection, Q_ARG(const QString&, url));
+	SomProgressBarr::set_prog_bar(fractiondownloaded * 100, 100, this->progress_bar);
+
+	// create the "meter"
+	//int ii = 0;
+	//printf("%3.0f%% [", fractiondownloaded * 100);
+	//// part  that's full already
+	//for (; ii < dotz; ii++)
+	//{
+	//	printf("=");
+	//	SomProgressBarr::set_prog_bar(fractiondownloaded * 100, TotalToDownload, this->progress_bar);
+	//}
+	//// remaining part (spaces)
+	//for (; ii < totaldotz; ii++)
+	//{
+	//	printf(" ");
+	//	//SomProgressBarr::set_prog_bar(0, TotalToDownload, this->progress_bar);
+	//}
+	//// and back to line begin - do not forget the fflush to avoid output buffering problems!
+	//printf("]\r");
+
+	//fflush(stdout);
+	// if you don't return 0, the transfer will be aborted - see the documentation
+	return 0;
 }
 
 STDMETHODIMP_(HRESULT __stdcall) CallbackDict::OnProgress(ULONG ulProgress, ULONG ulProgressMax,
@@ -161,4 +216,13 @@ void CallbackNull::setQProgressBar(QProgressBar* progress_bar)
 
 void CallbackNull::setQLabelProggress(SignalLabel* progress_label)
 {
+}
+
+void CallbackNull::setCurl(CURL* curl)
+{
+}
+
+int CallbackNull::progress_func(double TotalToDownload, double NowDownloaded, double TotalToUpload, double NowUploaded)
+{
+	return 0;
 }

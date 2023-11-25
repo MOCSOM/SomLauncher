@@ -120,29 +120,40 @@ bool MinecraftCpp::install_minecraft_version(const std::string& versionid, const
 	/*
 	Install a Minecraft Version. Fore more Information take a look at the documentation"
 	*/
+	qInfo() << "1" << std::endl;
 	Json::JsonParcer json_manifest;
 
+	qInfo() << "1" << std::endl;
 	std::string full_dir = Join({ minecraft_directory , "versions" , versionid, (versionid + ".json") });
 
+	qInfo() << "1" << std::endl;
 	std::string download_dir = Join({ minecraft_directory, "downloads" });
 
-	if (!std::filesystem::exists(download_dir)) {
+	qInfo() << "1" << std::endl;
+	if (!std::filesystem::exists(download_dir))
+	{
+		qInfo() << "2" << std::endl;
 		bool out_mkdir = std::filesystem::create_directories(download_dir);
 		std::cout << "java dir is maked with status: " << out_mkdir << std::endl;
 	}
 
+	qInfo() << "1" << std::endl;
 	if (std::filesystem::exists(full_dir))
 	{
+		qInfo() << "2" << std::endl;
 		if (!std::filesystem::is_directory(full_dir))
 		{
+			qInfo() << "3" << std::endl;
 			do_version_install(versionid, minecraft_directory, callback);
 			return true;
 		}
 	}
 
+	qInfo() << "1" << std::endl;
 	std::string version_manifest_file = DownloadFile("https://launchermeta.mojang.com/mc/game/version_manifest.json",
 		download_dir, callback);
 
+	qInfo() << "1" << std::endl;
 	Json::JsonValue version_list = json_manifest.ParseFile(version_manifest_file.c_str());
 
 	for (auto& var : version_list["versions"].get_array())
@@ -300,7 +311,9 @@ Json::JsonValue MinecraftCpp::get_version_list()
 	/*
 	Returns all versions that Mojang offers to download
 	*/
+	qInfo() << "getting version list" << std::endl;
 	Json::JsonParcer parcer;
+
 	Json::JsonValue vlist = parcer.ParseUrl("https://launchermeta.mojang.com/mc/game/version_manifest.json");
 	Json::JsonValue returnlist = Json::JsonValue(std::vector<Json::JsonValue>());
 
@@ -1921,22 +1934,29 @@ int MinecraftCpp::fabric::install_fabric_version(const std::string& minecraft_ve
 	std::string fabric_version_dir = Join({ minecraft_directory, "versions", fabric_minecraft_version });
 
 	// Check if the given version exists
-	if (!_is_version_valid(minecraft_version, minecraft_directory))
-	{
-		qFatal() << "Version Not Found " << minecraft_version;
-		return -1;
-	}
-	// Check if the given Minecraft version supported
-	if (!_is_minecraft_version_supported(minecraft_version))
-	{
-		qFatal() << "Unsupported Version " << minecraft_version;
-		return -1;
-	}
-	// Get latest loader version if not given
-	if (loader == "")
-	{
-		loader = get_latest_loader_version();
-	}
+	//qInfo() << "Checking version valid..." << minecraft_version << " " << minecraft_directory << std::endl;
+	//if (!_is_version_valid(minecraft_version, minecraft_directory))
+	//{
+	//	qInfo() << "Version Not Found" << minecraft_version << std::endl;
+	//	qFatal() << "Version Not Found " << minecraft_version;
+	//	return -1;
+	//}
+	//// Check if the given Minecraft version supported
+	//qInfo() << "Checking version supported..." << minecraft_version << std::endl;
+	//if (!_is_minecraft_version_supported(minecraft_version))
+	//{
+	//	qInfo() << "Unsupported Version" << minecraft_version << std::endl;
+	//	qFatal() << "Unsupported Version " << minecraft_version;
+	//	return -1;
+	//}
+	//// Get latest loader version if not given
+	//if (loader == "")
+	//{
+	//	qInfo() << "Getting latest loader..." << std::endl;
+	//	loader = get_latest_loader_version();
+	//}
+
+	qInfo() << "Installed minecraft..." << std::endl;
 	// Make sure the Minecraft version is installed
 	install_minecraft_version(minecraft_version, minecraft_directory, callback = callback);
 
@@ -2093,9 +2113,10 @@ Json::JsonValue MinecraftCpp::fabric::parse_maven_metadata(const std::string& ur
 		destenation_file = destenation_file /*+ "\\"*/ + replace_url;
 	}
 
-	HRESULT resurl = URLDownloadToFileA(NULL, url.c_str(), destenation_file.c_str(), NULL, NULL);
+	CURL* curl = nullptr;
+	CURLcode resurl = DDIC::Download::Files::download(curl, url, destenation_file);
 
-	if (resurl == S_OK)
+	if (resurl == CURLE_OK)
 	{
 		if (!std::filesystem::exists(destenation_file))
 		{

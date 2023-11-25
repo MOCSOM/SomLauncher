@@ -13,6 +13,9 @@
 #include <string>
 #include <memory>
 #include <urlmon.h>
+#include <fstream>
+
+#include <curl/curl.h>
 
 //#include <vcclr.h>
 
@@ -83,8 +86,13 @@ namespace DDIC
 
 			//bool _check_hash();
 			//void set_hash(System::String^ FilePath, int index);
+
+			CURLcode download(CURL* curl, const std::string& s_url, const std::string& d_file = "", CallbackNull* callback = new CallbackNull());
+			size_t write_data(char* ptr, size_t size, size_t nmemb, void* userdata);
+			int progress_func(void* ptr, double TotalToDownload, double NowDownloaded, double TotalToUpload, double NowUploaded);
 		}
-		namespace Java {
+		namespace Java
+		{
 			std::string install(
 				const std::string& version,
 				const std::string& path = "",

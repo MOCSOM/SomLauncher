@@ -13,6 +13,8 @@
 #include <iostream>
 #include <memory>
 
+#include <curl/curl.h>
+
 #include "../../../Moc/Logger/MocIOStream.h"
 
 #pragma comment(lib, "Urlmon.lib")
@@ -23,7 +25,8 @@ namespace SomConsole
 {
 	void setloadbar(unsigned curr_val, unsigned max_val, unsigned bar_width = 20);
 }
-namespace SomProgressBarr {
+namespace SomProgressBarr
+{
 	void set_prog_bar(unsigned curr_val, unsigned max_val,
 		QProgressBar* progress_bar);
 }
@@ -37,6 +40,10 @@ public:
 public:
 	void setQProgressBar(QProgressBar* progress_bar);
 	void setQLabelProggress(SignalLabel* progress_label);
+	void setCurl(CURL* curl);
+
+	int progress_func(double TotalToDownload, double NowDownloaded,
+		double TotalToUpload, double NowUploaded);
 
 	/// <summary>
 	///
@@ -90,6 +97,7 @@ private:
 	int m_percentLast = -1;
 	QProgressBar* progress_bar = nullptr;
 	SignalLabel* proggress_label = nullptr;
+	CURL* curl = nullptr;
 
 public:
 	CallbackDict() = default;
@@ -98,6 +106,10 @@ public:
 
 	void setQProgressBar(QProgressBar* progress_bar);
 	void setQLabelProggress(SignalLabel* progress_label);
+	void setCurl(CURL* curl);
+
+	int progress_func(double TotalToDownload, double NowDownloaded,
+		double TotalToUpload, double NowUploaded);
 
 	// This one is called by URLDownloadToFile
 	STDMETHOD(OnProgress)(/* [in] */ ULONG ulProgress, /* [in] */ ULONG ulProgressMax, /* [in] */ ULONG ulStatusCode, /* [in] */ LPCWSTR wszStatusText) override;

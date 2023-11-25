@@ -78,7 +78,9 @@ void SomLauncherMainWindow::start_minecraft_params()
 	qInfo() << this->config_parce["user"]["isInstallMods"].to_string() << std::endl;
 	qInfo() << this->config_parce["user"]["server"].to_string() << std::endl;
 
+	qInfo() << "Configurate options..." << std::endl;
 	this->configureOptions();
+	this->setUuidFromAccount();
 
 	switch (this->config_parce["user"]["server"].to_int())
 	{
@@ -129,6 +131,8 @@ void SomLauncherMainWindow::setupInstallMinecraft(const size_t& index)
 	std::shared_ptr<CallbackDict> callback = std::make_shared<CallbackDict>();
 	callback->setQProgressBar(ui.progressBar_ahtung);
 	callback->setQLabelProggress(ui.label_download_status_change);
+
+	qInfo() << "starting installing minecraft..." << std::endl;
 
 	std::string launch_version = install_minecraft(
 		instance_path,
@@ -183,13 +187,16 @@ std::string SomLauncherMainWindow::install_minecraft(
 	std::string launch_version;
 	std::string install_version;
 
+	qInfo() << "Checking java..." << std::endl;
 	checkJava(options, java, callback.get());
 
+	qInfo() << "Starting download minecraft..." << std::endl;
 	if (loader_mame == "forge" || loader_mame == "Forge")
 	{
 		launch_version = version + "-" + loader_mame + "-" + loader_version;
 		install_version = version + "-" + loader_version;
 
+		qInfo() << "Starting download forge..." << std::endl;
 		MinecraftCpp::forge::install_forge_version(
 			install_version, install_path.u8string(), callback.get(), options.executablePath);
 
@@ -199,6 +206,7 @@ std::string SomLauncherMainWindow::install_minecraft(
 	{
 		launch_version = std::string("fabric") + "-" + "loader" + "-" + loader_version + "-" + version;
 
+		qInfo() << "Starting download fabric..." << std::endl;
 		MinecraftCpp::fabric::install_fabric_version(
 			version, install_path.u8string(), loader_version, callback.get(), options.executablePath);
 
@@ -208,6 +216,8 @@ std::string SomLauncherMainWindow::install_minecraft(
 
 		return launch_version;
 	}
+
+	qWarning() << "Unknow loader";
 	return std::string();
 }
 
@@ -216,15 +226,23 @@ void SomLauncherMainWindow::installMods(const std::filesystem::path& install_pat
 	std::shared_ptr<CallbackNull> callback)
 {
 	std::string querry = R"(SELECT mods_mod.mod_link FROM servers_server
-INNER JOIN mods_mod_modpacks ON servers_server.modpack_id_id = mods_mod_modpacks.modpack_id
-INNER JOIN mods_mod ON mods_mod_modpacks.mod_id = mods_mod.mod_id
+INNER JOIN mods_modpack_mods ON servers_server.modpack_id_id = mods_modpack_mods.modpack_id
+INNER JOIN mods_mod ON mods_modpack_mods.mod_id = mods_mod.mod_id
 WHERE servers_server.server_slug LIKE )" + std::string("'%") + modpack_name + "%'";
-
-	sql::ResultSet* result = sqlbase::mysql::sqlconnector::sendQuerry(this->database_connection, querry);
-	while (result->next())
+	sql::ResultSet* result = nullptr;
+	try
 	{
-		std::string downloaded_path = DownloadFile(result->getString(1),
-			install_path.u8string(), callback.get());
+		sql::ResultSet* result = sqlbase::mysql::sqlconnector::sendQuerry(this->database_connection, querry);
+
+		while (result->next())
+		{
+			std::string downloaded_path = DownloadFile(result->getString(1),
+				install_path.u8string(), callback.get());
+		}
+	}
+	catch (const sql::SQLException& exc)
+	{
+		qWarning() << exc.what() << " " << exc.getErrorCode() << " " << exc.getSQLState();
 	}
 
 	//MinecraftCpp::modpacks::download::database::installModPack(, install_path, callback);
@@ -291,10 +309,13 @@ void SomLauncherMainWindow::checkJava(MinecraftCpp::option::MinecraftOptions& op
 
 	if (java_verison == "")
 	{
-		std::string java_path = DDIC::Download::Files::getInstalledJavaInDirectory(this->minecraft_core_dir_path);
+		qInfo() << "Getting installed java in directory..." << std::endl;
+		std::string java_path =
+			DDIC::Download::Files::getInstalledJavaInDirectory(this->minecraft_core_dir_path);
 
 		if (java_path == "")
 		{
+			qInfo() << "Getting standart installed java in directory..." << std::endl;
 			options.executablePath = DDIC::Download::Files::getInstalledJavaInDirectory();
 			return;
 		}
@@ -306,13 +327,16 @@ void SomLauncherMainWindow::checkJava(MinecraftCpp::option::MinecraftOptions& op
 
 	if (!DDIC::Download::Java::check_system_verison_java(java_verison))
 	{
+		qInfo() << "Checking installed java..." << std::endl;
 		if (!DDIC::Download::Java::check_downloaded_version_java(this->minecraft_core_dir_path, java_verison))
 		{
+			qInfo() << "Install java..." << std::endl;
 			java_dir = DDIC::Download::Java::install(java_verison, this->minecraft_core_dir_path, callback);
 			options.executablePath = java_dir + "\\" + "bin" + "\\" + "java.exe";
 		}
 		else
 		{
+			qInfo() << "Getting java..." << std::endl;
 			for (auto& var : DDIC::Download::Files::_get_java_path(this->minecraft_core_dir_path))
 			{
 				if (var.second == java_verison)
@@ -324,6 +348,7 @@ void SomLauncherMainWindow::checkJava(MinecraftCpp::option::MinecraftOptions& op
 	}
 	else
 	{
+		qInfo() << "Getting java in programm files..." << std::endl;
 		char* program_files = nullptr;
 		size_t program_files_sz = 0;
 		_dupenv_s(&program_files, &program_files_sz, "ProgramFiles");
@@ -484,6 +509,17 @@ bool SomLauncherMainWindow::isVersionOld()
 void SomLauncherMainWindow::setAccountData(const Json::JsonValue& data)
 {
 	this->account_data = data;
+}
+
+void SomLauncherMainWindow::setUuidFromAccount()
+{
+	for (auto& elem : this->account_data.get_array())
+	{
+		if (elem.is_exist("id"))
+		{
+			this->options.uuid = elem["id"].to_string();
+		}
+	}
 }
 
 std::unique_ptr<SettingsDialog>& SomLauncherMainWindow::getSettingsDialog()

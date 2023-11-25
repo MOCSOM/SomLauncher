@@ -8,29 +8,39 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget* parent)
 
 	this->progressBar_ahtung_geometry = ui.progressBar_ahtung->geometry();
 
+	qInfo() << "Setting mc standart path..." << std::endl;
 	_settingMinecraftStandartPath();
 
 	//Проверка и создание конфига
+	qInfo() << "Checking config..." << std::endl;
 	if (!isConfigExist())
 	{
 		createConfig();
 		qInfo() << "Config created" << std::endl;
 	}
 
+	qInfo() << "Setting memory..." << std::endl;
 	_settingMemory();
 
+	qInfo() << "Parcing configs..." << std::endl;
 	_parcingConfigs();
 
+	qInfo() << "Configure options..." << std::endl;
 	configureOptions();
 
+	qInfo() << "Setting otions value from config..." << std::endl;
 	setOptionsValuesFromConfig();
 
+	qInfo() << "Setting ui changes..." << std::endl;
 	_settingUiChanges();
 
+	qInfo() << "Setting ui connections..." << std::endl;
 	_settingConnections();
 
+	qInfo() << "Setting cyrrentversion..." << std::endl;
 	setCurrentVersionFromDatabase();
 
+	qInfo() << "Checking verison..." << std::endl;
 	if (isVersionOld())
 	{
 		qInfo() << "Start updater" << std::endl;
@@ -39,6 +49,8 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget* parent)
 
 	this->recomended_memory = 3072;
 	this->curret_memory = this->config_parce["user"]["memory"].to_int();
+
+	qInfo() << "Create main window complete" << std::endl;
 }
 
 SomLauncherMainWindow::~SomLauncherMainWindow()
@@ -326,6 +338,7 @@ void SomLauncherMainWindow::onClickpushButton_startgame()
 	connect(ui.label_download_status_change, &SignalLabel::textChanged, this, &SomLauncherMainWindow::updateProgressLabel);
 
 	download_thread = new FunctionThread(start_minecraft_thread_func);
+
 	download_thread->start();
 }
 
