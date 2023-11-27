@@ -77,27 +77,32 @@ std::string DDIC::Download::Files::download_file(const std::string& s_url,
 
 	if (std::filesystem::is_regular_file(destenation_file))
 	{
+		callback->OnProgress(NULL, NULL, 6, Additionals::Convectors::ConvertStringToWString("Checking checksum " + destenation_file).c_str());
 		if (sha1 == "")
 		{
-			return destenation_file;
+			if (std::filesystem::file_size(destenation_file) != 0)
+			{
+				return destenation_file;
+			}
 		}
-		callback->OnProgress(NULL, NULL, 6, Additionals::Convectors::ConvertStringToWString("Checking checksum " + destenation_file).c_str());
-		if (SHA1::from_file(destenation_file) == sha1)
+		else if (SHA1::from_file(destenation_file) == sha1)
 		{
 			return destenation_file;
 		}
 	}
 
-	/*size_t pos = normal_url.find("https://");
+	size_t pos = normal_url.find("https://");
 
-	if (pos != std::string::npos) {
+	if (pos != std::string::npos)
+	{
 		pos += 8;
 	}
 
-	while ((pos = normal_url.find("//", pos)) != std::string::npos) {
+	while ((pos = normal_url.find("//", pos)) != std::string::npos)
+	{
 		normal_url.replace(pos, 2, "/");
 		pos += 1;
-	}*/
+	}
 
 	//HRESULT download_result = URLDownloadToFileA(NULL, s_url.c_str(), destenation_file.c_str(), NULL, callback);
 	CURL* curl = nullptr;
@@ -105,13 +110,7 @@ std::string DDIC::Download::Files::download_file(const std::string& s_url,
 
 	if (lzma_compressed)
 	{
-		if (download_result == CURLE_OK)
-		{
-			callback->OnProgress(NULL, NULL, NULL, Additionals::Convectors::ConvertStringToWString("The file is saved as: " + d_file).c_str());
-			return destenation_file;
-		}
-		/*System::IO::Compression::ZipArchive^ zArchive = System::IO::Compression::ZipFile::OpenRead(System::String(d_file).ToString());
-		System::IO::Compression::ZipFileExtensions::ExtractToDirectory(zArchive, System::String(d_file).ToString());*/
+		lzmaDecomress(destenation_file, destenation_file);
 	}
 
 	if (sha1 != "")
@@ -119,11 +118,8 @@ std::string DDIC::Download::Files::download_file(const std::string& s_url,
 		std::string check_sum = SHA1::from_file(destenation_file);
 		if (check_sum != sha1)
 		{
-			callback->OnProgress(NULL, NULL, NULL, Additionals::Convectors::ConvertStringToWString(
-				"Invalid checksum " +
-				s_url + " in " +
-				destenation_file + " with " +
-				sha1 + " checksum " + check_sum).c_str());
+			callback->setProgress(-1, -1, -1, "Invalid checksum in " + destenation_file + " with " +
+				sha1 + " checksum " + check_sum);
 
 			/*throw std::runtime_error("Invalid checksum " +
 				s_url + " in " +
@@ -132,16 +128,16 @@ std::string DDIC::Download::Files::download_file(const std::string& s_url,
 		}
 	}
 
-	qInfo() << "downloaded with " << download_result << std::endl;
+	callback->setProgress(-1, -1, -1, "downloaded with " + download_result);
 	if (CURLE_OK == download_result)
 	{
-		callback->OnProgress(NULL, NULL, NULL, Additionals::Convectors::ConvertStringToWString("The file is saved as: " + d_file).c_str());
+		callback->setProgress(-1, -1, -1, "The file is saved as: " + d_file);
 		return destenation_file;
 	}
 	else
 	{
-		callback->OnProgress(NULL, NULL, NULL, Additionals::Convectors::ConvertStringToWString("Unable to Download file: " + s_url + " with code: " + std::to_string(download_result)).c_str());
-		callback->OnProgress(NULL, NULL, NULL, Additionals::Convectors::ConvertStringToWString("to: " + d_file).c_str());
+		callback->setProgress(-1, -1, -1, "Unable to Download file: " + s_url + " with code: " + std::to_string(download_result));
+		callback->setProgress(-1, -1, -1, "to: " + d_file);
 		return "";
 	}
 }
@@ -296,7 +292,7 @@ size_t DDIC::Download::Files::write_data(char* ptr, size_t size, size_t nmemb, v
 
 int DDIC::Download::Files::progress_func(void* ptr, double TotalToDownload, double NowDownloaded, double TotalToUpload, double NowUploaded)
 {
-	CallbackNull* callback = static_cast<CallbackDict*>(ptr);
+	auto callback = static_cast<CallbackDict*>(ptr);
 	return callback->progress_func(TotalToDownload, NowDownloaded, TotalToUpload, NowUploaded);
 }
 
@@ -422,12 +418,11 @@ std::string DDIC::Download::Java::_decompress_archive(const std::string& repo_ro
 	std::string repo_root_str;
 	repo_root_str = repo_root;
 
-	if (!std::filesystem::exists(destination_str)) {
+	if (!std::filesystem::exists(destination_str))
+	{
 		bool out_mkdir = std::filesystem::create_directories(destination_str_cstr);
-		/*System::Console::Write("java dir is maked with status: ");
-		System::Console::WriteLine(out_mkdir);*/
 
-		std::cout << "java dir is maked with status: " << out_mkdir << std::endl;
+		qInfo() << "java dir is maked with status: " << out_mkdir << std::endl;
 	}
 
 	std::string jdk_file = repo_root_str;

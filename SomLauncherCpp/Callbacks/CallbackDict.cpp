@@ -105,6 +105,43 @@ int CallbackDict::progress_func(double TotalToDownload, double NowDownloaded, do
 	return 0;
 }
 
+void CallbackDict::setProgress(size_t progress, size_t progress_max, size_t code, const std::string& message)
+{
+	if (progress == -1 && progress_max == -1 && code == -1)
+	{
+		qInfo() << message << std::endl;
+		if (this->proggress_label != nullptr)
+		{
+			emit this->proggress_label->textChanged(message.c_str());
+		}
+		return;
+	}
+
+	if (progress == -1 || code == -1 && message == "")
+	{
+		int percent = 100 * progress
+			/ progress_max;
+		if (m_percentLast < percent)
+		{
+			ProgressBarInConsole(percent, 100);
+			m_percentLast = percent;
+		}
+		return;
+	}
+
+	if (progress_max == -1 || code == -1 && message == "")
+	{
+		int percent = 100 * progress
+			/ progress_max;
+		if (m_percentLast < percent)
+		{
+			ProgressBarInConsole(percent, 100);
+			m_percentLast = percent;
+		}
+		return;
+	}
+}
+
 STDMETHODIMP_(HRESULT __stdcall) CallbackDict::OnProgress(ULONG ulProgress, ULONG ulProgressMax,
 	ULONG ulStatusCode, LPCWSTR wszStatusText)
 {
@@ -225,4 +262,8 @@ void CallbackNull::setCurl(CURL* curl)
 int CallbackNull::progress_func(double TotalToDownload, double NowDownloaded, double TotalToUpload, double NowUploaded)
 {
 	return 0;
+}
+
+void CallbackNull::setProgress(size_t progress, size_t progress_max, size_t code, const std::string& message)
+{
 }

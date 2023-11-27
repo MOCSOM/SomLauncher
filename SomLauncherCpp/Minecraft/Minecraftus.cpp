@@ -1,6 +1,6 @@
 ﻿#include "Minecraftus.h"
 
-std::string MinecraftCpp::option::MinecraftOptions::get(const std::string& param, const std::string& writ)
+std::string MinecraftCpp::option::MinecraftOptions::get(const std::string& param, const std::string& writ) const
 {
 	//16 полей
 	/*wchar_t* username;
@@ -65,7 +65,7 @@ std::string MinecraftCpp::option::MinecraftOptions::get(const std::string& param
 	}
 }
 
-bool MinecraftCpp::option::MinecraftOptions::get(const std::string& param, bool writ)
+bool MinecraftCpp::option::MinecraftOptions::get(const std::string& param, bool writ) const
 {
 	bool field = false;
 
@@ -120,50 +120,63 @@ bool MinecraftCpp::install_minecraft_version(const std::string& versionid, const
 	/*
 	Install a Minecraft Version. Fore more Information take a look at the documentation"
 	*/
-	qInfo() << "1" << std::endl;
 	Json::JsonParcer json_manifest;
 
-	qInfo() << "1" << std::endl;
 	std::string full_dir = Join({ minecraft_directory , "versions" , versionid, (versionid + ".json") });
 
-	qInfo() << "1" << std::endl;
 	std::string download_dir = Join({ minecraft_directory, "downloads" });
 
-	qInfo() << "1" << std::endl;
 	if (!std::filesystem::exists(download_dir))
 	{
-		qInfo() << "2" << std::endl;
 		bool out_mkdir = std::filesystem::create_directories(download_dir);
-		std::cout << "java dir is maked with status: " << out_mkdir << std::endl;
+		qInfo() << "java dir is maked with status: " << out_mkdir << std::endl;
 	}
 
-	qInfo() << "1" << std::endl;
 	if (std::filesystem::exists(full_dir))
 	{
-		qInfo() << "2" << std::endl;
 		if (!std::filesystem::is_directory(full_dir))
 		{
-			qInfo() << "3" << std::endl;
+			qInfo() << "doversion install" << std::endl;
 			do_version_install(versionid, minecraft_directory, callback);
+			qInfo() << "version is installed" << std::endl;
 			return true;
 		}
 	}
 
-	qInfo() << "1" << std::endl;
 	std::string version_manifest_file = DownloadFile("https://launchermeta.mojang.com/mc/game/version_manifest.json",
 		download_dir, callback);
-
-	qInfo() << "1" << std::endl;
 	Json::JsonValue version_list = json_manifest.ParseFile(version_manifest_file.c_str());
+
+	if (version_list == nullptr)
+	{
+		qFatal() << "error in version list";
+	}
 
 	for (auto& var : version_list["versions"].get_array())
 	{
+		qInfo() << "doversion install" << std::endl;
 		if (var["id"].to_string() == versionid)
 		{
+			qInfo() << "doversion install" << std::endl;
 			do_version_install(versionid, minecraft_directory, callback, var["url"].to_string());
+			qInfo() << "version is installed" << std::endl;
 			return true;
 		}
 	}
+
+	for (auto& var : version_list["versions"].get_object())
+	{
+		qInfo() << "doversion install obj" << std::endl;
+		if (var.second["id"].to_string() == versionid)
+		{
+			qInfo() << "doversion install" << std::endl;
+			do_version_install(versionid, minecraft_directory, callback, var.second["url"].to_string());
+			qInfo() << "version is installed" << std::endl;
+			return true;
+		}
+	}
+
+	qWarning() << "minecraft not installed";
 	return false;
 }
 
@@ -178,6 +191,7 @@ bool MinecraftCpp::do_version_install(const std::string& versionid, const std::s
 	std::string path_ver_json = Join({ path, "versions", versionid, (versionid + ".json") });
 
 	// Download and read versions.json
+	qInfo() << "Download and read versions.json..." << std::endl;
 	if (url != "")
 	{
 		DownloadFile(url, path_ver_json, callback);
@@ -185,8 +199,10 @@ bool MinecraftCpp::do_version_install(const std::string& versionid, const std::s
 	Json::JsonValue versiondata = json_verid.ParseFile(path_ver_json);
 
 	// For forge
+	qInfo() << "Download For forge..." << std::endl;
 	if (versiondata.is_exist("inheritsFrom"))
 	{
+		qInfo() << "install_minecraft_version For forge..." << std::endl;
 		install_minecraft_version(versiondata["inheritsFrom"].to_string(), path, callback);
 		versiondata = inherit_json(versiondata, path);
 	}
@@ -194,6 +210,7 @@ bool MinecraftCpp::do_version_install(const std::string& versionid, const std::s
 	install_assets(versiondata, path, callback);
 
 	//Download logging config
+	qInfo() << "Download logging config..." << std::endl;
 	std::string logger_file = "";
 	if (versiondata.is_exist("logging"))
 	{
@@ -205,12 +222,14 @@ bool MinecraftCpp::do_version_install(const std::string& versionid, const std::s
 	}
 
 	//Download minecraft.jar
+	qInfo() << "Download minecraft.jar..." << std::endl;
 	if (versiondata.is_exist("downloads"))
 	{
 		DownloadFile(versiondata["downloads"]["client"]["url"].to_string(), Join({ path, "versions", versiondata["id"].to_string(), (versiondata["id"].to_string() + ".jar") }), callback);
 	}
 
 	//Need to copy jar for old forge versions
+	qInfo() << "Need to copy jar for old forge versions..." << std::endl;
 	if (std::filesystem::is_directory(Join({ path, "versions", versiondata["id"].to_string(), (versiondata["id"].to_string() + ".jar") })) && versiondata.is_exist("inheritsFrom"))
 	{
 		std::filesystem::copy
@@ -247,6 +266,7 @@ bool MinecraftCpp::do_version_install(const std::string& versionid, const std::s
 	}
 
 	//Install java runtime if needed
+	qInfo() << "Install java runtime if needed..." << std::endl;
 	if (versiondata.is_exist("javaVersion"))
 	{
 		install_jvm_runtime(versiondata["javaVersion"]["component"].to_string(), path, callback);
@@ -1420,7 +1440,8 @@ bool MinecraftCpp::install_jvm_runtime(const std::string& jvm_version, const std
 			// Prefer downloading the compresses file
 			if (var.second["downloads"].is_exist("lzma"))
 			{
-				DownloadFile(var.second["downloads"]["lzma"]["url"].to_string(), current_path.u8string(), callback, var.second["downloads"]["raw"]["sha1"].to_string(), true);
+				//TODO: сделать lzma
+				DownloadFile(var.second["downloads"]["lzma"]["url"].to_string(), current_path.u8string(), callback, var.second["downloads"]["raw"]["sha1"].to_string(), false);
 			}
 			else
 			{
@@ -1973,7 +1994,7 @@ int MinecraftCpp::fabric::install_fabric_version(const std::string& minecraft_ve
 	libraries_json = inherit_json(libraries_json, minecraft_directory);
 	install_libraries(libraries_json, minecraft_directory, callback);
 	MinecraftCpp::natives::downloadNatives(fabric_version_dir + "\\" + "natives", callback);
-	install_minecraft_version(fabric_minecraft_version, minecraft_directory, callback = callback);
+	//install_minecraft_version(fabric_minecraft_version, minecraft_directory, callback = callback);
 
 	std::string installer_download_url = "https://maven.fabricmc.net/net/fabricmc/fabric-installer/" + installer_version + "\\fabric-installer-" + installer_version + ".jar";
 	// Generate a temporary path for downloading the installer
@@ -1985,7 +2006,12 @@ int MinecraftCpp::fabric::install_fabric_version(const std::string& minecraft_ve
 	callback->OnProgress(NULL, NULL, NULL, L"Running fabric installer");
 	std::vector<std::string> command;
 
-	command.push_back(java == "" ? "java" : java);
+	std::string java_w = java;
+	size_t pos = java_w.find("java.exe");
+
+	java_w.insert(pos + 4, "w");
+
+	command.push_back(java == "" ? "javaw" : java_w);
 	command.push_back("-jar");
 	command.push_back(installer_path);
 	command.push_back("client");
@@ -2112,7 +2138,8 @@ Json::JsonValue MinecraftCpp::fabric::parse_maven_metadata(const std::string& ur
 		replace_url = Additionals::String::split(url, '/')[Additionals::String::split(url, '/').size() - 1];
 		destenation_file = destenation_file /*+ "\\"*/ + replace_url;
 	}
-	std::string path = DownloadFile(url, destenation_file);
+	std::shared_ptr<CallbackDict> callback = std::make_shared<CallbackDict>();
+	std::string path = DownloadFile(url, destenation_file, callback.get());
 
 	if (path != "")
 	{

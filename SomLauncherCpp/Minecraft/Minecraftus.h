@@ -66,8 +66,8 @@ namespace MinecraftCpp
 			ProcessPriority process_priority = NORMAL;
 
 			// get (поле, стандарт)
-			std::string get(const std::string& param, const std::string& writ = "");
-			bool get(const std::string& param, bool writ = NULL);
+			std::string get(const std::string& param, const std::string& writ = "") const;
+			bool get(const std::string& param, bool writ = NULL) const;
 			bool is_exist(const std::string& param);
 		};
 	}

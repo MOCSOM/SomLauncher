@@ -41,7 +41,7 @@ Json::JsonValue Json::JsonParcer::ParseFile(const std::string& filename)
 {
 	if (!std::filesystem::exists(filename))
 	{
-		std::cout << "Unable to open file: " << filename << std::endl;
+		std::cerr << "Unable to open file: " << filename << std::endl;
 		return nullptr;
 	}
 
@@ -49,7 +49,7 @@ Json::JsonValue Json::JsonParcer::ParseFile(const std::string& filename)
 
 	if (!file.is_open())
 	{
-		std::cout << "failed to open " << filename << std::endl;
+		std::cerr << "failed to open " << filename << std::endl;
 		return nullptr;
 	}
 	else

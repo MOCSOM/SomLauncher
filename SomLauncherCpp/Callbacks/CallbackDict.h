@@ -45,6 +45,8 @@ public:
 	int progress_func(double TotalToDownload, double NowDownloaded,
 		double TotalToUpload, double NowUploaded);
 
+	void setProgress(size_t progress = -1, size_t progress_max = -1, size_t code = -1, const std::string& message = "");
+
 	/// <summary>
 	///
 	/// </summary>
@@ -110,6 +112,8 @@ public:
 
 	int progress_func(double TotalToDownload, double NowDownloaded,
 		double TotalToUpload, double NowUploaded);
+
+	void setProgress(size_t progress = -1, size_t progress_max = -1, size_t code = -1, const std::string& message = "");
 
 	// This one is called by URLDownloadToFile
 	STDMETHOD(OnProgress)(/* [in] */ ULONG ulProgress, /* [in] */ ULONG ulProgressMax, /* [in] */ ULONG ulStatusCode, /* [in] */ LPCWSTR wszStatusText) override;

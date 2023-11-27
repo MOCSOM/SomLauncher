@@ -284,7 +284,7 @@ void SomLauncherMainWindow::onClickedpushButton_changeserver()
 			_settingCurrentServerName();
 		});
 
-	dialog.exec(); //modal settings_dialog
+	dialog.exec(); //modal server changer
 }
 
 void SomLauncherMainWindow::_settingServerNameInChangeServerButton()
@@ -304,6 +304,14 @@ void SomLauncherMainWindow::onClickedpushLable_profile()
 void SomLauncherMainWindow::onClickedpushButton_settings()
 {
 	qInfo() << "pushButton_settings clicked" << std::endl;
+
+	QObject::connect(this->settings_dialog.get(), &SettingsDialog::changedMinecraftPathSignal,
+		[=](const std::filesystem::path& path) -> void
+		{
+			this->config_path = path.u8string();
+			this->_parcingConfigs();
+		}
+	);
 
 	this->settings_dialog->setMemoryData(1024, this->max_memory, this->recomended_memory);
 	this->settings_dialog->setCurretMemory(this->curret_memory);

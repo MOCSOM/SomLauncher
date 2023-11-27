@@ -54,6 +54,8 @@ signals:
 	void reinstallMods(bool state);
 signals:
 	void logoutSignal();
+signals:
+	void changedMinecraftPathSignal(const std::filesystem::path& path);
 
 private slots:
 	void setMemoryLableValue(int value);

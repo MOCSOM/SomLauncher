@@ -128,6 +128,9 @@
     <ClCompile Include="Minecraft\Servers\ServerDatConfiguration.cpp">
       <Filter>Minecraft</Filter>
     </ClCompile>
+    <ClCompile Include="Encryption\LZMA\LzmaDecompress.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -258,6 +261,9 @@
     </ClInclude>
     <ClInclude Include="Minecraft\Servers\ServerDatConfiguration.h">
       <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Encryption\LZMA\LzmaDecompress.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

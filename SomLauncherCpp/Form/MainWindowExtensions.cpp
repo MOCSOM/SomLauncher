@@ -349,7 +349,7 @@ void SomLauncherMainWindow::checkJava(MinecraftCpp::option::MinecraftOptions& op
 	}
 	else
 	{
-		java_dir = DDIC::Download::Java::install(java_verison, this->minecraft_core_dir_path, callback);
+		//java_dir = DDIC::Download::Java::install(java_verison, this->minecraft_core_dir_path, callback);
 		qInfo() << "Getting java in programm files..." << std::endl;
 		char* program_files = nullptr;
 		size_t program_files_sz = 0;

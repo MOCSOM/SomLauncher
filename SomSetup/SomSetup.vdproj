@@ -165,6 +165,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_70B7FF466C5E51C7DF738B188AC5507D"
+        "OwnerKey" = "8:_34B24EA6487A4E298A1A1282EF6D025B"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_73DD965F9CDF09B3F3F5D3ACA3C3686C"
         "OwnerKey" = "8:_34B24EA6487A4E298A1A1282EF6D025B"
         "MsmSig" = "8:_UNDEFINED"
@@ -261,6 +267,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_BB857BDBC3F9901F9AB2FA9BE58BC364"
+        "OwnerKey" = "8:_34B24EA6487A4E298A1A1282EF6D025B"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_CA3CF49FD35F45C5A937EF91844F7C3B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -269,12 +281,6 @@
         {
         "MsmKey" = "8:_CBE051D0D711B2A078A77F161BF1069C"
         "OwnerKey" = "8:_34B24EA6487A4E298A1A1282EF6D025B"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_CE3078C4163749878D0A5877804F2EE9"
-        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -757,12 +763,12 @@
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
             "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
+            "System" = "11:TRUE"
             "Permanent" = "11:FALSE"
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:FALSE"
+            "Exclude" = "11:TRUE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -886,10 +892,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_73DD965F9CDF09B3F3F5D3ACA3C3686C"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_70B7FF466C5E51C7DF738B188AC5507D"
             {
-            "SourcePath" = "8:Secur32.dll"
-            "TargetName" = "8:Secur32.dll"
+            "SourcePath" = "8:liblzma.dll"
+            "TargetName" = "8:liblzma.dll"
             "Tag" = "8:"
             "Folder" = "8:_05F01DAAB8364CA695ACCE8AFE368FB5"
             "Condition" = "8:"
@@ -903,6 +909,26 @@
             "PackageAs" = "3:1"
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_73DD965F9CDF09B3F3F5D3ACA3C3686C"
+            {
+            "SourcePath" = "8:Secur32.dll"
+            "TargetName" = "8:Secur32.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_05F01DAAB8364CA695ACCE8AFE368FB5"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:TRUE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:TRUE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -1206,6 +1232,26 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BB857BDBC3F9901F9AB2FA9BE58BC364"
+            {
+            "SourcePath" = "8:urlmon.dll"
+            "TargetName" = "8:urlmon.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_05F01DAAB8364CA695ACCE8AFE368FB5"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:TRUE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:4"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CA3CF49FD35F45C5A937EF91844F7C3B"
             {
             "SourcePath" = "8:..\\QtFiles\\Qt6Widgetsd.dll"
@@ -1244,26 +1290,6 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CE3078C4163749878D0A5877804F2EE9"
-            {
-            "SourcePath" = "8:..\\QtFiles\\zlib1.dll"
-            "TargetName" = "8:zlib1.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_05F01DAAB8364CA695ACCE8AFE368FB5"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D33D03F6AD4444AFA8395483E1A9E419"
@@ -1517,15 +1543,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:SomLauncher"
-        "ProductCode" = "8:{DA9209E0-8718-4849-B768-F89A15EE5FA6}"
-        "PackageCode" = "8:{92420065-7671-417F-95B7-7CF9AE76A08D}"
+        "ProductCode" = "8:{E1648A46-FDF3-46AC-9940-339656827550}"
+        "PackageCode" = "8:{6AA63BC0-899D-41E9-A9CB-3CA505056EB3}"
         "UpgradeCode" = "8:{F9EAB7F5-9D61-49C2-85AA-8DAD4762EB34}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.7"
+        "ProductVersion" = "8:1.1.5"
         "Manufacturer" = "8:.SomSomSom"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -1535,7 +1561,7 @@
         "Keywords" = "8:"
         "ARPCOMMENTS" = "8:"
         "ARPURLINFOABOUT" = "8:"
-        "ARPPRODUCTICON" = "8:"
+        "ARPPRODUCTICON" = "8:_0505D52B565946F8ABAEC536EB829231"
         "ARPIconIndex" = "3:0"
         "SearchPath" = "8:"
         "UseSystemSearchPath" = "11:TRUE"

@@ -165,6 +165,7 @@ void SettingsDialog::onClickToolBotton_getminecraft_core()
 		return;
 	}
 	ui.lineEdit_game_path->setText(path.u8string().c_str());
+	emit changedMinecraftPathSignal(path);
 }
 
 void SettingsDialog::onClickToolBotton_getjava_path()

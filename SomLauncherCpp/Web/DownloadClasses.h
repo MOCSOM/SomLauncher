@@ -16,18 +16,17 @@
 #include <fstream>
 
 #include <curl/curl.h>
+#include <lzma.h>
 
 //#include <vcclr.h>
 
 //#include <atlstr.h>
 
-#pragma comment(lib, "Urlmon.lib")
-#pragma comment(lib, "User32.lib")
-
 #include "../Callbacks/CallbackDict.h"
 #include "../../SomAdditionalsLib/Additionals.h"
 #include "../Archives/Archives.h"
 #include "../Hashes/sha1.h"
+#include "../Encryption/LZMA/LzmaDecompress.h"
 
 #if defined(_WIN32) || defined(_WIN64)
 const std::string OS = "windows";
@@ -65,6 +64,15 @@ const std::string _TAR = ".tar";
 const std::string _TAR_GZ = ".tar.gz";
 const std::string _ZIP = ".zip";
 const std::string _SEVEN_ZIP = ".7z";
+
+/* read/write buffer sizes */
+#define IN_BUF_MAX  409600
+#define OUT_BUF_MAX 409600
+/* analogous to xz CLI options: -0 to -9 */
+#define COMPRESSION_LEVEL 7
+
+/* boolean setting, analogous to xz CLI option: -e */
+#define COMPRESSION_EXTREME true
 
 #define DownloadFile DDIC::Download::Files::download_file
 
