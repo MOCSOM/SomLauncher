@@ -1,8 +1,8 @@
-#include "NativesInstaller.h"
+п»ї#include "NativesInstaller.h"
 
 std::vector<std::filesystem::path> MinecraftCpp::natives::getNativesUrls()
 {
-	//FIXME: Поменять определение natives на автоматику и сделать на разные платформы
+	//FIXME: РџРѕРјРµРЅСЏС‚СЊ РѕРїСЂРµРґРµР»РµРЅРёРµ natives РЅР° Р°РІС‚РѕРјР°С‚РёРєСѓ Рё СЃРґРµР»Р°С‚СЊ РЅР° СЂР°Р·РЅС‹Рµ РїР»Р°С‚С„РѕСЂРјС‹
 	std::vector<std::filesystem::path> returned_urls =
 	{
 		"https://build.lwjgl.org/stable/windows/x64/lwjgl.dll",

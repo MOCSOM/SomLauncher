@@ -7,27 +7,20 @@
 
 class LibraryDownloadInfo : public DownloadInfo
 {
-public:
-	LibraryDownloadInfo() {}
-
-	LibraryDownloadInfo(const std::string& path) : path(path) {}
-
-	LibraryDownloadInfo(const std::string& path, const std::string& url) : DownloadInfo(url), path(path) {}
-
-	LibraryDownloadInfo(const std::string& path, const std::string& url, const std::string& sha1) : DownloadInfo(url, sha1), path(path) {}
-
-	LibraryDownloadInfo(const std::string& path, const std::string& url, const std::string& sha1, int size) : DownloadInfo(url, sha1, size), path(path) {}
-
-	const std::string& getPath() const {
-		return path;
-	}
-
-	bool empty() const {
-		return path.empty();
-	}
-
 private:
 	std::string path;
+
+public:
+	LibraryDownloadInfo() = default;
+	LibraryDownloadInfo(const std::string& path);
+	LibraryDownloadInfo(const std::string& path, const std::string& url, const std::string& sha1 = "", int size = 0);
+	~LibraryDownloadInfo() = default;
+
+public:
+	const std::string& getPath() const;
+
+public:
+	bool empty() const;
 };
 
 #endif // !LIBRARYDOWNLOADINFO_H_

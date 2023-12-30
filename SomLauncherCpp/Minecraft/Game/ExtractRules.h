@@ -1,35 +1,27 @@
 #ifndef EXTRACTRULES_H_
 #define EXTRACTRULES_H_
 
-#include <vector>
-#include <string>
 #include <algorithm>
+#include <string>
+#include <vector>
 
 class ExtractRules
 {
+private:
+	std::vector<std::string> exclude;
+
 public:
 	static const ExtractRules EMPTY;
 
-	ExtractRules() {
-		// Initialize an empty list of exclusions
-		exclude = std::vector<std::string>();
-	}
+public:
+	ExtractRules();
+	ExtractRules(const std::vector<std::string>& exclude);
 
-	ExtractRules(const std::vector<std::string>& exclude) : exclude(exclude) {}
+public:
+	const std::vector<std::string>& getExclude() const;
 
-	const std::vector<std::string>& getExclude() const {
-		return exclude;
-	}
-
-	bool shouldExtract(const std::string& path) const {
-		// Check if any exclusion matches the path
-		return std::none_of(exclude.begin(), exclude.end(), [&path](const std::string& exclusion) {
-			return path.find(exclusion) == 0;
-			});
-	}
-
-private:
-	std::vector<std::string> exclude;
+public:
+	bool shouldExtract(const std::string& path) const;
 };
 
 #endif // !EXTRACTRULES_H_

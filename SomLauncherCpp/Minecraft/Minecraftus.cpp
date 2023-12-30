@@ -545,7 +545,7 @@ std::vector<std::string> MinecraftCpp::generateCommandLine(const std::filesystem
 	// Provided Minecraft arguments
 	std::filesystem::path gameAssets = Join({ minecraft_directory, "assets", "indexes" });
 
-	std::map<std::string, std::string> configuration = version.getConfigurations(options.auth_info, options, minecraft_directory, version);
+	std::map<std::string, std::string> configuration; //= version.getConfigurations(options.auth_info, options, minecraft_directory, version);
 	configuration["${classpath}"] = Join({ classpath, get_classpath_separator() });
 	configuration["${game_assets}"] = gameAssets.string();
 	configuration["${assets_root}"] = gameAssets.string();
@@ -557,14 +557,14 @@ std::vector<std::string> MinecraftCpp::generateCommandLine(const std::filesystem
 	if ((OS == "linux" || OS == "mac") &&
 		!StringUtils::isASCII(nativeFolderPath))
 	{
-		tempNativeFolder = std::filesystem::path("/tmp/natives-" + std::to_string(options.auth_info.getUUID().Data1));
+		tempNativeFolder = std::filesystem::path("/tmp/natives-" + std::string(/*options.auth_info.getUUID().begin(), options.auth_info.getUUID().end()*/));
 		nativeFolderPath = tempNativeFolder.string() + "\\" + nativeFolderPath;
 	}
 	configuration["${natives_directory}"] = nativeFolderPath;
 
 	res.addAll(Arguments::parseArguments(version.arguments.getJvm(), configuration));
 
-	Arguments argumentsFromAuthInfo = nullptr /*options.auth_info.getLaunchArguments(options)*/;
+	Arguments argumentsFromAuthInfo; /*options.auth_info.getLaunchArguments(options)*/;
 	if (!argumentsFromAuthInfo.getGame().empty() && !argumentsFromAuthInfo.getJvm().empty())
 		res.addAll(Arguments::parseArguments(argumentsFromAuthInfo.getJvm(), configuration));
 

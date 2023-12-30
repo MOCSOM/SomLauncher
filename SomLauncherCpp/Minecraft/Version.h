@@ -10,7 +10,7 @@
 #pragma comment(lib, "rpcrt4.lib")
 
 #include "Game/Library.h"
-#include "Game/Arguments.h"
+#include "Game/Command/Arguments.h"
 #include "Utils/Validation.h"
 #include "Minecraftus.h"
 
@@ -66,14 +66,7 @@ public:
 	static std::map<std::string, std::string> getConfigurations(const AuthInfo& authInfo, const MinecraftCpp::option::LaunchOptions& options, const std::filesystem::path& repository, const Version& version) {
 		std::map<std::string, std::string> configurations;
 
-		std::string guid = "uuu";
-		RPC_CSTR szUuid = NULL;
-
-		if (UuidToStringA(&authInfo.getUUID(), &szUuid) == RPC_S_OK)
-		{
-			guid = (char*)szUuid;
-			RpcStringFreeA(&szUuid);
-		}
+		/*std::string guid(authInfo.getUUID().begin(), authInfo.getUUID().end());
 
 		configurations["${auth_player_name}"] = authInfo.getUsername();
 		configurations["${auth_session}"] = authInfo.getAccessToken();
@@ -91,7 +84,7 @@ public:
 		configurations["${library_directory}"] = repository.u8string() + "\\" + version.id + "\\" + "libraries";
 		configurations["${classpath_separator}"] = get_classpath_separator();
 		configurations["${primary_jar}"] = repository.u8string() + "\\" + version.id + "\\" + "versions" + "\\" + version.version + "\\" + version.version + ".jar";
-		configurations["${language}"] = "en";
+		configurations["${language}"] = "en";*/
 
 		// Дополнительные параметры, определенные HMCL
 		/*configurations["${libraries_directory}"] = repository.getLibrariesDirectory(version).string();

@@ -1,4 +1,4 @@
-#include "ServerDatConfiguration.h"
+п»ї#include "ServerDatConfiguration.h"
 
 void serversdat::configServersDat(const std::filesystem::path& serversdat_path,
 	const std::string& server_name, const std::string& server_ip_port)
@@ -30,12 +30,12 @@ QByteArray serversdat::utils::getByteArrayFromFile(const std::filesystem::path& 
 void serversdat::utils::editByteArrayServersDat(QByteArray& byte_array,
 	const std::string& server_name, const std::string& server_ip_port)
 {
-	//FIXME: доделать
+	//FIXME: РґРѕРґРµР»Р°С‚СЊ
 	//qInfo() << byte_array.toHex().data();
-	const char ENDING_BYTES[1]{ '00' };
-	const char STARTING_FILE_BYTES[3]{ '0a','00','00' };
-	const char STARTING_DIR_BYTES[3]{ '01','00','06' };
-	const char STARTING_KEYS_BYTES[3]{ '08','00','02' };
+	const char ENDING_BYTES[1]{ 0x00 };
+	const char STARTING_FILE_BYTES[3]{ 0x0A,0x00,0x00 };
+	const char STARTING_DIR_BYTES[3]{ 0x01,0x00,0x06 };
+	const char STARTING_KEYS_BYTES[3]{ 0x08,0x00,0x02 };
 
 	size_t count = -1;
 	for (auto& byte : byte_array)

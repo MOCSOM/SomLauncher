@@ -7,7 +7,7 @@
 #include <string>
 
 #include "Utils/Auth/AuthInfo.h"
-#include "Game/Argument.h"
+#include "Game/Command/Argument.h"
 
 namespace MinecraftCpp
 {
@@ -56,7 +56,7 @@ namespace MinecraftCpp
 			bool useNativeGLFW = 0;
 			bool useNativeOpenAL = 0;
 			bool daemon = 0;
-			AuthInfo auth_info = AuthInfo("debug", UUID(), "none", "none", "none");
+			//AuthInfo auth_info = AuthInfo("debug", boost::uuids::random_generator()(), "none", "none", "none");
 
 		public:
 			LaunchOptions() {}

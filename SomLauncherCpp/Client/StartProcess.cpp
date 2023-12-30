@@ -1,4 +1,4 @@
-#include "StartProcess.h"
+п»ї#include "StartProcess.h"
 
 int client::startProcess(const std::string& args)
 {
@@ -12,7 +12,7 @@ int client::startProcess(const std::string& args)
 	qInfo() << "Programm args setting complete" << std::endl;
 	if (CreateProcessW(NULL, buffer.get(), NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi))
 	{
-		// программа запущена, ждем её завершения
+		// РїСЂРѕРіСЂР°РјРјР° Р·Р°РїСѓС‰РµРЅР°, Р¶РґРµРј РµС‘ Р·Р°РІРµСЂС€РµРЅРёСЏ
 		qInfo() << "Programm has been started" << std::endl;
 		DWORD dwWait = WaitForSingleObject(pi.hProcess, INFINITE);
 		if (dwWait == WAIT_OBJECT_0)
@@ -25,7 +25,7 @@ int client::startProcess(const std::string& args)
 			qInfo() << "Programm has been adadonde" << std::endl;
 			return 1;
 		}
-		//  else ну и может быть другие варианты ожидания
+		//  else РЅСѓ Рё РјРѕР¶РµС‚ Р±С‹С‚СЊ РґСЂСѓРіРёРµ РІР°СЂРёР°РЅС‚С‹ РѕР¶РёРґР°РЅРёСЏ
 
 		CloseHandle(pi.hProcess);
 		CloseHandle(pi.hThread);
@@ -48,8 +48,8 @@ int client::startProcess(const std::vector<std::string>& args)
 	SECURITY_ATTRIBUTES atributes = {};
 	memset(&atributes, 0, sizeof(SECURITY_ATTRIBUTES));
 	atributes.nLength = sizeof(atributes);
-	atributes.lpSecurityDescriptor = NULL; // Дескриптор безопасности по умолчанию.
-	atributes.bInheritHandle = TRUE; // Наследовать данный хэндл.
+	atributes.lpSecurityDescriptor = NULL; // Р”РµСЃРєСЂРёРїС‚РѕСЂ Р±РµР·РѕРїР°СЃРЅРѕСЃС‚Рё РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ.
+	atributes.bInheritHandle = TRUE; // РќР°СЃР»РµРґРѕРІР°С‚СЊ РґР°РЅРЅС‹Р№ С…СЌРЅРґР».
 
 	CreatePipe(&g_hChildStd_OUT_Rd, &g_hChildStd_OUT_Wd, &atributes, 0);
 	SetHandleInformation(g_hChildStd_OUT_Rd, HANDLE_FLAG_INHERIT, 0);
@@ -80,7 +80,7 @@ int client::startProcess(const std::vector<std::string>& args)
 	qInfo() << "Programm args setting complete" << std::endl;
 	if (CreateProcessW(NULL, buffer.get(), &atributes, NULL, TRUE, 0, NULL, NULL, &si, &pi))
 	{
-		// программа запущена, ждем её завершения
+		// РїСЂРѕРіСЂР°РјРјР° Р·Р°РїСѓС‰РµРЅР°, Р¶РґРµРј РµС‘ Р·Р°РІРµСЂС€РµРЅРёСЏ
 		qInfo() << "Programm has been started" << std::endl;
 		DWORD dwWait = WaitForSingleObject(pi.hProcess, INFINITE);
 		if (dwWait == WAIT_OBJECT_0)
@@ -93,7 +93,7 @@ int client::startProcess(const std::vector<std::string>& args)
 			qInfo() << "Programm has been adadonde" << std::endl;
 			return 1;
 		}
-		//  else ну и может быть другие варианты ожидания
+		//  else РЅСѓ Рё РјРѕР¶РµС‚ Р±С‹С‚СЊ РґСЂСѓРіРёРµ РІР°СЂРёР°РЅС‚С‹ РѕР¶РёРґР°РЅРёСЏ
 
 		CloseHandle(pi.hProcess);
 		CloseHandle(pi.hThread);

@@ -1,11 +1,11 @@
 ﻿#ifndef COMMANDBUILDER_H_
 #define COMMANDBUILDER_H_
 
-#include <iostream>
-#include <vector>
-#include <string>
 #include <algorithm>
+#include <iostream>
 #include <regex>
+#include <string>
+#include <vector>
 
 #include "Minecraftus.h"
 #include "Utils/Lang.h"
@@ -13,8 +13,10 @@
 class CommandBuilder
 {
 private:
-	std::regex UNSTABLE_OPTION_PATTERN = std::regex("-XX:(?<key>[a-zA-Z0-9]+)=(?<value>.*)", std::regex_constants::basic);
-	std::regex UNSTABLE_BOOLEAN_OPTION_PATTERN = std::regex("-XX:(?<value>[+\\-])(?<key>[a-zA-Z0-9]+)", std::regex_constants::basic);
+	std::regex UNSTABLE_OPTION_PATTERN = std::regex("-XX:(?<key>[a-zA-Z0-9]+)=(?<value>.*)",
+		std::regex_constants::basic);
+	std::regex UNSTABLE_BOOLEAN_OPTION_PATTERN = std::regex("-XX:(?<value>[+\\-])(?<key>[a-zA-Z0-9]+)",
+		std::regex_constants::basic);
 
 	std::vector<std::string> raw;
 

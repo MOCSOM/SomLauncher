@@ -1,7 +1,26 @@
 #include "LibrariesDownloadInfo.h"
 
-LibrariesDownloadInfo::LibrariesDownloadInfo(const std::nullptr_t& null)
+LibrariesDownloadInfo::LibrariesDownloadInfo(const LibraryDownloadInfo& artifact)
+	: artifact(artifact)
 {
-	this->artifact;
-	this->classifiers = {};
+}
+
+LibrariesDownloadInfo::LibrariesDownloadInfo(const LibraryDownloadInfo& artifact, const std::unordered_map<std::string, LibraryDownloadInfo>& classifiers)
+	: artifact(artifact), classifiers(classifiers)
+{
+}
+
+const LibraryDownloadInfo& LibrariesDownloadInfo::getArtifact() const
+{
+	return this->artifact;
+}
+
+const std::unordered_map<std::string, LibraryDownloadInfo>& LibrariesDownloadInfo::getClassifiers() const
+{
+	return this->classifiers;
+}
+
+bool LibrariesDownloadInfo::isEmpty() const
+{
+	return this->classifiers.empty() && this->artifact.empty();
 }

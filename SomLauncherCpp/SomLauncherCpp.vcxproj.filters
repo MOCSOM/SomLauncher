@@ -101,9 +101,6 @@
     <ClCompile Include="Minecraft\CommandBuilder.cpp">
       <Filter>Minecraft</Filter>
     </ClCompile>
-    <ClCompile Include="Minecraft\Game\LibrariesDownloadInfo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Minecraft\NativesInstaller.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -129,6 +126,39 @@
       <Filter>Minecraft</Filter>
     </ClCompile>
     <ClCompile Include="Encryption\LZMA\LzmaDecompress.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Game\Command\Arguments.cpp">
+      <Filter>Minecraft</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Game\Command\StringArgument.cpp">
+      <Filter>Minecraft</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Game\Command\RuledArgument.cpp">
+      <Filter>Minecraft</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Game\Artifact.cpp">
+      <Filter>Minecraft</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Utils\Auth\AuthInfo.cpp">
+      <Filter>Minecraft</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Game\CompatibilityRule.cpp">
+      <Filter>Minecraft</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Game\DownloadInfo.cpp">
+      <Filter>Minecraft</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Game\ExtractRules.cpp">
+      <Filter>Minecraft</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Game\LibrariesDownloadInfo.cpp">
+      <Filter>Minecraft</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Game\Library.cpp">
+      <Filter>Minecraft</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Game\LibraryDownloadInfo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -199,10 +229,10 @@
     <ClInclude Include="Minecraft\CommandBuilder.h">
       <Filter>Minecraft</Filter>
     </ClInclude>
-    <ClInclude Include="Minecraft\Game\Arguments.h">
+    <ClInclude Include="Minecraft\Game\Command\Arguments.h">
       <Filter>Minecraft</Filter>
     </ClInclude>
-    <ClInclude Include="Minecraft\Game\Argument.h">
+    <ClInclude Include="Minecraft\Game\Command\Argument.h">
       <Filter>Minecraft</Filter>
     </ClInclude>
     <ClInclude Include="Minecraft\Game\CompatibilityRule.h">
@@ -214,10 +244,10 @@
     <ClInclude Include="Minecraft\Utils\Platform\OperatingSystem.h">
       <Filter>Minecraft</Filter>
     </ClInclude>
-    <ClInclude Include="Minecraft\Game\RuledArgument.h">
+    <ClInclude Include="Minecraft\Game\Command\RuledArgument.h">
       <Filter>Minecraft</Filter>
     </ClInclude>
-    <ClInclude Include="Minecraft\Game\StringArgument.h">
+    <ClInclude Include="Minecraft\Game\Command\StringArgument.h">
       <Filter>Minecraft</Filter>
     </ClInclude>
     <ClInclude Include="Minecraft\Utils\Lang.h">
@@ -264,6 +294,9 @@
     </ClInclude>
     <ClInclude Include="Encryption\LZMA\LzmaDecompress.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\PlatformDefines.h">
+      <Filter>Minecraft</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
