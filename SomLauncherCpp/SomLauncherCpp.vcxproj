@@ -115,25 +115,25 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\alkor\source\github\vcpkg\installed\x64-windows\include;C:\Program Files\MySQL\MySQL Connector C++ 8.2\include\jdbc;C:\Users\alkor\source\libs\dlls\$(PlatformTarget)\$(Configuration)\include;C:\Program Files\MySQL\MySQL Connector C++ 8.2\include\jdbc;C:\Users\alkor\source\libs\dlls\$(PlatformTarget)\$(Configuration)\include;C:\Program Files\PostgreSQL\16\include;C:\boost\boost_1_82_0;$(Qt_INCLUDEPATH_)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProgramFiles)\MySQL\MySQL Connector C++ 8.2\include\jdbc;$(VcpkgRoot)\installed\x64-windows\include;$(Qt_INCLUDEPATH_)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>$(Qt_DEFINES_);%(PreprocessorDefinitions);STATIC_CONCPP;CURL_STATICLIB</PreprocessorDefinitions>
       <LanguageStandard>$(Qt_STDCPP_)</LanguageStandard>
     </ClCompile>
     <Link>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
-      <AdditionalLibraryDirectories>C:\Users\alkor\source\github\vcpkg\installed\x64-windows\debug\lib;C:\Users\alkor\source\libs\dlls\$(PlatformTarget)\$(Configuration)\lib;%(AdditionalLibraryDirectories);C:\Program Files\MySQL\MySQL Connector C++ 8.2\lib64\vs14\debug</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(VcpkgRoot)\installed\x64-windows\debug\lib;C:\Program Files\MySQL\MySQL Connector C++ 8.2\lib64\vs14\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>%(AdditionalDependencies);$(Qt_LIBS_);mysqlcppconn-static.lib;lzma.lib;libcrypto.lib;libssl.lib;Urlmon.lib;User32.lib;libcurl-d.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Link />
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\alkor\source\github\vcpkg\installed\x64-windows\include;C:\Program Files\MySQL\MySQL Connector C++ 8.2\include\jdbc;C:\Users\alkor\source\libs\dlls\$(PlatformTarget)\$(Configuration)\include;C:\Program Files\PostgreSQL\16\include;C:\boost\boost_1_82_0;$(Qt_INCLUDEPATH_)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProgramFiles)\MySQL\MySQL Connector C++ 8.2\include\jdbc;$(VcpkgRoot)\installed\x64-windows\include;$(Qt_INCLUDEPATH_)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>$(Qt_DEFINES_);%(PreprocessorDefinitions);STATIC_CONCPP;CURL_STATICLIB</PreprocessorDefinitions>
       <LanguageStandard>$(Qt_STDCPP_)</LanguageStandard>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>C:\Users\alkor\source\github\vcpkg\installed\x64-windows\lib;C:\Users\alkor\source\libs\dlls\$(PlatformTarget)\$(Configuration)\lib;%(AdditionalLibraryDirectories);C:\Program Files\MySQL\MySQL Connector C++ 8.2\lib64\vs14;C:\Program Files (x86)\PostgreSQL\10\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(VcpkgRoot)\installed\x64-windows\lib;C:\Program Files\MySQL\MySQL Connector C++ 8.2\lib64\vs14\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>%(AdditionalDependencies);$(Qt_LIBS_);mysqlcppconn-static.lib;lzma.lib;libcrypto.lib;libssl.lib;Urlmon.lib;User32.lib;libcurl.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
