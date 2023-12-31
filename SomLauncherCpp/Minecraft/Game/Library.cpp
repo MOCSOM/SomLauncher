@@ -74,7 +74,7 @@ bool Library::isNative() const
 
 const LibraryDownloadInfo& Library::getRawDownloadInfo()
 {
-	if (!this->downloads.isEmpty())
+	if (!this->downloads.empty())
 	{
 		if (isNative())
 		{

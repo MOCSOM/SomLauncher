@@ -19,3 +19,7 @@ bool LibraryDownloadInfo::empty() const
 {
 	return this->path.empty();
 }
+
+void LibraryDownloadInfo::validate()
+{
+}

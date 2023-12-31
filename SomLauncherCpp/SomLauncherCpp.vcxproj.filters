@@ -128,19 +128,16 @@
     <ClCompile Include="Encryption\LZMA\LzmaDecompress.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Minecraft\Game\Command\Arguments.cpp">
+    <ClCompile Include="Minecraft\Game\LibrariesDownloadInfo.cpp">
       <Filter>Minecraft</Filter>
     </ClCompile>
-    <ClCompile Include="Minecraft\Game\Command\StringArgument.cpp">
+    <ClCompile Include="Minecraft\Game\LibraryDownloadInfo.cpp">
       <Filter>Minecraft</Filter>
     </ClCompile>
-    <ClCompile Include="Minecraft\Game\Command\RuledArgument.cpp">
+    <ClCompile Include="Minecraft\Game\Library.cpp">
       <Filter>Minecraft</Filter>
     </ClCompile>
     <ClCompile Include="Minecraft\Game\Artifact.cpp">
-      <Filter>Minecraft</Filter>
-    </ClCompile>
-    <ClCompile Include="Minecraft\Utils\Auth\AuthInfo.cpp">
       <Filter>Minecraft</Filter>
     </ClCompile>
     <ClCompile Include="Minecraft\Game\CompatibilityRule.cpp">
@@ -152,14 +149,41 @@
     <ClCompile Include="Minecraft\Game\ExtractRules.cpp">
       <Filter>Minecraft</Filter>
     </ClCompile>
-    <ClCompile Include="Minecraft\Game\LibrariesDownloadInfo.cpp">
+    <ClCompile Include="Minecraft\Game\Command\Arguments.cpp">
       <Filter>Minecraft</Filter>
     </ClCompile>
-    <ClCompile Include="Minecraft\Game\Library.cpp">
+    <ClCompile Include="Minecraft\Game\Command\RuledArgument.cpp">
       <Filter>Minecraft</Filter>
     </ClCompile>
-    <ClCompile Include="Minecraft\Game\LibraryDownloadInfo.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Minecraft\Game\Command\StringArgument.cpp">
+      <Filter>Minecraft</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Utils\Auth\AuthInfo.cpp">
+      <Filter>Minecraft</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Game\OSRestriction.cpp">
+      <Filter>Minecraft</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Utils\Validation.cpp">
+      <Filter>Minecraft</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Game\LoggingInfo.cpp">
+      <Filter>Minecraft</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Game\IdDownloadInfo.cpp">
+      <Filter>Minecraft</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Game\ReleaseType.cpp">
+      <Filter>Minecraft</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Version.cpp">
+      <Filter>Minecraft</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Game\GameJavaVersion.cpp">
+      <Filter>Minecraft</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Game\AssetIndexInfo.cpp">
+      <Filter>Minecraft</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -229,12 +253,6 @@
     <ClInclude Include="Minecraft\CommandBuilder.h">
       <Filter>Minecraft</Filter>
     </ClInclude>
-    <ClInclude Include="Minecraft\Game\Command\Arguments.h">
-      <Filter>Minecraft</Filter>
-    </ClInclude>
-    <ClInclude Include="Minecraft\Game\Command\Argument.h">
-      <Filter>Minecraft</Filter>
-    </ClInclude>
     <ClInclude Include="Minecraft\Game\CompatibilityRule.h">
       <Filter>Minecraft</Filter>
     </ClInclude>
@@ -242,12 +260,6 @@
       <Filter>Minecraft</Filter>
     </ClInclude>
     <ClInclude Include="Minecraft\Utils\Platform\OperatingSystem.h">
-      <Filter>Minecraft</Filter>
-    </ClInclude>
-    <ClInclude Include="Minecraft\Game\Command\RuledArgument.h">
-      <Filter>Minecraft</Filter>
-    </ClInclude>
-    <ClInclude Include="Minecraft\Game\Command\StringArgument.h">
       <Filter>Minecraft</Filter>
     </ClInclude>
     <ClInclude Include="Minecraft\Utils\Lang.h">
@@ -295,7 +307,52 @@
     <ClInclude Include="Encryption\LZMA\LzmaDecompress.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Minecraft\PlatformDefines.h">
+    <ClInclude Include="Minecraft\Game\Argument.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Game\Arguments.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Game\RuledArgument.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Game\StringArgument.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Game\Command\Argument.h">
+      <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Game\Command\Arguments.h">
+      <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Game\Command\RuledArgument.h">
+      <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Game\Command\StringArgument.h">
+      <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Game\DownloadType.h">
+      <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Game\LoggingInfo.h">
+      <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Game\IdDownloadInfo.h">
+      <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Game\ReleaseType.h">
+      <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Game\GameJavaVersion.h">
+      <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Game\AssetIndexInfo.h">
+      <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Utils\Constants.h">
+      <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Game\VersionProvider.h">
       <Filter>Minecraft</Filter>
     </ClInclude>
   </ItemGroup>

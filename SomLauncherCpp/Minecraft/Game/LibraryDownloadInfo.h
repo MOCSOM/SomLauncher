@@ -21,6 +21,10 @@ public:
 
 public:
 	bool empty() const;
+
+public:
+	// Унаследовано через DownloadInfo
+	void validate() override;
 };
 
 #endif // !LIBRARYDOWNLOADINFO_H_

@@ -41,3 +41,12 @@ bool DownloadInfo::validateChecksum(const std::string& file_path, bool default_v
 
 	return hash == this->sha1;
 }
+
+bool DownloadInfo::empty() const
+{
+	return this->sha1.empty() && this->size == 0 && this->url.empty();
+}
+
+void DownloadInfo::validate()
+{
+}

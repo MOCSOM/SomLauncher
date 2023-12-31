@@ -23,7 +23,7 @@ public:
 	const std::unordered_map<std::string, LibraryDownloadInfo>& getClassifiers() const;
 
 public:
-	bool isEmpty() const;
+	bool empty() const;
 };
 
 #endif // !LIBRARIESDOWNLOADINFO_H_

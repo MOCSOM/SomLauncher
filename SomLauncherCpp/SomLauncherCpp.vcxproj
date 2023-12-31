@@ -122,7 +122,7 @@
     <Link>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <AdditionalLibraryDirectories>$(VcpkgRoot)\installed\x64-windows\debug\lib;C:\Program Files\MySQL\MySQL Connector C++ 8.2\lib64\vs14\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>%(AdditionalDependencies);$(Qt_LIBS_);mysqlcppconn-static.lib;lzma.lib;libcrypto.lib;libssl.lib;Urlmon.lib;User32.lib;libcurl-d.lib</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies);$(Qt_LIBS_);mysqlcppconn-static.lib;lzma.lib;libcrypto.lib;libssl.lib;Urlmon.lib;User32.lib;libcurl-d.lib;rpcrt4.lib;boost_*-vc140-mt-gd.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -134,7 +134,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(VcpkgRoot)\installed\x64-windows\lib;C:\Program Files\MySQL\MySQL Connector C++ 8.2\lib64\vs14\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>%(AdditionalDependencies);$(Qt_LIBS_);mysqlcppconn-static.lib;lzma.lib;libcrypto.lib;libssl.lib;Urlmon.lib;User32.lib;libcurl.lib</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies);$(Qt_LIBS_);mysqlcppconn-static.lib;lzma.lib;libcrypto.lib;libssl.lib;Urlmon.lib;User32.lib;libcurl.lib;boost_*-vc140-mt.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
@@ -205,11 +205,29 @@
     <ClCompile Include="Form\TopSlideFrameWidget.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Minecraft\CommandBuilder.cpp" />
+    <ClCompile Include="Minecraft\Game\Artifact.cpp" />
+    <ClCompile Include="Minecraft\Game\AssetIndexInfo.cpp" />
+    <ClCompile Include="Minecraft\Game\Command\Arguments.cpp" />
+    <ClCompile Include="Minecraft\Game\Command\RuledArgument.cpp" />
+    <ClCompile Include="Minecraft\Game\Command\StringArgument.cpp" />
+    <ClCompile Include="Minecraft\Game\CompatibilityRule.cpp" />
+    <ClCompile Include="Minecraft\Game\DownloadInfo.cpp" />
+    <ClCompile Include="Minecraft\Game\ExtractRules.cpp" />
+    <ClCompile Include="Minecraft\Game\GameJavaVersion.cpp" />
+    <ClCompile Include="Minecraft\Game\IdDownloadInfo.cpp" />
     <ClCompile Include="Minecraft\Game\LibrariesDownloadInfo.cpp" />
+    <ClCompile Include="Minecraft\Game\Library.cpp" />
+    <ClCompile Include="Minecraft\Game\LibraryDownloadInfo.cpp" />
+    <ClCompile Include="Minecraft\Game\LoggingInfo.cpp" />
+    <ClCompile Include="Minecraft\Game\OSRestriction.cpp" />
+    <ClCompile Include="Minecraft\Game\ReleaseType.cpp" />
     <ClCompile Include="Minecraft\Minecraftus.cpp" />
     <ClCompile Include="Minecraft\Mods.cpp" />
     <ClCompile Include="Minecraft\NativesInstaller.cpp" />
     <ClCompile Include="Minecraft\Servers\ServerDatConfiguration.cpp" />
+    <ClCompile Include="Minecraft\Utils\Auth\AuthInfo.cpp" />
+    <ClCompile Include="Minecraft\Utils\Validation.cpp" />
+    <ClCompile Include="Minecraft\Version.cpp" />
     <ClCompile Include="Moc\Logger\MocIOStream.cpp" />
     <ClCompile Include="QObjects\ClickableLabel.cpp" />
     <ClCompile Include="QObjects\HoveredFrame.cpp" />
@@ -244,20 +262,32 @@
     <ClInclude Include="Minecraft\Game\Argument.h" />
     <ClInclude Include="Minecraft\Game\Arguments.h" />
     <ClInclude Include="Minecraft\Game\Artifact.h" />
+    <ClInclude Include="Minecraft\Game\AssetIndexInfo.h" />
+    <ClInclude Include="Minecraft\Game\Command\Argument.h" />
+    <ClInclude Include="Minecraft\Game\Command\Arguments.h" />
+    <ClInclude Include="Minecraft\Game\Command\RuledArgument.h" />
+    <ClInclude Include="Minecraft\Game\Command\StringArgument.h" />
     <ClInclude Include="Minecraft\Game\CompatibilityRule.h" />
     <ClInclude Include="Minecraft\Game\DownloadInfo.h" />
+    <ClInclude Include="Minecraft\Game\DownloadType.h" />
     <ClInclude Include="Minecraft\Game\ExtractRules.h" />
+    <ClInclude Include="Minecraft\Game\GameJavaVersion.h" />
+    <ClInclude Include="Minecraft\Game\IdDownloadInfo.h" />
     <ClInclude Include="Minecraft\Game\LibrariesDownloadInfo.h" />
     <ClInclude Include="Minecraft\Game\Library.h" />
     <ClInclude Include="Minecraft\Game\LibraryDownloadInfo.h" />
+    <ClInclude Include="Minecraft\Game\LoggingInfo.h" />
     <ClInclude Include="Minecraft\Game\OSRestriction.h" />
+    <ClInclude Include="Minecraft\Game\ReleaseType.h" />
     <ClInclude Include="Minecraft\Game\RuledArgument.h" />
     <ClInclude Include="Minecraft\Game\StringArgument.h" />
+    <ClInclude Include="Minecraft\Game\VersionProvider.h" />
     <ClInclude Include="Minecraft\MinecraftOptions.h" />
     <ClInclude Include="Minecraft\Mods.h" />
     <ClInclude Include="Minecraft\NativesInstaller.h" />
     <ClInclude Include="Minecraft\Servers\ServerDatConfiguration.h" />
     <ClInclude Include="Minecraft\Utils\Auth\AuthInfo.h" />
+    <ClInclude Include="Minecraft\Utils\Constants.h" />
     <ClInclude Include="Minecraft\Utils\JavaVersion.h" />
     <ClInclude Include="Minecraft\Utils\Lang.h" />
     <ClInclude Include="Minecraft\Utils\Platform\OperatingSystem.h" />

@@ -20,6 +20,7 @@ private:
 public:
 	DownloadInfo() = default;
 	DownloadInfo(const std::string& url, const std::string& sha1 = "", int size = 0);
+	~DownloadInfo() = default;
 
 public:
 	const std::string& getUrl() const;
@@ -28,6 +29,11 @@ public:
 
 public:
 	bool validateChecksum(const std::string& file_path, bool default_value) const;
+	bool empty() const;
+
+public:
+	// Унаследовано через Validation
+	void validate() override;
 };
 
 #endif // !DOWNLOADINFO_H_

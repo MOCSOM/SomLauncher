@@ -4,28 +4,26 @@
 #include <exception>
 #include <string>
 
-class JsonParseException : public std::exception {
-public:
-	JsonParseException(const std::string& message) : message(message) {}
-	const char* what() const noexcept override {
-		return message.c_str();
-	}
-
+class JsonParseException : public std::exception
+{
 private:
 	std::string message;
+
+public:
+	JsonParseException() = default;
+	JsonParseException(const std::string& message);
+	~JsonParseException() = default;
+
+public:
+	const char* what() const noexcept override;
 };
 
-class Validation {
+class Validation
+{
 public:
-	virtual void validate() {
-		// Empty default implementation, can be overridden by subclasses.
-	}
+	virtual void validate() = 0;
 
-	static void requireNonNull(const void* object, const std::string& message) {
-		if (object == nullptr) {
-			throw JsonParseException(message);
-		}
-	}
+	static void requireNonNull(const void* object, const std::string& message);
 };
 
 #endif // !VALIDATION_H_

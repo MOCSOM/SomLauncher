@@ -164,7 +164,7 @@ namespace Lang
 	}*/
 
 	template <typename T>
-	T merge(const T& a, const T& b, const std::function<T(const T&, const T&)>& operator_function);
+	T merge(const T& a, const T& b, const std::function<T>& operator_function);
 	template <typename T>
 	std::vector<T> merge(const std::vector<T>& a, const std::vector<T>& b);
 
@@ -276,7 +276,7 @@ namespace Lang
 }
 
 template<typename T>
-T Lang::merge(const T& a, const T& b, const std::function<T(const T&, const T&)>& operator_function)
+T Lang::merge(const T& a, const T& b, const std::function<T>& operator_function)
 {
 	if (a == nullptr)
 		return b;

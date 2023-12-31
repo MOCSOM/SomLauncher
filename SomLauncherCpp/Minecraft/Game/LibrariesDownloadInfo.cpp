@@ -20,7 +20,7 @@ const std::unordered_map<std::string, LibraryDownloadInfo>& LibrariesDownloadInf
 	return this->classifiers;
 }
 
-bool LibrariesDownloadInfo::isEmpty() const
+bool LibrariesDownloadInfo::empty() const
 {
 	return this->classifiers.empty() && this->artifact.empty();
 }
