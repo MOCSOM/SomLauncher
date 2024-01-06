@@ -226,6 +226,7 @@
     <ClCompile Include="Minecraft\NativesInstaller.cpp" />
     <ClCompile Include="Minecraft\Servers\ServerDatConfiguration.cpp" />
     <ClCompile Include="Minecraft\Utils\Auth\AuthInfo.cpp" />
+    <ClCompile Include="Minecraft\Utils\Platform\OperatingSystem.cpp" />
     <ClCompile Include="Minecraft\Utils\Validation.cpp" />
     <ClCompile Include="Minecraft\Version.cpp" />
     <ClCompile Include="Moc\Logger\MocIOStream.cpp" />
@@ -259,8 +260,6 @@
     <QtMoc Include="Form\TopSlideFrameWidget.h" />
     <ClInclude Include="Hashes\sha1.h" />
     <ClInclude Include="Minecraft\CommandBuilder.h" />
-    <ClInclude Include="Minecraft\Game\Argument.h" />
-    <ClInclude Include="Minecraft\Game\Arguments.h" />
     <ClInclude Include="Minecraft\Game\Artifact.h" />
     <ClInclude Include="Minecraft\Game\AssetIndexInfo.h" />
     <ClInclude Include="Minecraft\Game\Command\Argument.h" />
@@ -280,8 +279,8 @@
     <ClInclude Include="Minecraft\Game\OSRestriction.h" />
     <ClInclude Include="Minecraft\Game\ReleaseType.h" />
     <ClInclude Include="Minecraft\Game\RuledArgument.h" />
-    <ClInclude Include="Minecraft\Game\StringArgument.h" />
     <ClInclude Include="Minecraft\Game\VersionProvider.h" />
+    <ClInclude Include="Minecraft\Launch\DefaultLaunch.h" />
     <ClInclude Include="Minecraft\MinecraftOptions.h" />
     <ClInclude Include="Minecraft\Mods.h" />
     <ClInclude Include="Minecraft\NativesInstaller.h" />
@@ -291,6 +290,7 @@
     <ClInclude Include="Minecraft\Utils\JavaVersion.h" />
     <ClInclude Include="Minecraft\Utils\Lang.h" />
     <ClInclude Include="Minecraft\Utils\Platform\OperatingSystem.h" />
+    <ClInclude Include="Minecraft\Utils\Platform\Platform.h" />
     <ClInclude Include="Minecraft\Utils\StringUtils.h" />
     <ClInclude Include="Minecraft\Utils\Validation.h" />
     <ClInclude Include="Minecraft\Version.h" />

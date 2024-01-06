@@ -41,7 +41,7 @@ const std::string OS "linux"
 #if defined(_WIN64) || defined(__x86_64__) || defined(__ppc64__)
 const std::string ARCH = "x64";
 #else
-const std::string ARCH "x86"
+const std::string ARCH = "x86";
 #endif
 
 #if defined(_WIN32) || defined(_WIN64)

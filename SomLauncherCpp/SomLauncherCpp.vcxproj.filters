@@ -185,6 +185,9 @@
     <ClCompile Include="Minecraft\Game\AssetIndexInfo.cpp">
       <Filter>Minecraft</Filter>
     </ClCompile>
+    <ClCompile Include="Minecraft\Utils\Platform\OperatingSystem.cpp">
+      <Filter>Minecraft</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -236,9 +239,6 @@
       <Filter>Custom Qt Files</Filter>
     </ClInclude>
     <ClInclude Include="Callbacks\CallbackDict.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Minecraft\Utils\StringUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Minecraft\Utils\JavaVersion.h">
@@ -307,16 +307,7 @@
     <ClInclude Include="Encryption\LZMA\LzmaDecompress.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Minecraft\Game\Argument.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Minecraft\Game\Arguments.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Minecraft\Game\RuledArgument.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Minecraft\Game\StringArgument.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Minecraft\Game\Command\Argument.h">
@@ -353,6 +344,15 @@
       <Filter>Minecraft</Filter>
     </ClInclude>
     <ClInclude Include="Minecraft\Game\VersionProvider.h">
+      <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Utils\Platform\Platform.h">
+      <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Utils\StringUtils.h">
+      <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Launch\DefaultLaunch.h">
       <Filter>Minecraft</Filter>
     </ClInclude>
   </ItemGroup>
