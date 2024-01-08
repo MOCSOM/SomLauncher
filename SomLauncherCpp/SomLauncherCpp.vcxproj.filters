@@ -27,6 +27,15 @@
     <Filter Include="Minecraft">
       <UniqueIdentifier>{c0a20697-8c72-4604-b121-5dcd320c5596}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Minecraft\task">
+      <UniqueIdentifier>{f95d63e6-2adf-4da0-b4e7-e20f09bf7977}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Minecraft\launch">
+      <UniqueIdentifier>{774e0126-9219-494d-bdb8-c4d3524aad66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Minecraft\settings">
+      <UniqueIdentifier>{4b40edda-f1b2-4005-a650-7b998c6867e4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -39,9 +48,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Databases\SQLBased.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Minecraft\Mods.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="basic_xml.cpp">
@@ -188,6 +194,33 @@
     <ClCompile Include="Minecraft\Utils\Platform\OperatingSystem.cpp">
       <Filter>Minecraft</Filter>
     </ClCompile>
+    <ClCompile Include="Minecraft\Mods.cpp">
+      <Filter>Minecraft</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Launch\Task\Task.cpp">
+      <Filter>Minecraft\task</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Launch\DefaultLaunch.cpp">
+      <Filter>Minecraft\launch</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Settings\Setting.cpp">
+      <Filter>Minecraft\settings</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Settings\PassthroughSetting.cpp">
+      <Filter>Minecraft\settings</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Settings\OverrideSetting.cpp">
+      <Filter>Minecraft\settings</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Settings\SettingsObject.cpp">
+      <Filter>Minecraft\settings</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Settings\INIFile.cpp">
+      <Filter>Minecraft\settings</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Settings\INISettingsObject.cpp">
+      <Filter>Minecraft\settings</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -197,9 +230,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Databases\SQLBased.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Minecraft\Mods.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="basic_xml.h">
@@ -307,9 +337,6 @@
     <ClInclude Include="Encryption\LZMA\LzmaDecompress.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Minecraft\Game\RuledArgument.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Minecraft\Game\Command\Argument.h">
       <Filter>Minecraft</Filter>
     </ClInclude>
@@ -352,8 +379,14 @@
     <ClInclude Include="Minecraft\Utils\StringUtils.h">
       <Filter>Minecraft</Filter>
     </ClInclude>
-    <ClInclude Include="Minecraft\Launch\DefaultLaunch.h">
+    <ClInclude Include="Minecraft\Mods.h">
       <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Launch\DefaultLaunch.h">
+      <Filter>Minecraft\launch</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Settings\INIFile.h">
+      <Filter>Minecraft\settings</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -404,6 +437,30 @@
     </QtMoc>
     <QtMoc Include="Form\TopSlideFrameWidget.h">
       <Filter>Custom Qt Files</Filter>
+    </QtMoc>
+    <QtMoc Include="Minecraft\Launch\Task\Task.h">
+      <Filter>Minecraft\task</Filter>
+    </QtMoc>
+    <QtMoc Include="Minecraft\Launch\LaunchTask.h">
+      <Filter>Minecraft\launch</Filter>
+    </QtMoc>
+    <QtMoc Include="Minecraft\BaseInstance.h">
+      <Filter>Minecraft</Filter>
+    </QtMoc>
+    <QtMoc Include="Minecraft\Settings\SettingsObject.h">
+      <Filter>Minecraft\settings</Filter>
+    </QtMoc>
+    <QtMoc Include="Minecraft\Settings\Setting.h">
+      <Filter>Minecraft\settings</Filter>
+    </QtMoc>
+    <QtMoc Include="Minecraft\Settings\OverrideSetting.h">
+      <Filter>Minecraft\settings</Filter>
+    </QtMoc>
+    <QtMoc Include="Minecraft\Settings\PassthroughSetting.h">
+      <Filter>Minecraft\settings</Filter>
+    </QtMoc>
+    <QtMoc Include="Minecraft\Settings\INISettingsObject.h">
+      <Filter>Minecraft\settings</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
