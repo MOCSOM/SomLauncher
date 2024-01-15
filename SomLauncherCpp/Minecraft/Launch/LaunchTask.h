@@ -6,10 +6,10 @@
 #include <memory>
 
 #include "LogModel.h"
-#include "BaseInstance.h"
-#include "MessageLevel.h"
-#include "LoggedProcess.h"
-#include "LaunchStep.h"
+#include "../BaseInstance.h"
+#include "../MessageLevel.h"
+#include "../LoggedProcess.h"
+#include "../Launch/LaunchStep.h"
 #include "Task/Task.h"
 
 class LaunchTask : public Task
@@ -30,7 +30,7 @@ public:
 protected: /* data */
 	InstancePtr m_instance;
 	std::shared_ptr<LogModel> m_logModel;
-	QList <std::shared_ptr<LaunchStep>> m_steps;
+	QList<std::shared_ptr<LaunchStep>> m_steps;
 	QMap<QString, QString> m_censorFilter;
 	int currentStep = -1;
 	State state = State::NotStarted;
@@ -41,27 +41,19 @@ protected:
 	void init();
 
 public: /* methods */
+	virtual ~LaunchTask() = default;
+
 	static std::shared_ptr<LaunchTask> create(InstancePtr inst);
-	virtual ~LaunchTask() {};
 
 	void appendStep(std::shared_ptr<LaunchStep> step);
 	void prependStep(std::shared_ptr<LaunchStep> step);
 	void setCensorFilter(QMap<QString, QString> filter);
 
-	InstancePtr instance()
-	{
-		return m_instance;
-	}
+	InstancePtr instance();
 
-	void setPid(qint64 pid)
-	{
-		m_pid = pid;
-	}
+	void setPid(qint64 pid);
 
-	qint64 pid()
-	{
-		return m_pid;
-	}
+	qint64 pid() const;
 
 	/**
 	 * @brief prepare the process for launch (for multi-stage launch)

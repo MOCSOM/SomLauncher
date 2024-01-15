@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.Windows.CppWinRT.2.0.220531.1\build\native\Microsoft.Windows.CppWinRT.props" Condition="Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.220531.1\build\native\Microsoft.Windows.CppWinRT.props')" />
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
       <Configuration>Debug</Configuration>
@@ -115,7 +116,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProgramFiles)\MySQL\MySQL Connector C++ 8.2\include\jdbc;$(VcpkgRoot)\installed\x64-windows\include;$(Qt_INCLUDEPATH_)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProgramFiles)\MySQL\MySQL Connector C++ 8.2\include\jdbc;$(VcpkgRoot)\installed\x64-windows\include;$(SolutionDir)\libraries\systeminfo\include;$(SolutionDir)\libraries\katabasis\include;$(Qt_INCLUDEPATH_)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>$(Qt_DEFINES_);%(PreprocessorDefinitions);STATIC_CONCPP;CURL_STATICLIB</PreprocessorDefinitions>
       <LanguageStandard>$(Qt_STDCPP_)</LanguageStandard>
     </ClCompile>
@@ -186,6 +187,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\libraries\katabasis\src\DeviceFlow.cpp" />
+    <ClCompile Include="..\libraries\katabasis\src\JsonResponse.cpp" />
+    <ClCompile Include="..\libraries\katabasis\src\PollServer.cpp" />
+    <ClCompile Include="..\libraries\katabasis\src\Reply.cpp" />
+    <ClCompile Include="..\libraries\systeminfo\src\distroutils.cpp" />
+    <ClCompile Include="..\libraries\systeminfo\src\ntstatus\NtStatusNames.cpp" />
+    <ClCompile Include="..\libraries\systeminfo\src\sys_apple.cpp" />
+    <ClCompile Include="..\libraries\systeminfo\src\sys_test.cpp" />
+    <ClCompile Include="..\libraries\systeminfo\src\sys_unix.cpp" />
+    <ClCompile Include="..\libraries\systeminfo\src\sys_win32.cpp" />
     <ClCompile Include="Archives\Archives.cpp" />
     <ClCompile Include="basic_xml.cpp" />
     <ClCompile Include="Callbacks\CallbackDict.cpp" />
@@ -204,7 +215,23 @@
     <ClCompile Include="Form\SomLauncherMainWindow.cpp" />
     <ClCompile Include="Form\TopSlideFrameWidget.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Minecraft\Application.cpp" />
+    <ClCompile Include="Minecraft\Auth\AccountData.cpp" />
+    <ClCompile Include="Minecraft\Auth\AccountTask.cpp" />
+    <ClCompile Include="Minecraft\Auth\AuthSession.cpp" />
+    <ClCompile Include="Minecraft\Auth\AuthStep.cpp" />
+    <ClCompile Include="Minecraft\Auth\Flows\AuthFlow.cpp" />
+    <ClCompile Include="Minecraft\Auth\Flows\Mojang.cpp" />
+    <ClCompile Include="Minecraft\Auth\Flows\MSA.cpp" />
+    <ClCompile Include="Minecraft\Auth\MinecraftAccount.cpp" />
+    <ClCompile Include="Minecraft\Auth\Steps\MSAStep.cpp" />
+    <ClCompile Include="Minecraft\Auth\Yggdrasil.cpp" />
+    <ClCompile Include="Minecraft\BaseInstance.cpp" />
+    <ClCompile Include="Minecraft\BaseVersion.cpp" />
+    <ClCompile Include="Minecraft\BaseVersionList.cpp" />
+    <ClCompile Include="Minecraft\BuildConfig\BuildConfig.cpp" />
     <ClCompile Include="Minecraft\CommandBuilder.cpp" />
+    <ClCompile Include="Minecraft\Commandline.cpp" />
     <ClCompile Include="Minecraft\Game\Artifact.cpp" />
     <ClCompile Include="Minecraft\Game\AssetIndexInfo.cpp" />
     <ClCompile Include="Minecraft\Game\Command\Arguments.cpp" />
@@ -221,11 +248,37 @@
     <ClCompile Include="Minecraft\Game\LoggingInfo.cpp" />
     <ClCompile Include="Minecraft\Game\OSRestriction.cpp" />
     <ClCompile Include="Minecraft\Game\ReleaseType.cpp" />
+    <ClCompile Include="Minecraft\JavaCommon.cpp" />
+    <ClCompile Include="Minecraft\Java\JavaChecker.cpp" />
+    <ClCompile Include="Minecraft\Java\JavaCheckerJob.cpp" />
+    <ClCompile Include="Minecraft\Java\JavaInstall.cpp" />
+    <ClCompile Include="Minecraft\Java\JavaInstallList.cpp" />
+    <ClCompile Include="Minecraft\Java\JavaUtils.cpp" />
+    <ClCompile Include="Minecraft\Java\JavaVersion.cpp" />
+    <ClCompile Include="Minecraft\LaunchController.cpp" />
     <ClCompile Include="Minecraft\Launch\DefaultLaunch.cpp" />
+    <ClCompile Include="Minecraft\Launch\LaunchStep.cpp" />
+    <ClCompile Include="Minecraft\Launch\LaunchTask.cpp" />
+    <ClCompile Include="Minecraft\Launch\LogModel.cpp" />
+    <ClCompile Include="Minecraft\Launch\QuickPlayTarget.cpp" />
+    <ClCompile Include="Minecraft\Launch\Steps\TextPrint.cpp" />
     <ClCompile Include="Minecraft\Launch\Task\Task.cpp" />
+    <ClCompile Include="Minecraft\LoggedProcess.cpp" />
+    <ClCompile Include="Minecraft\MessageLevel.cpp" />
     <ClCompile Include="Minecraft\Minecraftus.cpp" />
+    <ClCompile Include="Minecraft\MMCStrings.cpp" />
     <ClCompile Include="Minecraft\Mods.cpp" />
     <ClCompile Include="Minecraft\NativesInstaller.cpp" />
+    <ClCompile Include="Minecraft\Net\ByteArraySink.cpp" />
+    <ClCompile Include="Minecraft\Net\ChecksumValidator.cpp" />
+    <ClCompile Include="Minecraft\Net\Download.cpp" />
+    <ClCompile Include="Minecraft\Net\FileSink.cpp" />
+    <ClCompile Include="Minecraft\Net\HttpMetaCache.cpp" />
+    <ClCompile Include="Minecraft\Net\MetaCacheSink.cpp" />
+    <ClCompile Include="Minecraft\Net\NetAction.cpp" />
+    <ClCompile Include="Minecraft\Net\NetJob.cpp" />
+    <ClCompile Include="Minecraft\Net\Sink.cpp" />
+    <ClCompile Include="Minecraft\ParseUtils.cpp" />
     <ClCompile Include="Minecraft\Servers\ServerDatConfiguration.cpp" />
     <ClCompile Include="Minecraft\Settings\INIFile.cpp" />
     <ClCompile Include="Minecraft\Settings\INISettingsObject.cpp" />
@@ -233,10 +286,17 @@
     <ClCompile Include="Minecraft\Settings\PassthroughSetting.cpp" />
     <ClCompile Include="Minecraft\Settings\Setting.cpp" />
     <ClCompile Include="Minecraft\Settings\SettingsObject.cpp" />
+    <ClCompile Include="Minecraft\Tools\BaseExternalTool.cpp" />
+    <ClCompile Include="Minecraft\Tools\BaseProfiler.cpp" />
+    <ClCompile Include="Minecraft\Ui\Dialogs\CustomMessageBox.cpp" />
+    <ClCompile Include="Minecraft\Ui\Dialogs\ProgressDialog.cpp" />
+    <ClCompile Include="Minecraft\Updater\GoUpdate.cpp" />
+    <ClCompile Include="Minecraft\Usable.cpp" />
     <ClCompile Include="Minecraft\Utils\Auth\AuthInfo.cpp" />
     <ClCompile Include="Minecraft\Utils\Platform\OperatingSystem.cpp" />
     <ClCompile Include="Minecraft\Utils\Validation.cpp" />
     <ClCompile Include="Minecraft\Version.cpp" />
+    <ClCompile Include="Minecraft\VersionFilterData.cpp" />
     <ClCompile Include="Moc\Logger\MocIOStream.cpp" />
     <ClCompile Include="QObjects\ClickableLabel.cpp" />
     <ClCompile Include="QObjects\HoveredFrame.cpp" />
@@ -249,6 +309,7 @@
     <ClCompile Include="Web\DownloadClasses.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\libraries\katabasis\src\JsonResponse.h" />
     <ClInclude Include="Archives\Archives.h" />
     <ClInclude Include="Archives\qzipreader_p.h" />
     <ClInclude Include="Archives\qzipwriter_p.h" />
@@ -268,7 +329,22 @@
     <QtMoc Include="Form\TopSlideFrameWidget.h" />
     <ClInclude Include="Hashes\sha1.h" />
     <QtMoc Include="Minecraft\BaseInstance.h" />
+    <ClInclude Include="Minecraft\Application.h" />
+    <ClInclude Include="Minecraft\Auth\AccountData.h" />
+    <ClInclude Include="Minecraft\Auth\AccountTask.h" />
+    <ClInclude Include="Minecraft\Auth\AuthSession.h" />
+    <ClInclude Include="Minecraft\Auth\AuthStep.h" />
+    <ClInclude Include="Minecraft\Auth\Flows\AuthFlow.h" />
+    <ClInclude Include="Minecraft\Auth\Flows\Mojang.h" />
+    <ClInclude Include="Minecraft\Auth\Flows\MSA.h" />
+    <ClInclude Include="Minecraft\Auth\MinecraftAccount.h" />
+    <ClInclude Include="Minecraft\Auth\Steps\MSAStep.h" />
+    <ClInclude Include="Minecraft\Auth\Yggdrasil.h" />
+    <ClInclude Include="Minecraft\BaseVersion.h" />
+    <ClInclude Include="Minecraft\BaseVersionList.h" />
+    <ClInclude Include="Minecraft\BuildConfig\BuildConfig.h" />
     <ClInclude Include="Minecraft\CommandBuilder.h" />
+    <ClInclude Include="Minecraft\Commandline.h" />
     <ClInclude Include="Minecraft\Game\Artifact.h" />
     <ClInclude Include="Minecraft\Game\AssetIndexInfo.h" />
     <ClInclude Include="Minecraft\Game\Command\Argument.h" />
@@ -288,12 +364,40 @@
     <ClInclude Include="Minecraft\Game\OSRestriction.h" />
     <ClInclude Include="Minecraft\Game\ReleaseType.h" />
     <ClInclude Include="Minecraft\Game\VersionProvider.h" />
+    <ClInclude Include="Minecraft\JavaCommon.h" />
+    <ClInclude Include="Minecraft\Java\JavaChecker.h" />
+    <ClInclude Include="Minecraft\Java\JavaCheckerJob.h" />
+    <ClInclude Include="Minecraft\Java\JavaInstall.h" />
+    <ClInclude Include="Minecraft\Java\JavaInstallList.h" />
+    <ClInclude Include="Minecraft\Java\JavaUtils.h" />
+    <ClInclude Include="Minecraft\Java\JavaVersion.h" />
+    <ClInclude Include="Minecraft\LaunchController.h" />
     <ClInclude Include="Minecraft\Launch\DefaultLaunch.h" />
     <QtMoc Include="Minecraft\Launch\Task\Task.h" />
     <QtMoc Include="Minecraft\Launch\LaunchTask.h" />
+    <ClInclude Include="Minecraft\Launch\LaunchStep.h" />
+    <ClInclude Include="Minecraft\Launch\LogModel.h" />
+    <ClInclude Include="Minecraft\Launch\QuickPlayTarget.h" />
+    <ClInclude Include="Minecraft\Launch\Steps\TextPrint.h" />
+    <ClInclude Include="Minecraft\LoggedProcess.h" />
+    <ClInclude Include="Minecraft\MessageLevel.h" />
     <ClInclude Include="Minecraft\MinecraftOptions.h" />
+    <ClInclude Include="Minecraft\MMCStrings.h" />
     <ClInclude Include="Minecraft\Mods.h" />
     <ClInclude Include="Minecraft\NativesInstaller.h" />
+    <ClInclude Include="Minecraft\Net\ByteArraySink.h" />
+    <ClInclude Include="Minecraft\Net\ChecksumValidator.h" />
+    <ClInclude Include="Minecraft\Net\Download.h" />
+    <ClInclude Include="Minecraft\Net\FileSink.h" />
+    <ClInclude Include="Minecraft\Net\HttpMetaCache.h" />
+    <ClInclude Include="Minecraft\Net\MetaCacheSink.h" />
+    <ClInclude Include="Minecraft\Net\Mode.h" />
+    <ClInclude Include="Minecraft\Net\NetAction.h" />
+    <ClInclude Include="Minecraft\Net\NetJob.h" />
+    <ClInclude Include="Minecraft\Net\Sink.h" />
+    <ClInclude Include="Minecraft\Net\Validator.h" />
+    <ClInclude Include="Minecraft\ParseUtils.h" />
+    <ClInclude Include="Minecraft\PathMatcher\IPathMatcher.h" />
     <ClInclude Include="Minecraft\Servers\ServerDatConfiguration.h" />
     <QtMoc Include="Minecraft\Settings\SettingsObject.h" />
     <QtMoc Include="Minecraft\Settings\Setting.h" />
@@ -301,6 +405,13 @@
     <QtMoc Include="Minecraft\Settings\PassthroughSetting.h" />
     <ClInclude Include="Minecraft\Settings\INIFile.h" />
     <QtMoc Include="Minecraft\Settings\INISettingsObject.h" />
+    <ClInclude Include="Minecraft\Tools\BaseExternalTool.h" />
+    <ClInclude Include="Minecraft\Tools\BaseProfiler.h" />
+    <ClInclude Include="Minecraft\Ui\Dialogs\CustomMessageBox.h" />
+    <ClInclude Include="Minecraft\Ui\Dialogs\ProgressDialog.h" />
+    <ClInclude Include="Minecraft\Ui\InstanceWindow.h" />
+    <ClInclude Include="Minecraft\Updater\GoUpdate.h" />
+    <ClInclude Include="Minecraft\Usable.h" />
     <ClInclude Include="Minecraft\Utils\Auth\AuthInfo.h" />
     <ClInclude Include="Minecraft\Utils\Constants.h" />
     <ClInclude Include="Minecraft\Utils\JavaVersion.h" />
@@ -310,6 +421,7 @@
     <ClInclude Include="Minecraft\Utils\StringUtils.h" />
     <ClInclude Include="Minecraft\Utils\Validation.h" />
     <ClInclude Include="Minecraft\Version.h" />
+    <ClInclude Include="Minecraft\VersionFilterData.h" />
     <ClInclude Include="Moc\Logger\MocIOStream.h" />
     <ClInclude Include="QObjects\Images\ImageEditing.h" />
     <QtMoc Include="QObjects\SignalLabel.h" />
@@ -326,6 +438,7 @@
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\libraries\systeminfo\src\ntstatus\README.md" />
     <None Include="all.json" />
     <None Include="cpp.hint" />
     <None Include="DATA.json" />
@@ -344,6 +457,7 @@
     <QtUic Include="Form\SingleNewsItemWidget.ui" />
     <QtUic Include="Form\SomLauncherMainWindow.ui" />
     <QtUic Include="Form\TopSlideFrameWidget.ui" />
+    <QtUic Include="Minecraft\Ui\Dialogs\ProgressDialog.ui" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MocJsonLib\MocJsonLib.vcxproj">
@@ -361,5 +475,14 @@
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
     <Import Project="$(QtMsBuild)\qt.targets" />
   </ImportGroup>
-  <ImportGroup Label="ExtensionTargets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\packages\Microsoft.Windows.CppWinRT.2.0.220531.1\build\native\Microsoft.Windows.CppWinRT.targets" Condition="Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.220531.1\build\native\Microsoft.Windows.CppWinRT.targets')" />
+  </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>Данный проект ссылается на пакеты NuGet, отсутствующие на этом компьютере. Используйте восстановление пакетов NuGet, чтобы скачать их.  Дополнительную информацию см. по адресу: http://go.microsoft.com/fwlink/?LinkID=322105. Отсутствует следующий файл: {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.220531.1\build\native\Microsoft.Windows.CppWinRT.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.CppWinRT.2.0.220531.1\build\native\Microsoft.Windows.CppWinRT.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.220531.1\build\native\Microsoft.Windows.CppWinRT.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.CppWinRT.2.0.220531.1\build\native\Microsoft.Windows.CppWinRT.targets'))" />
+  </Target>
 </Project>

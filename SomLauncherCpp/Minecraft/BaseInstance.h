@@ -1,37 +1,37 @@
 #ifndef MINECRAFT_BASEINSTANCE_H_
 #define MINECRAFT_BASEINSTANCE_H_
 
-#include <QObject>
 #include <QDateTime>
-#include <QSet>
-#include <QProcess>
-#include <QFileInfo>
-#include <QDir>
 #include <QDebug>
+#include <QDir>
+#include <QFileInfo>
+#include <QObject>
+#include <QProcess>
+#include <QSet>
 
 #include <cassert>
+#include <filesystem>
 
 #include "Launch/Task/Task.h"
 
 #include "Settings/SettingsObject.h"
 
-#include "Settings/INIFile.h"
+#include "Auth/MinecraftAccount.h"
 #include "BaseVersionList.h"
-#include "minecraft/auth/MinecraftAccount.h"
 #include "MessageLevel.h"
-#include "pathmatcher/IPathMatcher.h"
+#include "Pathmatcher/IPathMatcher.h"
+#include "Settings/INIFile.h"
 
-#include "net/Mode.h"
+#include "Net/Mode.h"
 
-#include "minecraft/launch/QuickPlayTarget.h"
+#include "Launch/QuickPlayTarget.h"
 
 #include "Settings/INISettingsObject.h"
-#include "Settings/Setting.h"
 #include "Settings/OverrideSetting.h"
+#include "Settings/Setting.h"
 
-#include "FileSystem.h"
+#include "BuildConfig/BuildConfig.h"
 #include "Commandline.h"
-#include "BuildConfig.h"
 
 class Task;
 class LaunchTask;
@@ -99,7 +99,7 @@ public:
 	bool isRunning() const;
 	int64_t totalTimePlayed() const;
 	int64_t lastTimePlayed() const;
-	void resetTimePlayed();
+	void resetTimePlayed() const;
 
 	/// get the type of this instance
 	QString instanceType() const;
@@ -108,10 +108,7 @@ public:
 	QString instanceRoot() const;
 
 	/// Path to the instance's game root directory.
-	virtual QString gameRoot() const
-	{
-		return instanceRoot();
-	}
+	virtual QString gameRoot() const;
 
 	/// Path to the instance's mods directory.
 	virtual QString modsRoot() const = 0;
@@ -130,23 +127,20 @@ public:
 	QString notes() const;
 	void setNotes(QString val);
 
-	QString getPreLaunchCommand();
-	QString getPostExitCommand();
-	QString getWrapperCommand();
+	QString getPreLaunchCommand() const;
+	QString getPostExitCommand() const;
+	QString getWrapperCommand() const;
 
-	bool isManagedPack();
-	QString getManagedPackType();
-	QString getManagedPackID();
-	QString getManagedPackName();
-	QString getManagedPackVersionID();
-	QString getManagedPackVersionName();
-	void setManagedPack(const QString& type, const QString& id, const QString& name, const QString& versionId, const QString& version);
+	bool isManagedPack() const;
+	QString getManagedPackType() const;
+	QString getManagedPackID() const;
+	QString getManagedPackName() const;
+	QString getManagedPackVersionID() const;
+	QString getManagedPackVersionName() const;
+	void setManagedPack(const QString& type, const QString& id, const QString& name, const QString& versionId, const QString& version) const;
 
 	/// guess log level from a line of game log
-	virtual MessageLevel::Enum guessLevel(const QString& line, MessageLevel::Enum level)
-	{
-		return level;
-	};
+	virtual MessageLevel::Enum guessLevel(const QString& line, MessageLevel::Enum level);
 
 	virtual QStringList extraArguments() const;
 
@@ -203,44 +197,13 @@ public:
 
 	virtual QString typeName() const = 0;
 
-	bool hasVersionBroken() const
-	{
-		return m_hasBrokenVersion;
-	}
-	void setVersionBroken(bool value)
-	{
-		if (m_hasBrokenVersion != value)
-		{
-			m_hasBrokenVersion = value;
-			emit propertiesChanged(this);
-		}
-	}
+	bool hasVersionBroken() const;
+	void setVersionBroken(bool value);
 
-	bool hasUpdateAvailable() const
-	{
-		return m_hasUpdate;
-	}
-	void setUpdateAvailable(bool value)
-	{
-		if (m_hasUpdate != value)
-		{
-			m_hasUpdate = value;
-			emit propertiesChanged(this);
-		}
-	}
-
-	bool hasCrashed() const
-	{
-		return m_crashed;
-	}
-	void setCrashed(bool value)
-	{
-		if (m_crashed != value)
-		{
-			m_crashed = value;
-			emit propertiesChanged(this);
-		}
-	}
+	bool hasUpdateAvailable() const;
+	void setUpdateAvailable(bool value);
+	bool hasCrashed() const;
+	void setCrashed(bool value);
 
 	virtual bool canLaunch() const;
 	virtual bool canEdit() const = 0;

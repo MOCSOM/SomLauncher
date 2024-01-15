@@ -33,6 +33,11 @@
 #include "../Databases/SQLBased.h"
 #include "../Minecraft/Servers/ServerDatConfiguration.h"
 
+#include "../Minecraft/Updater/GoUpdate.h"
+#include "../Minecraft/BaseInstance.h"
+#include "../Minecraft/LaunchController.h"
+//#include "../Minecraft/Launch/"
+
 #include "ui_SomLauncherMainWindow.h"
 
 #include "../QObjects/ClickableLabel.h"
@@ -53,6 +58,43 @@ constexpr int MEM_DIV = 1024 * 1024;
 class SomLauncherMainWindow : public QMainWindow
 {
 	Q_OBJECT
+
+public:
+	enum Status 
+	{
+		StartingUp,
+		Failed,
+		Succeeded,
+		Initialized
+	};
+
+private: /*laucnh var*/
+	InstanceWindow* window = nullptr;
+	std::shared_ptr<LaunchController> controller;
+
+	// main state variables
+	size_t m_openWindows = 0;
+	size_t m_runningInstances = 0;
+	bool m_updateRunning = false;
+
+	std::filesystem::path m_jarsPath;
+	std::shared_ptr<QNetworkAccessManager> m_network;
+
+	std::shared_ptr<SettingsObject> m_settings;
+	//std::shared_ptr<JavaInstallList> m_javalist;
+
+	//SetupWizard * m_setupWizard = nullptr;
+
+	// FIXME: attach to instances instead.
+	struct InstanceXtras
+	{
+		InstanceWindow* window = nullptr;
+		std::shared_ptr<LaunchController> controller;
+	};
+
+	std::map<QString, InstanceXtras> m_instanceExtras;
+
+	Status m_status = SomLauncherMainWindow::StartingUp;
 
 private:
 	std::string minecraft_core_dir_path = "";
@@ -156,6 +198,39 @@ public:
 	void setAccountData(const Json::JsonValue& data);
 	void setUuidFromAccount();
 	std::unique_ptr<SettingsDialog>& getSettingsDialog();
+
+	std::filesystem::path getJarsPath() const;
+	std::shared_ptr<QNetworkAccessManager> network();
+	std::shared_ptr<SettingsObject> settings() const;
+
+	InstanceWindow* showInstanceWindow(InstancePtr instance, QString page = QString());
+
+private:
+	void addRunningInstance();
+	void subRunningInstance();
+	bool shouldExitNow() const;
+
+signals:
+	void updateAllowedChanged(bool status);
+
+public slots:
+	bool launch(
+		InstancePtr instance,
+		bool online = true,
+		BaseProfilerFactory* profiler = nullptr,
+		QuickPlayTargetPtr quickPlayTarget = nullptr,
+		MinecraftAccountPtr accountToUse = nullptr,
+		const QString& offlineName = QString()
+	);
+	bool kill(InstancePtr instance);
+
+private slots:
+	void on_windowClose();
+	//void messageReceived(const QByteArray& message);
+	void controllerSucceeded();
+	void controllerFailed(const QString& error);
+	//void analyticsSettingChanged(const Setting& setting, QVariant value);
+	//void setupWizardFinished(int status);
 
 private slots:
 	void onClickedpushButton_game();

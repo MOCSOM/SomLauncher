@@ -166,7 +166,9 @@ void SomLauncherMainWindow::setupInstallMinecraft(const size_t& index)
 	this->close();
 
 	std::filesystem::current_path(instance_path);
-	client::startProcess(command);
+
+	launch(std::make_shared<BaseInstance>(), false, nullptr, nullptr, nullptr, "Debuf");
+	//client::startProcess(command);
 }
 
 std::string SomLauncherMainWindow::install_minecraft(
@@ -527,4 +529,223 @@ void SomLauncherMainWindow::setUuidFromAccount()
 std::unique_ptr<SettingsDialog>& SomLauncherMainWindow::getSettingsDialog()
 {
 	return this->settings_dialog;
+}
+
+std::filesystem::path SomLauncherMainWindow::getJarsPath() const
+{
+	if (this->m_jarsPath.empty())
+	{
+		return std::filesystem::path(QCoreApplication::applicationDirPath().toStdWString(), std::wstring(L"jars"));
+	}
+	return this->m_jarsPath;
+}
+
+std::shared_ptr<QNetworkAccessManager> SomLauncherMainWindow::network()
+{
+	return this->m_network;
+}
+
+std::shared_ptr<SettingsObject> SomLauncherMainWindow::settings() const
+{
+	return this->m_settings;
+}
+
+InstanceWindow* SomLauncherMainWindow::showInstanceWindow(InstancePtr instance, QString page)
+{
+	if (!instance)
+		return nullptr;
+	auto id = instance->id();
+	auto& extras = m_instanceExtras[id];
+	auto& window = extras.window;
+
+	if (window)
+	{
+		/*window->raise();
+		window->activateWindow();*/
+	}
+	else
+	{
+		//window = new InstanceWindow(instance);
+		m_openWindows++;
+		//connect(window, &InstanceWindow::isClosing, this, &SomLauncherMainWindow::on_windowClose);
+	}
+	if (!page.isEmpty())
+	{
+		//window->selectPage(page);
+	}
+	if (extras.controller)
+	{
+		//extras.controller->setParentWidget(window);
+	}
+	return window;
+}
+
+void SomLauncherMainWindow::addRunningInstance()
+{
+	++m_runningInstances;
+	if (m_runningInstances == 1)
+	{
+		emit updateAllowedChanged(false);
+	}
+}
+
+void SomLauncherMainWindow::subRunningInstance()
+{
+	if (m_runningInstances == 0)
+	{
+		qCritical() << "Something went really wrong and we now have less than 0 running instances... WTF";
+		return;
+	}
+	m_runningInstances--;
+	if (m_runningInstances == 0)
+	{
+		emit updateAllowedChanged(true);
+	}
+}
+
+bool SomLauncherMainWindow::shouldExitNow() const
+{
+	return m_runningInstances == 0 && m_openWindows == 0;
+}
+
+bool SomLauncherMainWindow::launch(InstancePtr instance, bool online, BaseProfilerFactory* profiler, QuickPlayTargetPtr quickPlayTarget, MinecraftAccountPtr accountToUse, const QString& offlineName)
+{
+	if (m_updateRunning)
+	{
+		qDebug() << "Cannot launch instances while an update is running. Please try again when updates are completed.";
+	}
+	else if (instance->canLaunch())
+	{
+		auto& extras = m_instanceExtras[instance->id()];
+		auto& window = extras.window;
+		if (window)
+		{
+			/*if (!window->saveAll())
+			{
+				return false;
+			}*/
+		}
+		auto& controller = extras.controller;
+		controller.reset(std::make_shared<LaunchController>().get());
+		controller->setInstance(instance);
+		controller->setOnline(online);
+		controller->setProfiler(profiler);
+		controller->setQuickPlayTarget(quickPlayTarget);
+		controller->setAccountToUse(accountToUse);
+		controller->setOfflineName(offlineName);
+		if (window)
+		{
+			//controller->setParentWidget(window);
+		}
+		/*else if (m_mainWindow)
+		{
+			controller->setParentWidget(m_mainWindow);
+		}*/
+		connect(controller.get(), &LaunchController::succeeded, this, &SomLauncherMainWindow::controllerSucceeded);
+		connect(controller.get(), &LaunchController::failed, this, &SomLauncherMainWindow::controllerFailed);
+		addRunningInstance();
+		controller->start();
+		return true;
+	}
+	else if (instance->isRunning())
+	{
+		showInstanceWindow(instance, "console");
+		return true;
+	}
+	else if (instance->canEdit())
+	{
+		showInstanceWindow(instance);
+		return true;
+	}
+	return false;
+}
+
+bool SomLauncherMainWindow::kill(InstancePtr instance)
+{
+	if (!instance->isRunning())
+	{
+		qWarning() << "Attempted to kill instance" << instance->id() << ", which isn't running.";
+		return false;
+	}
+	auto& extras = m_instanceExtras[instance->id()];
+	// NOTE: copy of the shared pointer keeps it alive
+	auto& controller = extras.controller;
+	if (controller)
+	{
+		return controller->abort();
+	}
+	return true;
+}
+
+void SomLauncherMainWindow::on_windowClose()
+{
+	//--m_openWindows;
+	//auto instWindow = qobject_cast<InstanceWindow*>(QObject::sender());
+	//if (instWindow)
+	//{
+	//	auto& extras = m_instanceExtras[instWindow->instanceId()];
+	//	extras.window = nullptr;
+	//	if (extras.controller)
+	//	{
+	//		extras.controller->setParentWidget(m_mainWindow);
+	//	}
+	//}
+	//auto mainWindow = qobject_cast<MainWindow*>(QObject::sender());
+	//if (mainWindow)
+	//{
+	//	m_mainWindow = nullptr;
+	//}
+	//// quit when there are no more windows.
+	//if (shouldExitNow())
+	//{
+	//	exit(0);
+	//}
+}
+
+void SomLauncherMainWindow::controllerSucceeded()
+{
+	auto controller = qobject_cast<LaunchController*>(QObject::sender());
+	if (!controller)
+		return;
+	auto id = controller->id();
+	auto& extras = m_instanceExtras[id];
+
+	// on success, do...
+	if (controller->instance()->settings()->get("AutoCloseConsole").toBool())
+	{
+		if (extras.window)
+		{
+			//extras.window->close();
+		}
+	}
+	extras.controller.reset();
+	subRunningInstance();
+
+	// quit when there are no more windows.
+	if (shouldExitNow())
+	{
+		m_status = Status::Succeeded;
+		exit(0);
+	}
+}
+
+void SomLauncherMainWindow::controllerFailed(const QString& error)
+{
+	Q_UNUSED(error);
+	auto controller = qobject_cast<LaunchController*>(QObject::sender());
+	if (!controller)
+		return;
+	auto id = controller->id();
+	auto& extras = m_instanceExtras[id];
+
+	// on failure, do... nothing
+	extras.controller.reset();
+	subRunningInstance();
+
+	// quit when there are no more windows.
+	if (shouldExitNow())
+	{
+		m_status = Status::Failed;
+		exit(1);
+	}
 }

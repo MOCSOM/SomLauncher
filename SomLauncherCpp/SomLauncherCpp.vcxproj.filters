@@ -27,14 +27,62 @@
     <Filter Include="Minecraft">
       <UniqueIdentifier>{c0a20697-8c72-4604-b121-5dcd320c5596}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Minecraft\task">
-      <UniqueIdentifier>{f95d63e6-2adf-4da0-b4e7-e20f09bf7977}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Minecraft\launch">
       <UniqueIdentifier>{774e0126-9219-494d-bdb8-c4d3524aad66}</UniqueIdentifier>
     </Filter>
     <Filter Include="Minecraft\settings">
       <UniqueIdentifier>{4b40edda-f1b2-4005-a650-7b998c6867e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Minecraft\auth">
+      <UniqueIdentifier>{87871a12-ca21-4af5-8d7d-d97432d14540}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Libraries">
+      <UniqueIdentifier>{af69e0e5-515b-485a-ab75-018f7809d307}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Libraries\katabasis">
+      <UniqueIdentifier>{079fe2e7-8b0a-47dd-9484-24b4385144b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Minecraft\auth\flows">
+      <UniqueIdentifier>{7fbf27e0-86f4-4c3a-8d93-5cfa9c045f4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Minecraft\launch\task">
+      <UniqueIdentifier>{f95d63e6-2adf-4da0-b4e7-e20f09bf7977}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Minecraft\updater">
+      <UniqueIdentifier>{ec8c1c7d-1bb1-42b6-9b8e-f80159f2d859}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Minecraft\Net">
+      <UniqueIdentifier>{8c62ad0a-5409-4db2-a070-66230b6d24cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Minecraft\buildconfig">
+      <UniqueIdentifier>{b89b33a7-8bab-4917-8372-a3d137eca217}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Minecraft\auth\steps">
+      <UniqueIdentifier>{1eb26145-fcdb-4366-bf3a-73932b6490fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Minecraft\PathMatcher">
+      <UniqueIdentifier>{94b7d204-8943-4f7a-80e1-df013d00ad88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Minecraft\Tools">
+      <UniqueIdentifier>{fe4ad637-bef3-4799-9b28-5731dc1b3f00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Minecraft\Java">
+      <UniqueIdentifier>{d3eb2604-ce2c-4201-b87b-279cb21a9aca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Libraries\systeminfo">
+      <UniqueIdentifier>{25cd2ce6-9a3e-47fa-976e-45588fa30bd0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Libraries\systeminfo\ntstatus">
+      <UniqueIdentifier>{b8a96cc9-9491-4aec-b449-aa6e8223bd34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Minecraft\Ui">
+      <UniqueIdentifier>{bc13de45-850a-43c2-aab3-be8d7efaf977}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Minecraft\Ui\Dialogs">
+      <UniqueIdentifier>{88e56f8a-51a4-431b-afa9-45a7d45afcd9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Minecraft\launch\Steps">
+      <UniqueIdentifier>{f7487b9a-2564-4f74-9f38-d430deba46a3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -198,7 +246,7 @@
       <Filter>Minecraft</Filter>
     </ClCompile>
     <ClCompile Include="Minecraft\Launch\Task\Task.cpp">
-      <Filter>Minecraft\task</Filter>
+      <Filter>Minecraft\launch\task</Filter>
     </ClCompile>
     <ClCompile Include="Minecraft\Launch\DefaultLaunch.cpp">
       <Filter>Minecraft\launch</Filter>
@@ -220,6 +268,183 @@
     </ClCompile>
     <ClCompile Include="Minecraft\Settings\INISettingsObject.cpp">
       <Filter>Minecraft\settings</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\BaseVersion.cpp">
+      <Filter>Minecraft</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\BaseVersionList.cpp">
+      <Filter>Minecraft</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Auth\AuthSession.cpp">
+      <Filter>Minecraft\auth</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Usable.cpp">
+      <Filter>Minecraft</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libraries\katabasis\src\DeviceFlow.cpp">
+      <Filter>Libraries\katabasis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libraries\katabasis\src\JsonResponse.cpp">
+      <Filter>Libraries\katabasis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libraries\katabasis\src\PollServer.cpp">
+      <Filter>Libraries\katabasis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libraries\katabasis\src\Reply.cpp">
+      <Filter>Libraries\katabasis</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Auth\AccountData.cpp">
+      <Filter>Minecraft\auth</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Auth\MinecraftAccount.cpp">
+      <Filter>Minecraft\auth</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Auth\AccountTask.cpp">
+      <Filter>Minecraft\auth</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Launch\QuickPlayTarget.cpp">
+      <Filter>Minecraft\launch</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Net\NetAction.cpp">
+      <Filter>Minecraft\Net</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Auth\Yggdrasil.cpp">
+      <Filter>Minecraft\auth</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Net\HttpMetaCache.cpp">
+      <Filter>Minecraft\Net</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Net\Sink.cpp">
+      <Filter>Minecraft\Net</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Net\Download.cpp">
+      <Filter>Minecraft\Net</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Net\ChecksumValidator.cpp">
+      <Filter>Minecraft\Net</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Net\FileSink.cpp">
+      <Filter>Minecraft\Net</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Net\MetaCacheSink.cpp">
+      <Filter>Minecraft\Net</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Net\ByteArraySink.cpp">
+      <Filter>Minecraft\Net</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\BuildConfig\BuildConfig.cpp">
+      <Filter>Minecraft\buildconfig</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Net\NetJob.cpp">
+      <Filter>Minecraft\Net</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Updater\GoUpdate.cpp">
+      <Filter>Minecraft\updater</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Auth\AuthStep.cpp">
+      <Filter>Minecraft\auth</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Application.cpp">
+      <Filter>Minecraft</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Auth\Flows\AuthFlow.cpp">
+      <Filter>Minecraft\auth\flows</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Auth\Flows\MSA.cpp">
+      <Filter>Minecraft\auth\flows</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Auth\Steps\MSAStep.cpp">
+      <Filter>Minecraft\auth\steps</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Auth\Flows\Mojang.cpp">
+      <Filter>Minecraft\auth\flows</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\MessageLevel.cpp">
+      <Filter>Minecraft</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Commandline.cpp">
+      <Filter>Minecraft</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Tools\BaseProfiler.cpp">
+      <Filter>Minecraft\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Tools\BaseExternalTool.cpp">
+      <Filter>Minecraft\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\BaseInstance.cpp">
+      <Filter>Minecraft</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\MMCStrings.cpp">
+      <Filter>Minecraft</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Java\JavaVersion.cpp">
+      <Filter>Minecraft\Java</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Java\JavaChecker.cpp">
+      <Filter>Minecraft\Java</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Java\JavaCheckerJob.cpp">
+      <Filter>Minecraft\Java</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Java\JavaInstall.cpp">
+      <Filter>Minecraft\Java</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\ParseUtils.cpp">
+      <Filter>Minecraft</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\VersionFilterData.cpp">
+      <Filter>Minecraft</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Java\JavaInstallList.cpp">
+      <Filter>Minecraft\Java</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\LaunchController.cpp">
+      <Filter>Minecraft</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Java\JavaUtils.cpp">
+      <Filter>Minecraft\Java</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Launch\LaunchStep.cpp">
+      <Filter>Minecraft\launch</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Launch\LogModel.cpp">
+      <Filter>Minecraft\launch</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\LoggedProcess.cpp">
+      <Filter>Minecraft</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libraries\systeminfo\src\distroutils.cpp">
+      <Filter>Libraries\systeminfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libraries\systeminfo\src\sys_apple.cpp">
+      <Filter>Libraries\systeminfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libraries\systeminfo\src\sys_test.cpp">
+      <Filter>Libraries\systeminfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libraries\systeminfo\src\sys_unix.cpp">
+      <Filter>Libraries\systeminfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libraries\systeminfo\src\sys_win32.cpp">
+      <Filter>Libraries\systeminfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libraries\systeminfo\src\ntstatus\NtStatusNames.cpp">
+      <Filter>Libraries\systeminfo\ntstatus</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Launch\LaunchTask.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Ui\Dialogs\CustomMessageBox.cpp">
+      <Filter>Minecraft\Ui\Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Ui\Dialogs\ProgressDialog.cpp">
+      <Filter>Minecraft\Ui\Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Launch\Steps\TextPrint.cpp">
+      <Filter>Minecraft\launch\Steps</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\JavaCommon.cpp">
+      <Filter>Minecraft</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -388,6 +613,162 @@
     <ClInclude Include="Minecraft\Settings\INIFile.h">
       <Filter>Minecraft\settings</Filter>
     </ClInclude>
+    <ClInclude Include="Minecraft\BaseVersionList.h">
+      <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\BaseVersion.h">
+      <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Auth\MinecraftAccount.h">
+      <Filter>Minecraft\auth</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Auth\AuthSession.h">
+      <Filter>Minecraft\auth</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Usable.h">
+      <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Auth\AccountData.h">
+      <Filter>Minecraft\auth</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libraries\katabasis\src\JsonResponse.h">
+      <Filter>Libraries\katabasis</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Auth\Flows\MSA.h">
+      <Filter>Minecraft\auth\flows</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Auth\Flows\AuthFlow.h">
+      <Filter>Minecraft\auth\flows</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Auth\Yggdrasil.h">
+      <Filter>Minecraft\auth</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Auth\AccountTask.h">
+      <Filter>Minecraft\auth</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Application.h">
+      <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Launch\QuickPlayTarget.h">
+      <Filter>Minecraft\launch</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Updater\GoUpdate.h">
+      <Filter>Minecraft\updater</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Net\NetJob.h">
+      <Filter>Minecraft\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Net\NetAction.h">
+      <Filter>Minecraft\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Net\Download.h">
+      <Filter>Minecraft\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Net\HttpMetaCache.h">
+      <Filter>Minecraft\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Net\Validator.h">
+      <Filter>Minecraft\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Net\Sink.h">
+      <Filter>Minecraft\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Net\ChecksumValidator.h">
+      <Filter>Minecraft\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Net\MetaCacheSink.h">
+      <Filter>Minecraft\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Net\FileSink.h">
+      <Filter>Minecraft\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Net\ByteArraySink.h">
+      <Filter>Minecraft\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\BuildConfig\BuildConfig.h">
+      <Filter>Minecraft\buildconfig</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Auth\AuthStep.h">
+      <Filter>Minecraft\auth</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Auth\Steps\MSAStep.h">
+      <Filter>Minecraft\auth\steps</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Auth\Flows\Mojang.h">
+      <Filter>Minecraft\auth\flows</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\MessageLevel.h">
+      <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\PathMatcher\IPathMatcher.h">
+      <Filter>Minecraft\PathMatcher</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Net\Mode.h">
+      <Filter>Minecraft\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Commandline.h">
+      <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\LaunchController.h">
+      <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Tools\BaseProfiler.h">
+      <Filter>Minecraft\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Tools\BaseExternalTool.h">
+      <Filter>Minecraft\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\JavaCommon.h">
+      <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Java\JavaChecker.h">
+      <Filter>Minecraft\Java</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Java\JavaVersion.h">
+      <Filter>Minecraft\Java</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\MMCStrings.h">
+      <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Java\JavaUtils.h">
+      <Filter>Minecraft\Java</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Java\JavaInstallList.h">
+      <Filter>Minecraft\Java</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Java\JavaCheckerJob.h">
+      <Filter>Minecraft\Java</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Java\JavaInstall.h">
+      <Filter>Minecraft\Java</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\VersionFilterData.h">
+      <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\ParseUtils.h">
+      <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Launch\LaunchStep.h">
+      <Filter>Minecraft\launch</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Launch\LogModel.h">
+      <Filter>Minecraft\launch</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\LoggedProcess.h">
+      <Filter>Minecraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Ui\InstanceWindow.h">
+      <Filter>Minecraft\Ui</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Ui\Dialogs\CustomMessageBox.h">
+      <Filter>Minecraft\Ui\Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Ui\Dialogs\ProgressDialog.h">
+      <Filter>Minecraft\Ui\Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Launch\Steps\TextPrint.h">
+      <Filter>Minecraft\launch\Steps</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="all.json" />
@@ -399,6 +780,9 @@
     <None Include="SOMCONFIG_template.json" />
     <None Include="resources\StyleSheets\Wstartpage_modyfied.qss">
       <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\libraries\systeminfo\src\ntstatus\README.md">
+      <Filter>Libraries\systeminfo\ntstatus</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -439,7 +823,7 @@
       <Filter>Custom Qt Files</Filter>
     </QtMoc>
     <QtMoc Include="Minecraft\Launch\Task\Task.h">
-      <Filter>Minecraft\task</Filter>
+      <Filter>Minecraft\launch\task</Filter>
     </QtMoc>
     <QtMoc Include="Minecraft\Launch\LaunchTask.h">
       <Filter>Minecraft\launch</Filter>
@@ -486,6 +870,9 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="Form\TopSlideFrameWidget.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="Minecraft\Ui\Dialogs\ProgressDialog.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
