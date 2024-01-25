@@ -27,7 +27,7 @@
 #include "../Moc/Logger/MocIOStream.h"
 #include "../Servers/ServerTypes.h"
 #include "../Exceptions/TerminateProgrammException.h"
-#include "../Minecraft/CommandBuilder.h"
+//#include "../Minecraft/CommandBuilder.h"
 #include "../Client/StartProcess.h"
 #include "../Minecraft/Mods.h"
 #include "../Databases/SQLBased.h"
