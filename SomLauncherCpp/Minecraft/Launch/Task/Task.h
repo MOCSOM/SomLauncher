@@ -8,12 +8,14 @@
 
 #include "memory"
 
+#include "../../QObjectPtr.h"
+
 class Task : public QObject
 {
 	Q_OBJECT
 
 public:
-	using Ptr = std::shared_ptr<Task>;
+	using Ptr = shared_qobject_ptr<Task>;
 
 	enum class State
 	{

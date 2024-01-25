@@ -13,8 +13,10 @@
 #include <filesystem>
 
 #include "Launch/Task/Task.h"
+#include "Launch/LaunchTask.h"
 
 #include "Settings/SettingsObject.h"
+#include "QObjectPtr.h"
 
 #include "Auth/MinecraftAccount.h"
 #include "BaseVersionList.h"
@@ -33,12 +35,6 @@
 #include "BuildConfig/BuildConfig.h"
 #include "Commandline.h"
 
-class Task;
-class LaunchTask;
-class BaseInstance;
-
-// pointer for lazy people
-typedef std::shared_ptr<BaseInstance> InstancePtr;
 
 /*!
  * \brief Base class for instances.
@@ -64,7 +60,7 @@ protected: /* data */
 	SettingsObjectPtr m_settings;
 	// InstanceFlags m_flags;
 	bool m_isRunning = false;
-	std::shared_ptr<LaunchTask> m_launchProcess;
+	shared_qobject_ptr<LaunchTask> m_launchProcess;
 	QDateTime m_timeStarted;
 
 private: /* data */
@@ -166,11 +162,11 @@ public:
 	virtual Task::Ptr createUpdateTask(Net::Mode mode) = 0;
 
 	/// returns a valid launcher (task container)
-	virtual std::shared_ptr<LaunchTask> createLaunchTask(
+	virtual shared_qobject_ptr<LaunchTask> createLaunchTask(
 		AuthSessionPtr account, QuickPlayTargetPtr quickPlayTarget) = 0;
 
 	/// returns the current launch task (if any)
-	std::shared_ptr<LaunchTask> getLaunchTask();
+	shared_qobject_ptr<LaunchTask> getLaunchTask();
 
 	/*!
 	 * Create envrironment variables for running the instance
@@ -229,11 +225,11 @@ signals:
 	 * \brief Signal emitted when properties relevant to the instance view change
 	 */
 	void propertiesChanged(BaseInstance* inst);
-
-	void launchTaskChanged(std::shared_ptr<LaunchTask>);
-
+signals:
+	void launchTaskChanged(shared_qobject_ptr<LaunchTask>);
+signals:
 	void runningStatusChanged(bool running);
-
+signals:
 	void statusChanged(Status from, Status to);
 
 protected slots:
@@ -241,7 +237,10 @@ protected slots:
 
 };
 
-Q_DECLARE_METATYPE(std::shared_ptr<BaseInstance>)
+// pointer for lazy people
+typedef std::shared_ptr<BaseInstance> InstancePtr;
+
+Q_DECLARE_METATYPE(shared_qobject_ptr<BaseInstance>)
 //Q_DECLARE_METATYPE(BaseInstance::InstanceFlag)
 //Q_DECLARE_OPERATORS_FOR_FLAGS(BaseInstance::InstanceFlags)
 

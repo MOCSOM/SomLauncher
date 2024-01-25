@@ -33,6 +33,7 @@
 #include "../Databases/SQLBased.h"
 #include "../Minecraft/Servers/ServerDatConfiguration.h"
 
+#include "../Minecraft/Ui/InstanceWindow.h"
 #include "../Minecraft/Updater/GoUpdate.h"
 #include "../Minecraft/BaseInstance.h"
 #include "../Minecraft/LaunchController.h"
@@ -60,7 +61,7 @@ class SomLauncherMainWindow : public QMainWindow
 	Q_OBJECT
 
 public:
-	enum Status 
+	enum Status
 	{
 		StartingUp,
 		Failed,

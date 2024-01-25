@@ -18,6 +18,7 @@
 #include "JavaInstall.h"
 #include "JavaInstallList.h"
 #include "JavaUtils.h"
+#include "../QObjectPtr.h"
 
 class JavaListLoadTask;
 
@@ -25,60 +26,60 @@ bool sortJavas(BaseVersionPtr left, BaseVersionPtr right);
 
 class JavaInstallList : public BaseVersionList
 {
-    Q_OBJECT
+	Q_OBJECT
 
 private:
-    enum class Status
-    {
-        NotDone,
-        InProgress,
-        Done
-    };
+	enum class Status
+	{
+		NotDone,
+		InProgress,
+		Done
+	};
 
 protected:
-    Status m_status = Status::NotDone;
-    std::shared_ptr<JavaListLoadTask> m_loadTask;
-    QList<BaseVersionPtr> m_vlist;
+	Status m_status = Status::NotDone;
+	shared_qobject_ptr<JavaListLoadTask> m_loadTask;
+	QList<BaseVersionPtr> m_vlist;
 
 public:
-    explicit JavaInstallList(QObject* parent = 0);
-    ~JavaInstallList() noexcept = default;
+	explicit JavaInstallList(QObject* parent = 0);
+	~JavaInstallList() noexcept = default;
 
-    Task::Ptr getLoadTask() override;
-    bool isLoaded() override;
-    const BaseVersionPtr at(int i) const override;
-    int count() const override;
-    void sortVersions() override;
+	Task::Ptr getLoadTask() override;
+	bool isLoaded() override;
+	const BaseVersionPtr at(int i) const override;
+	int count() const override;
+	void sortVersions() override;
 
-    QVariant data(const QModelIndex& index, int role) const override;
-    RoleList providesRoles() const override;
+	QVariant data(const QModelIndex& index, int role) const override;
+	RoleList providesRoles() const override;
 
 public slots:
-    void updateListData(QList<BaseVersionPtr> versions) override;
+	void updateListData(QList<BaseVersionPtr> versions) override;
 
 protected:
-    void load();
-    Task::Ptr getCurrentTask();
+	void load();
+	Task::Ptr getCurrentTask();
 };
 
 
 class JavaListLoadTask : public Task
 {
-    Q_OBJECT
+	Q_OBJECT
 
 protected:
-    std::shared_ptr<JavaCheckerJob> m_job;
-    JavaInstallList* m_list;
-    JavaInstall* m_currentRecommended;
+	shared_qobject_ptr<JavaCheckerJob> m_job;
+	JavaInstallList* m_list;
+	JavaInstall* m_currentRecommended;
 
 public:
-    explicit JavaListLoadTask(JavaInstallList* vlist);
-    virtual ~JavaListLoadTask() = default;
+	explicit JavaListLoadTask(JavaInstallList* vlist);
+	virtual ~JavaListLoadTask() = default;
 
-    void executeTask() override;
+	void executeTask() override;
 
 public slots:
-    void javaCheckerFinished();
+	void javaCheckerFinished();
 };
 
 #endif // !JAVA_JAVAINSTALLLIST_H_

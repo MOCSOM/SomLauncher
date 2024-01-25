@@ -11,6 +11,7 @@
 #include "../LoggedProcess.h"
 #include "../Launch/LaunchStep.h"
 #include "Task/Task.h"
+#include "../QObjectPtr.h"
 
 class LaunchTask : public Task
 {
@@ -29,8 +30,8 @@ public:
 
 protected: /* data */
 	InstancePtr m_instance;
-	std::shared_ptr<LogModel> m_logModel;
-	QList<std::shared_ptr<LaunchStep>> m_steps;
+	shared_qobject_ptr<LogModel> m_logModel;
+	QList<shared_qobject_ptr<LaunchStep>> m_steps;
 	QMap<QString, QString> m_censorFilter;
 	int currentStep = -1;
 	State state = State::NotStarted;
@@ -43,10 +44,10 @@ protected:
 public: /* methods */
 	virtual ~LaunchTask() = default;
 
-	static std::shared_ptr<LaunchTask> create(InstancePtr inst);
+	static shared_qobject_ptr<LaunchTask> create(InstancePtr inst);
 
-	void appendStep(std::shared_ptr<LaunchStep> step);
-	void prependStep(std::shared_ptr<LaunchStep> step);
+	void appendStep(shared_qobject_ptr<LaunchStep> step);
+	void prependStep(shared_qobject_ptr<LaunchStep> step);
 	void setCensorFilter(QMap<QString, QString> filter);
 
 	InstancePtr instance();
@@ -72,7 +73,7 @@ public: /* methods */
 
 	bool canAbort() const override;
 
-	std::shared_ptr<LogModel> getLogModel();
+	shared_qobject_ptr<LogModel> getLogModel();
 
 public:
 	QString substituteVariables(const QString& cmd) const;

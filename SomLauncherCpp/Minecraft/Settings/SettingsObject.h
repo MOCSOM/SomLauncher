@@ -13,11 +13,6 @@
 
 #include <memory>
 
-class Setting;
-class SettingsObject;
-
-typedef std::shared_ptr<SettingsObject> SettingsObjectPtr;
-
 /*!
  * \brief The SettingsObject handles communicating settings between the application and a
  *settings file.
@@ -197,5 +192,7 @@ protected:
 	 */
 	virtual QVariant retrieveValue(const Setting& setting) = 0;
 };
+
+typedef std::shared_ptr<SettingsObject> SettingsObjectPtr;
 
 #endif // !SETTINGS_SETTINGSOBJECT_H_
