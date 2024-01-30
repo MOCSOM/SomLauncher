@@ -13,11 +13,13 @@
 int main(int argc, char* argv[])
 {
 	int returned_id = -1;
-	QApplication application(argc, argv);
 
-	qInstallMessageHandler(customHandler);
 	try
 	{
+		QApplication application(argc, argv);
+
+		qInstallMessageHandler(customHandler);
+
 		if (!std::filesystem::exists("somlogs"))
 		{
 			std::filesystem::create_directories("somlogs");
@@ -82,10 +84,10 @@ int main(int argc, char* argv[])
 	}
 	catch (const std::exception& exc)
 	{
-		qWarning() << "exception " << exc.what();
-		QMessageBox messageBox;
+		qFatal() << "exception " << exc.what();
+		/*QMessageBox messageBox;
 		messageBox.critical(nullptr, "Error", exc.what());
-		messageBox.setFixedSize(500, 200);
+		messageBox.setFixedSize(500, 200);*/
 	}
 
 	return returned_id;

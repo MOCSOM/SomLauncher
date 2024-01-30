@@ -326,6 +326,17 @@ void SomLauncherMainWindow::onClickpushButton_startgame()
 {
 	qInfo() << "pushButton_startgame clicked" << std::endl;
 
+	GameProfile profile;
+	profile.setInstancePath("C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\fabric1.18.2");
+	profile.setVersionName("fabric-loader-0.14.22-1.18.2");
+	profile.setMinecraftVersion("1.18.2");
+	profile.setUsername(this->username.c_str());
+	profile.setupNativesPath();
+	libraries::loadLibraries(profile);
+	gamearguments::loadGameArguments(profile);
+	auto ldo = commandline::generateCommand(profile);
+	auto dd = ldo.join(' ');
+
 	ui.progressBar_ahtung->setHidden(false);
 	ui.label_download_status_change->setHidden(false);
 

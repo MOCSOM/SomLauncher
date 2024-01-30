@@ -27,11 +27,14 @@
 #include "../Moc/Logger/MocIOStream.h"
 #include "../Servers/ServerTypes.h"
 #include "../Exceptions/TerminateProgrammException.h"
-//#include "../Minecraft/CommandBuilder.h"
+#include "../Minecraft/Launcher/LaunchCommand.h"
 #include "../Client/StartProcess.h"
 #include "../Minecraft/Mods.h"
 #include "../Databases/SQLBased.h"
 #include "../Minecraft/Servers/ServerDatConfiguration.h"
+#include "../Minecraft/Libraries/Libraries.h"
+#include "../Minecraft/GameArgs/GameArguments.h"
+#include "../Minecraft/Download/DownloadHelper.h"
 
 #include "ui_SomLauncherMainWindow.h"
 
@@ -53,6 +56,9 @@ constexpr int MEM_DIV = 1024 * 1024;
 class SomLauncherMainWindow : public QMainWindow
 {
 	Q_OBJECT
+
+private:
+	friend DownloadHelper;
 
 private:
 	std::string minecraft_core_dir_path = "";

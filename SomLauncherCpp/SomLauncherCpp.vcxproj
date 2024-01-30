@@ -204,6 +204,7 @@
     <ClCompile Include="Form\SomLauncherMainWindow.cpp" />
     <ClCompile Include="Form\TopSlideFrameWidget.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Minecraft\Download\Download.cpp" />
     <ClCompile Include="Minecraft\Minecraftus.cpp" />
     <ClCompile Include="Minecraft\Mods.cpp" />
     <ClCompile Include="Minecraft\NativesInstaller.cpp" />
@@ -238,6 +239,7 @@
     <QtMoc Include="Form\SingleNewsItemWidget.h" />
     <QtMoc Include="Form\TopSlideFrameWidget.h" />
     <ClInclude Include="Hashes\sha1.h" />
+    <QtMoc Include="Minecraft\Download\Download.h" />
     <ClInclude Include="Minecraft\MinecraftOptions.h" />
     <ClInclude Include="Minecraft\Mods.h" />
     <ClInclude Include="Minecraft\NativesInstaller.h" />

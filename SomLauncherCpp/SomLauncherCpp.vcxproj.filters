@@ -30,6 +30,27 @@
     <Filter Include="Minecraft\Servers">
       <UniqueIdentifier>{04374f31-57e4-49fe-baaa-a1f5431bf12f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Minecraft\Launcher">
+      <UniqueIdentifier>{96e91052-1ca7-4fda-a0eb-332881766978}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Minecraft\Download">
+      <UniqueIdentifier>{701c0d08-0ed4-419b-bf31-6be3c0532add}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="qtzipfiles">
+      <UniqueIdentifier>{c4a98e47-d534-4a2f-a5bb-1fa51d80451f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Minecraft\Libraries">
+      <UniqueIdentifier>{0df20773-bf95-4ad4-aa05-7e75fb5765e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Minecraft\GameArgs">
+      <UniqueIdentifier>{afda4347-48de-45fb-bece-5148a98790ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Minecraft\Rules">
+      <UniqueIdentifier>{74a539a8-b096-4ea7-adb2-40baec2d6625}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Minecraft\Utils">
+      <UniqueIdentifier>{94c01862-4ff9-4245-b1f6-ee9c4ac56fb1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -92,9 +113,6 @@
     <ClCompile Include="Exceptions\FileOutsideMinecraftDirectoryException.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="QObjects\Images\ImageEditing.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="QObjects\SignalLabel.cpp">
       <Filter>Custom Qt Files</Filter>
     </ClCompile>
@@ -128,6 +146,12 @@
     <ClCompile Include="Minecraft\Servers\ServerDatConfiguration.cpp">
       <Filter>Minecraft\Servers</Filter>
     </ClCompile>
+    <ClCompile Include="QObjects\Images\ImageEditing.cpp">
+      <Filter>Custom Qt Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Download\Download.cpp">
+      <Filter>Minecraft\Download</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -149,12 +173,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Moc\Logger\MocIOStream.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Archives\qzipreader_p.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Archives\qzipwriter_p.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="QObjects\SomSlider.h">
@@ -205,6 +223,12 @@
     <ClInclude Include="Minecraft\Servers\ServerDatConfiguration.h">
       <Filter>Minecraft\Servers</Filter>
     </ClInclude>
+    <ClInclude Include="Archives\qzipwriter_p.h">
+      <Filter>qtzipfiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Archives\qzipreader_p.h">
+      <Filter>qtzipfiles</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="all.json" />
@@ -254,6 +278,9 @@
     </QtMoc>
     <QtMoc Include="Form\TopSlideFrameWidget.h">
       <Filter>Custom Qt Files</Filter>
+    </QtMoc>
+    <QtMoc Include="Minecraft\Download\Download.h">
+      <Filter>Minecraft\Download</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
