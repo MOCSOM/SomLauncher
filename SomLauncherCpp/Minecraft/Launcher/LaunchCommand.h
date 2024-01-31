@@ -6,7 +6,7 @@
 #include <QDebug>
 #include <QVariant>
 
-#include <SomJson.h>
+#include "../../../MocJsonLib/SomJson.h"
 
 #include "GameProfile.h"
 #include "../Minecraftus.h"

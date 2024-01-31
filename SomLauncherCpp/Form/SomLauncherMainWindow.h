@@ -35,6 +35,7 @@
 #include "../Minecraft/Libraries/Libraries.h"
 #include "../Minecraft/GameArgs/GameArguments.h"
 #include "../Minecraft/Download/DownloadHelper.h"
+#include "../Minecraft/Download/Download.h"
 
 #include "ui_SomLauncherMainWindow.h"
 
@@ -58,7 +59,10 @@ class SomLauncherMainWindow : public QMainWindow
 	Q_OBJECT
 
 private:
-	friend DownloadHelper;
+	//friend DownloadHelper;
+
+private:
+	QNetworkAccessManager mNetwork;
 
 private:
 	std::string minecraft_core_dir_path = "";
@@ -152,6 +156,7 @@ public:
 	ServerTypes getServerType();
 	std::string getCurrentServerName();
 	const std::filesystem::path getConfigPath();
+	const std::filesystem::path getMCCorePath();
 	void _settingServerNameInChangeServerButton();
 	std::string getLatestVersionFromGithub();
 	Json::JsonValue getLatestVersionFromDatabase();
@@ -162,6 +167,8 @@ public:
 	void setAccountData(const Json::JsonValue& data);
 	void setUuidFromAccount();
 	std::unique_ptr<SettingsDialog>& getSettingsDialog();
+
+	void installPackage(const QUrl& url);
 
 private slots:
 	void onClickedpushButton_game();

@@ -6,11 +6,11 @@ char GameProfile::ClasspathEntry::classpath_separator = ';';
 char GameProfile::ClasspathEntry::classpath_separator = ':';
 #endif // Q_OS_WINDOWS
 
-DownloadEntry downloadEntryFromJson(const QString& path, Json::JsonValue& v)
+DownloadEntry downloadEntryFromJson(const QString& path, const QJsonObject& v)
 {
 	return DownloadEntry{
-			path, v["url"].to_string().c_str(),
-			uint64_t(v["size"].to_int()), false, v["sha1"].to_string().c_str()
+			path.toStdString(), QUrl::fromUserInput(v["url"].toString()),
+			uint64_t(v["size"].toInt()), false, v["sha1"].toString()
 	};
 }
 

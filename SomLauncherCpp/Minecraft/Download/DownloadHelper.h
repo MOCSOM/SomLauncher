@@ -6,8 +6,12 @@
 #include <QUrl>
 #include <QDir>
 #include <QMainWindow>
-#include <QMainWindow>
-#include <QMainWindow>
+#include <QEventLoop>
+#include <QNetworkAccessManager>
+#include <QObject>
+#include <QNetworkReply>
+#include <QTimer>
+#include <QThread>
 
 #include "DownloadEntry.h"
 //#include "Settings.h"
@@ -16,7 +20,9 @@
 #include "../Utils/UIThread.h"
 //#include "Model/User.h"
 
-#include "../../Form/SomLauncherMainWindow.h"
+//#include "../../Form/SomLauncherMainWindow.h"
+
+//class SomLauncherMainWindow;
 
 class DownloadHelper
 {
@@ -26,16 +32,16 @@ private:
 	QList<D> mDownloadList;
 	quint64 mTotalDownloadSize = 0;
 
-	SomLauncherMainWindow* mLauncher;
+	QObject* mLauncher;
 	QDir mGameDir;
 
 
 public:
-	explicit DownloadHelper(SomLauncherMainWindow* launcher = nullptr);
+	explicit DownloadHelper(QObject* launcher = nullptr);
 
-	void addDownloadList(const QList<DownloadEntry>& downloads, bool withHashCheck);
+	void addDownloadList(const QList<DownloadEntry>& downloads, const std::filesystem::path& path, bool withHashCheck);
 	void performDownload();
-	void gameDownload(const ::GameProfile& profile, bool withUpdate);
+	void gameDownload(const GameProfile& profile, bool withUpdate);
 	void setStatusUI(const QString& status);
 };
 

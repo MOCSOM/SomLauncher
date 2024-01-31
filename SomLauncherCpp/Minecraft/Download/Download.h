@@ -11,16 +11,17 @@
 #include "DownloadEntry.h"
 #include "DownloadHelper.h"
 #include "../Utils/Crypto.h"
+#include "../Launcher/GameProfile.h"
 
-class Download
+namespace download
 {
-	Q_OBJECT
+	bool loadDownloads(GameProfile& profile);
 
-private:
-	QNetworkAccessManager mNetwork;
-
-public:
-	void installPackage(const QUrl& url);
-};
+	namespace utils
+	{
+		QVector<DownloadEntry> getDownloads(const QJsonObject& object);
+		QString javaLibNameToPath(const QString& name);
+	}
+}
 
 #endif // !DOWNLOAD_DOWNLOAD_H_

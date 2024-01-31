@@ -152,6 +152,30 @@
     <ClCompile Include="Minecraft\Download\Download.cpp">
       <Filter>Minecraft\Download</Filter>
     </ClCompile>
+    <ClCompile Include="Minecraft\Utils\Crypto.cpp">
+      <Filter>Minecraft\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Utils\UIThread.cpp">
+      <Filter>Minecraft\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Download\DownloadHelper.cpp">
+      <Filter>Minecraft\Download</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\GameArgs\GameArguments.cpp">
+      <Filter>Minecraft\GameArgs</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Launcher\GameProfile.cpp">
+      <Filter>Minecraft\Launcher</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Launcher\LaunchCommand.cpp">
+      <Filter>Minecraft\Launcher</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Libraries\Libraries.cpp">
+      <Filter>Minecraft\Libraries</Filter>
+    </ClCompile>
+    <ClCompile Include="Minecraft\Rules\Rules.cpp">
+      <Filter>Minecraft\Rules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -229,6 +253,36 @@
     <ClInclude Include="Archives\qzipreader_p.h">
       <Filter>qtzipfiles</Filter>
     </ClInclude>
+    <ClInclude Include="Minecraft\Utils\Crypto.h">
+      <Filter>Minecraft\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Download\DownloadEntry.h">
+      <Filter>Minecraft\Download</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Download\DownloadHelper.h">
+      <Filter>Minecraft\Download</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Download\Download.h">
+      <Filter>Minecraft\Download</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\GameArgs\GameArguments.h">
+      <Filter>Minecraft\GameArgs</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Launcher\GameProfile.h">
+      <Filter>Minecraft\Launcher</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Launcher\LaunchCommand.h">
+      <Filter>Minecraft\Launcher</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Launcher\LauncherRule.h">
+      <Filter>Minecraft\Launcher</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Libraries\Libraries.h">
+      <Filter>Minecraft\Libraries</Filter>
+    </ClInclude>
+    <ClInclude Include="Minecraft\Rules\Rules.h">
+      <Filter>Minecraft\Rules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="all.json" />
@@ -279,8 +333,8 @@
     <QtMoc Include="Form\TopSlideFrameWidget.h">
       <Filter>Custom Qt Files</Filter>
     </QtMoc>
-    <QtMoc Include="Minecraft\Download\Download.h">
-      <Filter>Minecraft\Download</Filter>
+    <QtMoc Include="Minecraft\Utils\UIThread.h">
+      <Filter>Minecraft\Utils</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>

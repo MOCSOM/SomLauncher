@@ -13,14 +13,14 @@
 
 #include <filesystem>
 
-#include <SomJson.h>
+#include "../../../MocJsonLib/SomJson.h"
 
 #include "../Download/DownloadEntry.h"
 #include "LauncherRule.h"
-#include "../Download/DownloadHelper.h"
+//#include "../Download/DownloadHelper.h"
 //#include "ClasspathListModel.h"
 
-DownloadEntry downloadEntryFromJson(const QString& path, Json::JsonValue& v);
+DownloadEntry downloadEntryFromJson(const QString& path, const QJsonObject& v);
 
 class GameProfile
 {
@@ -136,6 +136,8 @@ public:
 public:
 	std::filesystem::path instancePath(const std::filesystem::path& minecraft_path = std::filesystem::path()) noexcept;
 	std::filesystem::path setupNativesPath(const std::filesystem::path& minecraft_path = std::filesystem::path()) noexcept;
+
+public:
 
 
 	//public:

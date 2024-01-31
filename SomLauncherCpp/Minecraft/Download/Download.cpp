@@ -1,78 +1,132 @@
 #include "Download.h"
 
-void Download::installPackage(const QUrl& url)
+bool download::loadDownloads(GameProfile& profile)
 {
-	auto reply = mNetwork.get(QNetworkRequest(url));
+	auto& name = profile.getVersionName();
+	QFile file = std::filesystem::absolute(
+		profile.getInstancePath() / "versions" / name.toStdU16String() / (name + ".json").toStdString());
+	if (file.exists())
+	{
+		file.open(QIODevice::ReadOnly);
+		QVector<DownloadEntry> downloads = utils::getDownloads(QJsonDocument::fromJson(file.readAll()).object());
+		profile.setDownloads(downloads);
+		file.close();
+		return true;
+	}
+	return false;
+}
 
-	QObject::connect(reply, &QNetworkReply::finished,
-		[&, reply]()
+QVector<DownloadEntry> download::utils::getDownloads(const QJsonObject& object)
+{
+	QVector<DownloadEntry> downloads;
+
+	// Java libraries
+	for (QJsonValue v : object["libraries"].toArray())
+	{
+		if (v["rules"].isArray())
 		{
-			reply->deleteLater();
-			auto buffer = reply->readAll();
-			auto hash = crypto::sha1(buffer);
-			QJsonObject manifest = QJsonDocument::fromJson(buffer).object();
-
-			auto performDownload =
-				[&, manifest, hash]()
-				{
-					QThreadPool::globalInstance()->start(
-						[&, manifest, hash]()
-						{
-							QDir installDir = getSettings()->getGameDir().absoluteFilePath("packages/" + hash);
-							if (!installDir.exists())
-							{
-								installDir.mkpath(installDir.absolutePath());
-							}
-							// compose the download list
-							QList<DownloadEntry> downloads;
-							for (auto& key : manifest["files"].toObject().keys())
-							{
-								auto file = manifest["files"].toObject()[key].toObject();
-								// necessary directories will be created automatically
-								if (file["type"].toString() == "file")
-								{
-									auto raw = file["downloads"].toObject()["raw"].toObject();
-									downloads << DownloadEntry{ installDir.absoluteFilePath(key).toStdString(), raw["url"].toString(),
-										quint64(raw["size"].toInt()), false, raw["sha1"].toString() };
-								}
-							}
-							DownloadHelper d(this);
-							d.addDownloadList(downloads, true);
-							d.performDownload();
-							//UIThread::run([&]()
-							//	{
-							//		ui.play->setEnabled(true); // play will work only if ui.play is enabled
-							//		play(false);
-							//	});
-						});
-				};
-
-
-			// check for the license file
-			if (manifest["files"].toObject()["LICENSE"].isObject())
+			bool allowed = false;
+			for (auto r : v["rules"].toArray())
 			{
-				auto url =
-					manifest["files"].toObject()["LICENSE"].toObject()["downloads"].toObject()["raw"].toObject()["url"].toString();
-				auto licenseReply = mNetwork.get(QNetworkRequest(url));
-				QObject::connect(licenseReply, &QNetworkReply::finished,
-					[&, performDownload, licenseReply]()
+				auto rule = r.toObject();
+				bool rulePassed = true;
+				for (auto& k : rule.keys())
+				{
+					if (k != "action")
 					{
-						licenseReply->deleteLater();
-
-						LicenseForm f(QString::fromUtf8(licenseReply->readAll()), this);
-						if (f.exec())
+						if (rule[k].isObject())
 						{
-							performDownload();
+							auto x = rule[k].toObject();
+							for (auto& v : x.keys())
+							{
+								/*if (VariableHelper::getVariableValue(launcher, k + '.' + v).toString() != x[v]
+									.
+									toVariant()
+									.
+									toString()
+									)
+								{
+									rulePassed = false;
+									break;
+								}*/
+							}
 						}
 						else
 						{
-							//setDownloadMode(false);
+							/*if (VariableHelper::getVariableValue(launcher, k).toString() != rule[k]
+								.toVariant().toString())
+							{
+								rulePassed = false;
+							}*/
 						}
-					});
+						if (!rulePassed)
+							break;
+					}
+				}
+				if (rulePassed)
+					allowed = rule["action"] == "allow";
 			}
-			else
+			if (!allowed)
+				continue;
+		}
+
+		QString name = v["name"].toString();
+
+		if (v["downloads"].isObject())
+		{
+			downloads << downloadEntryFromJson("libraries/" + v["downloads"]["artifact"]["path"].toString(),
+				v["downloads"]["artifact"].toObject());
+
+			bool extract = v["extract"].isObject();
+			downloads.last().mExtract = extract;
+
+			if (v["downloads"]["classifiers"].isObject())
 			{
-				performDownload();
+				auto k = v["downloads"]["classifiers"]["natives-windows"];
+				if (k.isObject())
+				{
+					downloads.last().mExtract = false;
+					downloads << downloadEntryFromJson("libraries/" + k["path"].toString(), k.toObject());
+					downloads.last().mExtract = extract;
+					//p.mClasspath << GameProfile::ClasspathEntry{ "libraries/" + k["path"].toString() };
+				}
 			}
-		});
+		}
+		else
+		{
+			// Minecraft Forge-style entry
+			QString url = "https://libraries.minecraft.net/";
+			if (v["url"].isString())
+			{
+				url = v["url"].toString();
+				if (!url.endsWith("/"))
+				{
+					url += "/";
+				}
+			}
+			downloads << DownloadEntry{
+				("libraries/" + javaLibNameToPath(name)).toStdString(), url + javaLibNameToPath(name), 0, false, ""
+			};
+		}
+
+		/*if (v["downloads"].isObject())
+			p.mClasspath << ClasspathEntry{ "libraries/" + v["downloads"]["artifact"]["path"].toString() };
+		else
+			p.mClasspath << ClasspathEntry{ "libraries/" + javaLibNameToPath(name) };*/
+	}
+
+
+	return downloads;
+}
+
+QString download::utils::javaLibNameToPath(const QString& name)
+{
+	auto colonSplitted = name.split(':');
+	if (colonSplitted.size() == 3)
+	{
+		colonSplitted[0].replace('.', '/');
+		return colonSplitted[0] + '/' + colonSplitted[1] + '/' + colonSplitted[2]
+			+ '/' + colonSplitted[1] + '-' + colonSplitted[2] + ".jar";
+	}
+	return "INVALID:" + name;
 }

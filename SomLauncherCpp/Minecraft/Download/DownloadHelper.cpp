@@ -1,15 +1,15 @@
 #include "DownloadHelper.h"
 
-DownloadHelper::DownloadHelper(SomLauncherMainWindow* launcher)
+DownloadHelper::DownloadHelper(QObject* launcher)
 	: mLauncher(launcher)
 {
 }
 
-void DownloadHelper::addDownloadList(const QList<DownloadEntry>& downloads, bool withHashCheck)
+void DownloadHelper::addDownloadList(const QList<DownloadEntry>& downloads, const std::filesystem::path& path, bool withHashCheck)
 {
 	for (auto& d : downloads)
 	{
-		auto absPath = std::filesystem::absolute(d.mLocalPath);
+		auto absPath = std::filesystem::absolute(path / d.mLocalPath);
 		QFile local = absPath;
 		if (local.exists())
 		{
@@ -37,10 +37,10 @@ void DownloadHelper::performDownload()
 			{
 				//mLauncher->ui.total->setText(StringHelper::prettySize(mTotalDownloadSize));
 				//mLauncher->ui.label_download_status_change->setText(StringHelper::prettySize(0));
-				mLauncher->ui.label_download_status_change->setText(QObject::tr("Calculating..."));
+				//mLauncher->ui.label_download_status_change->setText(QObject::tr("Calculating..."));
 				//mLauncher->ui.speed->setText(StringHelper::prettySize(0, true));
-				mLauncher->ui.progressBar_ahtung->setMaximum(1000);
-				mLauncher->ui.progressBar_ahtung->setValue(0);
+				//mLauncher->ui.progressBar_ahtung->setMaximum(1000);
+				//mLauncher->ui.progressBar_ahtung->setValue(0);
 			});
 		QNetworkAccessManager network;
 		QEventLoop zaloop;
@@ -122,7 +122,7 @@ void DownloadHelper::performDownload()
 						UIThread::run([&, time]()
 							{
 								auto k = QDateTime::fromMSecsSinceEpoch(time * 1000).toUTC().toString("HH:mm:ss");
-								mLauncher->ui.label_download_status_change->setText(k);
+								//mLauncher->ui.label_download_status_change->setText(k);
 							});
 					}
 
@@ -138,12 +138,12 @@ void DownloadHelper::performDownload()
 						//mLauncher->ui.speed->setText(StringHelper::prettySize(averangeDelta, true));
 						if (mTotalDownloadSize)
 						{
-							mLauncher->ui.progressBar_ahtung->setValue(d * 1000 / mTotalDownloadSize);
+							//mLauncher->ui.progressBar_ahtung->setValue(d * 1000 / mTotalDownloadSize);
 						}
 						else
 						{
 
-							mLauncher->ui.progressBar_ahtung->setValue(0);
+							//mLauncher->ui.progressBar_ahtung->setValue(0);
 						}
 					});
 			});
@@ -154,9 +154,9 @@ void DownloadHelper::performDownload()
 	}
 }
 
-void DownloadHelper::gameDownload(const::GameProfile& profile, bool withUpdate)
+void DownloadHelper::gameDownload(const GameProfile& profile, bool withUpdate)
 {
-	mGameDir = QDir(mLauncher->minecraft_core_dir_path.c_str());
+	mGameDir = QDir(profile.getInstancePath());
 
 	// Determine download list and count total download size
 	// running twice because of asset index
@@ -166,7 +166,7 @@ void DownloadHelper::gameDownload(const::GameProfile& profile, bool withUpdate)
 		auto assetJsonPath = mGameDir.absoluteFilePath("assets/indexes/" + profile.getAssetsIndex() + ".json");
 		bool assetIndexExists = QFile(assetJsonPath).exists();
 
-		addDownloadList(profile.getDownloads(), withUpdate);
+		addDownloadList(profile.getDownloads(), profile.getInstancePath(), withUpdate);
 
 		if (assetIndexExists)
 		{
@@ -215,6 +215,6 @@ void DownloadHelper::setStatusUI(const QString& status)
 	UIThread::run(
 		[&, status]()
 		{
-			mLauncher->ui.label_download_status_change->setText(status);
+			//mLauncher->ui.label_download_status_change->setText(status);
 		});
 }
