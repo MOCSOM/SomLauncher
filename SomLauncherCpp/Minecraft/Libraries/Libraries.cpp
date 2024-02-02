@@ -84,6 +84,83 @@ bool libraries::loadLibraries(GameProfile& profile)
 	return true;
 }
 
+void libraries::unpackLibraries(const GameProfile& profile)
+{
+	// unpack necessary libraries
+	for (auto& lib : profile.getDownloads())
+	{
+		if (lib.mExtract)
+		{
+			std::string absoluteFilePath = std::filesystem::absolute(profile.getInstancePath() / lib.mLocalPath).string();
+
+			QDir extractTo = std::filesystem::absolute(profile.getInstancePath() / "bin" / profile.id().toStdString());
+			if (!extractTo.exists())
+				extractTo.mkpath(extractTo.absolutePath());
+
+			unzFile unz = unzOpen(absoluteFilePath.c_str());
+			if (unz)
+			{
+				unz_global_info info;
+				if (unzGetGlobalInfo(unz, &info) != UNZ_OK)
+					continue;
+				for (size_t i = 0; i < info.number_entry; ++i)
+				{
+					unz_file_info fileInfo;
+					char cFileName[512];
+					if (unzGetCurrentFileInfo(unz, &fileInfo, cFileName, sizeof(cFileName), nullptr, 0, nullptr,
+						0) != UNZ_OK)
+						break;
+
+					QString fileName = cFileName;
+
+					// meta-inf folder is not needed
+					if (!fileName.startsWith("META-INF/"))
+					{
+						if (fileName.endsWith('/'))
+						{
+							// folder
+							extractTo.mkpath(extractTo.absoluteFilePath(fileName));
+						}
+						else
+						{
+							// file
+							if (unzOpenCurrentFile(unz) != UNZ_OK)
+								break;
+
+
+							QFile dstFile = extractTo.absoluteFilePath(fileName);
+							auto containingDir = QFileInfo(dstFile).absoluteDir();
+							if (!containingDir.exists())
+								extractTo.mkpath(containingDir.absolutePath());
+
+							dstFile.open(QIODevice::WriteOnly);
+
+							char buf[0x1000]{};
+
+							for (int read; (read = unzReadCurrentFile(unz, buf, sizeof(buf))) > 0;)
+							{
+								dstFile.write(buf, read);
+							}
+
+							dstFile.close();
+							unzCloseCurrentFile(unz);
+						}
+					}
+
+
+					if ((i + 1) < info.number_entry)
+					{
+						if (unzGoToNextFile(unz) != UNZ_OK)
+							break;
+					}
+				}
+
+				unzClose(unz);
+			}
+		}
+	}
+}
+
 std::filesystem::path libraries::utils::getLibraryPath(const QString& lib_name, const std::filesystem::path& instance_path)
 {
 	/*

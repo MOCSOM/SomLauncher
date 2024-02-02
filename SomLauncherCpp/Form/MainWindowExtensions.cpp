@@ -610,3 +610,123 @@ void SomLauncherMainWindow::installPackage(const QUrl& url)
 			}
 		});
 }
+
+QProcess* SomLauncherMainWindow::createProcess()
+{
+	if (mProcesses.empty())
+	{
+		//emit closeConsoleWindows();
+	}
+	auto p = new QProcess(this);
+	mProcesses << p;
+	hide();
+	/*if (getSettings()->value("hide_launcher").toBool())
+	{
+		hide();
+	}
+	else {
+		updatePlayButton();
+	}
+	if (getSettings()->value("show_console").toBool())
+	{
+		auto console = new ConsoleWindow(p);
+		connect(this, &HackersMCLauncher::closeConsoleWindows, console, &ConsoleWindow::onClose);
+	}*/
+	return p;
+}
+
+void SomLauncherMainWindow::removeProcess(QProcess* p, int status, QProcess::ExitStatus e)
+{
+	mProcesses.removeAll(p);
+	p->deleteLater();
+	if (isHidden())
+	{
+		show();
+	}
+	/*else
+	{
+		updatePlayButton();
+	}
+	if (mProcesses.isEmpty())
+	{
+		if (getSettings()->value("close_launcher").toBool())
+		{
+			close();
+		}
+	}*/
+}
+
+void SomLauncherMainWindow::startMinecraft(const GameProfile& profile)
+{
+	auto args = commandline::generateCommand(profile);
+
+	UIThread::run([&, args, profile]()
+		{
+			//auto p = createProcess();
+			//connect(p, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this,
+			//	[&, p](int status, QProcess::ExitStatus e)
+			//	{
+			//		removeProcess(p, status, e);
+			//	});
+			//connect(p, &QProcess::readyReadStandardOutput, this, [p]()
+			//	{
+			//		printf("%s", p->readAllStandardOutput().data());
+			//		printf("%s", p->readAllStandardError().data());
+			//	});
+			//connect(p, &QProcess::errorOccurred, this, [&, p](QProcess::ProcessError e)
+			//	{
+			//		if (e == 0)
+			//			switch (QMessageBox::question(this, tr("Could not start Java"), tr(
+			//				"It seems like you have no proper Java installation."
+			//				" Minecraft requires Java to launch.\n\nLauncher can download and install Java for you."),
+			//				tr("Download and install Java for me"), tr("I'll install by myself")))
+			//			{
+			//			case 0: // install
+			//				//downloadJava();
+			//				break;
+			//			case 1: // install by user
+			//				QMessageBox::information(this, tr("Java installation"),
+			//					tr("Don't forget to restart the launcher."), tr("Got it"));
+			//				break;
+			//			}
+			//		removeProcess(p, 0, QProcess::ExitStatus::NormalExit);
+			//	});
+			//p->setWorkingDirectory(profile.getInstancePath().string().c_str());
+
+			//// set default java command.
+			//p->setProgram("java");
+
+			// try to find java in packages dir
+			QString executable = "java";
+			if (profile.getjavaPath() == executable.toStdString())
+			{
+				QDir packageDir = std::filesystem::absolute(profile.getMinecraftCorePath() / "packages");
+				for (auto& e : packageDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot))
+				{
+					executable = packageDir.absoluteFilePath(e + "/bin/java.exe");
+					if (QFileInfo(executable).isFile())
+					{
+						//p->setProgram(executable);
+						break;
+					}
+				}
+			}
+			else
+			{
+				executable = profile.getjavaPath().string().c_str();
+			}
+			//p->setArguments(args);
+
+			//qInfo() << p->program() << std::endl;
+			//qInfo() << p->arguments().join(' ') << std::endl;
+
+			//p->start();
+
+			hide();
+
+			client::startProcess((executable + " " + args.join(' ')).toStdString());
+
+			setWindowFlags(windowFlags() /*| Qt::Window*/ | Qt::WindowSystemMenuHint);
+			show();
+		});
+}

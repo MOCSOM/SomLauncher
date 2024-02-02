@@ -17,6 +17,7 @@
 
 #include "../Download/DownloadEntry.h"
 #include "LauncherRule.h"
+#include "../Utils/Crypto.h"
 //#include "../Download/DownloadHelper.h"
 //#include "ClasspathListModel.h"
 
@@ -62,13 +63,15 @@ public:
 private:
 	QUuid mUuid;
 	QString version_name;
+	QString loader_version;
+	QString loader_core;
 	QString minecraft_version;
 	QString mName;
 	QString user_name;
 	QString mMainClass;
 	QString mAssetsIndex;
 	QString mJavaVersionName = "java-runtime-alpha";
-	std::filesystem::path java_path;
+	std::filesystem::path java_path = "java";
 
 	QVector<DownloadEntry> mDownloads;
 	QVector<GameArg> mGameArgs;
@@ -78,6 +81,7 @@ private:
 	std::filesystem::path natives_path;
 	std::filesystem::path jar_path;
 	std::filesystem::path instance_path;
+	std::filesystem::path minecraft_core_path;
 
 	bool mIsFullscreen = false;
 	unsigned short mWindowWidth = 854;
@@ -109,6 +113,10 @@ public:
 	[[nodiscard]] const QString& getMinecraftVersion() const noexcept { return minecraft_version; }
 	[[nodiscard]] const QString& getUsername() const noexcept { return user_name; }
 	[[nodiscard]] const std::filesystem::path& getjavaPath() const noexcept { return java_path; }
+	[[nodiscard]] const std::filesystem::path& getMinecraftCorePath() const noexcept { return minecraft_core_path; }
+	[[nodiscard]] const QString& getLoaderCore() const noexcept { return loader_core; }
+	[[nodiscard]] const QString& getLoaderVersion() const noexcept { return loader_version; }
+	[[nodiscard]] const bool& isLoader() const noexcept { return !(loader_version.isEmpty() || loader_core.isEmpty()); }
 
 public:
 	void setUuid(const QUuid& uuid) noexcept { mUuid = uuid; }
@@ -132,13 +140,16 @@ public:
 	void setMinecraftVersion(const QString& minecraft_version) noexcept { this->minecraft_version = minecraft_version; }
 	void setUsername(const QString& user_name) noexcept { this->user_name = user_name; }
 	void setjavaPath(const std::filesystem::path& java_path) noexcept { this->java_path = java_path; }
+	void setMinecraftCorePath(const std::filesystem::path& minecraft_core_path) noexcept { this->minecraft_core_path = minecraft_core_path; }
+	void setLoaderCore(const QString& loader_core) noexcept { this->loader_core = loader_core; }
+	void setLoaderVersion(const QString& loader_version) noexcept { this->loader_version = loader_version; }
 
 public:
 	std::filesystem::path instancePath(const std::filesystem::path& minecraft_path = std::filesystem::path()) noexcept;
 	std::filesystem::path setupNativesPath(const std::filesystem::path& minecraft_path = std::filesystem::path()) noexcept;
 
 public:
-
+	QString id() const;
 
 	//public:
 	//	void save();

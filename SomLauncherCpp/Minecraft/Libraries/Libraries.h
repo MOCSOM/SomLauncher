@@ -8,6 +8,8 @@
 #include <QVector>
 #include <QDir>
 
+#include <minizip/unzip.h>
+
 //#include <variant>
 
 #include "../Launcher/GameProfile.h"
@@ -20,6 +22,8 @@ namespace libraries
 		Json::JsonValue& json_data, const std::filesystem::path& instance_path);
 
 	bool loadLibraries(GameProfile& profile);
+
+	void unpackLibraries(const GameProfile& profile);
 
 	namespace utils
 	{

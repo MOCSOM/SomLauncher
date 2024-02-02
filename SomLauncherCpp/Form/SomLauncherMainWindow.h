@@ -59,10 +59,11 @@ class SomLauncherMainWindow : public QMainWindow
 	Q_OBJECT
 
 private:
-	//friend DownloadHelper;
+	friend DownloadHelper;
 
 private:
 	QNetworkAccessManager mNetwork;
+	QList<QProcess*> mProcesses;
 
 private:
 	std::string minecraft_core_dir_path = "";
@@ -169,6 +170,10 @@ public:
 	std::unique_ptr<SettingsDialog>& getSettingsDialog();
 
 	void installPackage(const QUrl& url);
+	void setUiToDownload(bool status);
+	QProcess* createProcess();
+	void removeProcess(QProcess* p, int status, QProcess::ExitStatus e);
+	void startMinecraft(const GameProfile& profile);
 
 private slots:
 	void onClickedpushButton_game();

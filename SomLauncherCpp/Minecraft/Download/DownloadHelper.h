@@ -20,8 +20,7 @@
 #include "../Utils/UIThread.h"
 //#include "Model/User.h"
 
-//#include "../../Form/SomLauncherMainWindow.h"
-
+class SomLauncherMainWindow;
 //class SomLauncherMainWindow;
 
 class DownloadHelper
@@ -32,12 +31,12 @@ private:
 	QList<D> mDownloadList;
 	quint64 mTotalDownloadSize = 0;
 
-	QObject* mLauncher;
+	SomLauncherMainWindow* mLauncher;
 	QDir mGameDir;
 
 
 public:
-	explicit DownloadHelper(QObject* launcher = nullptr);
+	explicit DownloadHelper(SomLauncherMainWindow* launcher = nullptr);
 
 	void addDownloadList(const QList<DownloadEntry>& downloads, const std::filesystem::path& path, bool withHashCheck);
 	void performDownload();

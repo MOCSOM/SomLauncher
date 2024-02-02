@@ -2,17 +2,58 @@
 
 bool download::loadDownloads(GameProfile& profile)
 {
-	auto& name = profile.getVersionName();
-	QFile file = std::filesystem::absolute(
-		profile.getInstancePath() / "versions" / name.toStdU16String() / (name + ".json").toStdString());
-	if (file.exists())
+	if (profile.isLoader())
 	{
-		file.open(QIODevice::ReadOnly);
-		QVector<DownloadEntry> downloads = utils::getDownloads(QJsonDocument::fromJson(file.readAll()).object());
+		download::utils::versionjson::fabric::downloadJsonFabric(profile);
+	}
+	download::utils::versionjson::downloadJsons(profile);
+
+	auto& name = profile.getVersionName();
+	auto& vanilla_name = profile.getMinecraftVersion();
+	QFile version_name_file = std::filesystem::absolute(
+		profile.getInstancePath() / "versions" / name.toStdU16String() / (name + ".json").toStdString());
+	if (version_name_file.exists())
+	{
+		QVector<DownloadEntry> downloads;
+		QFile vanilla_name_file = std::filesystem::absolute(
+			profile.getInstancePath() / "versions" / vanilla_name.toStdU16String() / (vanilla_name + ".json").toStdString());
+		if (vanilla_name_file.exists())
+		{
+			vanilla_name_file.open(QIODevice::ReadOnly);
+
+			//Download minecraft.jar
+			const QJsonObject json_vanilla = QJsonDocument::fromJson(vanilla_name_file.readAll()).object();
+			QUrl minecraft_jar_url = json_vanilla["downloads"]["client"]["url"].toString();
+			if (json_vanilla["downloads"].type() != QJsonValue::Null)
+			{
+				downloads += DownloadEntry{
+					(profile.getInstancePath() / "versions" / vanilla_name.toStdU16String() / (vanilla_name + ".jar").toStdString()),
+					minecraft_jar_url
+				};
+				downloads += DownloadEntry{
+					(profile.getInstancePath() / "versions" / name.toStdU16String() / (name + ".jar").toStdString()),
+					minecraft_jar_url
+				};
+			}
+
+			downloads += utils::getDownloads(QJsonDocument::fromJson(vanilla_name_file.readAll()).object());
+
+			vanilla_name_file.close();
+		}
+
+		version_name_file.open(QIODevice::ReadOnly);
+
+		downloads += utils::getDownloads(QJsonDocument::fromJson(version_name_file.readAll()).object());
+
 		profile.setDownloads(downloads);
-		file.close();
+		version_name_file.close();
 		return true;
 	}
+
+
+	//else
+	//{
+	//}
 	return false;
 }
 
@@ -129,4 +170,53 @@ QString download::utils::javaLibNameToPath(const QString& name)
 			+ '/' + colonSplitted[1] + '-' + colonSplitted[2] + ".jar";
 	}
 	return "INVALID:" + name;
+}
+
+bool download::utils::versionjson::downloadJsons(const GameProfile& profile)
+{
+	QUrl version_manifest_url = QUrl::fromUserInput("https://launchermeta.mojang.com/mc/game/version_manifest.json");
+	DownloadHelper helper;
+	helper.addDownloadList(
+		{ DownloadEntry {profile.getInstancePath() / "version_manifest.json", version_manifest_url, 0, false, "" } },
+		profile.getInstancePath() / "version_manifest.json", false);
+	helper.performDownload();
+
+	Json::JsonValue version_list = Json::JsonParcer::ParseFile(profile.getInstancePath() / "version_manifest.json");
+
+	if (version_list == nullptr)
+	{
+		qFatal() << "error in version list";
+	}
+
+	for (auto& var : version_list["versions"].get_array())
+	{
+		//qInfo() << "doversion install" << std::endl;
+		if (var["id"].to_string() == profile.getMinecraftVersion().toStdString())
+		{
+			QUrl version_url = QUrl::fromUserInput(var["url"].to_string().c_str());
+			auto file = std::filesystem::absolute(
+				profile.getInstancePath() / "versions" / profile.getMinecraftVersion().toStdString() / (profile.getMinecraftVersion() + ".json").toStdString());
+
+			DownloadHelper helper;
+			helper.addDownloadList({ DownloadEntry {file, version_url, 0, false, "" } }, file, false);
+			helper.performDownload();
+			return true;
+		}
+	}
+	return false;
+}
+
+bool download::utils::versionjson::fabric::downloadJsonFabric(const GameProfile& profile)
+{
+	QUrl version_url = QUrl::fromUserInput("https://meta.fabricmc.net/v2/versions/loader/"
+		+ profile.getMinecraftVersion() + "/" + profile.getLoaderVersion() + "/profile/json");
+	auto file = std::filesystem::absolute(
+		profile.getInstancePath() / "versions" / profile.getVersionName().toStdString() / (profile.getVersionName() + ".json").toStdString());
+
+	DownloadHelper helper;
+	helper.addDownloadList({ DownloadEntry {file, version_url, 0, false, "" } }, file, false);
+	helper.performDownload();
+	//return true;
+
+	return true;
 }

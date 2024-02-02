@@ -1,6 +1,9 @@
 #include "DownloadHelper.h"
 
-DownloadHelper::DownloadHelper(QObject* launcher)
+#include "../../Form/SomLauncherMainWindow.h"
+
+
+DownloadHelper::DownloadHelper(SomLauncherMainWindow* launcher)
 	: mLauncher(launcher)
 {
 }
@@ -35,12 +38,16 @@ void DownloadHelper::performDownload()
 
 		UIThread::run([&]()
 			{
-				//mLauncher->ui.total->setText(StringHelper::prettySize(mTotalDownloadSize));
-				//mLauncher->ui.label_download_status_change->setText(StringHelper::prettySize(0));
-				//mLauncher->ui.label_download_status_change->setText(QObject::tr("Calculating..."));
-				//mLauncher->ui.speed->setText(StringHelper::prettySize(0, true));
-				//mLauncher->ui.progressBar_ahtung->setMaximum(1000);
-				//mLauncher->ui.progressBar_ahtung->setValue(0);
+				if (mLauncher)
+				{
+					mLauncher->setUiToDownload(true);
+					//mLauncher->ui.total->setText(StringHelper::prettySize(mTotalDownloadSize));
+					//mLauncher->ui.label_download_status_change->setText(StringHelper::prettySize(0));
+					mLauncher->ui.label_download_status_change->setText(QObject::tr("Calculating..."));
+					//mLauncher->ui.speed->setText(StringHelper::prettySize(0, true));
+					mLauncher->ui.progressBar_ahtung->setMaximum(1000);
+					mLauncher->ui.progressBar_ahtung->setValue(0);
+				}
 			});
 		QNetworkAccessManager network;
 		QEventLoop zaloop;
@@ -121,8 +128,11 @@ void DownloadHelper::performDownload()
 						float time = (mTotalDownloadSize - downloaded) / averangeDelta;
 						UIThread::run([&, time]()
 							{
-								auto k = QDateTime::fromMSecsSinceEpoch(time * 1000).toUTC().toString("HH:mm:ss");
-								//mLauncher->ui.label_download_status_change->setText(k);
+								if (mLauncher)
+								{
+									auto k = QDateTime::fromMSecsSinceEpoch(time * 1000).toUTC().toString("HH:mm:ss");
+									mLauncher->ui.label_download_status_change->setText(k);
+								}
 							});
 					}
 
@@ -138,12 +148,17 @@ void DownloadHelper::performDownload()
 						//mLauncher->ui.speed->setText(StringHelper::prettySize(averangeDelta, true));
 						if (mTotalDownloadSize)
 						{
-							//mLauncher->ui.progressBar_ahtung->setValue(d * 1000 / mTotalDownloadSize);
+							if (mLauncher)
+							{
+								mLauncher->ui.progressBar_ahtung->setValue(d * 1000 / mTotalDownloadSize);
+							}
 						}
 						else
 						{
-
-							//mLauncher->ui.progressBar_ahtung->setValue(0);
+							if (mLauncher)
+							{
+								mLauncher->ui.progressBar_ahtung->setValue(0);
+							}
 						}
 					});
 			});
@@ -207,6 +222,10 @@ void DownloadHelper::gameDownload(const GameProfile& profile, bool withUpdate)
 		{
 			//mLauncher->resetDownloadIndicators();
 			qDebug() << "resetDownloadIndicators";
+			if (mLauncher)
+			{
+				mLauncher->setUiToDownload(false);
+			}
 		});
 }
 
@@ -215,6 +234,9 @@ void DownloadHelper::setStatusUI(const QString& status)
 	UIThread::run(
 		[&, status]()
 		{
-			//mLauncher->ui.label_download_status_change->setText(status);
+			if (mLauncher)
+			{
+				mLauncher->ui.label_download_status_change->setText(status);
+			}
 		});
 }

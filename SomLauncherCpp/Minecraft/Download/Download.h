@@ -21,6 +21,20 @@ namespace download
 	{
 		QVector<DownloadEntry> getDownloads(const QJsonObject& object);
 		QString javaLibNameToPath(const QString& name);
+
+		namespace versionjson
+		{
+			bool downloadJsons(const GameProfile& profile);
+
+			namespace fabric
+			{
+				bool downloadJsonFabric(const GameProfile& profile);
+			}
+			namespace forge
+			{
+
+			}
+		}
 	}
 }
 

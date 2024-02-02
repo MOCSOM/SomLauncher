@@ -40,12 +40,12 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget* parent)
 	qInfo() << "Setting cyrrentversion..." << std::endl;
 	setCurrentVersionFromDatabase();
 
-	qInfo() << "Checking verison..." << std::endl;
-	if (isVersionOld())
-	{
-		qInfo() << "Start updater" << std::endl;
-		emit this->updateSignal(getLatestVersionFromDatabase()[getLatestVersionFromDatabase().get_array().size() - 1]["file"].to_string());
-	}
+	//qInfo() << "Checking verison..." << std::endl;
+	//if (isVersionOld())
+	//{
+	//	qInfo() << "Start updater" << std::endl;
+	//	emit this->updateSignal(getLatestVersionFromDatabase()[getLatestVersionFromDatabase().get_array().size() - 1]["file"].to_string());
+	//}
 
 	this->recomended_memory = 3072;
 	this->curret_memory = this->config_parce["user"]["memory"].to_int();
@@ -322,37 +322,51 @@ void SomLauncherMainWindow::onClickedpushButton_settings()
 	this->settings_dialog->exec();
 }
 
+void SomLauncherMainWindow::setUiToDownload(bool status)
+{
+	ui.progressBar_ahtung->setHidden(!status);
+	ui.label_download_status_change->setHidden(!status);
+
+	ui.pushButton_startgame->setDisabled(status);
+	this->top_frame->getPushButtonSettings()->setDisabled(status);
+	ui.pushButton_checkupdates->setDisabled(status);
+	ui.pushButton_changeserver->setDisabled(status);
+	//ui.scrollArea_servers->setDisabled(status);
+	ui.scrollAreaWidgetContents->setDisabled(status);
+}
+
 void SomLauncherMainWindow::onClickpushButton_startgame()
 {
 	qInfo() << "pushButton_startgame clicked" << std::endl;
 
 	GameProfile profile;
+	profile.setMinecraftCorePath(this->minecraft_core_dir_path);
+	profile.setUsername(this->username.c_str());
+
 	profile.setInstancePath("C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\fabric1.18.2");
 	profile.setVersionName("1.18.2");
+	/*profile.setLoaderCore("fabric");
+	profile.setLoaderVersion("0.14.22");*/
 	profile.setMinecraftVersion("1.18.2");
-	profile.setUsername(this->username.c_str());
+
 	profile.setAssetsIndex("1.18");
+
 	profile.setupNativesPath();
+
 	download::loadDownloads(profile);
 	libraries::loadLibraries(profile);
 	gamearguments::loadGameArguments(profile);
-	auto ldo = commandline::generateCommand(profile);
-	auto dd = ldo.join(' ');
 
 	DownloadHelper helper(this);
 	helper.setStatusUI(tr("Searching files..."));
 	helper.gameDownload(profile, false);
 	helper.setStatusUI(tr("Preparing to launch..."));
 
-	ui.progressBar_ahtung->setHidden(false);
-	ui.label_download_status_change->setHidden(false);
+	libraries::unpackLibraries(profile);
 
-	ui.pushButton_startgame->setDisabled(true);
-	this->top_frame->getPushButtonSettings()->setDisabled(true);
-	ui.pushButton_checkupdates->setDisabled(true);
-	ui.pushButton_changeserver->setDisabled(true);
-	//ui.scrollArea_servers->setDisabled(true);
-	ui.scrollAreaWidgetContents->setDisabled(true);
+	startMinecraft(profile);
+
+	/*setUiToDownload(true);
 
 	std::function<void()> start_minecraft_thread_func =
 		[this]() -> void
@@ -365,7 +379,7 @@ void SomLauncherMainWindow::onClickpushButton_startgame()
 
 	download_thread = new FunctionThread(start_minecraft_thread_func);
 
-	download_thread->start();
+	download_thread->start();*/
 }
 
 void SomLauncherMainWindow::mouseEnterframe_topslidemenu()

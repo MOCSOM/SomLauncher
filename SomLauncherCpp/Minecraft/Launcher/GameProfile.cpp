@@ -96,6 +96,11 @@ std::filesystem::path GameProfile::setupNativesPath(const std::filesystem::path&
 	return this->instance_path;
 }
 
+QString GameProfile::id() const
+{
+	return crypto::md5(mName).mid(0, 32);
+}
+
 GameProfile::ClasspathEntry::ClasspathEntry(const std::filesystem::path& path, const QString& name)
 	: path(path), name(name)
 {
