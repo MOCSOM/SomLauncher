@@ -40,12 +40,12 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget* parent)
 	qInfo() << "Setting cyrrentversion..." << std::endl;
 	setCurrentVersionFromDatabase();
 
-	qInfo() << "Checking verison..." << std::endl;
+	/*qInfo() << "Checking verison..." << std::endl;
 	if (isVersionOld())
 	{
 		qInfo() << "Start updater" << std::endl;
 		emit this->updateSignal(getLatestVersionFromDatabase()[getLatestVersionFromDatabase().get_array().size() - 1]["file"].to_string());
-	}
+	}*/
 
 	this->recomended_memory = 3072;
 	this->curret_memory = this->config_parce["user"]["memory"].to_int();
@@ -336,7 +336,14 @@ void SomLauncherMainWindow::onClickpushButton_startgame()
 	//ui.scrollArea_servers->setDisabled(true);
 	ui.scrollAreaWidgetContents->setDisabled(true);
 
-	std::function<void()> start_minecraft_thread_func =
+	UIThread::run(
+		[&]()
+		{
+			start_minecraft_params();
+		}
+	);
+
+	/*std::function<void()> start_minecraft_thread_func =
 		[this]() -> void
 		{
 			start_minecraft_params();
@@ -347,7 +354,7 @@ void SomLauncherMainWindow::onClickpushButton_startgame()
 
 	download_thread = new FunctionThread(start_minecraft_thread_func);
 
-	download_thread->start();
+	download_thread->start();*/
 }
 
 void SomLauncherMainWindow::mouseEnterframe_topslidemenu()

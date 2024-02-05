@@ -38,9 +38,15 @@ public:
 	~CallbackNull() = default;
 
 public:
-	void setQProgressBar(QProgressBar* progress_bar);
-	void setQLabelProggress(SignalLabel* progress_label);
+	virtual void setQProgressBar(QProgressBar* progress_bar);
+	virtual void setQLabelProggress(SignalLabel* progress_label);
 	void setCurl(CURL* curl);
+
+public:
+	virtual void setQProgressValue(size_t value) {}
+	virtual void setQLabelProggressValue(QString value) {}
+	virtual void setTotalDownloadSize(quint64 value) {}
+	virtual [[nodiscard]] quint64 getTotalDownloadSize() const { return 0; }
 
 	int progress_func(double TotalToDownload, double NowDownloaded,
 		double TotalToUpload, double NowUploaded);
@@ -106,8 +112,8 @@ public:
 	//CallbackDict(CallbackNull other) {}
 	~CallbackDict() = default;
 
-	void setQProgressBar(QProgressBar* progress_bar);
-	void setQLabelProggress(SignalLabel* progress_label);
+	void setQProgressBar(QProgressBar* progress_bar) override;
+	void setQLabelProggress(SignalLabel* progress_label) override;
 	void setCurl(CURL* curl);
 
 	int progress_func(double TotalToDownload, double NowDownloaded,

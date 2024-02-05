@@ -11,7 +11,8 @@ namespace MinecraftCpp
 	namespace natives
 	{
 		std::vector<std::filesystem::path> getNativesUrls();
-		void downloadNatives(const std::filesystem::path& path, CallbackNull* callback = new CallbackNull());
+		void downloadNatives(const std::filesystem::path& path,
+			std::shared_ptr<CallbackNull> callback = std::make_shared<CallbackNull>());
 	}
 }
 

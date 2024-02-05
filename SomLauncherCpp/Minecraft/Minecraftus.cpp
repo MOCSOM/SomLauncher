@@ -115,7 +115,7 @@ bool MinecraftCpp::option::MinecraftOptions::is_exist(const std::string& param)
 	}
 }
 
-bool MinecraftCpp::install_minecraft_version(const std::string& versionid, const std::string& minecraft_directory, CallbackNull* callback)
+bool MinecraftCpp::install_minecraft_version(const std::string& versionid, const std::string& minecraft_directory, std::shared_ptr<CallbackNull> callback)
 {
 	/*
 	Install a Minecraft Version. Fore more Information take a look at the documentation"
@@ -124,7 +124,7 @@ bool MinecraftCpp::install_minecraft_version(const std::string& versionid, const
 
 	std::string full_dir = Join({ minecraft_directory , "versions" , versionid, (versionid + ".json") });
 
-	std::string download_dir = Join({ minecraft_directory, "downloads" });
+	std::filesystem::path download_dir = Join({ minecraft_directory, "downloads" });
 
 	if (!std::filesystem::exists(download_dir))
 	{
@@ -143,9 +143,9 @@ bool MinecraftCpp::install_minecraft_version(const std::string& versionid, const
 		}
 	}
 
-	std::string version_manifest_file = DownloadFile("https://launchermeta.mojang.com/mc/game/version_manifest.json",
+	auto version_manifest_file = DownloadFile("https://launchermeta.mojang.com/mc/game/version_manifest.json",
 		download_dir, callback);
-	Json::JsonValue version_list = json_manifest.ParseFile(version_manifest_file.c_str());
+	Json::JsonValue version_list = json_manifest.ParseFile(version_manifest_file);
 
 	if (version_list == nullptr)
 	{
@@ -181,7 +181,7 @@ bool MinecraftCpp::install_minecraft_version(const std::string& versionid, const
 }
 
 bool MinecraftCpp::do_version_install(const std::string& versionid, const std::string& path,
-	CallbackNull* callback, const std::string& url)
+	std::shared_ptr<CallbackNull> callback, const std::string& url)
 {
 	/*
 	Install the given version
@@ -216,6 +216,7 @@ bool MinecraftCpp::do_version_install(const std::string& versionid, const std::s
 	{
 		if (versiondata["logging"].get_count() != 0)
 		{
+			callback->setTotalDownloadSize(versiondata["logging"]["client"]["file"]["size"].to_int());
 			logger_file = Join({ path, "assets", "log_configs", versiondata["logging"]["client"]["file"]["id"].to_string() });
 			DownloadFile(versiondata["logging"]["client"]["file"]["url"].to_string(), logger_file, callback); //to with sha
 		}
@@ -225,6 +226,7 @@ bool MinecraftCpp::do_version_install(const std::string& versionid, const std::s
 	qInfo() << "Download minecraft.jar..." << std::endl;
 	if (versiondata.is_exist("downloads"))
 	{
+		callback->setTotalDownloadSize(versiondata["downloads"]["client"]["size"].to_int());
 		DownloadFile(versiondata["downloads"]["client"]["url"].to_string(), Join({ path, "versions", versiondata["id"].to_string(), (versiondata["id"].to_string() + ".jar") }), callback);
 	}
 
@@ -1186,7 +1188,7 @@ std::string MinecraftCpp::get_executable_path(const std::string& jvm_version, co
 	return "";
 }
 
-bool MinecraftCpp::install_libraries(Json::JsonValue data, const std::string& path, CallbackNull* callback)
+bool MinecraftCpp::install_libraries(Json::JsonValue data, const std::string& path, std::shared_ptr<CallbackNull> callback)
 {
 	/*
 	Install all libraries
@@ -1276,8 +1278,11 @@ bool MinecraftCpp::install_libraries(Json::JsonValue data, const std::string& pa
 		jarFilename = name + "-" + version + "." + fileend;
 		downloadUrl = downloadUrl + "/" + jarFilename;
 
-		//Try to download the lib
-		DownloadFile(downloadUrl, Join({ currentPath, jarFilename }), callback);
+		if (!std::filesystem::exists(Join({ currentPath, jarFilename })))
+		{
+			//Try to download the lib
+			DownloadFile(downloadUrl, Join({ currentPath, jarFilename }), callback);
+		}
 
 		if (!var.is_exist("downloads"))
 		{
@@ -1289,11 +1294,13 @@ bool MinecraftCpp::install_libraries(Json::JsonValue data, const std::string& pa
 		}
 		if (var["downloads"].is_exist("artifact"))
 		{
-			DownloadFile(var["downloads"]["artifact"]["url"].to_string(), Join({ path, "libraries", var["downloads"]["artifact"]["path"].to_string() }), callback);
+			callback->setTotalDownloadSize(var["downloads"]["artifact"]["size"].to_int());
+			DownloadFile(var["downloads"]["artifact"]["url"].to_string(), Join({ path, "libraries", var["downloads"]["artifact"]["path"].to_string() }), callback, var["downloads"]["artifact"]["sha1"].to_string());
 		}
 		if (native != "")
 		{
-			DownloadFile(var["downloads"]["classifiers"][native]["url"].to_string(), Join({ currentPath, jarFilenameNative }), callback);
+			callback->setTotalDownloadSize(var["downloads"]["classifiers"][native]["size"].to_int());
+			DownloadFile(var["downloads"]["classifiers"][native]["url"].to_string(), Join({ currentPath, jarFilenameNative }), callback, var["downloads"]["artifact"]["sha1"].to_string());
 			if (var["extract"] != nullptr)
 			{
 				extract_natives_file(Join({ currentPath, jarFilenameNative }), Join({ path, "versions", data["id"].to_string(), "natives" }), var["extract"]);
@@ -1344,7 +1351,7 @@ bool MinecraftCpp::extract_natives_file(const std::string& filename, const std::
 	return true;
 }
 
-bool MinecraftCpp::install_assets(Json::JsonValue data, const std::string& path, CallbackNull* callback)
+bool MinecraftCpp::install_assets(Json::JsonValue data, const std::string& path, std::shared_ptr<CallbackNull> callback)
 {
 	/*
 	Install all assets
@@ -1358,6 +1365,7 @@ bool MinecraftCpp::install_assets(Json::JsonValue data, const std::string& path,
 
 	// Download all assets
 	Json::JsonParcer jsonParcer;
+	callback->setTotalDownloadSize(data["assetIndex"]["size"].to_int());
 	DownloadFile(
 		data["assetIndex"]["url"].to_string(),
 		Join({ path, "assets", "indexes", (data["assets"].to_string() + ".json") }),
@@ -1375,7 +1383,8 @@ bool MinecraftCpp::install_assets(Json::JsonValue data, const std::string& path,
 	int count = 0;
 	for (auto& var : assets_data["objects"].get_object())
 	{
-		DDIC::Download::Files::download_file
+		callback->setTotalDownloadSize(var.second["size"].to_int());
+		DownloadFile
 		(
 			(
 				"https://resources.download.minecraft.net/" +
@@ -1399,7 +1408,7 @@ bool MinecraftCpp::install_assets(Json::JsonValue data, const std::string& path,
 	return true;
 }
 
-bool MinecraftCpp::install_jvm_runtime(const std::string& jvm_version, const std::string& minecraft_directory, CallbackNull* callback)
+bool MinecraftCpp::install_jvm_runtime(const std::string& jvm_version, const std::string& minecraft_directory, std::shared_ptr<CallbackNull> callback)
 {
 	/*
 	Installs the given jvm runtime. callback is the same dict as in the install module.
@@ -1408,8 +1417,8 @@ bool MinecraftCpp::install_jvm_runtime(const std::string& jvm_version, const std
 
 	Json::JsonParcer jsonParcer;
 	std::string platform_string = _get_jvm_platform_string();
-	std::string download_path = DDIC::Download::Files::download_file(_JVM_MANIFEST_URL);
-	Json::JsonValue manifest_data = jsonParcer.ParseFile(download_path.c_str());
+	auto download_path = DownloadFile(_JVM_MANIFEST_URL);
+	Json::JsonValue manifest_data = jsonParcer.ParseFile(download_path);
 
 	// Check if the jvm version exists
 	if (!manifest_data[platform_string].is_exist(jvm_version))
@@ -1425,7 +1434,8 @@ bool MinecraftCpp::install_jvm_runtime(const std::string& jvm_version, const std
 		return false;
 	}
 
-	Json::JsonValue platform_manifest = jsonParcer.ParseFile(DownloadFile(manifest_data[platform_string][jvm_version][0]["manifest"]["url"].to_string()).c_str());
+	callback->setTotalDownloadSize(manifest_data[platform_string][jvm_version][0]["manifest"]["size"].to_int());
+	Json::JsonValue platform_manifest = jsonParcer.ParseFile(DownloadFile(manifest_data[platform_string][jvm_version][0]["manifest"]["url"].to_string()));
 	std::string base_path = Join({ minecraft_directory, "runtime", jvm_version, platform_string, jvm_version });
 
 	// Download all files of the runtime
@@ -1442,11 +1452,13 @@ bool MinecraftCpp::install_jvm_runtime(const std::string& jvm_version, const std
 			// Prefer downloading the compresses file
 			if (var.second["downloads"].is_exist("lzma"))
 			{
+				callback->setTotalDownloadSize(var.second["downloads"]["lzma"]["size"].to_int());
 				//TODO: сделать lzma
 				DownloadFile(var.second["downloads"]["lzma"]["url"].to_string(), current_path.u8string(), callback, var.second["downloads"]["raw"]["sha1"].to_string(), false);
 			}
 			else
 			{
+				callback->setTotalDownloadSize(var.second["downloads"]["lzma"]["size"].to_int());
 				DownloadFile(var.second["downloads"]["raw"]["url"].to_string(), current_path.u8string(), callback, var.second["downloads"]["raw"]["sha1"].to_string());
 			}
 
@@ -1663,7 +1675,7 @@ std::string MinecraftCpp::get_arguments_string(Json::JsonValue versionData, cons
 	return arglist;
 }
 
-bool MinecraftCpp::forge::install_forge_version(const std::string& versionid, const std::string& path, CallbackNull* callback, const std::string& java)
+bool MinecraftCpp::forge::install_forge_version(const std::string& versionid, const std::string& path, std::shared_ptr<CallbackNull> callback, const std::string& java)
 {
 	/*
 	Installs a forge version. Fore more information look at the documentation.
@@ -1837,7 +1849,7 @@ bool MinecraftCpp::forge::forge_processors(
 	const std::string& minecraft_directory,
 	const std::string& lzma_path,
 	const std::string& installer_path,
-	CallbackNull* callback,
+	std::shared_ptr<CallbackNull> callback,
 	const std::string& java = nullptr)
 {
 	/*
@@ -1946,7 +1958,8 @@ bool MinecraftCpp::forge::forge_processors(
 	return true;
 }
 
-int MinecraftCpp::fabric::install_fabric_version(const std::string& minecraft_version, const std::string& minecraft_directory, const std::string& loader_version, CallbackNull* callback, const std::string& java)
+int MinecraftCpp::fabric::install_fabric_version(const std::string& minecraft_version, const std::string& minecraft_directory,
+	const std::string& loader_version, std::shared_ptr<CallbackNull> callback, const std::string& java)
 {
 	/*
 	Install a fabric version
@@ -2140,8 +2153,8 @@ Json::JsonValue MinecraftCpp::fabric::parse_maven_metadata(const std::string& ur
 		replace_url = Additionals::String::split(url, '/')[Additionals::String::split(url, '/').size() - 1];
 		destenation_file = destenation_file /*+ "\\"*/ + replace_url;
 	}
-	std::shared_ptr<CallbackDict> callback = std::make_shared<CallbackDict>();
-	std::string path = DownloadFile(url, destenation_file, callback.get());
+	//std::shared_ptr<QCallback> callback = std::make_shared<QCallback>();
+	auto path = DownloadFile(url, destenation_file/*, callback*/);
 
 	if (path != "")
 	{

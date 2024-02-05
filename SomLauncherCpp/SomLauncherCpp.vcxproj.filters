@@ -30,6 +30,9 @@
     <Filter Include="Minecraft\Servers">
       <UniqueIdentifier>{04374f31-57e4-49fe-baaa-a1f5431bf12f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Hashes">
+      <UniqueIdentifier>{28a77ec8-3d00-4626-aad3-246bf95d6060}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -128,6 +131,21 @@
     <ClCompile Include="Minecraft\Servers\ServerDatConfiguration.cpp">
       <Filter>Minecraft\Servers</Filter>
     </ClCompile>
+    <ClCompile Include="Web\Download\Download.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="QObjects\Threads\UIThread.cpp">
+      <Filter>Custom Qt Files</Filter>
+    </ClCompile>
+    <ClCompile Include="QObjects\Threads\LambdaTask.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Callbacks\QCallback.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Hashes\Crypto.cpp">
+      <Filter>Hashes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -205,6 +223,18 @@
     <ClInclude Include="Minecraft\Servers\ServerDatConfiguration.h">
       <Filter>Minecraft\Servers</Filter>
     </ClInclude>
+    <ClInclude Include="Web\Download\Download.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="QObjects\Threads\LambdaTask.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Callbacks\QCallback.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Hashes\Crypto.h">
+      <Filter>Hashes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="all.json" />
@@ -253,6 +283,9 @@
       <Filter>Custom Qt Files</Filter>
     </QtMoc>
     <QtMoc Include="Form\TopSlideFrameWidget.h">
+      <Filter>Custom Qt Files</Filter>
+    </QtMoc>
+    <QtMoc Include="QObjects\Threads\UIThread.h">
       <Filter>Custom Qt Files</Filter>
     </QtMoc>
   </ItemGroup>

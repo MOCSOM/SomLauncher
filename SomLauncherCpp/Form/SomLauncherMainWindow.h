@@ -32,6 +32,7 @@
 #include "../Minecraft/Mods.h"
 #include "../Databases/SQLBased.h"
 #include "../Minecraft/Servers/ServerDatConfiguration.h"
+#include "../Callbacks/QCallback.h"
 
 #include "ui_SomLauncherMainWindow.h"
 

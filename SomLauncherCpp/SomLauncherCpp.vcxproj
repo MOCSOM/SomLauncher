@@ -189,6 +189,7 @@
     <ClCompile Include="Archives\Archives.cpp" />
     <ClCompile Include="basic_xml.cpp" />
     <ClCompile Include="Callbacks\CallbackDict.cpp" />
+    <ClCompile Include="Callbacks\QCallback.cpp" />
     <ClCompile Include="Client\StartProcess.cpp" />
     <ClCompile Include="Databases\SQLBased.cpp" />
     <ClCompile Include="Encryption\LZMA\LzmaDecompress.cpp" />
@@ -203,6 +204,7 @@
     <ClCompile Include="Form\SingleNewsItemWidget.cpp" />
     <ClCompile Include="Form\SomLauncherMainWindow.cpp" />
     <ClCompile Include="Form\TopSlideFrameWidget.cpp" />
+    <ClCompile Include="Hashes\Crypto.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Minecraft\Minecraftus.cpp" />
     <ClCompile Include="Minecraft\Mods.cpp" />
@@ -215,17 +217,25 @@
     <ClCompile Include="QObjects\SignalLabel.cpp" />
     <ClCompile Include="QObjects\SomSlider.cpp" />
     <ClCompile Include="QObjects\Threads\FunThread.cpp" />
+    <ClCompile Include="QObjects\Threads\LambdaTask.cpp" />
+    <ClCompile Include="QObjects\Threads\UIThread.cpp" />
     <ClCompile Include="Servers\ServerTypes.cpp" />
     <ClCompile Include="Upgrader.cpp" />
     <ClCompile Include="Web\DownloadClasses.cpp" />
+    <ClCompile Include="Web\Download\Download.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Archives\Archives.h" />
     <ClInclude Include="Archives\qzipreader_p.h" />
     <ClInclude Include="Archives\qzipwriter_p.h" />
     <ClInclude Include="basic_xml.h" />
+    <ClInclude Include="Callbacks\QCallback.h" />
     <ClInclude Include="Client\StartProcess.h" />
     <ClInclude Include="Databases\SQLBased.h" />
+    <QtMoc Include="QObjects\Threads\UIThread.h" />
+    <ClInclude Include="Hashes\Crypto.h" />
+    <ClInclude Include="QObjects\Threads\LambdaTask.h" />
+    <ClInclude Include="Web\Download\Download.h" />
     <QtMoc Include="Form\ServerChangerForm.h" />
     <QtMoc Include="Form\ServerWidget.h" />
     <QtMoc Include="Form\SettingsDialog.h" />

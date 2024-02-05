@@ -18,6 +18,7 @@
 //#include "Utils/Lang.h"
 #include "NativesInstaller.h"
 #include "../Client/StartProcess.h"
+#include "../Callbacks/QCallback.h"
 
 #include <initializer_list>
 //#include <stdio.h>
@@ -91,9 +92,9 @@ namespace MinecraftCpp
 		const std::string& path, MinecraftCpp::option::MinecraftOptions options);
 
 	std::string get_executable_path(const std::string& jvm_version, const std::string& minecraft_directory);
-	bool install_libraries(Json::JsonValue data, const std::string& path, CallbackNull* callback);
+	bool install_libraries(Json::JsonValue data, const std::string& path, std::shared_ptr<CallbackNull> callback);
 	bool extract_natives_file(const std::string& filename, const std::string& extract_path, Json::JsonValue extract_data);
-	bool install_assets(Json::JsonValue data, const std::string& path, CallbackNull* callback);
+	bool install_assets(Json::JsonValue data, const std::string& path, std::shared_ptr<CallbackNull> callback);
 
 	/// <summary>
 	/// Installs the given jvm runtime. callback is the same dict as in the install module.
@@ -103,7 +104,7 @@ namespace MinecraftCpp
 	/// <param name="callback">- the same dict as for :func:`~minecraft_launcher_lib.install.install_minecraft_version`</param>
 	/// <returns>void</returns>
 	bool install_jvm_runtime(const std::string& jvm_version, const std::string& minecraft_directory,
-		CallbackNull* callback = new CallbackNull());
+		std::shared_ptr<CallbackNull> callback = std::make_shared<CallbackNull>());
 
 	/// <summary>
 	/// Raises a FileOutsideMinecraftDirectory if the Path is not in the given Directory
@@ -124,7 +125,7 @@ namespace MinecraftCpp
 	namespace forge
 	{
 		bool install_forge_version(const std::string& versionid, const std::string& path,
-			CallbackNull* callback = new CallbackNull(), const std::string& java = "");
+			std::shared_ptr<CallbackNull> callback = std::make_shared<CallbackNull>(), const std::string& java = "");
 
 		bool extract_file(const QZipReader& handler, const std::string& zip_path, const std::string& extract_path);
 		std::string get_data_library_path(const std::string& libname, const std::string& path);
@@ -135,14 +136,15 @@ namespace MinecraftCpp
 			const std::string& minecraft_directory,
 			const std::string& lzma_path,
 			const std::string& installer_path,
-			CallbackNull* callback,
+			std::shared_ptr<CallbackNull> callback,
 			const std::string& java);
 	}
 
 	namespace fabric
 	{
 		int install_fabric_version(const std::string& minecraft_version, const std::string& minecraft_directory,
-			const std::string& loader_version = "", CallbackNull* callback = new CallbackNull(), const std::string& java = "");
+			const std::string& loader_version = "", std::shared_ptr<CallbackNull> callback = std::make_shared<CallbackNull>(),
+			const std::string& java = "");
 
 		bool _is_version_valid(const std::string& version, const std::string& minecraft_directory);
 		bool _is_minecraft_version_supported(const std::string& version);
@@ -167,12 +169,12 @@ namespace MinecraftCpp
 	bool install_minecraft_version(
 		const std::string& versionid,
 		const std::string& minecraft_directory,
-		CallbackNull* callback = new CallbackNull());
+		std::shared_ptr<CallbackNull> callback = std::make_shared<CallbackNull>());
 
 	bool do_version_install(
 		const std::string& versionid,
 		const std::string& path,
-		CallbackNull* callback,
+		std::shared_ptr<CallbackNull> callback,
 		const std::string& url = "");
 
 	Json::JsonValue inherit_json(

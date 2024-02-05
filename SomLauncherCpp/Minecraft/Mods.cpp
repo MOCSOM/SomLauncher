@@ -6,8 +6,8 @@ bool MinecraftCpp::modpacks::download::database::installModPack(const Json::Json
 	Json::JsonValue urls = json_from_server;
 	for (std::pair<const std::string, Json::JsonValue> elem : urls.get_object())
 	{
-		std::string downloaded_path = DownloadFile(elem.second.to_string(),
-			path_to_download.u8string(), callback.get());
+		auto downloaded_path = DownloadFile(elem.second.to_string(),
+			path_to_download.u8string(), callback);
 	}
 
 	return true;
@@ -64,8 +64,8 @@ bool MinecraftCpp::modpacks::deletemods::deleteAllMods(const std::filesystem::pa
 bool MinecraftCpp::modpacks::download::manual::installModPackManualy(const std::string& archive_url,
 	const std::filesystem::path& path, std::shared_ptr<CallbackNull> callback) noexcept
 {
-	std::string downloaded_arhcive_path = DownloadFile(archive_url,
-		Additionals::TempFile::get_tempdir_SYSTEM(), callback.get());
+	auto downloaded_arhcive_path = DownloadFile(archive_url,
+		Additionals::TempFile::get_tempdir_SYSTEM(), callback);
 	if (downloaded_arhcive_path == "")
 	{
 		return false;
@@ -74,7 +74,7 @@ bool MinecraftCpp::modpacks::download::manual::installModPackManualy(const std::
 	callback->OnProgress(0, 1, NULL, L"Start extracting archive");
 	callback->OnProgress(0, 1, 6, NULL);
 
-	QZipReader archive(downloaded_arhcive_path.c_str());
+	QZipReader archive(downloaded_arhcive_path.u8string().c_str());
 	Additionals::archives::decompressArchive(archive, path.string());
 
 	callback->OnProgress(1, 1, NULL, L"Extracting archive completed");

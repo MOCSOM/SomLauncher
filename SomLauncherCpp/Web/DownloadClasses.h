@@ -27,6 +27,7 @@
 #include "../Archives/Archives.h"
 #include "../Hashes/sha1.h"
 #include "../Encryption/LZMA/LzmaDecompress.h"
+#include "Download/Download.h"
 
 #if defined(_WIN32) || defined(_WIN64)
 const std::string OS = "windows";
@@ -74,7 +75,8 @@ const std::string _SEVEN_ZIP = ".7z";
 /* boolean setting, analogous to xz CLI option: -e */
 #define COMPRESSION_EXTREME true
 
-#define DownloadFile DDIC::Download::Files::download_file
+//#define DownloadFile DDIC::Download::Files::download_file
+#define DownloadFile web::download::downloadFile
 
 namespace DDIC
 {

@@ -300,10 +300,26 @@ int Json::SomJson::to_int()
 
 bool Json::SomJson::is_exist(const std::string& key)
 {
-	auto search = this->value->object_value.find(key);
-	if (search != this->value->object_value.end())
+	if (this->value)
 	{
-		return true;
+		if (!this->value->object_value.empty())
+		{
+			auto search = this->value->object_value.find(key);
+			if (search != this->value->object_value.end())
+			{
+				return true;
+			}
+		}
+		if (!this->value->array_value.empty())
+		{
+			for (auto& elem : this->value->array_value)
+			{
+				if (elem.get_string() == key)
+				{
+					return true;
+				}
+			}
+		}
 	}
 	return false;
 }

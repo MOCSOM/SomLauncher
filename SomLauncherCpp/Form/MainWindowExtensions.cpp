@@ -128,7 +128,7 @@ void SomLauncherMainWindow::setupInstallMinecraft(const size_t& index)
 
 	std::filesystem::path instance_path = this->minecraft_core_dir_path + "\\" + name;
 
-	std::shared_ptr<CallbackDict> callback = std::make_shared<CallbackDict>();
+	std::shared_ptr<QCallback> callback = std::make_shared<QCallback>();
 	callback->setQProgressBar(ui.progressBar_ahtung);
 	callback->setQLabelProggress(ui.label_download_status_change);
 
@@ -163,10 +163,13 @@ void SomLauncherMainWindow::setupInstallMinecraft(const size_t& index)
 
 	//std::vector<std::string> command = MinecraftCpp::generateCommandLine(instance_path.u8string(), _options);
 
-	this->close();
+	hide();
 
 	std::filesystem::current_path(instance_path);
 	client::startProcess(command);
+
+	setWindowState(windowState()/* & ~Qt::WindowMinimized)*/ | Qt::WindowActive);
+	show();
 }
 
 std::string SomLauncherMainWindow::install_minecraft(
@@ -198,7 +201,7 @@ std::string SomLauncherMainWindow::install_minecraft(
 
 		qInfo() << "Starting download forge..." << std::endl;
 		MinecraftCpp::forge::install_forge_version(
-			install_version, install_path.u8string(), callback.get(), options.executablePath);
+			install_version, install_path.u8string(), callback, options.executablePath);
 
 		return launch_version;
 	}
@@ -208,7 +211,7 @@ std::string SomLauncherMainWindow::install_minecraft(
 
 		qInfo() << "Starting download fabric..." << std::endl;
 		MinecraftCpp::fabric::install_fabric_version(
-			version, install_path.u8string(), loader_version, callback.get(), options.executablePath);
+			version, install_path.u8string(), loader_version, callback, options.executablePath);
 
 		std::filesystem::copy_file(Join({ install_path.u8string(), "versions", version, version + ".jar" }),
 			Join({ install_path.u8string(), "versions", launch_version, launch_version + ".jar" }),
@@ -237,8 +240,8 @@ WHERE servers_server.server_slug LIKE )" + std::string("'%") + modpack_name + "%
 		while (result->next())
 		{
 			std::filesystem::create_directories(install_path);
-			std::string downloaded_path = DownloadFile(result->getString(1),
-				install_path.u8string(), callback.get());
+			std::filesystem::path downloaded_path = DownloadFile(result->getString(1),
+				install_path, callback);
 		}
 	}
 	catch (const sql::SQLException& exc)

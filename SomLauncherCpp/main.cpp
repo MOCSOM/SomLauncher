@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
 				qInfo() << "updateSignal detected" << std::endl;
 				std::string download_url = "https://mocsom.site/media" + std::string("/") + url;
 				QApplication::exit(0);
-				return system(DownloadFile(download_url, Additionals::TempFile::get_tempdir_SYSTEM()).c_str());
+				return system(DownloadFile(download_url, Additionals::TempFile::get_tempdir_SYSTEM()).u8string().c_str());
 			}
 		);
 
