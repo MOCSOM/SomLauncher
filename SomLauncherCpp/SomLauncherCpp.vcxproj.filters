@@ -33,6 +33,18 @@
     <Filter Include="Hashes">
       <UniqueIdentifier>{28a77ec8-3d00-4626-aad3-246bf95d6060}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Web">
+      <UniqueIdentifier>{c2af2d44-41f9-41f1-8b4a-23eb0086e158}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Web\Download">
+      <UniqueIdentifier>{3db11a7c-5ede-4e4f-8721-020759acf9c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tasks">
+      <UniqueIdentifier>{2c0166ce-ac8f-4d9b-9c68-c0fa12bacd49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Web\Net">
+      <UniqueIdentifier>{5da338ed-a271-4e82-88f6-044b527c3180}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -131,9 +143,6 @@
     <ClCompile Include="Minecraft\Servers\ServerDatConfiguration.cpp">
       <Filter>Minecraft\Servers</Filter>
     </ClCompile>
-    <ClCompile Include="Web\Download\Download.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="QObjects\Threads\UIThread.cpp">
       <Filter>Custom Qt Files</Filter>
     </ClCompile>
@@ -145,6 +154,33 @@
     </ClCompile>
     <ClCompile Include="Hashes\Crypto.cpp">
       <Filter>Hashes</Filter>
+    </ClCompile>
+    <ClCompile Include="Web\Download\Download.cpp">
+      <Filter>Web\Download</Filter>
+    </ClCompile>
+    <ClCompile Include="Tasks\Task.cpp">
+      <Filter>Tasks</Filter>
+    </ClCompile>
+    <ClCompile Include="Web\Net\HttpMetaCache.cpp">
+      <Filter>Web\Net</Filter>
+    </ClCompile>
+    <ClCompile Include="Web\Net\QDownload.cpp">
+      <Filter>Web\Net</Filter>
+    </ClCompile>
+    <ClCompile Include="Web\Net\FileSink.cpp">
+      <Filter>Web\Net</Filter>
+    </ClCompile>
+    <ClCompile Include="Web\Net\MetaCacheSink.cpp">
+      <Filter>Web\Net</Filter>
+    </ClCompile>
+    <ClCompile Include="Web\NetJob.cpp">
+      <Filter>Web</Filter>
+    </ClCompile>
+    <ClCompile Include="Web\Download\FileDownloader.cpp">
+      <Filter>Web\Download</Filter>
+    </ClCompile>
+    <ClCompile Include="Web\Download\DownloadManager.cpp">
+      <Filter>Web\Download</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -223,9 +259,6 @@
     <ClInclude Include="Minecraft\Servers\ServerDatConfiguration.h">
       <Filter>Minecraft\Servers</Filter>
     </ClInclude>
-    <ClInclude Include="Web\Download\Download.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="QObjects\Threads\LambdaTask.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -234,6 +267,30 @@
     </ClInclude>
     <ClInclude Include="Hashes\Crypto.h">
       <Filter>Hashes</Filter>
+    </ClInclude>
+    <ClInclude Include="Web\Download\Download.h">
+      <Filter>Web\Download</Filter>
+    </ClInclude>
+    <ClInclude Include="QObjects\QObjectPtr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Web\Net\Validator.h">
+      <Filter>Web\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="Web\Net\Sink.h">
+      <Filter>Web\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="Web\Net\ChecksumValidator.h">
+      <Filter>Web\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="Web\Net\MetaCacheSink.h">
+      <Filter>Web\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="Web\Net\FileSink.h">
+      <Filter>Web\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="Web\Net\ByteArraySink.h">
+      <Filter>Web\Net</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -287,6 +344,27 @@
     </QtMoc>
     <QtMoc Include="QObjects\Threads\UIThread.h">
       <Filter>Custom Qt Files</Filter>
+    </QtMoc>
+    <QtMoc Include="Web\NetJob.h">
+      <Filter>Web</Filter>
+    </QtMoc>
+    <QtMoc Include="Web\NetAction.h">
+      <Filter>Web</Filter>
+    </QtMoc>
+    <QtMoc Include="Tasks\Task.h">
+      <Filter>Tasks</Filter>
+    </QtMoc>
+    <QtMoc Include="Web\Net\QDownload.h">
+      <Filter>Web\Net</Filter>
+    </QtMoc>
+    <QtMoc Include="Web\Net\HttpMetaCache.h">
+      <Filter>Web\Net</Filter>
+    </QtMoc>
+    <QtMoc Include="Web\Download\FileDownloader.h">
+      <Filter>Web\Download</Filter>
+    </QtMoc>
+    <QtMoc Include="Web\Download\DownloadManager.h">
+      <Filter>Web\Download</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>

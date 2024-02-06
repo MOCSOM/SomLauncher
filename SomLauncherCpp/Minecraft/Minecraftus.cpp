@@ -1413,6 +1413,7 @@ bool MinecraftCpp::install_jvm_runtime(const std::string& jvm_version, const std
 	/*
 	Installs the given jvm runtime. callback is the same dict as in the install module.
 	*/
+	qInfo() << "install jvm runtime" << std::endl;
 	std::string _JVM_MANIFEST_URL = "https://launchermeta.mojang.com/v1/products/java-runtime/2ec0cc96c44e5a76b9c8b7c39df7210883d12871/all.json";
 
 	Json::JsonParcer jsonParcer;
@@ -2134,7 +2135,7 @@ std::string MinecraftCpp::fabric::get_latest_installer_version()
 	Returns the latest installer version
 	*/
 	std::string FABRIC_INSTALLER_MAVEN_URL = "https://maven.fabricmc.net/net/fabricmc/fabric-installer/maven-metadata.xml";
-	return parse_maven_metadata(FABRIC_INSTALLER_MAVEN_URL)["latest"].to_string();
+	return "";//parse_maven_metadata(FABRIC_INSTALLER_MAVEN_URL)["latest"].to_string();
 }
 
 Json::JsonValue MinecraftCpp::fabric::parse_maven_metadata(const std::string& url)

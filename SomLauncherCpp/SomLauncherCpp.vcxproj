@@ -113,6 +113,9 @@
     <VcpkgUseStatic>true</VcpkgUseStatic>
     <VcpkgConfiguration>Debug</VcpkgConfiguration>
   </PropertyGroup>
+  <PropertyGroup Label="QtDeploy" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <QtDeploy>true</QtDeploy>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <AdditionalIncludeDirectories>$(ProgramFiles)\MySQL\MySQL Connector C++ 8.2\include\jdbc;$(VcpkgRoot)\installed\x64-windows\include;$(Qt_INCLUDEPATH_)</AdditionalIncludeDirectories>
@@ -220,9 +223,18 @@
     <ClCompile Include="QObjects\Threads\LambdaTask.cpp" />
     <ClCompile Include="QObjects\Threads\UIThread.cpp" />
     <ClCompile Include="Servers\ServerTypes.cpp" />
+    <ClCompile Include="Tasks\Task.cpp" />
     <ClCompile Include="Upgrader.cpp" />
     <ClCompile Include="Web\DownloadClasses.cpp" />
     <ClCompile Include="Web\Download\Download.cpp" />
+    <QtMoc Include="Web\Download\DownloadManager.h" />
+    <ClCompile Include="Web\Download\DownloadManager.cpp" />
+    <ClCompile Include="Web\Download\FileDownloader.cpp" />
+    <ClCompile Include="Web\NetJob.cpp" />
+    <ClCompile Include="Web\Net\FileSink.cpp" />
+    <ClCompile Include="Web\Net\HttpMetaCache.cpp" />
+    <ClCompile Include="Web\Net\MetaCacheSink.cpp" />
+    <ClCompile Include="Web\Net\QDownload.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Archives\Archives.h" />
@@ -232,9 +244,22 @@
     <ClInclude Include="Callbacks\QCallback.h" />
     <ClInclude Include="Client\StartProcess.h" />
     <ClInclude Include="Databases\SQLBased.h" />
+    <QtMoc Include="Web\Download\FileDownloader.h" />
+    <ClInclude Include="Web\Net\ByteArraySink.h" />
+    <ClInclude Include="Web\Net\ChecksumValidator.h" />
+    <ClInclude Include="Web\Net\FileSink.h" />
+    <ClInclude Include="Web\Net\MetaCacheSink.h" />
+    <ClInclude Include="Web\Net\Sink.h" />
+    <ClInclude Include="Web\Net\Validator.h" />
+    <QtMoc Include="Web\Net\HttpMetaCache.h" />
+    <QtMoc Include="Web\Net\QDownload.h" />
+    <QtMoc Include="Web\NetAction.h" />
+    <QtMoc Include="Web\NetJob.h" />
     <QtMoc Include="QObjects\Threads\UIThread.h" />
     <ClInclude Include="Hashes\Crypto.h" />
+    <ClInclude Include="QObjects\QObjectPtr.h" />
     <ClInclude Include="QObjects\Threads\LambdaTask.h" />
+    <QtMoc Include="Tasks\Task.h" />
     <ClInclude Include="Web\Download\Download.h" />
     <QtMoc Include="Form\ServerChangerForm.h" />
     <QtMoc Include="Form\ServerWidget.h" />

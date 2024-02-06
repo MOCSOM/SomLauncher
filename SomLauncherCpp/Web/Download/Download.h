@@ -21,6 +21,7 @@
 #include "../../QObjects/Threads/UIThread.h"
 #include "../../QObjects/Threads/LambdaTask.h"
 #include "../../Hashes/Crypto.h"
+#include "../Download/DownloadManager.h"
 
 namespace web
 {
