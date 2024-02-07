@@ -226,7 +226,7 @@ int sqlbase::postgresql::connect()
 	//return 1;
 }
 
-QSqlDatabase& sqlbase::mysql::qt::connect(
+QSqlDatabase sqlbase::mysql::qt::connect(
 	const std::string& server_adress,
 	const std::string& database_name,
 	const std::string& user_name,
@@ -254,7 +254,7 @@ QSqlDatabase& sqlbase::mysql::qt::connect(
 	}
 }
 
-QSqlQuery& sqlbase::mysql::qt::getQuerry(const QSqlDatabase& database, const std::string& querry)
+QSqlQuery sqlbase::mysql::qt::getQuerry(const QSqlDatabase& database, const std::string& querry)
 {
 	QSqlQuery querry_from_db = QSqlQuery(database);
 	querry_from_db.prepare(querry.c_str());

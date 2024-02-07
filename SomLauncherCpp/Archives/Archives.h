@@ -3,7 +3,7 @@
 
 #include <filesystem>
 
-#include <Windows.h>
+#include <windows.h>
 
 #include "qzipreader_p.h"
 #include "qzipwriter_p.h"

@@ -165,12 +165,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_70B7FF466C5E51C7DF738B188AC5507D"
-        "OwnerKey" = "8:_34B24EA6487A4E298A1A1282EF6D025B"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_73DD965F9CDF09B3F3F5D3ACA3C3686C"
         "OwnerKey" = "8:_34B24EA6487A4E298A1A1282EF6D025B"
         "MsmSig" = "8:_UNDEFINED"
@@ -892,26 +886,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_70B7FF466C5E51C7DF738B188AC5507D"
-            {
-            "SourcePath" = "8:liblzma.dll"
-            "TargetName" = "8:liblzma.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_05F01DAAB8364CA695ACCE8AFE368FB5"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_73DD965F9CDF09B3F3F5D3ACA3C3686C"
             {
             "SourcePath" = "8:Secur32.dll"
@@ -1543,15 +1517,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:SomLauncher"
-        "ProductCode" = "8:{E1648A46-FDF3-46AC-9940-339656827550}"
-        "PackageCode" = "8:{6AA63BC0-899D-41E9-A9CB-3CA505056EB3}"
+        "ProductCode" = "8:{C1BA8B70-D373-4B1B-9FC9-4C9BD3B57B09}"
+        "PackageCode" = "8:{275675F9-0FC4-46E3-BBB1-D5D30034044E}"
         "UpgradeCode" = "8:{F9EAB7F5-9D61-49C2-85AA-8DAD4762EB34}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.1.5"
+        "ProductVersion" = "8:1.2.2"
         "Manufacturer" = "8:.SomSomSom"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"

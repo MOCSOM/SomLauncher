@@ -132,11 +132,12 @@
     <Link />
     <ClCompile>
       <AdditionalIncludeDirectories>$(ProgramFiles)\MySQL\MySQL Connector C++ 8.2\include\jdbc;$(VcpkgRoot)\installed\x64-windows\include;$(Qt_INCLUDEPATH_)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>$(Qt_DEFINES_);%(PreprocessorDefinitions);STATIC_CONCPP;CURL_STATICLIB</PreprocessorDefinitions>
+      <PreprocessorDefinitions>STATIC_CONCPP;CURL_STATICLIB;$(Qt_DEFINES_)</PreprocessorDefinitions>
       <LanguageStandard>$(Qt_STDCPP_)</LanguageStandard>
+      <RuntimeLibrary>$(Qt_RUNTIME_)</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(VcpkgRoot)\installed\x64-windows\lib;$(ProgramFiles)\MySQL\MySQL Connector C++ 8.2\lib64\vs14\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(VcpkgRoot)\installed\x64-windows\lib;$(ProgramFiles)\MySQL\MySQL Connector C++ 8.2\lib64\vs14;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>%(AdditionalDependencies);$(Qt_LIBS_);mysqlcppconn-static.lib;lzma.lib;libcrypto.lib;libssl.lib;Urlmon.lib;User32.lib;libcurl.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -302,6 +303,9 @@
   <ItemGroup>
     <Image Include="resources\som.ico" />
     <Image Include="resources\som.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtTranslation Include="translations\_en_US.ts" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

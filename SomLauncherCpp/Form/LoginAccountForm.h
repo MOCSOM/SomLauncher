@@ -5,6 +5,7 @@
 #include <qmessagebox.h>
 
 #include <string>
+#include <optional>
 
 #include "../Databases/SQLBased.h"
 #include "../../MocJsonLib/SomJson.h"
@@ -36,6 +37,7 @@ public:
 	const std::string getPasswordHashFromServer();
 	const std::string getLoginFromServer();
 	const std::string getUserDataFromServer();
+	std::optional<bool> getIsFriendFromServer();
 	bool checkPassword();
 	bool checkLogin();
 

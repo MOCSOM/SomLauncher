@@ -1,4 +1,4 @@
-#include "LoginAccountForm.h"
+﻿#include "LoginAccountForm.h"
 
 LoginAccountForm::LoginAccountForm(QWidget* parent)
 	: QDialog(parent)
@@ -85,7 +85,7 @@ const std::string LoginAccountForm::getLoginFromServer()
 	}
 	catch (sql::SQLException& eSQL)
 	{
-		qInfo() << "Failed with exception: " << eSQL.what();
+		qFatal() << "Failed with exception: " << eSQL.what();
 		return "";
 	}
 	while (res->next())
@@ -104,13 +104,32 @@ const std::string LoginAccountForm::getUserDataFromServer()
 	}
 	catch (sql::SQLException& eSQL)
 	{
-		qInfo() << "Failed with exception: " << eSQL.what();
+		qFatal() << "Failed with exception: " << eSQL.what();
 		return "";
 	}
 	while (res->next())
 		return res->getString(1);
 
 	return "";
+}
+
+std::optional<bool> LoginAccountForm::getIsFriendFromServer()
+{
+	sql::ResultSet* res = nullptr;
+	QString querry = "SELECT is_friend FROM users_customuser WHERE username LIKE " + QString("'%") + ui.lineEdit_login->text() + "%'";
+	try
+	{
+		res = sqlbase::mysql::sqlconnector::sendQuerry(this->connection, querry.toStdString());
+	}
+	catch (sql::SQLException& eSQL)
+	{
+		qFatal() << "Failed with exception: " << eSQL.what();
+		return {};
+	}
+	while (res->next())
+		return res->getBoolean(1);
+
+	return {};
 }
 
 bool LoginAccountForm::checkPassword()
@@ -190,6 +209,13 @@ void LoginAccountForm::onClickPushButtonLogin()
 	if (checkPassword() == true && checkLogin() == true)
 	{
 		std::string json_data_string = getUserDataFromServer();
+		auto is_friend = getIsFriendFromServer();
+
+		//TODO: move this in server options
+		if (!is_friend.value_or(false))
+		{
+			qFatal() << tr("Вы не друг, извените(");
+		}
 
 		if (ui.checkBox_remember_password->isChecked())
 		{

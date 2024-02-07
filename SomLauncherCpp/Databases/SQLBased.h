@@ -41,10 +41,10 @@ namespace sqlbase
 	{
 		namespace qt
 		{
-			QSqlDatabase& connect(const std::string& server_adress, const std::string& database_name,
+			QSqlDatabase connect(const std::string& server_adress, const std::string& database_name,
 				const std::string& user_name, const std::string& password);
 
-			QSqlQuery& getQuerry(const QSqlDatabase& database, const std::string& querry);
+			QSqlQuery getQuerry(const QSqlDatabase& database, const std::string& querry);
 		}
 		namespace sqlconnector
 		{
