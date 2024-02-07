@@ -1292,7 +1292,7 @@ bool MinecraftCpp::install_libraries(Json::JsonValue data, const std::string& pa
 			}
 			continue;
 		}
-		if (var["downloads"].is_exist("artifact"))
+		if (var["downloads"].is_exist("artifact") && !var["downloads"]["artifact"]["url"].to_string().empty() && var["downloads"]["artifact"].is_exist("path"))
 		{
 			callback->setTotalDownloadSize(var["downloads"]["artifact"]["size"].to_int());
 			DownloadFile(var["downloads"]["artifact"]["url"].to_string(), Join({ path, "libraries", var["downloads"]["artifact"]["path"].to_string() }), callback, var["downloads"]["artifact"]["sha1"].to_string());

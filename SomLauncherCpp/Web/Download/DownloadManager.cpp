@@ -16,5 +16,6 @@ bool DownloadManager::downloadFile(const QUrl& url)
 	this->downloader = new FileDownloader(url, this);
 
 	connect(this->downloader, &FileDownloader::downloaded, this, &DownloadManager::saveFile);
+	this->downloader->download();
 	return false;
 }
