@@ -113,6 +113,9 @@
     <VcpkgUseStatic>true</VcpkgUseStatic>
     <VcpkgConfiguration>Debug</VcpkgConfiguration>
   </PropertyGroup>
+  <PropertyGroup Label="QtDeploy" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <QtDeploy>false</QtDeploy>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <AdditionalIncludeDirectories>$(ProgramFiles)\MySQL\MySQL Connector C++ 8.2\include\jdbc;$(VcpkgRoot)\installed\x64-windows\include;$(Qt_INCLUDEPATH_)</AdditionalIncludeDirectories>
@@ -121,7 +124,7 @@
     </ClCompile>
     <Link>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
-      <AdditionalLibraryDirectories>$(VcpkgRoot)\installed\x64-windows\debug\lib;C:\Program Files\MySQL\MySQL Connector C++ 8.2\lib64\vs14\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(VcpkgRoot)\installed\x64-windows\debug\lib;$(ProgramFiles)\MySQL\MySQL Connector C++ 8.2\lib64\vs14\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>%(AdditionalDependencies);$(Qt_LIBS_);mysqlcppconn-static.lib;lzma.lib;libcrypto.lib;libssl.lib;Urlmon.lib;User32.lib;libcurl-d.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -133,7 +136,7 @@
       <LanguageStandard>$(Qt_STDCPP_)</LanguageStandard>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(VcpkgRoot)\installed\x64-windows\lib;C:\Program Files\MySQL\MySQL Connector C++ 8.2\lib64\vs14\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(VcpkgRoot)\installed\x64-windows\lib;$(ProgramFiles)\MySQL\MySQL Connector C++ 8.2\lib64\vs14\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>%(AdditionalDependencies);$(Qt_LIBS_);mysqlcppconn-static.lib;lzma.lib;libcrypto.lib;libssl.lib;Urlmon.lib;User32.lib;libcurl.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
