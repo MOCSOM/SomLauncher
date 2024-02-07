@@ -88,6 +88,7 @@ void SomLauncherMainWindow::_parcingServers(sql::Connection* connect)
 
 void SomLauncherMainWindow::_settingUiChanges()
 {
+
 	ui.stackedWidget_bottommenu->setCurrentIndex(0);
 
 	this->top_frame = new TopSlideFrameWidget(this);
@@ -135,6 +136,8 @@ void SomLauncherMainWindow::_settingUiChanges()
 
 	ui.progressBar_ahtung->setHidden(true);
 	ui.label_download_status_change->setHidden(true);
+	ui.label_download_speed->setHidden(true);
+	ui.label_download_time->setHidden(true);
 }
 
 void SomLauncherMainWindow::_settingServersWidgets()
@@ -326,15 +329,7 @@ void SomLauncherMainWindow::onClickpushButton_startgame()
 {
 	qInfo() << "pushButton_startgame clicked" << std::endl;
 
-	ui.progressBar_ahtung->setHidden(false);
-	ui.label_download_status_change->setHidden(false);
-
-	ui.pushButton_startgame->setDisabled(true);
-	this->top_frame->getPushButtonSettings()->setDisabled(true);
-	ui.pushButton_checkupdates->setDisabled(true);
-	ui.pushButton_changeserver->setDisabled(true);
-	//ui.scrollArea_servers->setDisabled(true);
-	ui.scrollAreaWidgetContents->setDisabled(true);
+	setUiToDownload(true);
 
 	UIThread::run(
 		[&]()
@@ -355,6 +350,21 @@ void SomLauncherMainWindow::onClickpushButton_startgame()
 	download_thread = new FunctionThread(start_minecraft_thread_func);
 
 	download_thread->start();*/
+}
+
+void SomLauncherMainWindow::setUiToDownload(bool status)
+{
+	ui.progressBar_ahtung->setHidden(!status);
+	ui.label_download_status_change->setHidden(!status);
+	ui.label_download_speed->setHidden(!status);
+	ui.label_download_time->setHidden(!status);
+
+	ui.pushButton_startgame->setDisabled(status);
+	this->top_frame->getPushButtonSettings()->setDisabled(status);
+	ui.pushButton_checkupdates->setDisabled(status);
+	ui.pushButton_changeserver->setDisabled(status);
+	//ui.scrollArea_servers->setDisabled(status);
+	ui.scrollAreaWidgetContents->setDisabled(status);
 }
 
 void SomLauncherMainWindow::mouseEnterframe_topslidemenu()

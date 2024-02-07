@@ -1210,9 +1210,18 @@ bool MinecraftCpp::install_libraries(Json::JsonValue data, const std::string& pa
 			continue;
 		}
 
+		if (var["downloads"].is_exist("artifact"))
+		{
+			callback->setTotalDownloadSize(var["downloads"]["artifact"]["size"].to_int());
+			DownloadFile(var["downloads"]["artifact"]["url"].to_string(), Join({ path, "libraries", var["downloads"]["artifact"]["path"].to_string() }), callback, var["downloads"]["artifact"]["sha1"].to_string());
+			continue;
+		}
+
 		// Turn the name into a path
 		std::string currentPath = Join({ path, "libraries" });
 		std::string downloadUrl = "";
+
+
 
 		if (var.is_exist("url"))
 		{
@@ -1291,11 +1300,6 @@ bool MinecraftCpp::install_libraries(Json::JsonValue data, const std::string& pa
 				extract_natives_file(Join({ currentPath, jarFilenameNative }), Join({ path, "versions", data["id"].to_string(), "natives" }), var["extract"]);
 			}
 			continue;
-		}
-		if (var["downloads"].is_exist("artifact"))
-		{
-			callback->setTotalDownloadSize(var["downloads"]["artifact"]["size"].to_int());
-			DownloadFile(var["downloads"]["artifact"]["url"].to_string(), Join({ path, "libraries", var["downloads"]["artifact"]["path"].to_string() }), callback, var["downloads"]["artifact"]["sha1"].to_string());
 		}
 		if (native != "")
 		{
@@ -2011,36 +2015,36 @@ int MinecraftCpp::fabric::install_fabric_version(const std::string& minecraft_ve
 	MinecraftCpp::natives::downloadNatives(fabric_version_dir + "\\" + "natives", callback);
 	//install_minecraft_version(fabric_minecraft_version, minecraft_directory, callback = callback);
 
-	std::string installer_download_url = "https://maven.fabricmc.net/net/fabricmc/fabric-installer/" + installer_version + "\\fabric-installer-" + installer_version + ".jar";
-	// Generate a temporary path for downloading the installer
-	int random_num = 100 + (rand() % 10000);
-	std::string installer_path = std::filesystem::temp_directory_path().string() + "fabric-installer-" + std::to_string(random_num) + ".tmp";
-	// Download the installer
-	DownloadFile(installer_download_url, installer_path, callback = callback);
-	// Run the installer see https ://fabricmc.net/wiki/install#cli_installation
-	callback->OnProgress(NULL, NULL, NULL, L"Running fabric installer");
-	std::vector<std::string> command;
+	//std::string installer_download_url = "https://maven.fabricmc.net/net/fabricmc/fabric-installer/" + installer_version + "\\fabric-installer-" + installer_version + ".jar";
+	//// Generate a temporary path for downloading the installer
+	//int random_num = 100 + (rand() % 10000);
+	//std::string installer_path = std::filesystem::temp_directory_path().string() + "fabric-installer-" + std::to_string(random_num) + ".tmp";
+	//// Download the installer
+	//DownloadFile(installer_download_url, installer_path, callback = callback);
+	//// Run the installer see https ://fabricmc.net/wiki/install#cli_installation
+	//callback->OnProgress(NULL, NULL, NULL, L"Running fabric installer");
+	//std::vector<std::string> command;
 
-	std::string java_w = java;
-	size_t pos = java_w.find("java.exe");
+	//std::string java_w = java;
+	//size_t pos = java_w.find("java.exe");
 
-	java_w.insert(pos + 4, "w");
+	//java_w.insert(pos + 4, "w");
 
-	command.push_back(java == "" ? "javaw" : java_w);
-	command.push_back("-jar");
-	command.push_back(installer_path);
-	command.push_back("client");
-	command.push_back("-dir");
-	command.push_back(minecraft_directory);
-	command.push_back("-mcversion");
-	command.push_back(minecraft_version);
-	command.push_back("-loader");
-	command.push_back(loader_version);
-	command.push_back("-launcher win32");
-	command.push_back("-noprofile");
-	command.push_back("-snapshot");
+	//command.push_back(java == "" ? "javaw" : java_w);
+	//command.push_back("-jar");
+	//command.push_back(installer_path);
+	//command.push_back("client");
+	//command.push_back("-dir");
+	//command.push_back(minecraft_directory);
+	//command.push_back("-mcversion");
+	//command.push_back(minecraft_version);
+	//command.push_back("-loader");
+	//command.push_back(loader_version);
+	//command.push_back("-launcher win32");
+	//command.push_back("-noprofile");
+	//command.push_back("-snapshot");
 
-	client::startProcess(command);
+	//client::startProcess(command);
 
 	/*if (result != 0)
 	{

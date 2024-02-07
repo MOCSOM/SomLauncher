@@ -165,7 +165,7 @@ void SomLauncherMainWindow::setupInstallMinecraft(const size_t& index)
 	//_options.versionName = version;
 
 	//std::vector<std::string> command = MinecraftCpp::generateCommandLine(instance_path.u8string(), _options);
-
+	setUiToDownload(false);
 	hide();
 
 	std::filesystem::current_path(instance_path);
@@ -533,4 +533,9 @@ void SomLauncherMainWindow::setUuidFromAccount()
 std::unique_ptr<SettingsDialog>& SomLauncherMainWindow::getSettingsDialog()
 {
 	return this->settings_dialog;
+}
+
+const std::string& SomLauncherMainWindow::getStyleSheetPath()
+{
+	return this->style_sheet;
 }

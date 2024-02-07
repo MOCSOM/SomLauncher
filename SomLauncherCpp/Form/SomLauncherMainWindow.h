@@ -117,6 +117,8 @@ public:
 	void _settingServerType();
 	void _settingAccountDataInUi();
 
+	void setUiToDownload(bool status);
+
 	void setConnectionWithDatabase();
 	Json::JsonValue getServersFromDatabase();
 	Json::JsonValue getServersFromDatabase(sql::Connection* connect);
@@ -158,6 +160,8 @@ public:
 	void setUuidFromAccount();
 	std::unique_ptr<SettingsDialog>& getSettingsDialog();
 
+	const std::string& getStyleSheetPath();
+
 private slots:
 	void onClickedpushButton_game();
 	void onClickedpushButton_servers();
@@ -169,6 +173,7 @@ private slots:
 	void onClickedPushButton_check_update();
 
 	void onClickpushButton_startgame();
+
 
 	void mouseEnterframe_topslidemenu();
 	void mouseLeaveframe_topslidemenu();

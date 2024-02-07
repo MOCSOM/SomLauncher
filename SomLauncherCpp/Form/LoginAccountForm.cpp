@@ -25,6 +25,15 @@ void LoginAccountForm::_setPasswordAndLoginInUi()
 	}
 }
 
+void LoginAccountForm::setStyleSheet(const std::filesystem::path& path)
+{
+	QFile styleFile(path);
+	styleFile.open(QFile::ReadOnly);
+	// Apply the loaded stylesheet
+	QString style(styleFile.readAll());
+	QDialog::setStyleSheet(style);
+}
+
 void LoginAccountForm::setConfigPath(const std::filesystem::path& config_path)
 {
 	this->config_path = config_path;

@@ -1,6 +1,6 @@
 #include "TopSlideFrameWidget.h"
 
-TopSlideFrameWidget::TopSlideFrameWidget(QWidget *parent)
+TopSlideFrameWidget::TopSlideFrameWidget(QWidget* parent)
 	: QWidget(parent)
 {
 	ui.setupUi(this);
@@ -9,37 +9,37 @@ TopSlideFrameWidget::TopSlideFrameWidget(QWidget *parent)
 TopSlideFrameWidget::~TopSlideFrameWidget()
 {}
 
-HoveredFrame* TopSlideFrameWidget::getFrame()
+HoveredFrame* TopSlideFrameWidget::getFrame() const
 {
 	return ui.frame_topslidemenu;
 }
 
-QLabel* TopSlideFrameWidget::getLabelProfile()
+QLabel* TopSlideFrameWidget::getLabelProfile() const
 {
 	return ui.label_account_name;
 }
 
-QPushButton* TopSlideFrameWidget::getPushButtonSettings()
+QPushButton* TopSlideFrameWidget::getPushButtonSettings() const
 {
 	return ui.pushButton_settings;
 }
 
-QPushButton* TopSlideFrameWidget::getPushButtonAboutUs()
+QPushButton* TopSlideFrameWidget::getPushButtonAboutUs() const
 {
 	return ui.pushButton_aboutus;
 }
 
-QPushButton* TopSlideFrameWidget::getPushButtonNews()
+QPushButton* TopSlideFrameWidget::getPushButtonNews() const
 {
 	return ui.pushButton_news;
 }
 
-QPushButton* TopSlideFrameWidget::getPushButtonServers()
+QPushButton* TopSlideFrameWidget::getPushButtonServers() const
 {
 	return ui.pushButton_servers;
 }
 
-QPushButton* TopSlideFrameWidget::getPushButtonGame()
+QPushButton* TopSlideFrameWidget::getPushButtonGame() const
 {
 	return ui.pushButton_game;
 }

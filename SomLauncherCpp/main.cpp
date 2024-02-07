@@ -29,7 +29,9 @@ int main(int argc, char* argv[])
 
 		SomLauncherMainWindow main_window;
 		qInfo() << "Creating account window..." << std::endl;
-		LoginAccountForm account_window(&main_window);
+		LoginAccountForm account_window/*(&main_window)*/;
+		account_window.setStyleSheet(main_window.getStyleSheetPath());
+		account_window.setModal(false);
 		qInfo() << "Configureate account window..." << std::endl;
 		account_window.setConfigPath(main_window.getConfigPath());
 		account_window._setPasswordAndLoginInUi();
@@ -38,12 +40,12 @@ int main(int argc, char* argv[])
 		//std::cout << main_window.getServersFromDatabase().to_string() << std::endl;
 
 		QObject::connect(&main_window, &SomLauncherMainWindow::updateSignal,
-			[=](const std::string& url) -> int
+			[=](const std::string& url) -> void
 			{
 				qInfo() << "updateSignal detected" << std::endl;
 				std::string download_url = "https://mocsom.site/media" + std::string("/") + url;
+				UIThread::run([&]() {system(DownloadFile(download_url, Additionals::TempFile::get_tempdir_SYSTEM()).u8string().c_str()); });
 				QApplication::exit(0);
-				return system(DownloadFile(download_url, Additionals::TempFile::get_tempdir_SYSTEM()).u8string().c_str());
 			}
 		);
 
@@ -82,10 +84,10 @@ int main(int argc, char* argv[])
 	}
 	catch (const std::exception& exc)
 	{
-		qWarning() << "exception " << exc.what();
-		QMessageBox messageBox;
+		qFatal() << "exception " << exc.what();
+		/*QMessageBox messageBox;
 		messageBox.critical(nullptr, "Error", exc.what());
-		messageBox.setFixedSize(500, 200);
+		messageBox.setFixedSize(500, 200);*/
 	}
 
 	return returned_id;

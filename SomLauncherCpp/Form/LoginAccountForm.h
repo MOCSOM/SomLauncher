@@ -30,6 +30,7 @@ public:
 
 	void _setPasswordAndLoginInUi();
 
+	void setStyleSheet(const std::filesystem::path& path);
 	void setConfigPath(const std::filesystem::path& config_path);
 	void setConnectionWithDataBase();
 	const std::string getPasswordHashFromServer();

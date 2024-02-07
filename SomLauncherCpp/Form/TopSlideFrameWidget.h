@@ -18,13 +18,13 @@ public:
 	TopSlideFrameWidget(QWidget* parent = nullptr);
 	~TopSlideFrameWidget();
 
-	HoveredFrame* getFrame();
-	QLabel* getLabelProfile();
-	QPushButton* getPushButtonSettings();
-	QPushButton* getPushButtonAboutUs();
-	QPushButton* getPushButtonNews();
-	QPushButton* getPushButtonServers();
-	QPushButton* getPushButtonGame();
+	HoveredFrame* getFrame() const;
+	QLabel* getLabelProfile() const;
+	QPushButton* getPushButtonSettings() const;
+	QPushButton* getPushButtonAboutUs() const;
+	QPushButton* getPushButtonNews() const;
+	QPushButton* getPushButtonServers() const;
+	QPushButton* getPushButtonGame() const;
 
 	void setMainButtonsTextAlightButtom();
 	void setMainButtonsTextAlightCenter();
