@@ -131,6 +131,9 @@ void SomLauncherMainWindow::setupInstallMinecraft(const size_t& index)
 	std::shared_ptr<QCallback> callback = std::make_shared<QCallback>();
 	callback->setQProgressBar(ui.progressBar_ahtung);
 	callback->setQLabelProggress(ui.label_download_status_change);
+	callback->setQLabelProggress(ui.label_download_status_change);
+	callback->setQLabelDownloadSpeed(ui.label_download_speed);
+	callback->setQLabelDownloadTime(ui.label_download_time);
 
 	qInfo() << "starting installing minecraft..." << std::endl;
 

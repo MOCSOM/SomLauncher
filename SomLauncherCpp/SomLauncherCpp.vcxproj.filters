@@ -33,6 +33,12 @@
     <Filter Include="Hashes">
       <UniqueIdentifier>{28a77ec8-3d00-4626-aad3-246bf95d6060}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Web">
+      <UniqueIdentifier>{4d83afe9-92e2-47cd-9cf0-2a458edab63f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Web\Download">
+      <UniqueIdentifier>{b029d65b-8b12-4616-89fa-5f1b0ff2b48f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -131,9 +137,6 @@
     <ClCompile Include="Minecraft\Servers\ServerDatConfiguration.cpp">
       <Filter>Minecraft\Servers</Filter>
     </ClCompile>
-    <ClCompile Include="Web\Download\Download.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="QObjects\Threads\UIThread.cpp">
       <Filter>Custom Qt Files</Filter>
     </ClCompile>
@@ -145,6 +148,9 @@
     </ClCompile>
     <ClCompile Include="Hashes\Crypto.cpp">
       <Filter>Hashes</Filter>
+    </ClCompile>
+    <ClCompile Include="Web\Download\Download.cpp">
+      <Filter>Web\Download</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

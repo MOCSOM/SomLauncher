@@ -40,12 +40,17 @@ public:
 public:
 	virtual void setQProgressBar(QProgressBar* progress_bar);
 	virtual void setQLabelProggress(SignalLabel* progress_label);
+	virtual void setQLabelDownloadSpeed(SignalLabel* speed_label) {}
+	virtual void setQLabelDownloadTime(SignalLabel* time_label) {}
 	void setCurl(CURL* curl);
 
 public:
 	virtual void setQProgressValue(size_t value) {}
 	virtual void setQLabelProggressValue(QString value) {}
 	virtual void setTotalDownloadSize(quint64 value) {}
+	virtual void setQLabelDownloadSpeed(QString value) {}
+	virtual void setQLabelDownloadTime(QString value) {}
+
 	virtual [[nodiscard]] quint64 getTotalDownloadSize() const { return 0; }
 
 	int progress_func(double TotalToDownload, double NowDownloaded,

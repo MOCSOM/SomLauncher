@@ -227,7 +227,7 @@ bool MinecraftCpp::do_version_install(const std::string& versionid, const std::s
 	if (versiondata.is_exist("downloads"))
 	{
 		callback->setTotalDownloadSize(versiondata["downloads"]["client"]["size"].to_int());
-		DownloadFile(versiondata["downloads"]["client"]["url"].to_string(), Join({ path, "versions", versiondata["id"].to_string(), (versiondata["id"].to_string() + ".jar") }), callback);
+		DownloadFile(versiondata["downloads"]["client"]["url"].to_string(), Join({ path, "versions", versiondata["id"].to_string(), (versiondata["id"].to_string() + ".jar") }), callback, versiondata["downloads"]["client"]["sha1"].to_string());
 	}
 
 	//Need to copy jar for old forge versions
@@ -1458,7 +1458,7 @@ bool MinecraftCpp::install_jvm_runtime(const std::string& jvm_version, const std
 			}
 			else
 			{
-				callback->setTotalDownloadSize(var.second["downloads"]["lzma"]["size"].to_int());
+				callback->setTotalDownloadSize(var.second["downloads"]["raw"]["size"].to_int());
 				DownloadFile(var.second["downloads"]["raw"]["url"].to_string(), current_path.u8string(), callback, var.second["downloads"]["raw"]["sha1"].to_string());
 			}
 

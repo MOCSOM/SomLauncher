@@ -68,23 +68,7 @@
     </property>
     <widget class="QWidget" name="page_game">
      <layout class="QGridLayout" name="gridLayout_page_game">
-      <item row="0" column="0" colspan="2">
-       <widget class="QFrame" name="frame_short_news">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>7</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::StyledPanel</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Raised</enum>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="0" colspan="2">
+      <item row="5" column="0" colspan="2">
        <widget class="QFrame" name="frame_status_table">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -268,14 +252,44 @@
         </layout>
        </widget>
       </item>
+      <item row="0" column="0" colspan="2">
+       <widget class="QFrame" name="frame_short_news">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>7</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+       </widget>
+      </item>
       <item row="2" column="0">
+       <widget class="SignalLabel" name="label_download_speed">
+        <property name="text">
+         <string>download_speed</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="SignalLabel" name="label_download_time">
+        <property name="text">
+         <string>download_time</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0" colspan="2">
        <widget class="QProgressBar" name="progressBar_ahtung">
         <property name="value">
          <number>0</number>
         </property>
        </widget>
       </item>
-      <item row="3" column="0">
+      <item row="4" column="0" colspan="2">
        <widget class="SignalLabel" name="label_download_status_change">
         <property name="text">
          <string>download_status</string>
@@ -311,8 +325,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>757</width>
-           <height>397</height>
+           <width>98</width>
+           <height>28</height>
           </rect>
          </property>
          <layout class="QGridLayout" name="gridLayout_scrollArea_servers"/>

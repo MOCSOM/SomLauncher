@@ -25,3 +25,29 @@ void QCallback::setQLabelProggressValue(QString value)
 		}
 	);
 }
+
+void QCallback::setQLabelDownloadSpeed(QString value)
+{
+	UIThread::run(
+		[&, value]()
+		{
+			if (this->getQLabelDownloadSpeed())
+			{
+				this->getQLabelDownloadSpeed()->setText(value);
+			}
+		}
+	);
+}
+
+void QCallback::setQLabelDownloadTime(QString value)
+{
+	UIThread::run(
+		[&, value]()
+		{
+			if (this->getQLabelDownloadTime())
+			{
+				this->getQLabelDownloadTime()->setText(value);
+			}
+		}
+	);
+}

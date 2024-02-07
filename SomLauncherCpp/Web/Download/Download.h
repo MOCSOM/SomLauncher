@@ -16,11 +16,14 @@
 #include <filesystem>
 #include <memory>
 #include <string>
+#include <cmath>
 
 #include "../../Callbacks/CallbackDict.h"
 #include "../../QObjects/Threads/UIThread.h"
 #include "../../QObjects/Threads/LambdaTask.h"
 #include "../../Hashes/Crypto.h"
+
+#undef max
 
 namespace web
 {
