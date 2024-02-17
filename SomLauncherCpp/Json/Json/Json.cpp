@@ -1,5 +1,4 @@
-﻿#include "pch.h"
-#include "Json.h"
+﻿#include "Json.h"
 
 Json::SomJson::iterator Json::SomJson::begin() noexcept
 {

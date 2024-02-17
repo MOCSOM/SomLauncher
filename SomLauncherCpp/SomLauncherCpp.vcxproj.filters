@@ -152,6 +152,15 @@
     <ClCompile Include="Web\Download\Download.cpp">
       <Filter>Web\Download</Filter>
     </ClCompile>
+    <ClCompile Include="Additionals\Additionals.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Json\Json\Json.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Json\Json\JsonParcer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -240,6 +249,21 @@
     </ClInclude>
     <ClInclude Include="Hashes\Crypto.h">
       <Filter>Hashes</Filter>
+    </ClInclude>
+    <ClInclude Include="Additionals\Additionals.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Json\Json\Json.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Json\Json\JsonParcer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Json\Json\JsonTypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Json\SomJson.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

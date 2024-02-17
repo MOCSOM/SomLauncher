@@ -9,7 +9,7 @@
 
 #include <../../../Moc/Logger/MocIOStream.h>
 
-#include "../../SomAdditionalsLib/Additionals.h"
+#include "../Additionals/Additionals.h"
 
 namespace client
 {

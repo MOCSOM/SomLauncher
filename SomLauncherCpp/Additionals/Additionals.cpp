@@ -1,6 +1,4 @@
-﻿#include "pch.h"
-
-#include "Additionals.h"
+﻿#include "Additionals.h"
 
 wchar_t* Additionals::Convectors::ConvertStringToWcharPtr(const std::string& str)
 {

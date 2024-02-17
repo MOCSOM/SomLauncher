@@ -23,7 +23,7 @@
 //#include <atlstr.h>
 
 #include "../Callbacks/CallbackDict.h"
-#include "../../SomAdditionalsLib/Additionals.h"
+#include "../Additionals/Additionals.h"
 #include "../Archives/Archives.h"
 #include "../Hashes/sha1.h"
 #include "../Encryption/LZMA/LzmaDecompress.h"

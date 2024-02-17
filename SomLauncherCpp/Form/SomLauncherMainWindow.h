@@ -21,8 +21,8 @@
 
 #include "../Web/DownloadClasses.h"
 #include "../Callbacks/CallbackDict.h"
-#include "../../SomAdditionalsLib/Additionals.h"
-#include "../../MocJsonLib/SomJson.h"
+#include "../Additionals/Additionals.h"
+#include "../Json/SomJson.h"
 #include "../Minecraft/Minecraftus.h"
 #include "../Moc/Logger/MocIOStream.h"
 #include "../Servers/ServerTypes.h"

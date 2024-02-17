@@ -1,19 +1,13 @@
 #ifndef JSONPARCER_H_
 #define JSONPARCER_H_
 
-#ifdef SOMJSONDLL_EXPORTS
-#define JSONPARCER_API __declspec(dllexport)
-#else
-#define JSONPARCER_API __declspec(dllimport)
-#endif
-
 #include <urlmon.h>
 #include <filesystem>
 #include <curl/curl.h>
 
 #include "Json.h"
 
-#include "../../SomAdditionalsLib/Additionals.h"
+#include "../../Additionals/Additionals.h"
 
 #pragma comment(lib, "Urlmon.lib")
 

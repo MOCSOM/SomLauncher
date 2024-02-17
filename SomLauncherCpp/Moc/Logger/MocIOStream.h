@@ -15,7 +15,7 @@
 #include <windows.h>
 #include <cstring>
 
-#include "../../../SomAdditionalsLib/Additionals.h"
+#include "../../Additionals/Additionals.h"
 
 void customHandler(QtMsgType type, const QMessageLogContext& context, const QString& msg);
 

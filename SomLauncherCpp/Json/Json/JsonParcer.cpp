@@ -1,6 +1,4 @@
-﻿#include "../pch.h"
-
-#include "JsonParcer.h"
+﻿#include "JsonParcer.h"
 
 Json::JsonValue Json::JsonParcer::ParseFile(const std::wstring& filename)
 {
@@ -41,7 +39,7 @@ Json::JsonValue Json::JsonParcer::ParseFile(const std::string& filename)
 {
 	if (!std::filesystem::exists(filename))
 	{
-		std::cout << "Unable to open file: " << filename << std::endl;
+		std::cerr << "Unable to open file: " << filename << std::endl;
 		return nullptr;
 	}
 
@@ -49,7 +47,7 @@ Json::JsonValue Json::JsonParcer::ParseFile(const std::string& filename)
 
 	if (!file.is_open())
 	{
-		std::cout << "failed to open " << filename << std::endl;
+		std::cerr << "failed to open " << filename << std::endl;
 		return nullptr;
 	}
 	else
@@ -71,26 +69,75 @@ Json::JsonValue Json::JsonParcer::ParseFile(const std::string& filename)
 
 Json::JsonValue Json::JsonParcer::ParseJson(const std::string& json_str)
 {
-	_pos = 0;
-	return ParseValue(json_str);
+	Json::JsonParcer parcer;
+	parcer._pos = 0;
+	return parcer.ParseValue(json_str);
 }
 
-Json::JsonValue Json::JsonParcer::ParseUrl(const std::string& url)
+Json::JsonValue Json::JsonParcer::ParseUrl(const std::string& url, const std::filesystem::path& destination)
 {
 	std::string destenation_file = Additionals::TempFile::get_tempdir_SYSTEM();
+
+	if (destination == "")
+	{
+		destenation_file = destination.u8string();
+	}
 
 	{
 		std::string replace_url = url;
 		replace_url = Additionals::String::split(url, '/')[Additionals::String::split(url, '/').size() - 1];
 		destenation_file = destenation_file /*+ "\\"*/ + replace_url;
 	}
+	std::string normalise_url = url;
+	// Замена двойных косых черт на одиночные
+	size_t pos = normalise_url.find("https://");
 
-	HRESULT resurl = URLDownloadToFileA(NULL, url.c_str(), destenation_file.c_str(), NULL, NULL);
+	if (pos != std::string::npos) {
+		pos += 8;
+	}
 
-	if (resurl == S_OK)
+	while ((pos = normalise_url.find("//", pos)) != std::string::npos) {
+		normalise_url.replace(pos, 2, "/");
+		pos += 1;
+	}
+
+	CURL* curl = nullptr;
+	CURLcode res;
+	std::ofstream output(destenation_file, std::ios::binary);
+	curl = curl_easy_init();
+	if (curl)
+	{
+		curl_easy_setopt(curl, CURLOPT_URL, normalise_url.c_str());
+		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
+		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &output);
+		curl_easy_setopt(curl, CURLOPT_NOPROGRESS, TRUE);
+
+		res = curl_easy_perform(curl);
+
+		curl_easy_cleanup(curl);
+		output.close();
+	}
+	else
+	{
+		std::cerr << "Curl failed init" << std::endl;;
+		output.close();
+	}
+
+	output.close();
+	//HRESULT resurl = URLDownloadToFileA(NULL, normalise_url.c_str(), destenation_file.c_str(), NULL, NULL);
+
+	if (res == CURLE_OK)
 	{
 		Json::JsonValue return_val = ParseFile(destenation_file);
-		DeleteFileA(destenation_file.c_str());
+		if (destination == "")
+		{
+			std::remove(destenation_file.c_str());
+		}
+		else
+		{
+			std::filesystem::copy_file(destenation_file, destination, std::filesystem::copy_options::overwrite_existing);
+			std::remove(destenation_file.c_str());
+		}
 		return return_val;
 	}
 	else
@@ -98,6 +145,15 @@ Json::JsonValue Json::JsonParcer::ParseUrl(const std::string& url)
 		std::cerr << "Dont download file in json" << std::endl;
 	}
 	return nullptr;
+}
+
+size_t Json::JsonParcer::write_data(char* ptr, size_t size, size_t nmemb, void* userdata)
+{
+	std::ofstream* out = static_cast<std::ofstream*>(userdata);
+	size_t nbytes = size * nmemb;
+	out->write(ptr, nbytes);
+
+	return nbytes;
 }
 
 void Json::JsonParcer::SkipWhitespace(const std::string& json_str)
@@ -195,7 +251,7 @@ Json::JsonValue Json::JsonParcer::ParseNull(const std::string& json_str)
 
 	_pos += expectedValue.size();
 
-	return std::make_shared<Json::JsonNull>();
+	return Json::JsonValue(std::nullptr_t());
 }
 
 Json::JsonValue Json::JsonParcer::ParseBool(const std::string& json_str)
@@ -213,7 +269,7 @@ Json::JsonValue Json::JsonParcer::ParseBool(const std::string& json_str)
 
 	_pos += expectedValue.size();
 
-	return std::make_shared<Json::JsonBool>(value);
+	return Json::JsonValue(value);
 }
 
 Json::JsonValue Json::JsonParcer::ParseNumber(const std::string& json_str)
@@ -226,7 +282,7 @@ Json::JsonValue Json::JsonParcer::ParseNumber(const std::string& json_str)
 		++_pos;
 	}
 
-	return std::make_shared<Json::JsonNumber>(::atof(num_str.c_str()));
+	return Json::JsonValue(::atof(num_str.c_str()));
 }
 
 Json::JsonValue Json::JsonParcer::ParseString(const std::string& json_str)
@@ -303,7 +359,7 @@ Json::JsonValue Json::JsonParcer::ParseString(const std::string& json_str)
 
 	++_pos;
 
-	return std::make_shared<Json::JsonString>(value_str);
+	return Json::JsonValue(value_str);
 }
 
 std::string Json::JsonParcer::ParseUnicode(const std::string& json_str)
@@ -363,7 +419,7 @@ Json::JsonValue Json::JsonParcer::ParseArray(const std::string& json_str)
 
 	++_pos;
 
-	std::shared_ptr<Json::JsonArray> arr = std::make_shared<Json::JsonArray>();
+	Json::JsonValue arr = Json::JsonValue(std::vector<Json::SomJson>());
 
 	SkipWhitespace(json_str);
 
@@ -375,14 +431,14 @@ Json::JsonValue Json::JsonParcer::ParseArray(const std::string& json_str)
 
 	while (true)
 	{
-		std::shared_ptr<Json::JsonNode> value = ParseValue(json_str);
+		Json::JsonValue value = ParseValue(json_str);
 
 		if (value == nullptr)
 		{
 			return nullptr;
 		}
 
-		arr->add_value(value);
+		arr.add_value(value);
 		SkipWhitespace(json_str);
 
 		if (json_str[_pos] == ']')
@@ -410,7 +466,7 @@ Json::JsonValue Json::JsonParcer::ParseObject(const std::string& json_str)
 		return nullptr;
 	}
 
-	std::shared_ptr<Json::JsonObject> obj = std::make_shared<Json::JsonObject>();
+	Json::JsonValue obj = Json::JsonValue(std::unordered_map<std::string, Json::SomJson>());
 
 	++_pos;
 	SkipWhitespace(json_str);
@@ -449,7 +505,7 @@ Json::JsonValue Json::JsonParcer::ParseObject(const std::string& json_str)
 			return nullptr;
 		}
 
-		obj->add_value(key->to_string(), value);
+		obj.add_value(key.to_string(), value);
 
 		SkipWhitespace(json_str);
 

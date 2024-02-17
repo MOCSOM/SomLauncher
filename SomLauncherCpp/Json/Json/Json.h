@@ -1,8 +1,6 @@
 ﻿#ifndef JSON_H_
 #define JSON_H_
 
-#include "../pch.h"
-#include "../framework.h"
 
 #include <unordered_map>
 #include <string>
@@ -13,7 +11,7 @@
 #include <iostream>
 
 #include "JsonTypes.h"
-#include "../../SomAdditionalsLib/Additionals.h"
+#include "../../Additionals/Additionals.h"
 
 namespace Json
 {

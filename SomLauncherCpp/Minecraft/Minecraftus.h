@@ -3,8 +3,8 @@
 
 #include "../Web/DownloadClasses.h"
 #include "../Callbacks/CallbackDict.h"
-#include "../../MocJsonLib/SomJson.h"
-#include "../../SomAdditionalsLib/Additionals.h"
+#include "../Json/SomJson.h"
+#include "../Additionals/Additionals.h"
 #include "../Hashes/sha1.h"
 #include "../Exceptions/FileOutsideMinecraftDirectoryException.h"
 //#include "CommandBuilder.h"

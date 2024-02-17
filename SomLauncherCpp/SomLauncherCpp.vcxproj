@@ -121,11 +121,12 @@
       <AdditionalIncludeDirectories>$(ProgramFiles)\MySQL\MySQL Connector C++ 8.2\include\jdbc;$(VcpkgRoot)\installed\x64-windows\include;$(Qt_INCLUDEPATH_)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>$(Qt_DEFINES_);%(PreprocessorDefinitions);STATIC_CONCPP;CURL_STATICLIB</PreprocessorDefinitions>
       <LanguageStandard>$(Qt_STDCPP_)</LanguageStandard>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <AdditionalLibraryDirectories>$(VcpkgRoot)\installed\x64-windows\debug\lib;$(ProgramFiles)\MySQL\MySQL Connector C++ 8.2\lib64\vs14\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>%(AdditionalDependencies);$(Qt_LIBS_);mysqlcppconn-static.lib;lzma.lib;libcrypto.lib;libssl.lib;Urlmon.lib;User32.lib;libcurl-d.lib</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies);$(Qt_LIBS_);mysqlcppconn.lib;lzma.lib;libcrypto.lib;libssl.lib;Urlmon.lib;User32.lib;libcurl-d.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -190,6 +191,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Additionals\Additionals.cpp" />
     <ClCompile Include="Archives\Archives.cpp" />
     <ClCompile Include="basic_xml.cpp" />
     <ClCompile Include="Callbacks\CallbackDict.cpp" />
@@ -209,6 +211,8 @@
     <ClCompile Include="Form\SomLauncherMainWindow.cpp" />
     <ClCompile Include="Form\TopSlideFrameWidget.cpp" />
     <ClCompile Include="Hashes\Crypto.cpp" />
+    <ClCompile Include="Json\Json\Json.cpp" />
+    <ClCompile Include="Json\Json\JsonParcer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Minecraft\Minecraftus.cpp" />
     <ClCompile Include="Minecraft\Mods.cpp" />
@@ -229,6 +233,7 @@
     <ClCompile Include="Web\Download\Download.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Additionals\Additionals.h" />
     <ClInclude Include="Archives\Archives.h" />
     <ClInclude Include="Archives\qzipreader_p.h" />
     <ClInclude Include="Archives\qzipwriter_p.h" />
@@ -238,6 +243,10 @@
     <ClInclude Include="Databases\SQLBased.h" />
     <QtMoc Include="QObjects\Threads\UIThread.h" />
     <ClInclude Include="Hashes\Crypto.h" />
+    <ClInclude Include="Json\Json\Json.h" />
+    <ClInclude Include="Json\Json\JsonParcer.h" />
+    <ClInclude Include="Json\Json\JsonTypes.h" />
+    <ClInclude Include="Json\SomJson.h" />
     <ClInclude Include="QObjects\Threads\LambdaTask.h" />
     <ClInclude Include="Web\Download\Download.h" />
     <QtMoc Include="Form\ServerChangerForm.h" />
@@ -291,14 +300,6 @@
     <QtUic Include="Form\SingleNewsItemWidget.ui" />
     <QtUic Include="Form\SomLauncherMainWindow.ui" />
     <QtUic Include="Form\TopSlideFrameWidget.ui" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MocJsonLib\MocJsonLib.vcxproj">
-      <Project>{c3b81459-bb44-4ded-97e5-af78d104bfbd}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\SomAdditionalsLib\SomAdditionalsLib.vcxproj">
-      <Project>{63fda220-d21d-441c-b2e5-f17d86fe29e7}</Project>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\som.ico" />

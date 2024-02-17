@@ -6,8 +6,8 @@
 
 #include "../Web/DownloadClasses.h"
 #include "../Callbacks/CallbackDict.h"
-#include "../../MocJsonLib/SomJson.h"
-#include "../../SomAdditionalsLib/Additionals.h"
+#include "../Json/SomJson.h"
+#include "../Additionals/Additionals.h"
 #include "../Archives/Archives.h"
 
 namespace MinecraftCpp

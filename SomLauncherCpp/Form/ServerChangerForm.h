@@ -6,7 +6,7 @@
 #include <string>
 #include <memory>
 
-#include "../../MocJsonLib/SomJson.h"
+#include "../Json/SomJson.h"
 
 #include "ui_ServerChangerForm.h"
 
