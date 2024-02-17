@@ -277,6 +277,13 @@
     <None Include="resources\StyleSheets\Wstartpage_modyfied.qss">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="Form\StyleSheets\Wstartpage.qss" />
+    <None Include="Form\StyleSheets\Cstartpage.qss" />
+    <None Include="Form\StyleSheets\Diffnes.qss" />
+    <None Include="Form\StyleSheets\Fibers.qss" />
+    <None Include="Form\StyleSheets\Fibrary.qss" />
+    <None Include="Form\StyleSheets\Irrorater.qss" />
+    <None Include="Form\StyleSheets\Toolery.qss" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="QObjects\Threads\FunThread.h">

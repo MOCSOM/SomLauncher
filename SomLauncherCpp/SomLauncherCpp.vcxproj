@@ -285,6 +285,13 @@
     <None Include="all.json" />
     <None Include="cpp.hint" />
     <None Include="DATA.json" />
+    <None Include="Form\StyleSheets\Cstartpage.qss" />
+    <None Include="Form\StyleSheets\Diffnes.qss" />
+    <None Include="Form\StyleSheets\Fibers.qss" />
+    <None Include="Form\StyleSheets\Fibrary.qss" />
+    <None Include="Form\StyleSheets\Irrorater.qss" />
+    <None Include="Form\StyleSheets\Toolery.qss" />
+    <None Include="Form\StyleSheets\Wstartpage.qss" />
     <None Include="resources\StyleSheets\Wstartpage_modyfied.qss" />
     <None Include="SERVERS.json" />
     <None Include="SOMCONFIG_template.json" />
