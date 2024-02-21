@@ -1,6 +1,8 @@
 ﻿#ifndef MINECRAFTUS_H_     // equivalently, #if !defined HEADER_H_
 #define MINECRAFTUS_H_
 
+#include <QMessageBox>
+
 #include "../Web/DownloadClasses.h"
 #include "../Callbacks/CallbackDict.h"
 #include "../Json/SomJson.h"

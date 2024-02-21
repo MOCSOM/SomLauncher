@@ -288,12 +288,15 @@ void SomLauncherMainWindow::createConfig()
 
 void SomLauncherMainWindow::configureOptions()
 {
-	char* appdata = nullptr;
-	size_t appdata_sz = 0;
 
-	_dupenv_s(&appdata, &appdata_sz, "APPDATA");
+	//char* appdata = nullptr;
+	//size_t appdata_sz = 0;
+
+	//_dupenv_s(&appdata, &appdata_sz, "APPDATA");
+	//std::filesystem::temp_directory_path();
 
 	//std::string path_wch_java = DDIC::Download::Files::_get_java_path(Join({ appdata == nullptr ? "" : appdata, ".SomSomSom" }))[0].first + "\\" + "bin" + "\\" + "java.exe";
+	//qDebug() << this->config_parce.get_count() << std::endl;
 
 	this->options.customResolution = false;
 	this->options.gameDirectory = this->minecraft_core_dir_path;
@@ -312,6 +315,7 @@ void SomLauncherMainWindow::configureOptions()
 
 void SomLauncherMainWindow::checkJava(MinecraftCpp::option::MinecraftOptions& options, std::string java_verison, CallbackNull* callback) const
 {
+	qInfo() << "Checking java..." << std::endl;
 	std::string java_dir = "";
 
 	if (java_verison == "")

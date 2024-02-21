@@ -1687,7 +1687,7 @@ bool MinecraftCpp::forge::install_forge_version(const std::string& versionid, co
 
 	int random_num = 1 + (rand() % 100000);
 
-	std::string FORGE_DOWNLOAD_URL = "https://files.minecraftforge.net/maven/net/minecraftforge/forge/" + versionid + "/forge-" + versionid + "-installer.jar";
+	std::string FORGE_DOWNLOAD_URL = "https://maven.minecraftforge.net/net/minecraftforge/forge/" + versionid + "/forge-" + versionid + "-installer.jar";
 	std::string temp_file_path = Additionals::TempFile::get_tempdir_SYSTEM() + ("forge-installer-" + std::to_string(random_num) + ".tmp");
 	if (DownloadFile(FORGE_DOWNLOAD_URL, temp_file_path, callback) == "")
 	{
@@ -1713,23 +1713,31 @@ bool MinecraftCpp::forge::install_forge_version(const std::string& versionid, co
 		}
 	}
 
-	std::string forge_version_id = version_data["version"].to_string();
+	std::string forge_version_id = version_data.is_exist("version") ? version_data["version"].to_string() : version_data["install"]["version"].to_string();
+	std::string minecraft_version = version_data.is_exist("minecraft") ? version_data["minecraft"].to_string() : version_data["install"]["minecraft"].to_string();
 
 	// Make sure, the base version is installed
-	install_minecraft_version(version_data["minecraft"].to_string(), path, callback);
+	install_minecraft_version(minecraft_version, path, callback);
 
 	// Install all needed libs from install_profile.json
-	install_libraries(version_data, path, callback);
+	if (version_data.is_exist("libraries"))
+	{
+		install_libraries(version_data, path, callback);
+	}
 
 	// Extract the version.json
 	std::string version_json_path = Join({ path, "versions", forge_version_id, (forge_version_id + ".json") });
-	extract_file(zArchive, "version.json", version_json_path);
+	if(!extract_file(zArchive, "version.json", version_json_path))
+		if (version_data.is_exist("versionInfo"))
+		{
+			version_data["versionInfo"].save_json_to_file(version_json_path, 4);
+		}
 
 	// Extract forge libs from the installer
 	std::string forge_lib_path = Join({ path, "libraries", "net", "minecraftforge", "forge", versionid });
 	extract_file(zArchive, ("maven/net/minecraftforge/forge/" + versionid + "/forge-" + versionid + ".jar"), (forge_lib_path + "\\" + ("forge-" + versionid + ".jar")));
 	extract_file(zArchive, ("maven/net/minecraftforge/forge/" + versionid + "/forge-" + versionid + "-universal.jar"), Join({ forge_lib_path, ("forge-" + versionid + "-universal.jar") }));
-	extract_file(zArchive, (versionid + "/forge-" + versionid + "-universal.jar"), Join({ forge_lib_path, ("forge-" + versionid + ".jar") }));
+	extract_file(zArchive, ("forge-" + versionid + "-universal.jar"), Join({ forge_lib_path, ("forge-" + versionid + ".jar") }));
 
 	// Extract the client.lzma
 	std::string lzma_path = Additionals::TempFile::get_tempdir_SYSTEM() + ("lzma-" + std::to_string(random_num) + ".tmp");
@@ -1740,9 +1748,14 @@ bool MinecraftCpp::forge::install_forge_version(const std::string& versionid, co
 	install_minecraft_version(forge_version_id, path, callback);
 
 	// Run the processors
-	forge_processors(version_data, path, lzma_path, temp_file_path, callback, java);
+	if (version_data.is_exist("processors"))
+	{
+		qInfo() << "Run the forge processors" << std::endl;
+		forge_processors(version_data, path, lzma_path, temp_file_path, callback, java);
+	}
 
 	// Delete the temporary files
+	qInfo() << "Delete the temporary files" << std::endl;
 	//std::filesystem::permissions(temp_file_path, std::filesystem::perms::all);
 	DeleteFileA(temp_file_path.c_str());
 	if (std::filesystem::exists(lzma_path) && !std::filesystem::is_directory(lzma_path))
@@ -1773,7 +1786,7 @@ bool MinecraftCpp::forge::extract_file(const QZipReader& handler, const std::str
 	}
 
 	QVector<QZipReader::FileInfo> allFiles = handler.fileInfoList();
-
+	int count = 0;
 	for (auto& var : allFiles)
 	{
 		if (var.filePath.toStdString() == zip_path)
@@ -1781,6 +1794,12 @@ bool MinecraftCpp::forge::extract_file(const QZipReader& handler, const std::str
 			Additionals::archives::decompressFile(handler, var, p.string());
 			break;
 		}
+		++count;
+	}
+
+	if (count == 0)
+	{
+		return false;
 	}
 
 	return true;
@@ -1791,44 +1810,59 @@ std::string MinecraftCpp::forge::get_data_library_path(const std::string& libnam
 	/*
 	Turns the libname into a path
 	*/
+	qInfo() << "Get data library path" << std::endl;
 	std::string _libname = libname;
 
-	for (size_t i = 0; _libname[i] != '\0'; i++)
-	{
-		if (i == 0)
-		{
-			continue;
-		}
-		if (_libname[i + 1] == '\0')
-		{
-			continue;
-		}
-		_libname[i - 1] = _libname[i];
-	}
+	_libname = _libname.substr(1, _libname.size() - 2);
+	qDebug() << "libname:" << _libname << std::endl;
 
+	qInfo() << "Get data library path split" << std::endl;
 	std::string libpath = Join({ path, "libraries" });
 	std::string base_path = Additionals::String::split(_libname, ':')[0];
-	std::string libname_str = Additionals::String::split(_libname, ':')[1];
 	std::string version = Additionals::String::split(_libname, ':')[2];
 	std::string extra = Additionals::String::split(_libname, ':')[3];
+	_libname = Additionals::String::split(_libname, ':')[1];
 	std::string fileend;
+	qInfo() << "Get data library path split completed" << std::endl;
 
 	for (auto& var : Additionals::String::split(base_path, '.'))
 	{
 		libpath = Join({ libpath, var });
+		qDebug() << libpath << std::endl;
 
-		if (Additionals::String::split(extra, '@')[0] == extra)
+		if (Additionals::String::split(extra, '@').size() <= 1)
 		{
-			fileend = "jar";
+			qInfo() << "Get data library path split extrajar files" << extra << Additionals::String::split(extra, '@').size() << std::endl;
+
+			if (extra == "mappings" || extra == "mappings-merged")
+			{
+				fileend = "txt";
+			}
+			else
+			{
+				fileend = "jar";
+			}
 		}
 		else
 		{
-			extra = Additionals::String::split(extra, '@')[0];
-			fileend = Additionals::String::split(extra, '@')[1];
+			qInfo() << "Get data library path split extra" << Additionals::String::split(extra, '@').size() << std::endl;
+
+			auto splt = Additionals::String::split(extra, '@');
+
+			qDebug() << splt << std::endl;
+
+			extra = splt[0];
+			fileend = splt[1];
+
+			qDebug() << extra << fileend << std::endl;
 		}
 	}
+	qInfo() << "Get data library path split extra completed" << std::endl;
 
 	libpath = Join({ libpath, _libname, version, (_libname + "-" + version + "-" + extra + "." + fileend) });
+
+	qInfo() << "Get data library path completed" << libpath << std::endl;
+	
 	return libpath;
 }
 
@@ -1837,15 +1871,54 @@ std::string MinecraftCpp::forge::get_jar_mainclass(const std::string& path)
 	/*
 	Returns the mainclass of a given jar
 	*/
-	//Additionals::archives::Archive zArchive(path);
-
-	// Parse the MANIFEST.MF
-	/*for (auto& var : zArchive.entries)
+	qInfo() << "Get jar mainclass" << std::endl;
+	QZipReader zArchive(path.c_str());
+	auto manifest_path = std::filesystem::path(Additionals::TempFile::get_tempdir_SYSTEM()) / "MANIFEST.MF";
+	foreach(QZipReader::FileInfo var, zArchive.fileInfoList())
 	{
-	}*/
-	std::cout << "get_jar_mainclass is not done blyat" << std::endl;
+		if (var.filePath == "META-INF/MANIFEST.MF")
+		{
+			//qDebug() << "decompress file" << std::endl;
+			Additionals::archives::decompressFile(zArchive, var, manifest_path.u8string());
+		}
+	}
 
-	return "";
+	QFile file(manifest_path);
+	if (!file.open(QIODevice::ReadOnly)) 
+	{
+		qWarning() << file.errorString() << std::endl;
+
+		QMessageBox::information(0, "error", file.errorString());
+	}
+
+	QTextStream in(&file);
+	QStringList lines;
+
+	while (!in.atEnd()) 
+	{
+		lines += in.readLine();
+	}
+
+	file.close();
+
+	std::string key, value;
+	std::unordered_map<std::string, std::string> content;
+	//qDebug() << "split lines" << std::endl;
+	for (auto& line : lines)
+	{
+		//qDebug() << "split" << line << Additionals::String::split(line.toStdString(), ':') << Additionals::String::split(line.toStdString(), ':').size() << std::endl;
+		if (!(Additionals::String::split(line.toStdString(), ':').size() <= 1))
+		{
+			key = Additionals::String::split(line.toStdString(), ':')[0];
+			value = Additionals::String::split(line.toStdString(), ':')[1];
+
+			//qDebug() << "added split to map" << key << value << std::endl;
+			content.insert(std::make_pair(key, value.substr(1)));
+		}
+	}
+	
+	//qDebug() << "Get jar mainclass completed" << std::endl;
+	return content["Main-Class"];
 }
 
 bool MinecraftCpp::forge::forge_processors(
@@ -1862,21 +1935,31 @@ bool MinecraftCpp::forge::forge_processors(
 	int random_num = 1 + (rand() % 100000);
 	std::string path = minecraft_directory;
 
-	Json::JsonValue argument_vars = Json::JsonValue(std::unordered_map<std::string, Json::JsonValue>());
+	Json::JsonValue argument_vars = Json::JsonValue(Json::JsonTypes::Object);
 	Json::JsonValue value_ = Json::JsonValue(Join({ path, "versions", data["minecraft"].to_string(), (data["minecraft"].to_string() + ".jar") }));
+	
 	argument_vars.add_value("{MINECRAFT_JAR}", value_);
 
+	qDebug() << "Get client data" << std::endl;
 	for (auto& var : data["data"].get_object())
 	{
+		qDebug() << "clinet data loop" << var.first << std::endl;
 		if (var.second["client"].to_string()._Starts_with("[") && Additionals::String::EndsWith(var.second["client"].to_string(), "]"))
 		{
-			argument_vars["{" + var.first + "}"] = get_data_library_path(var.second["client"].to_string(), path);
+			qDebug() << "Getting library path in client data" << std::endl;
+			auto lib = get_data_library_path(var.second["client"].to_string(), path);
+			qDebug() << "lib:" << lib << std::endl;
+			argument_vars.add_value("{" + var.first + "}", lib);
 		}
 		else
 		{
-			argument_vars["{" + var.first + "}"] = var.second["client"];
+			qDebug() << "Setting client data in client data" << std::endl;
+			argument_vars.add_value("{" + var.first + "}", var.second["client"]);
 		}
 	}
+	qDebug() << argument_vars.to_string() << std::endl;
+
+	qDebug() << "Get root path" << std::endl;
 	std::string root_path = Additionals::TempFile::get_tempdir_SYSTEM() + "forge-root-" + std::to_string(random_num);
 
 	argument_vars.replace_value("{INSTALLER}", installer_path);
@@ -1884,15 +1967,8 @@ bool MinecraftCpp::forge::forge_processors(
 	argument_vars.replace_value("{ROOT}", root_path);
 	argument_vars.replace_value("{SIDE}", "client");
 
-	std::string classpath_seperator = "";
-	if (OS == "windows")
-	{
-		classpath_seperator = ";";
-	}
-	else
-	{
-		classpath_seperator = ":";
-	}
+	qDebug() << "Setting separator" << std::endl;
+	std::string classpath_seperator = get_classpath_separator();
 
 	//callback.get("setMax", empty)(len(data["processors"]))
 	//callback->OnProgress(NULL, (*data)["processors"]->to_int(), NULL, NULL);
@@ -1901,32 +1977,66 @@ bool MinecraftCpp::forge::forge_processors(
 	for (auto& var : data["processors"].get_array())
 	{
 		++count;
+		qDebug() << var.to_string() << count << std::endl;
 
-		if (!(var["sides"].is_exist("client")) || !(var["sides"] == var ? true : false))
+		if (var["sides"] == nullptr)
 		{
-			// Skip server side only processors
+			qDebug() << "Skip side is null" << std::endl;
 			continue;
 		}
-		callback->OnProgress(NULL, NULL, NULL, (L"Running processor " + var["jar"].to_stringW()).c_str());
+		if (var["sides"].to_string() != "[client]")
+		{
+			// Skip server side only processors
+			qDebug() << "Skip server side only processors" << std::endl;
+			continue;
+		}
+
+		//callback->OnProgress(NULL, NULL, NULL, (L"Running processor " + var["jar"].to_stringW()).c_str());
+		//callback->setQLabelProggressValue(("Running processor " + var["jar"].to_string()).c_str());
 
 		// Get the classpath
+		qDebug() << "Get the classpath" << std::endl;
 		std::string classpath = "";
 		for (auto& var2 : var["classpath"].get_array())
 		{
+			qDebug() << "Get the classpath path with separator" << std::endl;
 			classpath = classpath + get_library_path(var2.to_string(), path) + classpath_seperator;
 		}
 
+		qDebug() << "Get the classpath path" << std::endl;
 		classpath = classpath + get_library_path(var["jar"].to_string(), path);
+
+		qDebug() << "Get the mainclass" << std::endl;
 		std::string mainclass = get_jar_mainclass(get_library_path(var["jar"].to_string(), path));
 		std::vector<std::string> command;
-		command[0] = java == "" ? "java" : java + "-cp", classpath, mainclass;
+		qDebug() << "Configure command" << std::endl;
+		command.push_back(java == "" ? "java" : java);
+		command.push_back("-cp"); 
+		command.push_back(classpath);
+		command.push_back(mainclass);
 
+		qDebug() << "cmd:" << classpath << mainclass << std::endl;
+
+		qDebug() << "Get the args" << std::endl;
 		std::string variable = "";
+		qDebug() << "vars:" << var["args"].to_string() << std::endl;
 		for (auto& var2 : var["args"].get_array())
 		{
+			qDebug() << "Get library path in command" << var2.to_string() << std::endl;
+			/*if (var2.to_string() == "{MERGED_MAPPINGS}")
+			{
+				var2 = Json::SomJson("{MAPPINGS}");
+				
+			}*/
+			qDebug() << "dsss" << argument_vars.to_string() << std::endl;
+			qDebug() << "aaaaaaaaaaaaaaaaa:" << var2.to_string() << std::endl;
+
 			variable = argument_vars[var2.to_string()] == nullptr ? var2.to_string() : argument_vars[var2.to_string()].to_string();
+			
+			qDebug() << variable << var2.to_string() << std::endl;
 			if (variable._Starts_with("[") && Additionals::String::EndsWith(variable, "]"))
 			{
+				qDebug() << variable << path << std::endl;
 				command.push_back(get_library_path(variable, path));
 			}
 			else
@@ -1935,24 +2045,15 @@ bool MinecraftCpp::forge::forge_processors(
 			}
 		}
 
-		for (auto& var2 : argument_vars.get_object())
-		{
-			for (size_t i = 0; i < command.size(); i++)
-			{
-				std::replace(command.begin(), command.end(), var2.first, var2.second.to_string());
-				//command[i] = command[i].insert(libPart.first, libPart.second->to_string());
-			}
-		}
+		qDebug() << command << std::endl;
+		std::ostringstream imploded;
+		std::copy(command.begin(), command.end(),
+			std::ostream_iterator<std::string>(imploded, " "));
 
-		std::string commant_strw = "";
-		for (size_t i = 0; i < command.size(); i++)
-		{
-			commant_strw = commant_strw + command[i];
-		}
+		int out = system(imploded.str().c_str());
 
-		int out = system(commant_strw.c_str());
-
-		callback->OnProgress(count, NULL, NULL, NULL);
+		//callback->OnProgress(count, NULL, NULL, NULL);
+		//callback->setQProgressValue(count);
 	}
 	if (std::filesystem::exists(root_path))
 	{

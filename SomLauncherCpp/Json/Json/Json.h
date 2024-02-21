@@ -102,6 +102,7 @@ namespace Json
 	public:
 		SomJson();
 		SomJson(Node json);
+		SomJson(Json::JsonTypes type);
 		SomJson(const Json::SomJson& json);
 		SomJson(std::nullptr_t null);
 		~SomJson();

@@ -5,6 +5,8 @@
 #include <filesystem>
 #include <curl/curl.h>
 
+#include <qdebug.h>
+
 #include "Json.h"
 
 #include "../../Additionals/Additionals.h"

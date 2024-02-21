@@ -55,7 +55,10 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget* parent)
 
 SomLauncherMainWindow::~SomLauncherMainWindow()
 {
-	this->database_connection->close();
+	if (this->database_connection)
+	{
+		this->database_connection->close();
+	}
 }
 
 void SomLauncherMainWindow::_settingMinecraftStandartPath()
@@ -71,6 +74,7 @@ void SomLauncherMainWindow::_settingMinecraftStandartPath()
 
 void SomLauncherMainWindow::_parcingConfigs()
 {
+	qDebug() << this->config_path << std::endl;
 	this->config_parce = this->global_parcer.ParseFile(this->config_path);
 }
 

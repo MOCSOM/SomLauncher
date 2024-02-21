@@ -31,6 +31,40 @@ Json::SomJson::SomJson(Node json)
 	this->value = std::make_shared<Node>(json);
 }
 
+Json::SomJson::SomJson(Json::JsonTypes type)
+{
+	if (type == Json::JsonTypes::Object)
+	{
+		this->value = std::make_shared<Node>(std::unordered_map<std::string, Json::SomJson>());
+		this->value->type = type;
+	}
+	else if (type == Json::JsonTypes::Array)
+	{
+		this->value = std::make_shared<Node>(std::vector<Json::SomJson>());
+		this->value->type = type;
+	}
+	else if (type == Json::JsonTypes::Bool)
+	{
+		this->value = std::make_shared<Node>(false);
+		this->value->type = type;
+	}
+	else if (type == Json::JsonTypes::Null)
+	{
+		this->value = std::make_shared<Node>(nullptr);
+		this->value->type = type;
+	}
+	else if (type == Json::JsonTypes::Number)
+	{
+		this->value = std::make_shared<Node>(0);
+		this->value->type = type;
+	}
+	else if (type == Json::JsonTypes::String)
+	{
+		this->value = std::make_shared<Node>("");
+		this->value->type = type;
+	}
+}
+
 Json::SomJson::SomJson(const Json::SomJson& json)
 {
 	if (json.value != nullptr)
@@ -335,6 +369,10 @@ Json::SomJson& Json::SomJson::operator[](const size_t& index)
 
 Json::SomJson& Json::SomJson::operator=(const Json::SomJson& value)
 {
+	if (this->value != nullptr)
+	{
+		this->add_value(value);
+	}
 	if (value.value != nullptr)
 	{
 		this->value = value.value;
@@ -344,7 +382,14 @@ Json::SomJson& Json::SomJson::operator=(const Json::SomJson& value)
 
 Json::SomJson& Json::SomJson::operator=(const Node& value)
 {
-	*this->value = value;
+	/*if (this->value != nullptr)
+	{
+		this->add_value(value);
+	}*/
+	if (value != nullptr)
+	{
+		*this->value = value;
+	}
 	return *this;
 }
 

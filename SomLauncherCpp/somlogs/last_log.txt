@@ -1,14 +1,230 @@
-[53:50:3] [__cdecl SomLauncherMainWindow::SomLauncherMainWindow(class QWidget *)\INFO]: ui setup completed 
-[53:50:3] [__cdecl SomLauncherMainWindow::SomLauncherMainWindow(class QWidget *)\INFO]: Setting mc standart path... 
-[53:50:3] [__cdecl SomLauncherMainWindow::SomLauncherMainWindow(class QWidget *)\INFO]: Checking config... 
-[53:50:3] [__cdecl SomLauncherMainWindow::SomLauncherMainWindow(class QWidget *)\INFO]: Setting memory... 
-[53:50:3] [__cdecl SomLauncherMainWindow::SomLauncherMainWindow(class QWidget *)\INFO]: Parcing configs... 
-[53:50:3] [__cdecl SomLauncherMainWindow::SomLauncherMainWindow(class QWidget *)\INFO]: Configure options... 
-[53:50:3] [void __cdecl SomLauncherMainWindow::checkJava(struct MinecraftCpp::option::MinecraftOptions &,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >,class CallbackNull *) const\INFO]: Getting installed java in directory... 
-[53:50:3] [__cdecl SomLauncherMainWindow::SomLauncherMainWindow(class QWidget *)\INFO]: Setting otions value from config... 
-[53:50:3] [__cdecl SomLauncherMainWindow::SomLauncherMainWindow(class QWidget *)\INFO]: Setting ui changes... 
-[54:50:3] [__cdecl SomLauncherMainWindow::SomLauncherMainWindow(class QWidget *)\INFO]: Setting ui connections... 
-[54:50:3] [__cdecl SomLauncherMainWindow::SomLauncherMainWindow(class QWidget *)\INFO]: Setting cyrrentversion... 
-[54:50:3] [__cdecl SomLauncherMainWindow::SomLauncherMainWindow(class QWidget *)\INFO]: Create main window complete 
-[54:50:3] [int __cdecl main(int,char *[])\INFO]: Creating account window... 
-[54:50:3] [int __cdecl main(int,char *[])\INFO]: Configureate account window... 
+[1:13:2] [\INFO]: ui setup completed 
+[1:13:2] [\INFO]: Setting mc standart path... 
+[1:13:2] [\INFO]: Checking config... 
+[1:13:2] [\INFO]: Setting memory... 
+[1:13:2] [\INFO]: Parcing configs... 
+[1:13:2] [\DEBUG]: "SOMCONFIG.json" 
+[1:13:2] [\INFO]: Configure options... 
+[1:13:2] [\INFO]: Checking java... 
+[1:13:2] [\INFO]: Getting installed java in directory... 
+[1:13:2] [\INFO]: Setting otions value from config... 
+[1:13:2] [\INFO]: Setting ui changes... 
+[1:13:2] [\INFO]: Setting ui connections... 
+[1:13:2] [\INFO]: Setting cyrrentversion... 
+[1:13:2] [\INFO]: Create main window complete 
+[1:13:2] [\INFO]: Creating account window... 
+[1:13:2] [\INFO]: Configureate account window... 
+[25:13:2] [\INFO]: accountDataReceivedSignal detected 
+[26:13:2] [\INFO]: radioButtonChecked true 
+[18:14:2] [\INFO]: pushButton_startgame clicked 
+[18:14:2] [\INFO]: Config loaded 
+[18:14:2] [\INFO]: "NanLeb" 
+[18:14:2] [\INFO]: "7168" 
+[18:14:2] [\INFO]: "" 
+[18:14:2] [\INFO]: "false" 
+[18:14:2] [\INFO]: "1" 
+[18:14:2] [\INFO]: Configurate options... 
+[18:14:2] [\INFO]: Checking java... 
+[18:14:2] [\INFO]: Getting installed java in directory... 
+[18:14:2] [\INFO]: starting installing minecraft... 
+[18:14:2] [\INFO]: Checking java... 
+[18:14:2] [\INFO]: Checking java... 
+[18:14:2] [\INFO]: Getting java in programm files... 
+[18:14:2] [\INFO]: Starting download minecraft... 
+[18:14:2] [\INFO]: Starting download forge... 
+[24:14:2] [\INFO]: doversion install 
+[24:14:2] [\INFO]: Download and read versions.json... 
+[24:14:2] [\INFO]: Download For forge... 
+[30:14:2] [\INFO]: Download logging config... 
+[30:14:2] [\INFO]: Download minecraft.jar... 
+[30:14:2] [\INFO]: Need to copy jar for old forge versions... 
+[30:14:2] [\INFO]: Install java runtime if needed... 
+[30:14:2] [\WARNING]: QFSFileEngine::open: No file name specified
+[30:14:2] [\WARNING]: QFile::remove: Empty or null file name
+[30:14:2] [\WARNING]: QFSFileEngine::open: No file name specified
+[30:14:2] [\WARNING]: Could not open file: 
+[30:14:2] [\INFO]: version is installed 
+[31:14:2] [\INFO]: doversion install 
+[31:14:2] [\INFO]: Download and read versions.json... 
+[31:14:2] [\INFO]: Download For forge... 
+[31:14:2] [\INFO]: install_minecraft_version For forge... 
+[31:14:2] [\INFO]: doversion install 
+[31:14:2] [\INFO]: Download and read versions.json... 
+[31:14:2] [\INFO]: Download For forge... 
+[36:14:2] [\INFO]: Download logging config... 
+[36:14:2] [\INFO]: Download minecraft.jar... 
+[36:14:2] [\INFO]: Need to copy jar for old forge versions... 
+[36:14:2] [\INFO]: Install java runtime if needed... 
+[37:14:2] [\WARNING]: QFSFileEngine::open: No file name specified
+[37:14:2] [\WARNING]: QFile::remove: Empty or null file name
+[37:14:2] [\WARNING]: QFSFileEngine::open: No file name specified
+[37:14:2] [\WARNING]: Could not open file: 
+[37:14:2] [\INFO]: version is installed 
+[37:14:2] [\INFO]: "cpw.mods.bootstraplauncher.BootstrapLauncher" 
+[37:14:2] [\INFO]: "cpw.mods.bootstraplauncher.BootstrapLauncher" 
+[42:14:2] [\INFO]: Download logging config... 
+[42:14:2] [\INFO]: Download minecraft.jar... 
+[42:14:2] [\INFO]: Need to copy jar for old forge versions... 
+[42:14:2] [\INFO]: Install java runtime if needed... 
+[42:14:2] [\WARNING]: QFSFileEngine::open: No file name specified
+[42:14:2] [\WARNING]: QFile::remove: Empty or null file name
+[42:14:2] [\WARNING]: QFSFileEngine::open: No file name specified
+[42:14:2] [\WARNING]: Could not open file: 
+[42:14:2] [\INFO]: version is installed 
+[42:14:2] [\INFO]: Run the forge processors 
+[42:14:2] [\DEBUG]: Get client data 
+[42:14:2] [\DEBUG]: clinet data loop "MC_SLIM_SHA" 
+[42:14:2] [\DEBUG]: Setting client data in client data 
+[42:14:2] [\DEBUG]: clinet data loop "MAPPINGS" 
+[42:14:2] [\DEBUG]: Getting library path in client data 
+[42:14:2] [\INFO]: Get data library path 
+[42:14:2] [\DEBUG]: libname: "de.oceanlabs.mcp:mcp_config:1.19.2-20220805.130853:mappings@txt" 
+[42:14:2] [\INFO]: Get data library path split 
+[42:14:2] [\INFO]: Get data library path split completed 
+[42:14:2] [\DEBUG]: "C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\de" 
+[42:14:2] [\INFO]: Get data library path split extra 2 
+[42:14:2] [\DEBUG]: std::vector("mappings", "txt") 
+[42:14:2] [\DEBUG]: "mappings" "txt" 
+[42:14:2] [\DEBUG]: "C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\de\\oceanlabs" 
+[42:14:2] [\INFO]: Get data library path split extrajar files "mappings" 1 
+[42:14:2] [\DEBUG]: "C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\de\\oceanlabs\\mcp" 
+[42:14:2] [\INFO]: Get data library path split extrajar files "mappings" 1 
+[42:14:2] [\INFO]: Get data library path split extra completed 
+[42:14:2] [\INFO]: Get data library path completed "C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\de\\oceanlabs\\mcp\\mcp_config\\1.19.2-20220805.130853\\mcp_config-1.19.2-20220805.130853-mappings.txt" 
+[42:14:2] [\DEBUG]: lib: "C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\de\\oceanlabs\\mcp\\mcp_config\\1.19.2-20220805.130853\\mcp_config-1.19.2-20220805.130853-mappings.txt" 
+[42:14:2] [\DEBUG]: clinet data loop "MOJMAPS" 
+[42:14:2] [\DEBUG]: Getting library path in client data 
+[42:14:2] [\INFO]: Get data library path 
+[42:14:2] [\DEBUG]: libname: "net.minecraft:client:1.19.2-20220805.130853:mappings@txt" 
+[42:14:2] [\INFO]: Get data library path split 
+[42:14:2] [\INFO]: Get data library path split completed 
+[42:14:2] [\DEBUG]: "C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\net" 
+[42:14:2] [\INFO]: Get data library path split extra 2 
+[42:14:2] [\DEBUG]: std::vector("mappings", "txt") 
+[42:14:2] [\DEBUG]: "mappings" "txt" 
+[42:14:2] [\DEBUG]: "C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\net\\minecraft" 
+[42:14:2] [\INFO]: Get data library path split extrajar files "mappings" 1 
+[42:14:2] [\INFO]: Get data library path split extra completed 
+[42:14:2] [\INFO]: Get data library path completed "C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\net\\minecraft\\client\\1.19.2-20220805.130853\\client-1.19.2-20220805.130853-mappings.txt" 
+[42:14:2] [\DEBUG]: lib: "C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\net\\minecraft\\client\\1.19.2-20220805.130853\\client-1.19.2-20220805.130853-mappings.txt" 
+[42:14:2] [\DEBUG]: clinet data loop "MC_UNPACKED" 
+[42:14:2] [\DEBUG]: Getting library path in client data 
+[42:14:2] [\INFO]: Get data library path 
+[42:14:2] [\DEBUG]: libname: "net.minecraft:client:1.19.2-20220805.130853:unpacked" 
+[42:14:2] [\INFO]: Get data library path split 
+[42:14:2] [\INFO]: Get data library path split completed 
+[42:14:2] [\DEBUG]: "C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\net" 
+[42:14:2] [\INFO]: Get data library path split extrajar files "unpacked" 1 
+[42:14:2] [\DEBUG]: "C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\net\\minecraft" 
+[42:14:2] [\INFO]: Get data library path split extrajar files "unpacked" 1 
+[42:14:2] [\INFO]: Get data library path split extra completed 
+[42:14:2] [\INFO]: Get data library path completed "C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\net\\minecraft\\client\\1.19.2-20220805.130853\\client-1.19.2-20220805.130853-unpacked.jar" 
+[42:14:2] [\DEBUG]: lib: "C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\net\\minecraft\\client\\1.19.2-20220805.130853\\client-1.19.2-20220805.130853-unpacked.jar" 
+[42:14:2] [\DEBUG]: clinet data loop "MERGED_MAPPINGS" 
+[42:14:2] [\DEBUG]: Getting library path in client data 
+[42:14:2] [\INFO]: Get data library path 
+[42:14:2] [\DEBUG]: libname: "de.oceanlabs.mcp:mcp_config:1.19.2-20220805.130853:mappings-merged@txt" 
+[42:14:2] [\INFO]: Get data library path split 
+[42:14:2] [\INFO]: Get data library path split completed 
+[42:14:2] [\DEBUG]: "C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\de" 
+[42:14:2] [\INFO]: Get data library path split extra 2 
+[42:14:2] [\DEBUG]: std::vector("mappings-merged", "txt") 
+[42:14:2] [\DEBUG]: "mappings-merged" "txt" 
+[42:14:2] [\DEBUG]: "C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\de\\oceanlabs" 
+[42:14:2] [\INFO]: Get data library path split extrajar files "mappings-merged" 1 
+[42:14:2] [\DEBUG]: "C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\de\\oceanlabs\\mcp" 
+[42:14:2] [\INFO]: Get data library path split extrajar files "mappings-merged" 1 
+[42:14:2] [\INFO]: Get data library path split extra completed 
+[42:14:2] [\INFO]: Get data library path completed "C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\de\\oceanlabs\\mcp\\mcp_config\\1.19.2-20220805.130853\\mcp_config-1.19.2-20220805.130853-mappings-merged.txt" 
+[42:14:2] [\DEBUG]: lib: "C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\de\\oceanlabs\\mcp\\mcp_config\\1.19.2-20220805.130853\\mcp_config-1.19.2-20220805.130853-mappings-merged.txt" 
+[42:14:2] [\DEBUG]: clinet data loop "MC_SRG" 
+[42:14:2] [\DEBUG]: Getting library path in client data 
+[42:14:2] [\INFO]: Get data library path 
+[42:14:2] [\DEBUG]: libname: "net.minecraft:client:1.19.2-20220805.130853:srg" 
+[42:14:2] [\INFO]: Get data library path split 
+[42:14:2] [\INFO]: Get data library path split completed 
+[42:14:2] [\DEBUG]: "C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\net" 
+[42:14:2] [\INFO]: Get data library path split extrajar files "srg" 1 
+[42:14:2] [\DEBUG]: "C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\net\\minecraft" 
+[42:14:2] [\INFO]: Get data library path split extrajar files "srg" 1 
+[42:14:2] [\INFO]: Get data library path split extra completed 
+[42:14:2] [\INFO]: Get data library path completed "C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\net\\minecraft\\client\\1.19.2-20220805.130853\\client-1.19.2-20220805.130853-srg.jar" 
+[42:14:2] [\DEBUG]: lib: "C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\net\\minecraft\\client\\1.19.2-20220805.130853\\client-1.19.2-20220805.130853-srg.jar" 
+[42:14:2] [\DEBUG]: clinet data loop "BINPATCH" 
+[42:14:2] [\DEBUG]: Setting client data in client data 
+[42:14:2] [\DEBUG]: clinet data loop "MC_SLIM" 
+[42:14:2] [\DEBUG]: Getting library path in client data 
+[42:14:2] [\INFO]: Get data library path 
+[42:14:2] [\DEBUG]: libname: "net.minecraft:client:1.19.2-20220805.130853:slim" 
+[42:14:2] [\INFO]: Get data library path split 
+[42:14:2] [\INFO]: Get data library path split completed 
+[42:14:2] [\DEBUG]: "C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\net" 
+[42:14:2] [\INFO]: Get data library path split extrajar files "slim" 1 
+[42:14:2] [\DEBUG]: "C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\net\\minecraft" 
+[42:14:2] [\INFO]: Get data library path split extrajar files "slim" 1 
+[42:14:2] [\INFO]: Get data library path split extra completed 
+[42:14:2] [\INFO]: Get data library path completed "C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\net\\minecraft\\client\\1.19.2-20220805.130853\\client-1.19.2-20220805.130853-slim.jar" 
+[42:14:2] [\DEBUG]: lib: "C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\net\\minecraft\\client\\1.19.2-20220805.130853\\client-1.19.2-20220805.130853-slim.jar" 
+[42:14:2] [\DEBUG]: clinet data loop "MC_EXTRA" 
+[42:14:2] [\DEBUG]: Getting library path in client data 
+[42:14:2] [\INFO]: Get data library path 
+[42:14:2] [\DEBUG]: libname: "net.minecraft:client:1.19.2-20220805.130853:extra" 
+[42:14:2] [\INFO]: Get data library path split 
+[42:14:2] [\INFO]: Get data library path split completed 
+[42:14:2] [\DEBUG]: "C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\net" 
+[42:14:2] [\INFO]: Get data library path split extrajar files "extra" 1 
+[42:14:2] [\DEBUG]: "C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\net\\minecraft" 
+[42:14:2] [\INFO]: Get data library path split extrajar files "extra" 1 
+[42:14:2] [\INFO]: Get data library path split extra completed 
+[42:14:2] [\INFO]: Get data library path completed "C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\net\\minecraft\\client\\1.19.2-20220805.130853\\client-1.19.2-20220805.130853-extra.jar" 
+[42:14:2] [\DEBUG]: lib: "C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\net\\minecraft\\client\\1.19.2-20220805.130853\\client-1.19.2-20220805.130853-extra.jar" 
+[42:14:2] [\DEBUG]: clinet data loop "MC_EXTRA_SHA" 
+[42:14:2] [\DEBUG]: Setting client data in client data 
+[42:14:2] [\DEBUG]: clinet data loop "PATCHED" 
+[42:14:2] [\DEBUG]: Getting library path in client data 
+[42:14:2] [\INFO]: Get data library path 
+[42:14:2] [\DEBUG]: libname: "net.minecraftforge:forge:1.19.2-43.3.8:client" 
+[42:14:2] [\INFO]: Get data library path split 
+[42:14:2] [\INFO]: Get data library path split completed 
+[42:14:2] [\DEBUG]: "C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\net" 
+[42:14:2] [\INFO]: Get data library path split extrajar files "client" 1 
+[42:14:2] [\DEBUG]: "C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\net\\minecraftforge" 
+[42:14:2] [\INFO]: Get data library path split extrajar files "client" 1 
+[42:14:2] [\INFO]: Get data library path split extra completed 
+[42:14:2] [\INFO]: Get data library path completed "C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\net\\minecraftforge\\forge\\1.19.2-43.3.8\\forge-1.19.2-43.3.8-client.jar" 
+[42:14:2] [\DEBUG]: lib: "C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\net\\minecraftforge\\forge\\1.19.2-43.3.8\\forge-1.19.2-43.3.8-client.jar" 
+[42:14:2] [\DEBUG]: clinet data loop "PATCHED_SHA" 
+[42:14:2] [\DEBUG]: Setting client data in client data 
+[42:14:2] [\DEBUG]: clinet data loop "MCP_VERSION" 
+[42:14:2] [\DEBUG]: Setting client data in client data 
+[42:14:2] [\DEBUG]: "{\"{MC_SRG}\":C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\net\\minecraft\\client\\1.19.2-20220805.130853\\client-1.19.2-20220805.130853-srg.jar,\"{MC_SLIM_SHA}\":'0dd501541eb617a551187ad7d6130623989584dd',\"{MINECRAFT_JAR}\":C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\versions\\1.19.2\\1.19.2.jar,\"{MAPPINGS}\":C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\de\\oceanlabs\\mcp\\mcp_config\\1.19.2-20220805.130853\\mcp_config-1.19.2-20220805.130853-mappings.txt,\"{MC_EXTRA}\":C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\net\\minecraft\\client\\1.19.2-20220805.130853\\client-1.19.2-20220805.130853-extra.jar,\"{BINPATCH}\":/data/client.lzma,\"{MOJMAPS}\":C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\net\\minecraft\\client\\1.19.2-20220805.130853\\client-1.19.2-20220805.130853-mappings.txt,\"{MERGED_MAPPINGS}\":C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\de\\oceanlabs\\mcp\\mcp_config\\1.19.2-20220805.130853\\mcp_config-1.19.2-20220805.130853-mappings-merged.txt,\"{MC_UNPACKED}\":C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\net\\minecraft\\client\\1.19.2-20220805.130853\\client-1.19.2-20220805.130853-unpacked.jar,\"{MC_SLIM}\":C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\net\\minecraft\\client\\1.19.2-20220805.130853\\client-1.19.2-20220805.130853-slim.jar,\"{MC_EXTRA_SHA}\":'b78d6d3c3160407bd7a6da30b345dd2b8b29da34',\"{PATCHED}\":C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\net\\minecraftforge\\forge\\1.19.2-43.3.8\\forge-1.19.2-43.3.8-client.jar,\"{PATCHED_SHA}\":'b3795d8d568b57faaa03e7d4d70bb154afd9ee9c',\"{MCP_VERSION}\":'20220805.130853'}" 
+[42:14:2] [\DEBUG]: Get root path 
+[42:14:2] [\DEBUG]: Setting separator 
+[42:14:2] [\DEBUG]: "{\"sides\":[server],\"jar\":net.minecraftforge:installertools:1.3.0,\"classpath\":[net.md-5:SpecialSource:1.11.0,net.sf.jopt-simple:jopt-simple:5.0.4,com.google.code.gson:gson:2.8.7,de.siegmar:fastcsv:2.0.0,net.minecraftforge:srgutils:0.4.11,org.ow2.asm:asm-commons:9.3,com.google.guava:guava:20.0,com.opencsv:opencsv:4.4,org.ow2.asm:asm-analysis:9.3,org.ow2.asm:asm-tree:9.3,org.ow2.asm:asm:9.3,org.apache.commons:commons-text:1.3,org.apache.commons:commons-lang3:3.8.1,commons-beanutils:commons-beanutils:1.9.3,org.apache.commons:commons-collections4:4.2,commons-logging:commons-logging:1.2,commons-collections:commons-collections:3.2.2],\"args\":[--task,EXTRACT_FILES,--archive,{INSTALLER},--from,data/run.sh,--to,{ROOT}/run.sh,--exec,{ROOT}/run.sh,--from,data/run.bat,--to,{ROOT}/run.bat,--from,data/user_jvm_args.txt,--to,{ROOT}/user_jvm_args.txt,--optional,{ROOT}/user_jvm_args.txt,--from,data/win_args.txt,--to,{ROOT}/libraries/net/minecraftforge/forge/1.19.2-43.3.8/win_args.txt,--from,data/unix_args.txt,--to,{ROOT}/libraries/net/minecraftforge/forge/1.19.2-43.3.8/unix_args.txt]}" 0 
+[42:14:2] [\DEBUG]: Skip server side only processors 
+[42:14:2] [\DEBUG]: "{\"sides\":[server],\"jar\":net.minecraftforge:installertools:1.3.0,\"classpath\":[net.md-5:SpecialSource:1.11.0,net.sf.jopt-simple:jopt-simple:5.0.4,com.google.code.gson:gson:2.8.7,de.siegmar:fastcsv:2.0.0,net.minecraftforge:srgutils:0.4.11,org.ow2.asm:asm-commons:9.3,com.google.guava:guava:20.0,com.opencsv:opencsv:4.4,org.ow2.asm:asm-analysis:9.3,org.ow2.asm:asm-tree:9.3,org.ow2.asm:asm:9.3,org.apache.commons:commons-text:1.3,org.apache.commons:commons-lang3:3.8.1,commons-beanutils:commons-beanutils:1.9.3,org.apache.commons:commons-collections4:4.2,commons-logging:commons-logging:1.2,commons-collections:commons-collections:3.2.2],\"args\":[--task,BUNDLER_EXTRACT,--input,{MINECRAFT_JAR},--output,{ROOT}/libraries/,--libraries]}" 1 
+[42:14:2] [\DEBUG]: Skip server side only processors 
+[42:14:2] [\DEBUG]: "{\"sides\":[server],\"jar\":net.minecraftforge:installertools:1.3.0,\"classpath\":[net.md-5:SpecialSource:1.11.0,net.sf.jopt-simple:jopt-simple:5.0.4,com.google.code.gson:gson:2.8.7,de.siegmar:fastcsv:2.0.0,net.minecraftforge:srgutils:0.4.11,org.ow2.asm:asm-commons:9.3,com.google.guava:guava:20.0,com.opencsv:opencsv:4.4,org.ow2.asm:asm-analysis:9.3,org.ow2.asm:asm-tree:9.3,org.ow2.asm:asm:9.3,org.apache.commons:commons-text:1.3,org.apache.commons:commons-lang3:3.8.1,commons-beanutils:commons-beanutils:1.9.3,org.apache.commons:commons-collections4:4.2,commons-logging:commons-logging:1.2,commons-collections:commons-collections:3.2.2],\"args\":[--task,BUNDLER_EXTRACT,--input,{MINECRAFT_JAR},--output,{MC_UNPACKED},--jar-only]}" 2 
+[42:14:2] [\DEBUG]: Skip server side only processors 
+[42:14:2] [\DEBUG]: "{\"jar\":net.minecraftforge:installertools:1.3.0,\"classpath\":[net.md-5:SpecialSource:1.11.0,net.sf.jopt-simple:jopt-simple:5.0.4,com.google.code.gson:gson:2.8.7,de.siegmar:fastcsv:2.0.0,net.minecraftforge:srgutils:0.4.11,org.ow2.asm:asm-commons:9.3,com.google.guava:guava:20.0,com.opencsv:opencsv:4.4,org.ow2.asm:asm-analysis:9.3,org.ow2.asm:asm-tree:9.3,org.ow2.asm:asm:9.3,org.apache.commons:commons-text:1.3,org.apache.commons:commons-lang3:3.8.1,commons-beanutils:commons-beanutils:1.9.3,org.apache.commons:commons-collections4:4.2,commons-logging:commons-logging:1.2,commons-collections:commons-collections:3.2.2],\"args\":[--task,MCP_DATA,--input,[de.oceanlabs.mcp:mcp_config:1.19.2-20220805.130853@zip],--output,{MAPPINGS},--key,mappings]}" 3 
+[42:14:2] [\DEBUG]: Skip side is null 
+[42:14:2] [\DEBUG]: "{\"jar\":net.minecraftforge:installertools:1.3.0,\"classpath\":[net.md-5:SpecialSource:1.11.0,net.sf.jopt-simple:jopt-simple:5.0.4,com.google.code.gson:gson:2.8.7,de.siegmar:fastcsv:2.0.0,net.minecraftforge:srgutils:0.4.11,org.ow2.asm:asm-commons:9.3,com.google.guava:guava:20.0,com.opencsv:opencsv:4.4,org.ow2.asm:asm-analysis:9.3,org.ow2.asm:asm-tree:9.3,org.ow2.asm:asm:9.3,org.apache.commons:commons-text:1.3,org.apache.commons:commons-lang3:3.8.1,commons-beanutils:commons-beanutils:1.9.3,org.apache.commons:commons-collections4:4.2,commons-logging:commons-logging:1.2,commons-collections:commons-collections:3.2.2],\"args\":[--task,DOWNLOAD_MOJMAPS,--version,1.19.2,--side,{SIDE},--output,{MOJMAPS}]}" 4 
+[42:14:2] [\DEBUG]: Skip side is null 
+[42:14:2] [\DEBUG]: "{\"jar\":net.minecraftforge:installertools:1.3.0,\"classpath\":[net.md-5:SpecialSource:1.11.0,net.sf.jopt-simple:jopt-simple:5.0.4,com.google.code.gson:gson:2.8.7,de.siegmar:fastcsv:2.0.0,net.minecraftforge:srgutils:0.4.11,org.ow2.asm:asm-commons:9.3,com.google.guava:guava:20.0,com.opencsv:opencsv:4.4,org.ow2.asm:asm-analysis:9.3,org.ow2.asm:asm-tree:9.3,org.ow2.asm:asm:9.3,org.apache.commons:commons-text:1.3,org.apache.commons:commons-lang3:3.8.1,commons-beanutils:commons-beanutils:1.9.3,org.apache.commons:commons-collections4:4.2,commons-logging:commons-logging:1.2,commons-collections:commons-collections:3.2.2],\"args\":[--task,MERGE_MAPPING,--left,{MAPPINGS},--right,{MOJMAPS},--output,{MERGED_MAPPINGS},--classes,--reverse-right]}" 5 
+[42:14:2] [\DEBUG]: Skip side is null 
+[42:14:2] [\DEBUG]: "{\"sides\":[client],\"jar\":net.minecraftforge:jarsplitter:1.1.4,\"classpath\":[net.sf.jopt-simple:jopt-simple:5.0.4,net.minecraftforge:srgutils:0.4.3],\"args\":[--input,{MINECRAFT_JAR},--slim,{MC_SLIM},--extra,{MC_EXTRA},--srg,{MERGED_MAPPINGS}],\"outputs\":{\"{MC_SLIM}\":{MC_SLIM_SHA},\"{MC_EXTRA}\":{MC_EXTRA_SHA}}}" 6 
+[42:14:2] [\DEBUG]: Get the classpath 
+[42:14:2] [\DEBUG]: Get the classpath path with separator 
+[42:14:2] [\DEBUG]: Get the classpath path with separator 
+[42:14:2] [\DEBUG]: Get the classpath path 
+[42:14:2] [\DEBUG]: Get the mainclass 
+[42:14:2] [\INFO]: Get jar mainclass 
+[42:14:2] [\DEBUG]: Configure command 
+[42:14:2] [\DEBUG]: cmd: "C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\net\\sf\\jopt-simple\\jopt-simple\\5.0.4\\jopt-simple-5.0.4.jar;C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\net\\minecraftforge\\srgutils\\0.4.3\\srgutils-0.4.3.jar;C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\net\\minecraftforge\\jarsplitter\\1.1.4\\jarsplitter-1.1.4.jar" "net.minecraftforge.jarsplitter.ConsoleTool" 
+[42:14:2] [\DEBUG]: Get the args 
+[42:14:2] [\DEBUG]: vars: "[--input,{MINECRAFT_JAR},--slim,{MC_SLIM},--extra,{MC_EXTRA},--srg,{MERGED_MAPPINGS}]" 
+[42:14:2] [\DEBUG]: Get library path in command "--input" 
+[42:14:2] [\DEBUG]: dsss "{\"{MC_SRG}\":C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\net\\minecraft\\client\\1.19.2-20220805.130853\\client-1.19.2-20220805.130853-srg.jar,\"{MC_SLIM_SHA}\":'0dd501541eb617a551187ad7d6130623989584dd',\"{MINECRAFT_JAR}\":C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\versions\\1.19.2\\1.19.2.jar,\"{MAPPINGS}\":C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\de\\oceanlabs\\mcp\\mcp_config\\1.19.2-20220805.130853\\mcp_config-1.19.2-20220805.130853-mappings.txt,\"{MC_EXTRA}\":C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\net\\minecraft\\client\\1.19.2-20220805.130853\\client-1.19.2-20220805.130853-extra.jar,\"{BINPATCH}\":/data/client.lzma,\"{MOJMAPS}\":C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\net\\minecraft\\client\\1.19.2-20220805.130853\\client-1.19.2-20220805.130853-mappings.txt,\"{MERGED_MAPPINGS}\":C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\de\\oceanlabs\\mcp\\mcp_config\\1.19.2-20220805.130853\\mcp_config-1.19.2-20220805.130853-mappings-merged.txt,\"{MC_UNPACKED}\":C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\net\\minecraft\\client\\1.19.2-20220805.130853\\client-1.19.2-20220805.130853-unpacked.jar,\"{MC_SLIM}\":C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\net\\minecraft\\client\\1.19.2-20220805.130853\\client-1.19.2-20220805.130853-slim.jar,\"{MC_EXTRA_SHA}\":'b78d6d3c3160407bd7a6da30b345dd2b8b29da34',\"{PATCHED}\":C:\\Users\\alkor\\AppData\\Roaming\\.SomSomSom\\new-classic\\libraries\\net\\minecraftforge\\forge\\1.19.2-43.3.8\\forge-1.19.2-43.3.8-client.jar,\"{PATCHED_SHA}\":'b3795d8d568b57faaa03e7d4d70bb154afd9ee9c',\"{MCP_VERSION}\":'20220805.130853',\"{INSTALLER}\":C:\\Users\\alkor\\AppData\\Local\\Temp\\forge-installer-42.tmp,\"{ROOT}\":C:\\Users\\alkor\\AppData\\Local\\Temp\\forge-root-18468,\"{SIDE}\":client}" 
+[42:14:2] [\DEBUG]: aaaaaaaaaaaaaaaaa: "--input" 
+[42:14:2] [\DEBUG]: "--input" "--input" 
+[42:14:2] [\DEBUG]: Get library path in command "{MINECRAFT_JAR}" 

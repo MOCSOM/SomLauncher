@@ -84,7 +84,7 @@ int main(int argc, char* argv[])
 	}
 	catch (const std::exception& exc)
 	{
-		qFatal() << "exception " << exc.what();
+		qFatal() << "Exception:" << exc.what();
 		/*QMessageBox messageBox;
 		messageBox.critical(nullptr, "Error", exc.what());
 		messageBox.setFixedSize(500, 200);*/
