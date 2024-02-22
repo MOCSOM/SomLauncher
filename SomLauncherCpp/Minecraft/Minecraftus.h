@@ -157,7 +157,7 @@ namespace MinecraftCpp
 		Json::JsonValue parse_maven_metadata(const std::string& url);
 	}
 
-	std::string get_arguments(
+	std::vector<std::string> get_arguments(
 		Json::JsonValue& data,
 		Json::JsonValue versionData,
 		const std::string& path,

@@ -650,10 +650,10 @@ Json::SomJson::Node::Node(std::vector<Json::SomJson> array_value)
 
 bool Json::SomJson::Node::operator==(const Node& value) const
 {
-	if (this->type != value.type)
+	/*if (this->type != value.type)
 	{
 		return false;
-	}
+	}*/
 	if (this->type == Json::JsonTypes::Object)
 	{
 		for (auto& elem : this->object_value)
@@ -743,6 +743,7 @@ size_t Json::SomJson::get_count()
 
 Json::JsonTypes Json::SomJson::get_type()
 {
+	//return this->value->type;
 	if (this->value)
 	{
 		return this->value->type;

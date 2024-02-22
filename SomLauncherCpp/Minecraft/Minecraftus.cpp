@@ -709,7 +709,7 @@ std::vector<std::string> MinecraftCpp::get_minecraft_command__(const std::string
 	{
 		if (data["arguments"].is_exist("jvm"))
 		{
-			command.push_back(MinecraftCpp::get_arguments(data["arguments"]["jvm"], data, minecraft_directory, options));
+			command.insert(command.end(), MinecraftCpp::get_arguments(data["arguments"]["jvm"], data, minecraft_directory, options).begin(), MinecraftCpp::get_arguments(data["arguments"]["jvm"], data, minecraft_directory, options).end());
 		}
 		else
 		{
@@ -748,7 +748,7 @@ std::vector<std::string> MinecraftCpp::get_minecraft_command__(const std::string
 	}
 	else
 	{
-		command.push_back(MinecraftCpp::get_arguments(data["arguments"]["game"], data, minecraft_directory, options));
+		command.insert(command.end(), MinecraftCpp::get_arguments(data["arguments"]["game"], data, minecraft_directory, options).begin(), MinecraftCpp::get_arguments(data["arguments"]["game"], data, minecraft_directory, options).end());
 	}
 
 	if (options.server != "")
@@ -1538,7 +1538,7 @@ std::string MinecraftCpp::get_sha1_hash(const std::filesystem::path& path)
 	return SHA1::from_file(path.u8string());
 }
 
-std::string MinecraftCpp::get_arguments(
+std::vector<std::string> MinecraftCpp::get_arguments(
 	Json::JsonValue& data,
 	Json::JsonValue versionData,
 	const std::string& path,
@@ -1548,63 +1548,18 @@ std::string MinecraftCpp::get_arguments(
 	Returns all arguments from the version.json
 	*/
 
-	std::string arglist = "";
+	std::vector<std::string> arglist;
 	if (data.get_type() == Json::JsonTypes::Array)
 	{
 		for (auto& var : data.get_array())
 		{
 			if (var.get_type() == Json::JsonTypes::String)
 			{
-				arglist += "\"" + MinecraftCpp::replace_arguments(var.to_string(), versionData, path, options) + "\"";
-				arglist += " ";
-			}
-			else
-			{
-				// Rules might has 2 different names in different versions.json
-				if (var.is_exist("compatibilityRules") && !parse_rule_list(var, "compatibilityRules", options))
+				std::string rep = MinecraftCpp::replace_arguments(var.to_string(), versionData, path, options);
+				if (!rep.empty())
 				{
-					continue;
+					arglist.push_back("\"" + rep + "\"");
 				}
-				if (var.is_exist("rules") && !parse_rule_list(var, "rules", options))
-				{
-					continue;
-				}
-
-				// var could be the argument
-				if (var.get_type() == Json::JsonTypes::String)
-				{
-					std::string replace = MinecraftCpp::replace_arguments(var.to_string(), versionData, path, options);
-					arglist += "\"" + replace + "\"";
-					arglist += " ";
-				}
-				else
-				{
-					for (auto& v : var.get_array())
-					{
-						std::string val;
-						if (v["value"].get_type() == Json::JsonTypes::Array)
-						{
-							val = replace_arguments(v["value"][0].to_string(), versionData, path, options);
-						}
-						else
-						{
-							val = replace_arguments(v["value"].to_string(), versionData, path, options);
-						}
-
-						arglist += "\"" + val + "\"";
-						arglist += " ";
-					}
-				}
-			}
-		}
-	}
-	else
-	{
-		for (auto& var : data.get_array())
-		{
-			if (var.get_type() == Json::JsonTypes::String)
-			{
-				arglist += MinecraftCpp::replace_arguments(var.to_string(), versionData, path, options);
 			}
 			else
 			{
@@ -1621,23 +1576,75 @@ std::string MinecraftCpp::get_arguments(
 				// var could be the argument
 				if (var["value"].get_type() == Json::JsonTypes::String)
 				{
-					qInfo() << "data " << data.to_string() << std::endl;
-					qInfo() << "var " << var.to_string() << std::endl;
-					std::string replace = MinecraftCpp::replace_arguments(var["value"].to_string(), versionData, path, options);
-					arglist += replace;
-					arglist += " ";
+					std::string replace = MinecraftCpp::replace_arguments(var.to_string(), versionData, path, options);
+					if (!replace.empty())
+					{
+						arglist.push_back("\"" + replace + "\"");
+					}
 				}
 				else
 				{
-					for (auto& v : var["value"].get_object())
+					for (auto& v : var["value"].get_array())
 					{
-						std::string val = replace_arguments(v.second.to_string(), versionData, path, options);
-						arglist += val;
-						arglist += " ";
+						std::string val;
+						if (v["value"].get_type() == Json::JsonTypes::Array)
+						{
+							val = replace_arguments(v["value"][0].to_string(), versionData, path, options);
+						}
+						else
+						{
+							val = replace_arguments(v["value"].to_string(), versionData, path, options);
+						}
+
+						if (!val.empty())
+						{
+							arglist.push_back("\"" + val + "\"");
+						}
 					}
 				}
 			}
 		}
+	}
+	else
+	{
+		//for (auto& var : data.get_array())
+		//{
+		//	if (var.get_type() == Json::JsonTypes::String)
+		//	{
+		//		arglist += MinecraftCpp::replace_arguments(var.to_string(), versionData, path, options);
+		//	}
+		//	else
+		//	{
+		//		// Rules might has 2 different names in different versions.json
+		//		if (var.is_exist("compatibilityRules") && !parse_rule_list(var, "compatibilityRules", options))
+		//		{
+		//			continue;
+		//		}
+		//		if (var.is_exist("rules") && !parse_rule_list(var, "rules", options))
+		//		{
+		//			continue;
+		//		}
+
+		//		// var could be the argument
+		//		if (var["value"].get_type() == Json::JsonTypes::String)
+		//		{
+		//			qInfo() << "data " << data.to_string() << std::endl;
+		//			qInfo() << "var " << var.to_string() << std::endl;
+		//			std::string replace = MinecraftCpp::replace_arguments(var["value"].to_string(), versionData, path, options);
+		//			arglist += replace;
+		//			arglist += " ";
+		//		}
+		//		else
+		//		{
+		//			for (auto& v : var["value"].get_object())
+		//			{
+		//				std::string val = replace_arguments(v.second.to_string(), versionData, path, options);
+		//				arglist += val;
+		//				arglist += " ";
+		//			}
+		//		}
+		//	}
+		//}
 	}
 	return arglist;
 }
