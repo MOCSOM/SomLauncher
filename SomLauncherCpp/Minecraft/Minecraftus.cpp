@@ -933,16 +933,16 @@ std::string MinecraftCpp::get_library_path(const std::string& name, const std::s
 	std::string libpath = Join({ path, "libraries" });
 
 	std::vector<std::string> parts = Additionals::String::split(name, ':');
-	std::string base_path = parts[0];
-	std::string libname = parts[1];
-	std::string version = parts[2];
+	std::string& base_path = parts[0];
+	std::string& libname = parts[1];
+	std::string& version = parts[2];
 	std::string fileend;
 
 	for (auto& var : Additionals::String::split(base_path, '.'))
 	{
 		libpath = Join({ libpath, var.c_str() });
 	}
-	if (version.find('@') == 0)
+	if (version.find('@') != std::string::npos && version[version.find('@')] == '@')
 	{
 		std::vector<std::string> splt = Additionals::String::split(version, '@', 2);
 		version = splt[0];
@@ -956,18 +956,6 @@ std::string MinecraftCpp::get_library_path(const std::string& name, const std::s
 
 	std::string filename = "";
 
-	//parts->CopyTo(parts_2, 3);
-	int count = 0;
-	for (auto& var : parts)
-	{
-		++count;
-	}
-	/*array<System::String^>^ parts_2 = gcnew array<System::String^>(count - 2);
-	for (int i = 0; i < count - 2; i++)
-	{
-		parts_2[i] = parts[i + 2];
-	}*/
-	//filename = StrDogW({ const_cast<wchar_t*>(wch_libname), L"-", const_cast<wchar_t*>(wch_version) });
 	for (auto& var : parts)
 	{
 		filename = libname + ("-" + var);
@@ -1583,17 +1571,26 @@ std::string MinecraftCpp::get_arguments(
 				}
 
 				// var could be the argument
-				if (var["value"].get_type() == Json::JsonTypes::String)
+				if (var.get_type() == Json::JsonTypes::String)
 				{
-					std::string replace = MinecraftCpp::replace_arguments(var["value"].to_string(), versionData, path, options);
+					std::string replace = MinecraftCpp::replace_arguments(var.to_string(), versionData, path, options);
 					arglist += "\"" + replace + "\"";
 					arglist += " ";
 				}
 				else
 				{
-					for (auto& v : var["value"].get_object())
+					for (auto& v : var.get_array())
 					{
-						std::string val = replace_arguments(v.second.to_string(), versionData, path, options);
+						std::string val;
+						if (v["value"].get_type() == Json::JsonTypes::Array)
+						{
+							val = replace_arguments(v["value"][0].to_string(), versionData, path, options);
+						}
+						else
+						{
+							val = replace_arguments(v["value"].to_string(), versionData, path, options);
+						}
+
 						arglist += "\"" + val + "\"";
 						arglist += " ";
 					}
@@ -1727,7 +1724,7 @@ bool MinecraftCpp::forge::install_forge_version(const std::string& versionid, co
 
 	// Extract the version.json
 	std::string version_json_path = Join({ path, "versions", forge_version_id, (forge_version_id + ".json") });
-	if(!extract_file(zArchive, "version.json", version_json_path))
+	if (!extract_file(zArchive, "version.json", version_json_path))
 		if (version_data.is_exist("versionInfo"))
 		{
 			version_data["versionInfo"].save_json_to_file(version_json_path, 4);
@@ -1862,7 +1859,7 @@ std::string MinecraftCpp::forge::get_data_library_path(const std::string& libnam
 	libpath = Join({ libpath, _libname, version, (_libname + "-" + version + "-" + extra + "." + fileend) });
 
 	qInfo() << "Get data library path completed" << libpath << std::endl;
-	
+
 	return libpath;
 }
 
@@ -1884,7 +1881,7 @@ std::string MinecraftCpp::forge::get_jar_mainclass(const std::string& path)
 	}
 
 	QFile file(manifest_path);
-	if (!file.open(QIODevice::ReadOnly)) 
+	if (!file.open(QIODevice::ReadOnly))
 	{
 		qWarning() << file.errorString() << std::endl;
 
@@ -1894,7 +1891,7 @@ std::string MinecraftCpp::forge::get_jar_mainclass(const std::string& path)
 	QTextStream in(&file);
 	QStringList lines;
 
-	while (!in.atEnd()) 
+	while (!in.atEnd())
 	{
 		lines += in.readLine();
 	}
@@ -1916,7 +1913,7 @@ std::string MinecraftCpp::forge::get_jar_mainclass(const std::string& path)
 			content.insert(std::make_pair(key, value.substr(1)));
 		}
 	}
-	
+
 	//qDebug() << "Get jar mainclass completed" << std::endl;
 	return content["Main-Class"];
 }
@@ -1937,7 +1934,7 @@ bool MinecraftCpp::forge::forge_processors(
 
 	Json::JsonValue argument_vars = Json::JsonValue(Json::JsonTypes::Object);
 	Json::JsonValue value_ = Json::JsonValue(Join({ path, "versions", data["minecraft"].to_string(), (data["minecraft"].to_string() + ".jar") }));
-	
+
 	argument_vars.add_value("{MINECRAFT_JAR}", value_);
 
 	qDebug() << "Get client data" << std::endl;
@@ -1979,17 +1976,16 @@ bool MinecraftCpp::forge::forge_processors(
 		++count;
 		qDebug() << var.to_string() << count << std::endl;
 
-		if (var["sides"] == nullptr)
+		if (var["sides"] != nullptr)
 		{
-			qDebug() << "Skip side is null" << std::endl;
-			continue;
+			if (var["sides"][0].to_string() != "client")
+			{
+				// Skip server side only processors
+				//qDebug() << "Skip server side only processors" << std::endl;
+				continue;
+			}
 		}
-		if (var["sides"].to_string() != "[client]")
-		{
-			// Skip server side only processors
-			qDebug() << "Skip server side only processors" << std::endl;
-			continue;
-		}
+
 
 		//callback->OnProgress(NULL, NULL, NULL, (L"Running processor " + var["jar"].to_stringW()).c_str());
 		//callback->setQLabelProggressValue(("Running processor " + var["jar"].to_string()).c_str());
@@ -2011,7 +2007,7 @@ bool MinecraftCpp::forge::forge_processors(
 		std::vector<std::string> command;
 		qDebug() << "Configure command" << std::endl;
 		command.push_back(java == "" ? "java" : java);
-		command.push_back("-cp"); 
+		command.push_back("-cp");
 		command.push_back(classpath);
 		command.push_back(mainclass);
 
@@ -2026,18 +2022,18 @@ bool MinecraftCpp::forge::forge_processors(
 			/*if (var2.to_string() == "{MERGED_MAPPINGS}")
 			{
 				var2 = Json::SomJson("{MAPPINGS}");
-				
+
 			}*/
 			qDebug() << "dsss" << argument_vars.to_string() << std::endl;
 			qDebug() << "aaaaaaaaaaaaaaaaa:" << var2.to_string() << std::endl;
 
 			variable = argument_vars[var2.to_string()] == nullptr ? var2.to_string() : argument_vars[var2.to_string()].to_string();
-			
+
 			qDebug() << variable << var2.to_string() << std::endl;
 			if (variable._Starts_with("[") && Additionals::String::EndsWith(variable, "]"))
 			{
 				qDebug() << variable << path << std::endl;
-				command.push_back(get_library_path(variable, path));
+				command.push_back(get_library_path(variable.substr(1, variable.size() - 2), path));
 			}
 			else
 			{

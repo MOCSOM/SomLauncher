@@ -184,8 +184,8 @@ std::string Json::SomJson::to_string()
 				builder += ",";
 
 			std::string value;
-
-			value = "\"" + elem.first + "\":" + elem.second.to_string();
+			std::string val = elem.second.to_string();
+			value = "\"" + elem.first + "\":" + val;
 
 			builder += value;
 			first = false;
@@ -650,6 +650,10 @@ Json::SomJson::Node::Node(std::vector<Json::SomJson> array_value)
 
 bool Json::SomJson::Node::operator==(const Node& value) const
 {
+	if (this->type != value.type)
+	{
+		return false;
+	}
 	if (this->type == Json::JsonTypes::Object)
 	{
 		for (auto& elem : this->object_value)
@@ -675,11 +679,23 @@ bool Json::SomJson::Node::operator==(const Node& value) const
 
 		return true;
 	}
+	else if (this->type == Json::JsonTypes::Bool)
+	{
+		return this->bool_value == value.bool_value;
+	}
+	else if (this->type == Json::JsonTypes::Number)
+	{
+		return this->number_value == value.number_value;
+	}
+	else if (this->type == Json::JsonTypes::String)
+	{
+		return this->string_value == value.string_value;
+	}
 	else if (this->type == Json::JsonTypes::NotImplemented)
 	{
 		return false;
 	}
-	else
+	/*else
 	{
 		if (this->bool_value == value.bool_value)
 		{
@@ -697,7 +713,7 @@ bool Json::SomJson::Node::operator==(const Node& value) const
 		{
 			return true;
 		}
-	}
+	}*/
 
 	return false;
 }
@@ -727,5 +743,12 @@ size_t Json::SomJson::get_count()
 
 Json::JsonTypes Json::SomJson::get_type()
 {
-	return this->value->type;
+	if (this->value)
+	{
+		return this->value->type;
+	}
+	else
+	{
+		return JsonTypes::NotImplemented;
+	}
 }

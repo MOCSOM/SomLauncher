@@ -121,7 +121,6 @@
       <AdditionalIncludeDirectories>$(ProgramFiles)\MySQL\MySQL Connector C++ 8.2\include\jdbc;$(VcpkgRoot)\installed\x64-windows\include;$(Qt_INCLUDEPATH_)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>$(Qt_DEFINES_);%(PreprocessorDefinitions);STATIC_CONCPP;CURL_STATICLIB</PreprocessorDefinitions>
       <LanguageStandard>$(Qt_STDCPP_)</LanguageStandard>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
