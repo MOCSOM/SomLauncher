@@ -1,6 +1,6 @@
 #include "ServerWidget.h"
 
-ServerWidget::ServerWidget(QButtonGroup* group, Json::JsonValue server_data, QWidget* parent)
+ServerWidget::ServerWidget(QButtonGroup* group, SJson::JsonValue server_data, QWidget* parent)
 	: QWidget(parent)
 {
 	ui.setupUi(this);

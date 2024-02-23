@@ -32,7 +32,7 @@ namespace MinecraftCpp
 			namespace database
 			{
 				bool installModPack(
-					const Json::JsonValue& json_from_server, const std::filesystem::path& path_to_download,
+					const SJson::JsonValue& json_from_server, const std::filesystem::path& path_to_download,
 					std::shared_ptr<CallbackNull> callback = std::make_shared<CallbackNull>()) noexcept;
 			}
 		}

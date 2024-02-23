@@ -1,6 +1,6 @@
 #include "SettingsDialog.h"
 
-SettingsDialog::SettingsDialog(Json::JsonValue data, MinecraftCpp::option::MinecraftOptions& option, QWidget* parent)
+SettingsDialog::SettingsDialog(SJson::JsonValue data, MinecraftCpp::option::MinecraftOptions& option, QWidget* parent)
 	: QDialog(parent), option(option)
 {
 	ui.setupUi(this);
@@ -184,7 +184,7 @@ void SettingsDialog::onClickToolBotton_getjava_path()
 
 void SettingsDialog::onClickPushButtonLogoutFromAccount()
 {
-	Json::JsonValue parced_config = Json::JsonParcer::ParseFile(this->config_path);
+	SJson::JsonValue parced_config = SJson::JsonParcer::ParseFile(this->config_path);
 	parced_config["user"]["name"] = "";
 	parced_config["user"]["password"] = "";
 	parced_config.save_json_to_file(this->config_path.u8string(), 4);

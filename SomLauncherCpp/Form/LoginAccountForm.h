@@ -43,7 +43,7 @@ public:
 
 	const std::string getUserLogin();
 	const std::string getUserPassword();
-	const Json::JsonValue getUserDataFromConfig();
+	const SJson::JsonValue getUserDataFromConfig();
 
 	void earseAllData();
 

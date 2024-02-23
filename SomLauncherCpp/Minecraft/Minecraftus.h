@@ -2,6 +2,7 @@
 #define MINECRAFTUS_H_
 
 #include <QMessageBox>
+#include <QUrlQuery>
 
 #include "../Web/DownloadClasses.h"
 #include "../Callbacks/CallbackDict.h"
@@ -39,6 +40,9 @@
 #include <regex>
 #include <set>
 
+#include <json/json.h>
+#include <nlohmann/json.hpp>
+
 namespace MinecraftCpp
 {
 	namespace option
@@ -75,7 +79,7 @@ namespace MinecraftCpp
 		};
 	}
 
-	Json::JsonValue get_version_list();
+	SJson::JsonValue get_version_list();
 
 	std::vector<std::string> generateCommandLine(const std::filesystem::path& nativeFolder, MinecraftCpp::option::LaunchOptions& options);
 
@@ -85,18 +89,18 @@ namespace MinecraftCpp
 		MinecraftCpp::option::MinecraftOptions options);
 
 	std::string get_classpath_separator();
-	bool parse_single_rule(Json::JsonValue rule, MinecraftCpp::option::MinecraftOptions options);
-	bool parse_rule_list(Json::JsonValue data, const std::string& rule_string, MinecraftCpp::option::MinecraftOptions options);
+	bool parse_single_rule(nlohmann::json rule, MinecraftCpp::option::MinecraftOptions options);
+	bool parse_rule_list(nlohmann::json data, const std::string& rule_string, MinecraftCpp::option::MinecraftOptions options);
 	std::string get_library_path(const std::string& name, const std::string& path);
-	std::string get_natives(Json::JsonValue data);
+	std::string get_natives(nlohmann::json data);
 	std::string _get_jvm_platform_string();
-	std::string replace_arguments(std::string argstr, Json::JsonValue versionData,
+	std::string replace_arguments(std::string argstr, nlohmann::json versionData,
 		const std::string& path, MinecraftCpp::option::MinecraftOptions options);
 
 	std::string get_executable_path(const std::string& jvm_version, const std::string& minecraft_directory);
-	bool install_libraries(Json::JsonValue data, const std::string& path, std::shared_ptr<CallbackNull> callback);
-	bool extract_natives_file(const std::string& filename, const std::string& extract_path, Json::JsonValue extract_data);
-	bool install_assets(Json::JsonValue data, const std::string& path, std::shared_ptr<CallbackNull> callback);
+	bool install_libraries(nlohmann::json& data, const std::string& path, std::shared_ptr<CallbackNull> callback);
+	bool extract_natives_file(const std::string& filename, const std::string& extract_path, nlohmann::json& extract_data);
+	bool install_assets(nlohmann::json& data, const std::string& path, std::shared_ptr<CallbackNull> callback);
 
 	/// <summary>
 	/// Installs the given jvm runtime. callback is the same dict as in the install module.
@@ -134,7 +138,7 @@ namespace MinecraftCpp
 		std::string get_jar_mainclass(const std::string& path);
 
 		bool forge_processors(
-			Json::JsonValue data,
+			nlohmann::json& data,
 			const std::string& minecraft_directory,
 			const std::string& lzma_path,
 			const std::string& installer_path,
@@ -150,21 +154,21 @@ namespace MinecraftCpp
 
 		bool _is_version_valid(const std::string& version, const std::string& minecraft_directory);
 		bool _is_minecraft_version_supported(const std::string& version);
-		Json::JsonValue get_all_minecraft_versions();
+		SJson::JsonValue get_all_minecraft_versions();
 		std::string get_latest_loader_version();
-		Json::JsonValue get_all_loader_versions();
+		SJson::JsonValue get_all_loader_versions();
 		std::string get_latest_installer_version();
-		Json::JsonValue parse_maven_metadata(const std::string& url);
+		SJson::JsonValue parse_maven_metadata(const std::string& url);
 	}
 
 	std::vector<std::string> get_arguments(
-		Json::JsonValue& data,
-		Json::JsonValue versionData,
+		nlohmann::json& data,
+		nlohmann::json versionData,
 		const std::string& path,
 		MinecraftCpp::option::MinecraftOptions options);
 
 	std::string get_arguments_string(
-		Json::JsonValue versionData,
+		nlohmann::json versionData,
 		const std::string& path,
 		MinecraftCpp::option::MinecraftOptions options);
 
@@ -179,12 +183,12 @@ namespace MinecraftCpp
 		std::shared_ptr<CallbackNull> callback,
 		const std::string& url = "");
 
-	Json::JsonValue inherit_json(
-		Json::JsonValue original_data,
+	nlohmann::json inherit_json(
+		nlohmann::json original_data,
 		const std::string& path);
 
 	std::string get_libraries(
-		Json::JsonValue data,
+		nlohmann::json data,
 		const std::string& path);
 
 	std::chrono::system_clock::time_point _parseDateTime(const std::string& isoDateTime);

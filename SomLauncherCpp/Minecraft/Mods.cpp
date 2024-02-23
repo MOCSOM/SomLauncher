@@ -1,10 +1,10 @@
 ﻿#include "Mods.h"
 
-bool MinecraftCpp::modpacks::download::database::installModPack(const Json::JsonValue& json_from_server,
+bool MinecraftCpp::modpacks::download::database::installModPack(const SJson::JsonValue& json_from_server,
 	const std::filesystem::path& path_to_download, std::shared_ptr<CallbackNull> callback) noexcept
 {
-	Json::JsonValue urls = json_from_server;
-	for (std::pair<const std::string, Json::JsonValue> elem : urls.get_object())
+	SJson::JsonValue urls = json_from_server;
+	for (std::pair<const std::string, SJson::JsonValue> elem : urls.get_object())
 	{
 		auto downloaded_path = DownloadFile(elem.second.to_string(),
 			path_to_download.u8string(), callback);

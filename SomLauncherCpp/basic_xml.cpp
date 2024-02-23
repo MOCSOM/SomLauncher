@@ -147,7 +147,7 @@ Xml::basic_xml<Xml::XmlTypes::Object> Xml::XmlParcer::ParseObject(const std::str
 		++this->_position;
 		SkipWhitespace(json_str);
 
-		//Json::JsonValue* value = ParseValue(json_str);
+		//nlohmann::JsonValue* value = ParseValue(json_str);
 
 		/*if (value == Xml::basic_xml<>())
 		{

@@ -13,14 +13,14 @@
 #include "JsonTypes.h"
 #include "../../Additionals/Additionals.h"
 
-namespace Json
+namespace SJson
 {
 	class SomJson
 	{
 	private:
 		struct StandartNode
 		{
-			Json::JsonTypes type = Json::JsonTypes::NotImplemented;
+			SJson::JsonTypes type = SJson::JsonTypes::NotImplemented;
 		};
 
 		struct Node : public StandartNode
@@ -29,11 +29,11 @@ namespace Json
 			long double number_value = NULL;
 			std::string string_value = "";
 			std::nullptr_t null_value = NULL;
-			std::unordered_map<std::string, Json::SomJson> object_value = {};
-			std::vector<Json::SomJson> array_value = {};
+			std::unordered_map<std::string, SJson::SomJson> object_value = {};
+			std::vector<SJson::SomJson> array_value = {};
 
 			Node();
-			Node(Json::JsonTypes type);
+			Node(SJson::JsonTypes type);
 			Node(long double number_value);
 			Node(double number_value);
 			Node(int number_value);
@@ -42,8 +42,8 @@ namespace Json
 			Node(std::string string_value);
 			Node(const char* string_value);
 			Node(std::nullptr_t null_value);
-			Node(std::unordered_map<std::string, Json::SomJson> object_value);
-			Node(std::vector<Json::SomJson> array_value);
+			Node(std::unordered_map<std::string, SJson::SomJson> object_value);
+			Node(std::vector<SJson::SomJson> array_value);
 
 			bool operator==(const Node& value) const;
 			bool operator!=(const Node& value) const;
@@ -53,8 +53,8 @@ namespace Json
 		template <typename ITERATOR>
 		class SomIterator
 		{
-			friend class Json::SomJson;
-			friend struct Json::SomJson::Node;
+			friend class SJson::SomJson;
+			friend struct SJson::SomJson::Node;
 
 		public:
 			typedef ITERATOR iterator_type;
@@ -102,16 +102,16 @@ namespace Json
 	public:
 		SomJson();
 		SomJson(Node json);
-		SomJson(Json::JsonTypes type);
-		SomJson(const Json::SomJson& json);
+		SomJson(SJson::JsonTypes type);
+		SomJson(const SJson::SomJson& json);
 		SomJson(std::nullptr_t null);
 		~SomJson();
 
 		void add_value(const std::string& key, const Node& value);
-		void add_value(const std::string& key, const Json::SomJson& value);
-		void add_value(const std::pair<std::string, Json::SomJson>& pair);
+		void add_value(const std::string& key, const SJson::SomJson& value);
+		void add_value(const std::pair<std::string, SJson::SomJson>& pair);
 		void add_value(const Node& value);
-		void add_value(const Json::SomJson& value);
+		void add_value(const SJson::SomJson& value);
 
 		void replace_value(const size_t& index, const Node& value);
 		void replace_value(const std::string& key, const Node& value);
@@ -120,11 +120,11 @@ namespace Json
 		bool& get_bool();
 		std::string& get_string();
 		std::nullptr_t& get_null();
-		std::unordered_map<std::string, Json::SomJson>& get_object();
-		std::vector<Json::SomJson>& get_array();
+		std::unordered_map<std::string, SJson::SomJson>& get_object();
+		std::vector<SJson::SomJson>& get_array();
 
 		size_t get_count();
-		Json::JsonTypes get_type();
+		SJson::JsonTypes get_type();
 
 		std::string to_string();
 		std::wstring to_stringW();
@@ -132,27 +132,27 @@ namespace Json
 
 		bool is_exist(const std::string& key);
 
-		Json::SomJson& operator[](const std::string& key);
-		Json::SomJson& operator[](const size_t& index);
+		SJson::SomJson& operator[](const std::string& key);
+		SJson::SomJson& operator[](const size_t& index);
 
-		Json::SomJson& operator=(const Json::SomJson& value);
-		Json::SomJson& operator=(const Node& value);
-		Json::SomJson& operator+=(const Json::SomJson& value);
-		Json::SomJson operator+(const Json::SomJson& value);
+		SJson::SomJson& operator=(const SJson::SomJson& value);
+		SJson::SomJson& operator=(const Node& value);
+		SJson::SomJson& operator+=(const SJson::SomJson& value);
+		SJson::SomJson operator+(const SJson::SomJson& value);
 
 		bool operator==(const std::nullptr_t& null);
 		bool operator!=(const std::nullptr_t& null);
 
-		bool operator==(const Json::SomJson& value) const;
-		bool operator!=(const Json::SomJson& value) const;
+		bool operator==(const SJson::SomJson& value) const;
+		bool operator!=(const SJson::SomJson& value) const;
 
 		void save_json_to_file(const std::string& file_name, int indent);
 		std::string _json_value_to_string(int indent);
-		void _json_value_to_string_helper(Json::SomJson json_value, std::string& builder, int current_indent, int indent);
+		void _json_value_to_string_helper(SJson::SomJson json_value, std::string& builder, int current_indent, int indent);
 		void _indent(std::string& builder, int indent);
 	};
 
-	using JsonValue = Json::SomJson;
+	using JsonValue = SJson::SomJson;
 
 	template<typename ITERATOR>
 	inline SomJson::SomIterator<ITERATOR>::SomIterator(ITERATOR* pointer)
@@ -188,7 +188,7 @@ namespace Json
 	inline SomJson::SomIterator<ITERATOR>& SomJson::SomIterator<ITERATOR>::operator++() noexcept
 	{
 		//++this->value;
-		//if (this->value->type == Json::JsonTypes::Object)
+		//if (this->value->type == SJson::JsonTypes::Object)
 		//{
 		//	for (auto& i = this->value->object_value.begin();
 		//		i <= this->value->object_value.find((*i).first->string_value); ++i)
@@ -196,7 +196,7 @@ namespace Json
 		//		this->value = (*(++i)).second;
 		//	}
 		//}
-		//else if (this->value->type == Json::JsonTypes::Array)
+		//else if (this->value->type == SJson::JsonTypes::Array)
 		//{
 		//	//this->value = this->value->array_value[++this->value->array_value.size()];
 		//}

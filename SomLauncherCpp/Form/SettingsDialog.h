@@ -13,13 +13,13 @@ class SettingsDialog : public QDialog
 	Q_OBJECT
 
 private:
-	Json::JsonValue account_data;
+	SJson::JsonValue account_data;
 	std::filesystem::path config_path;
 
 	MinecraftCpp::option::MinecraftOptions& option;
 
 public:
-	explicit SettingsDialog(Json::JsonValue data, MinecraftCpp::option::MinecraftOptions& option, QWidget* parent = nullptr);
+	explicit SettingsDialog(SJson::JsonValue data, MinecraftCpp::option::MinecraftOptions& option, QWidget* parent = nullptr);
 	~SettingsDialog();
 
 	void setMemoryData(int min, int max, int recomended_value);

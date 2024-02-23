@@ -18,7 +18,7 @@ void SomLauncherMainWindow::setConnectionWithDatabase()
 	}
 }
 
-Json::JsonValue SomLauncherMainWindow::getServersFromDatabase()
+SJson::JsonValue SomLauncherMainWindow::getServersFromDatabase()
 {
 	sql::ResultSet* res = nullptr;
 	QString querry =
@@ -36,17 +36,17 @@ FROM servers_server)";
 	{
 		qFatal() << "Failed with exception: " << eSQL.what();
 	}
-	Json::JsonValue returned;
+	SJson::JsonValue returned;
 
 	while (res->next())
 	{
 		//std::cout << res->getString(1) << std::endl;
-		returned = Json::JsonParcer::ParseJson(res->getString(1));
+		returned = SJson::JsonParcer::ParseJson(res->getString(1));
 	}
 	return returned;
 }
 
-Json::JsonValue SomLauncherMainWindow::getServersFromDatabase(sql::Connection* connect)
+SJson::JsonValue SomLauncherMainWindow::getServersFromDatabase(sql::Connection* connect)
 {
 	sql::ResultSet* res = nullptr;
 	QString querry =
@@ -59,12 +59,12 @@ Json::JsonValue SomLauncherMainWindow::getServersFromDatabase(sql::Connection* c
 	{
 		qFatal() << "Failed with exception: " << eSQL.what();
 	}
-	Json::JsonValue returned;
+	SJson::JsonValue returned;
 
 	while (res->next())
 	{
 		//std::cout << res->getString(1) << std::endl;
-		returned = Json::JsonParcer::ParseJson(res->getString(1));
+		returned = SJson::JsonParcer::ParseJson(res->getString(1));
 	}
 	return returned;
 }
@@ -168,8 +168,10 @@ void SomLauncherMainWindow::setupInstallMinecraft(const size_t& index)
 	setUiToDownload(false);
 	hide();
 
+	auto work_dir = std::filesystem::current_path();
 	std::filesystem::current_path(instance_path);
 	client::startProcess(command);
+	std::filesystem::current_path(work_dir);
 
 	setWindowState(windowState()/* & ~Qt::WindowMinimized)*/ | Qt::WindowActive);
 	show();
@@ -185,7 +187,7 @@ std::string SomLauncherMainWindow::install_minecraft(
 	MinecraftCpp::option::MinecraftOptions& options,
 	std::shared_ptr<CallbackNull> callback) const
 {
-	//Json::JsonValue data_modpack = parecer_modpack.ParseFile(this->minecraft_core_dir_path);
+	//SJson::JsonValue data_modpack = parecer_modpack.ParseFile(this->minecraft_core_dir_path);
 
 	/* minecraft_version = 1.12.2 + "-" + forge_version = 14.23.5.2860 */
 	//wchar_t* launch_varsion = L"1.12.2-forge-14.23.5.2860";
@@ -454,7 +456,7 @@ std::string SomLauncherMainWindow::getLatestVersionFromGithub()
 	}
 }
 
-Json::JsonValue SomLauncherMainWindow::getLatestVersionFromDatabase()
+SJson::JsonValue SomLauncherMainWindow::getLatestVersionFromDatabase()
 {
 	setConnectionWithDatabase();
 	sql::ResultSet* res = nullptr;
@@ -472,12 +474,12 @@ FROM launcher_download_launcher)";
 	{
 		qFatal() << "Failed with exception: " << eSQL.what();
 	}
-	Json::JsonValue returned;
+	SJson::JsonValue returned;
 
 	while (res->next())
 	{
 		//std::cout << res->getString(1) << std::endl;
-		returned = Json::JsonParcer::ParseJson(res->getString(1));
+		returned = SJson::JsonParcer::ParseJson(res->getString(1));
 	}
 	return returned;
 }
@@ -518,7 +520,7 @@ bool SomLauncherMainWindow::isVersionOld()
 	return false;
 }
 
-void SomLauncherMainWindow::setAccountData(const Json::JsonValue& data)
+void SomLauncherMainWindow::setAccountData(const SJson::JsonValue& data)
 {
 	this->account_data = data;
 }

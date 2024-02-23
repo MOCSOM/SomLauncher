@@ -1,7 +1,7 @@
 #ifndef JSONTYPES_H_
 #define JSONTYPES_H_
 
-namespace Json
+namespace SJson
 {
 	enum struct JsonTypes
 	{

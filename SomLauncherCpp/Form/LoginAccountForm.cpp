@@ -16,7 +16,7 @@ LoginAccountForm::~LoginAccountForm()
 
 void LoginAccountForm::_setPasswordAndLoginInUi()
 {
-	Json::JsonValue config = getUserDataFromConfig();
+	SJson::JsonValue config = getUserDataFromConfig();
 	ui.lineEdit_login->setText(config["user"]["name"].to_string().c_str());
 	ui.lineEdit_password->setText(config["user"]["password"].to_string().c_str());
 	if (!config["user"]["password"].to_string().empty())
@@ -172,7 +172,7 @@ bool LoginAccountForm::checkLogin()
 
 const std::string LoginAccountForm::getUserLogin()
 {
-	Json::JsonValue config = getUserDataFromConfig();
+	SJson::JsonValue config = getUserDataFromConfig();
 	if (config["user"]["name"].to_string().empty())
 	{
 		return getLoginFromServer();
@@ -182,7 +182,7 @@ const std::string LoginAccountForm::getUserLogin()
 
 const std::string LoginAccountForm::getUserPassword()
 {
-	Json::JsonValue config = getUserDataFromConfig();
+	SJson::JsonValue config = getUserDataFromConfig();
 	if (config["user"]["password"].to_string().empty())
 	{
 		return "";
@@ -190,9 +190,9 @@ const std::string LoginAccountForm::getUserPassword()
 	return config["user"]["password"].to_string();
 }
 
-const Json::JsonValue LoginAccountForm::getUserDataFromConfig()
+const SJson::JsonValue LoginAccountForm::getUserDataFromConfig()
 {
-	const Json::JsonValue parced_config = Json::JsonParcer::ParseFile(this->config_path);
+	const SJson::JsonValue parced_config = SJson::JsonParcer::ParseFile(this->config_path);
 	return parced_config;
 }
 
@@ -219,8 +219,8 @@ void LoginAccountForm::onClickPushButtonLogin()
 
 		if (ui.checkBox_remember_password->isChecked())
 		{
-			Json::JsonValue data_to_save = Json::JsonParcer::ParseJson(json_data_string);
-			Json::JsonValue parced_config = Json::JsonParcer::ParseFile(this->config_path);
+			SJson::JsonValue data_to_save = SJson::JsonParcer::ParseJson(json_data_string);
+			SJson::JsonValue parced_config = SJson::JsonParcer::ParseFile(this->config_path);
 			for (auto& elem : data_to_save.get_array())
 			{
 				if (elem.is_exist("username"))
@@ -236,8 +236,8 @@ void LoginAccountForm::onClickPushButtonLogin()
 		}
 		else
 		{
-			Json::JsonValue data_to_save = Json::JsonParcer::ParseJson(json_data_string);
-			Json::JsonValue parced_config = Json::JsonParcer::ParseFile(this->config_path);
+			SJson::JsonValue data_to_save = SJson::JsonParcer::ParseJson(json_data_string);
+			SJson::JsonValue parced_config = SJson::JsonParcer::ParseFile(this->config_path);
 			for (auto& elem : data_to_save.get_array())
 			{
 				if (elem.is_exist("username"))

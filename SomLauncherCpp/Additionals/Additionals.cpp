@@ -408,11 +408,24 @@ std::vector<std::wstring> Additionals::String::split(const std::wstring& s, cons
 
 bool Additionals::String::replace(std::string& str, const std::string& from, const std::string& to)
 {
-	size_t start_pos = str.find(from);
+	size_t start_pos = 0;
+	size_t found_pos;
+	bool replaced = false;
+
+	while ((found_pos = str.find(from, start_pos)) != std::string::npos)
+	{
+		str.replace(found_pos, from.length(), to);
+		start_pos = found_pos + to.length(); // Move start position past the newly inserted string
+		replaced = true;
+	}
+
+	return replaced;
+
+	/*size_t start_pos = str.find(from);
 	if (start_pos == std::string::npos)
 		return false;
 	str.replace(start_pos, from.length(), to);
-	return true;
+	return true;*/
 }
 
 bool Additionals::String::replace(std::wstring& str, const std::wstring& from, const std::wstring& to)

@@ -162,7 +162,7 @@ void SomLauncherMainWindow::_settingServersWidgets()
 
 				this->widget_list.append(widget);
 
-				if (this->config_parce["user"]["server"].get_type() != Json::JsonTypes::Null && this->config_parce["user"]["server"].to_int() == i)
+				if (this->config_parce["user"]["server"].get_type() != SJson::JsonTypes::Null && this->config_parce["user"]["server"].to_int() == i)
 				{
 					widget->setStatusServer(true);
 				}
@@ -289,6 +289,7 @@ void SomLauncherMainWindow::onClickedpushButton_changeserver()
 		{
 			_settingServerNameInChangeServerButton();
 			_settingCurrentServerName();
+			this->widget_list[this->config_parce["user"]["server"].to_int()]->setStatusServer(true);
 		});
 
 	dialog.exec(); //modal server changer
@@ -300,7 +301,7 @@ void SomLauncherMainWindow::_settingServerNameInChangeServerButton()
 	ui.pushButton_changeserver->setText((this->server_changer_button_text +
 		this->servers_parce["servers"][this->config_parce["user"]["server"].to_int()]["name"].to_string() +
 		")").c_str());
-	this->widget_list[this->config_parce["user"]["server"].to_int()]->setStatusServer(true);
+	//this->widget_list[this->config_parce["user"]["server"].to_int()]->setStatusServer(true);
 }
 
 void SomLauncherMainWindow::onClickedpushLable_profile()
@@ -405,7 +406,7 @@ void SomLauncherMainWindow::mouseLeaveframe_topslidemenu()
 
 void SomLauncherMainWindow::groupButtonsClicked(QAbstractButton* id, bool status)
 {
-	qInfo() << "groupButtons Clicked id: " << id->objectName().toStdString() << " " << status << std::endl;
+	qInfo() << "groupButtons Clicked id: " << id->objectName() << " " << status << std::endl;
 
 	if (status == true)
 	{

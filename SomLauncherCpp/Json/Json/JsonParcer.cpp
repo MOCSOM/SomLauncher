@@ -1,6 +1,6 @@
 ﻿#include "JsonParcer.h"
 
-Json::JsonValue Json::JsonParcer::ParseFile(const std::wstring& filename)
+SJson::JsonValue SJson::JsonParcer::ParseFile(const std::wstring& filename)
 {
 	std::string file_name_string = Additionals::Convectors::ConvertWStringToString(filename);
 
@@ -35,7 +35,7 @@ Json::JsonValue Json::JsonParcer::ParseFile(const std::wstring& filename)
 	}
 }
 
-Json::JsonValue Json::JsonParcer::ParseFile(const std::string& filename)
+SJson::JsonValue SJson::JsonParcer::ParseFile(const std::string& filename)
 {
 	if (!std::filesystem::exists(filename))
 	{
@@ -67,14 +67,14 @@ Json::JsonValue Json::JsonParcer::ParseFile(const std::string& filename)
 	}
 }
 
-Json::JsonValue Json::JsonParcer::ParseJson(const std::string& json_str)
+SJson::JsonValue SJson::JsonParcer::ParseJson(const std::string& json_str)
 {
-	Json::JsonParcer parcer;
+	SJson::JsonParcer parcer;
 	parcer._pos = 0;
 	return parcer.ParseValue(json_str);
 }
 
-Json::JsonValue Json::JsonParcer::ParseUrl(const std::string& url, const std::filesystem::path& destination)
+SJson::JsonValue SJson::JsonParcer::ParseUrl(const std::string& url, const std::filesystem::path& destination)
 {
 	std::string destenation_file = Additionals::TempFile::get_tempdir_SYSTEM();
 
@@ -128,7 +128,7 @@ Json::JsonValue Json::JsonParcer::ParseUrl(const std::string& url, const std::fi
 
 	if (res == CURLE_OK)
 	{
-		Json::JsonValue return_val = ParseFile(destenation_file);
+		SJson::JsonValue return_val = ParseFile(destenation_file);
 		if (destination == "")
 		{
 			std::remove(destenation_file.c_str());
@@ -147,7 +147,7 @@ Json::JsonValue Json::JsonParcer::ParseUrl(const std::string& url, const std::fi
 	return nullptr;
 }
 
-size_t Json::JsonParcer::write_data(char* ptr, size_t size, size_t nmemb, void* userdata)
+size_t SJson::JsonParcer::write_data(char* ptr, size_t size, size_t nmemb, void* userdata)
 {
 	std::ofstream* out = static_cast<std::ofstream*>(userdata);
 	size_t nbytes = size * nmemb;
@@ -156,7 +156,7 @@ size_t Json::JsonParcer::write_data(char* ptr, size_t size, size_t nmemb, void* 
 	return nbytes;
 }
 
-void Json::JsonParcer::SkipWhitespace(const std::string& json_str)
+void SJson::JsonParcer::SkipWhitespace(const std::string& json_str)
 {
 	while (_pos < json_str.size())
 	{
@@ -197,7 +197,7 @@ void Json::JsonParcer::SkipWhitespace(const std::string& json_str)
 	}
 }
 
-Json::JsonValue Json::JsonParcer::ParseValue(const std::string& json_str)
+SJson::JsonValue SJson::JsonParcer::ParseValue(const std::string& json_str)
 {
 	SkipWhitespace(json_str);
 
@@ -238,7 +238,7 @@ Json::JsonValue Json::JsonParcer::ParseValue(const std::string& json_str)
 	}
 }
 
-Json::JsonValue Json::JsonParcer::ParseNull(const std::string& json_str)
+SJson::JsonValue SJson::JsonParcer::ParseNull(const std::string& json_str)
 {
 	std::string expectedValue = "null";
 	std::string actualValue = json_str.substr(_pos, expectedValue.size());
@@ -251,10 +251,10 @@ Json::JsonValue Json::JsonParcer::ParseNull(const std::string& json_str)
 
 	_pos += expectedValue.size();
 
-	return Json::JsonValue(std::nullptr_t());
+	return SJson::JsonValue(std::nullptr_t());
 }
 
-Json::JsonValue Json::JsonParcer::ParseBool(const std::string& json_str)
+SJson::JsonValue SJson::JsonParcer::ParseBool(const std::string& json_str)
 {
 	bool value = (json_str[_pos] == 't');
 
@@ -269,10 +269,10 @@ Json::JsonValue Json::JsonParcer::ParseBool(const std::string& json_str)
 
 	_pos += expectedValue.size();
 
-	return Json::JsonValue(value);
+	return SJson::JsonValue(value);
 }
 
-Json::JsonValue Json::JsonParcer::ParseNumber(const std::string& json_str)
+SJson::JsonValue SJson::JsonParcer::ParseNumber(const std::string& json_str)
 {
 	std::string num_str;
 
@@ -282,10 +282,10 @@ Json::JsonValue Json::JsonParcer::ParseNumber(const std::string& json_str)
 		++_pos;
 	}
 
-	return Json::JsonValue(::atof(num_str.c_str()));
+	return SJson::JsonValue(::atof(num_str.c_str()));
 }
 
-Json::JsonValue Json::JsonParcer::ParseString(const std::string& json_str)
+SJson::JsonValue SJson::JsonParcer::ParseString(const std::string& json_str)
 {
 	if (json_str[_pos] != '\"')
 	{
@@ -359,10 +359,10 @@ Json::JsonValue Json::JsonParcer::ParseString(const std::string& json_str)
 
 	++_pos;
 
-	return Json::JsonValue(value_str);
+	return SJson::JsonValue(value_str);
 }
 
-std::string Json::JsonParcer::ParseUnicode(const std::string& json_str)
+std::string SJson::JsonParcer::ParseUnicode(const std::string& json_str)
 {
 	if (json_str.substr(_pos, 2) != "\\u")
 	{
@@ -409,7 +409,7 @@ std::string Json::JsonParcer::ParseUnicode(const std::string& json_str)
 	return result;
 }
 
-Json::JsonValue Json::JsonParcer::ParseArray(const std::string& json_str)
+SJson::JsonValue SJson::JsonParcer::ParseArray(const std::string& json_str)
 {
 	if (json_str[_pos] != '[')
 	{
@@ -419,7 +419,7 @@ Json::JsonValue Json::JsonParcer::ParseArray(const std::string& json_str)
 
 	++_pos;
 
-	Json::JsonValue arr = Json::JsonValue(std::vector<Json::SomJson>());
+	SJson::JsonValue arr = SJson::JsonValue(std::vector<SJson::SomJson>());
 
 	SkipWhitespace(json_str);
 
@@ -431,7 +431,7 @@ Json::JsonValue Json::JsonParcer::ParseArray(const std::string& json_str)
 
 	while (true)
 	{
-		Json::JsonValue value = ParseValue(json_str);
+		SJson::JsonValue value = ParseValue(json_str);
 
 		if (value == nullptr)
 		{
@@ -458,7 +458,7 @@ Json::JsonValue Json::JsonParcer::ParseArray(const std::string& json_str)
 	}
 }
 
-Json::JsonValue Json::JsonParcer::ParseObject(const std::string& json_str)
+SJson::JsonValue SJson::JsonParcer::ParseObject(const std::string& json_str)
 {
 	if (json_str[_pos] != '{')
 	{
@@ -466,7 +466,7 @@ Json::JsonValue Json::JsonParcer::ParseObject(const std::string& json_str)
 		return nullptr;
 	}
 
-	Json::JsonValue obj = Json::JsonValue(std::unordered_map<std::string, Json::SomJson>());
+	SJson::JsonValue obj = SJson::JsonValue(std::unordered_map<std::string, SJson::SomJson>());
 
 	++_pos;
 	SkipWhitespace(json_str);
@@ -479,7 +479,7 @@ Json::JsonValue Json::JsonParcer::ParseObject(const std::string& json_str)
 
 	while (true)
 	{
-		Json::JsonValue key = ParseString(json_str);
+		SJson::JsonValue key = ParseString(json_str);
 
 		if (key == nullptr)
 		{
@@ -498,7 +498,7 @@ Json::JsonValue Json::JsonParcer::ParseObject(const std::string& json_str)
 		++_pos;
 		SkipWhitespace(json_str);
 
-		Json::JsonValue value = ParseValue(json_str);
+		SJson::JsonValue value = ParseValue(json_str);
 
 		if (value == nullptr)
 		{

@@ -1,6 +1,6 @@
 ﻿#include "ServerChangerForm.h"
 
-ServerChanger::ServerChanger(QWidget* parent, std::string config_path, Json::JsonValue server_parce)
+ServerChanger::ServerChanger(QWidget* parent, std::string config_path, SJson::JsonValue server_parce)
 	: QDialog(parent), config_path(config_path)
 {
 	ui.setupUi(this);
@@ -12,8 +12,8 @@ ServerChanger::ServerChanger(QWidget* parent, std::string config_path, Json::Jso
 
 	ui.listWidget_changeserver->clear();
 
-	Json::JsonValue json_parce = server_parce;
-	Json::JsonValue parce_config = Json::JsonParcer::ParseFile(this->config_path);
+	SJson::JsonValue json_parce = server_parce;
+	SJson::JsonValue parce_config = SJson::JsonParcer::ParseFile(this->config_path);
 
 	for (int i = 0; i < json_parce["servers"].get_count(); ++i)
 	{
@@ -41,8 +41,8 @@ ServerChanger::~ServerChanger()
 
 void ServerChanger::onClickedpushButton_apply()
 {
-	Json::JsonParcer json_config;
-	Json::JsonValue config_parce = json_config.ParseFile(this->config_path);
+	SJson::JsonParcer json_config;
+	SJson::JsonValue config_parce = json_config.ParseFile(this->config_path);
 	config_parce["user"]["server"] = this->index;
 
 	std::cout << "Server is: " << config_parce["user"]["server"].to_string() << std::endl;

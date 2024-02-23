@@ -1,71 +1,71 @@
 ﻿#include "Json.h"
 
-Json::SomJson::iterator Json::SomJson::begin() noexcept
+SJson::SomJson::iterator SJson::SomJson::begin() noexcept
 {
 	return iterator(this->value.get());
 }
 
-Json::SomJson::iterator Json::SomJson::end() noexcept
+SJson::SomJson::iterator SJson::SomJson::end() noexcept
 {
 	return iterator((*this->value->object_value.end()).second.value.get());
 }
 
-Json::SomJson::const_iterator Json::SomJson::begin() const noexcept
+SJson::SomJson::const_iterator SJson::SomJson::begin() const noexcept
 {
 	return const_iterator(this->value.get());
 }
 
-Json::SomJson::const_iterator Json::SomJson::end() const noexcept
+SJson::SomJson::const_iterator SJson::SomJson::end() const noexcept
 {
 	return const_iterator((*this->value->object_value.end()).second.value.get());
 }
 
-Json::SomJson::SomJson()
+SJson::SomJson::SomJson()
 {
-	//this->value->object_value = std::unordered_map<std::string, Json::SomJson>();
+	//this->value->object_value = std::unordered_map<std::string, nlohmann::SomJson>();
 	//this->value->is_null = false;
 }
 
-Json::SomJson::SomJson(Node json)
+SJson::SomJson::SomJson(Node json)
 {
 	this->value = std::make_shared<Node>(json);
 }
 
-Json::SomJson::SomJson(Json::JsonTypes type)
+SJson::SomJson::SomJson(SJson::JsonTypes type)
 {
-	if (type == Json::JsonTypes::Object)
+	if (type == SJson::JsonTypes::Object)
 	{
-		this->value = std::make_shared<Node>(std::unordered_map<std::string, Json::SomJson>());
+		this->value = std::make_shared<Node>(std::unordered_map<std::string, SJson::SomJson>());
 		this->value->type = type;
 	}
-	else if (type == Json::JsonTypes::Array)
+	else if (type == SJson::JsonTypes::Array)
 	{
-		this->value = std::make_shared<Node>(std::vector<Json::SomJson>());
+		this->value = std::make_shared<Node>(std::vector<SJson::SomJson>());
 		this->value->type = type;
 	}
-	else if (type == Json::JsonTypes::Bool)
+	else if (type == SJson::JsonTypes::Bool)
 	{
 		this->value = std::make_shared<Node>(false);
 		this->value->type = type;
 	}
-	else if (type == Json::JsonTypes::Null)
+	else if (type == SJson::JsonTypes::Null)
 	{
 		this->value = std::make_shared<Node>(nullptr);
 		this->value->type = type;
 	}
-	else if (type == Json::JsonTypes::Number)
+	else if (type == SJson::JsonTypes::Number)
 	{
 		this->value = std::make_shared<Node>(0);
 		this->value->type = type;
 	}
-	else if (type == Json::JsonTypes::String)
+	else if (type == SJson::JsonTypes::String)
 	{
 		this->value = std::make_shared<Node>("");
 		this->value->type = type;
 	}
 }
 
-Json::SomJson::SomJson(const Json::SomJson& json)
+SJson::SomJson::SomJson(const SJson::SomJson& json)
 {
 	if (json.value != nullptr)
 	{
@@ -73,48 +73,48 @@ Json::SomJson::SomJson(const Json::SomJson& json)
 	}
 }
 
-Json::SomJson::SomJson(std::nullptr_t null)
+SJson::SomJson::SomJson(std::nullptr_t null)
 {
 	this->value = std::make_shared<Node>();
 }
 
-Json::SomJson::~SomJson()
+SJson::SomJson::~SomJson()
 {
 }
 
-void Json::SomJson::add_value(const std::string& key, const Node& value)
-{
-	this->value->object_value.insert(std::make_pair(key, value));
-}
-
-void Json::SomJson::add_value(const std::string& key, const Json::SomJson& value)
+void SJson::SomJson::add_value(const std::string& key, const Node& value)
 {
 	this->value->object_value.insert(std::make_pair(key, value));
 }
 
-void Json::SomJson::add_value(const std::pair<std::string, Json::SomJson>& pair)
+void SJson::SomJson::add_value(const std::string& key, const SJson::SomJson& value)
+{
+	this->value->object_value.insert(std::make_pair(key, value));
+}
+
+void SJson::SomJson::add_value(const std::pair<std::string, SJson::SomJson>& pair)
 {
 	this->value->object_value.insert(pair);
 }
 
-void Json::SomJson::add_value(const Node& value)
+void SJson::SomJson::add_value(const Node& value)
 {
 	this->value->array_value.push_back(value);
 }
 
-void Json::SomJson::add_value(const Json::SomJson& value)
+void SJson::SomJson::add_value(const SJson::SomJson& value)
 {
 	this->add_value(*value.value);
 }
 
-void Json::SomJson::replace_value(const size_t& index, const Node& value)
+void SJson::SomJson::replace_value(const size_t& index, const Node& value)
 {
 	this->value->array_value[index] = value;
 }
 
-void Json::SomJson::replace_value(const std::string& key, const Node& value)
+void SJson::SomJson::replace_value(const std::string& key, const Node& value)
 {
-	if (this->get_type() == Json::JsonTypes::Object)
+	if (this->get_type() == SJson::JsonTypes::Object)
 	{
 		if (!this->is_exist(key))
 		{
@@ -125,7 +125,7 @@ void Json::SomJson::replace_value(const std::string& key, const Node& value)
 			this->value->object_value[key] = value;
 		}
 	}
-	else if (this->get_type() == Json::JsonTypes::Array)
+	else if (this->get_type() == SJson::JsonTypes::Array)
 	{
 		/*if (!this->is_exist(key))
 		{
@@ -138,41 +138,41 @@ void Json::SomJson::replace_value(const std::string& key, const Node& value)
 	}
 }
 
-long double& Json::SomJson::get_number()
+long double& SJson::SomJson::get_number()
 {
 	return this->value->number_value;
 }
 
-bool& Json::SomJson::get_bool()
+bool& SJson::SomJson::get_bool()
 {
 	return this->value->bool_value;
 }
 
-std::string& Json::SomJson::get_string()
+std::string& SJson::SomJson::get_string()
 {
 	return this->value->string_value;
 }
 
-std::nullptr_t& Json::SomJson::get_null()
+std::nullptr_t& SJson::SomJson::get_null()
 {
 	return this->value->null_value;
 }
 
-std::unordered_map<std::string, Json::SomJson>& Json::SomJson::get_object()
+std::unordered_map<std::string, SJson::SomJson>& SJson::SomJson::get_object()
 {
 	return this->value->object_value;
 }
 
-std::vector<Json::SomJson>& Json::SomJson::get_array()
+std::vector<SJson::SomJson>& SJson::SomJson::get_array()
 {
 	return this->value->array_value;
 }
 
-std::string Json::SomJson::to_string()
+std::string SJson::SomJson::to_string()
 {
 	std::string builder = "";
 
-	if (this->get_type() == Json::JsonTypes::Object)
+	if (this->get_type() == SJson::JsonTypes::Object)
 	{
 		builder += "{";
 
@@ -195,7 +195,7 @@ std::string Json::SomJson::to_string()
 
 		return builder;
 	}
-	else if (this->get_type() == Json::JsonTypes::Array)
+	else if (this->get_type() == SJson::JsonTypes::Array)
 	{
 		builder = "[";
 
@@ -211,7 +211,7 @@ std::string Json::SomJson::to_string()
 
 		return builder;
 	}
-	else if (this->get_type() == Json::JsonTypes::Bool)
+	else if (this->get_type() == SJson::JsonTypes::Bool)
 	{
 		if (this->value->bool_value)
 		{
@@ -224,11 +224,11 @@ std::string Json::SomJson::to_string()
 
 		return builder;
 	}
-	else if (this->get_type() == Json::JsonTypes::Null)
+	else if (this->get_type() == SJson::JsonTypes::Null)
 	{
 		return "null";
 	}
-	else if (this->get_type() == Json::JsonTypes::Number)
+	else if (this->get_type() == SJson::JsonTypes::Number)
 	{
 		if (std::abs(this->value->number_value) - std::abs(int(this->value->number_value)) < 0.000001)
 		{
@@ -239,7 +239,7 @@ std::string Json::SomJson::to_string()
 			return std::to_string(this->value->number_value);
 		}
 	}
-	else if (this->get_type() == Json::JsonTypes::String)
+	else if (this->get_type() == SJson::JsonTypes::String)
 	{
 		return this->value->string_value;
 	}
@@ -247,11 +247,11 @@ std::string Json::SomJson::to_string()
 	return builder;
 }
 
-std::wstring Json::SomJson::to_stringW()
+std::wstring SJson::SomJson::to_stringW()
 {
 	std::wstring builder = L"";
 
-	if (this->get_type() == Json::JsonTypes::Object)
+	if (this->get_type() == SJson::JsonTypes::Object)
 	{
 		builder += L"{";
 
@@ -274,7 +274,7 @@ std::wstring Json::SomJson::to_stringW()
 
 		return builder;
 	}
-	else if (this->get_type() == Json::JsonTypes::Array)
+	else if (this->get_type() == SJson::JsonTypes::Array)
 	{
 		builder = L"[";
 
@@ -290,7 +290,7 @@ std::wstring Json::SomJson::to_stringW()
 
 		return builder;
 	}
-	else if (this->get_type() == Json::JsonTypes::Bool)
+	else if (this->get_type() == SJson::JsonTypes::Bool)
 	{
 		if (this->value->bool_value)
 		{
@@ -303,11 +303,11 @@ std::wstring Json::SomJson::to_stringW()
 
 		return builder;
 	}
-	else if (this->get_type() == Json::JsonTypes::Null)
+	else if (this->get_type() == SJson::JsonTypes::Null)
 	{
 		return L"null";
 	}
-	else if (this->get_type() == Json::JsonTypes::Number)
+	else if (this->get_type() == SJson::JsonTypes::Number)
 	{
 		if (std::abs(this->value->number_value) - std::abs(int(this->value->number_value)) < 0.000001)
 		{
@@ -318,7 +318,7 @@ std::wstring Json::SomJson::to_stringW()
 			return std::to_wstring(this->value->number_value);
 		}
 	}
-	else if (this->get_type() == Json::JsonTypes::String)
+	else if (this->get_type() == SJson::JsonTypes::String)
 	{
 		return Additionals::Convectors::ConvertStringToWString(this->value->string_value);
 	}
@@ -326,12 +326,12 @@ std::wstring Json::SomJson::to_stringW()
 	return builder;
 }
 
-int Json::SomJson::to_int()
+int SJson::SomJson::to_int()
 {
 	return static_cast<int>(this->value->number_value);
 }
 
-bool Json::SomJson::is_exist(const std::string& key)
+bool SJson::SomJson::is_exist(const std::string& key)
 {
 	if (this->value)
 	{
@@ -357,17 +357,17 @@ bool Json::SomJson::is_exist(const std::string& key)
 	return false;
 }
 
-Json::SomJson& Json::SomJson::operator[](const std::string& key)
+SJson::SomJson& SJson::SomJson::operator[](const std::string& key)
 {
 	return this->value->object_value[key];
 }
 
-Json::SomJson& Json::SomJson::operator[](const size_t& index)
+SJson::SomJson& SJson::SomJson::operator[](const size_t& index)
 {
 	return this->value->array_value[index];
 }
 
-Json::SomJson& Json::SomJson::operator=(const Json::SomJson& value)
+SJson::SomJson& SJson::SomJson::operator=(const SJson::SomJson& value)
 {
 	if (this->value != nullptr)
 	{
@@ -380,7 +380,7 @@ Json::SomJson& Json::SomJson::operator=(const Json::SomJson& value)
 	return *this;
 }
 
-Json::SomJson& Json::SomJson::operator=(const Node& value)
+SJson::SomJson& SJson::SomJson::operator=(const Node& value)
 {
 	/*if (this->value != nullptr)
 	{
@@ -393,7 +393,7 @@ Json::SomJson& Json::SomJson::operator=(const Node& value)
 	return *this;
 }
 
-Json::SomJson& Json::SomJson::operator+=(const Json::SomJson& value)
+SJson::SomJson& SJson::SomJson::operator+=(const SJson::SomJson& value)
 {
 	for (auto& elem : value.value->object_value)
 	{
@@ -406,14 +406,14 @@ Json::SomJson& Json::SomJson::operator+=(const Json::SomJson& value)
 	return *this;
 }
 
-Json::SomJson Json::SomJson::operator+(const Json::SomJson& value)
+SJson::SomJson SJson::SomJson::operator+(const SJson::SomJson& value)
 {
-	Json::SomJson temp = *this;
+	SJson::SomJson temp = *this;
 	temp += value;
 	return temp;
 }
 
-bool Json::SomJson::operator==(const std::nullptr_t& null)
+bool SJson::SomJson::operator==(const std::nullptr_t& null)
 {
 	if (this->value == nullptr)
 	{
@@ -422,12 +422,12 @@ bool Json::SomJson::operator==(const std::nullptr_t& null)
 	return false;
 }
 
-bool Json::SomJson::operator!=(const std::nullptr_t& null)
+bool SJson::SomJson::operator!=(const std::nullptr_t& null)
 {
 	return !(*this == null);
 }
 
-bool Json::SomJson::operator==(const Json::SomJson& value) const
+bool SJson::SomJson::operator==(const SJson::SomJson& value) const
 {
 	for (auto& elem : value)
 	{
@@ -439,12 +439,12 @@ bool Json::SomJson::operator==(const Json::SomJson& value) const
 	return true;
 }
 
-bool Json::SomJson::operator!=(const Json::SomJson& value) const
+bool SJson::SomJson::operator!=(const SJson::SomJson& value) const
 {
 	return !(*this == value);
 }
 
-void Json::SomJson::save_json_to_file(const std::string& file_name, int indent)
+void SJson::SomJson::save_json_to_file(const std::string& file_name, int indent)
 {
 	std::ofstream file(file_name, std::ios::binary);
 
@@ -462,16 +462,16 @@ void Json::SomJson::save_json_to_file(const std::string& file_name, int indent)
 	file.close();
 }
 
-std::string Json::SomJson::_json_value_to_string(int indent)
+std::string SJson::SomJson::_json_value_to_string(int indent)
 {
 	std::string builder;
 	_json_value_to_string_helper(*this, builder, 0, indent);
 	return builder;
 }
 
-void Json::SomJson::_json_value_to_string_helper(Json::SomJson json_value, std::string& builder, int current_indent, int indent)
+void SJson::SomJson::_json_value_to_string_helper(SJson::SomJson json_value, std::string& builder, int current_indent, int indent)
 {
-	if (json_value.get_type() == Json::JsonTypes::Object)
+	if (json_value.get_type() == SJson::JsonTypes::Object)
 	{
 		builder += "{\n";
 		int i = 0;
@@ -494,16 +494,16 @@ void Json::SomJson::_json_value_to_string_helper(Json::SomJson json_value, std::
 		_indent(builder, current_indent);
 		builder += "}";
 	}
-	else if (json_value.get_type() == Json::JsonTypes::Array)
+	else if (json_value.get_type() == SJson::JsonTypes::Array)
 	{
 		builder += "[\n";
 		for (int i = 0; i < json_value.get_count(); i++)
 		{
 			_indent(builder, current_indent + indent);
 
-			if (json_value[i].get_type() == Json::JsonTypes::Object)
+			if (json_value[i].get_type() == SJson::JsonTypes::Object)
 			{
-				Json::SomJson obj = Json::SomJson(std::unordered_map<std::string, Json::SomJson>());
+				SJson::SomJson obj = SJson::SomJson(std::unordered_map<std::string, SJson::SomJson>());
 				obj._json_value_to_string_helper(json_value[i], builder, current_indent + indent, indent);
 			}
 			else
@@ -520,25 +520,25 @@ void Json::SomJson::_json_value_to_string_helper(Json::SomJson json_value, std::
 		_indent(builder, current_indent);
 		builder += "]";
 	}
-	else if (json_value.get_type() == Json::JsonTypes::Bool)
+	else if (json_value.get_type() == SJson::JsonTypes::Bool)
 	{
 		builder += json_value.to_string();
 	}
-	else if (json_value.get_type() == Json::JsonTypes::Null)
+	else if (json_value.get_type() == SJson::JsonTypes::Null)
 	{
 		builder += json_value.to_string();
 	}
-	else if (json_value.get_type() == Json::JsonTypes::Number)
+	else if (json_value.get_type() == SJson::JsonTypes::Number)
 	{
 		builder += json_value.to_string();
 	}
-	else if (json_value.get_type() == Json::JsonTypes::String)
+	else if (json_value.get_type() == SJson::JsonTypes::String)
 	{
 		builder += "\"" + json_value.to_string() + "\"";
 	}
 }
 
-void Json::SomJson::_indent(std::string& builder, int indent)
+void SJson::SomJson::_indent(std::string& builder, int indent)
 {
 	for (int i = 0; i < indent; ++i)
 	{
@@ -546,115 +546,115 @@ void Json::SomJson::_indent(std::string& builder, int indent)
 	}
 }
 
-Json::SomJson::Node::Node()
+SJson::SomJson::Node::Node()
 {
-	this->type = Json::JsonTypes::NotImplemented;
+	this->type = SJson::JsonTypes::NotImplemented;
 }
 
-Json::SomJson::Node::Node(Json::JsonTypes type)
+SJson::SomJson::Node::Node(SJson::JsonTypes type)
 {
 	switch (type)
 	{
-	case Json::JsonTypes::String:
-		this->type = Json::JsonTypes::String;
+	case SJson::JsonTypes::String:
+		this->type = SJson::JsonTypes::String;
 		this->string_value = std::string();
 		break;
-	case Json::JsonTypes::Number:
-		this->type = Json::JsonTypes::Number;
+	case SJson::JsonTypes::Number:
+		this->type = SJson::JsonTypes::Number;
 		this->number_value = NULL;
 		break;
-	case Json::JsonTypes::Bool:
-		this->type = Json::JsonTypes::Bool;
+	case SJson::JsonTypes::Bool:
+		this->type = SJson::JsonTypes::Bool;
 		this->bool_value = NULL;
 		break;
-	case Json::JsonTypes::Array:
-		this->type = Json::JsonTypes::Array;
+	case SJson::JsonTypes::Array:
+		this->type = SJson::JsonTypes::Array;
 		this->array_value = std::vector<SomJson>();
 		break;
-	case Json::JsonTypes::Object:
-		this->type = Json::JsonTypes::Object;
-		this->object_value = std::unordered_map<std::string, Json::SomJson>();
+	case SJson::JsonTypes::Object:
+		this->type = SJson::JsonTypes::Object;
+		this->object_value = std::unordered_map<std::string, SJson::SomJson>();
 		break;
-	case Json::JsonTypes::Null:
-		this->type = Json::JsonTypes::Null;
+	case SJson::JsonTypes::Null:
+		this->type = SJson::JsonTypes::Null;
 		this->null_value = std::nullptr_t();
 		break;
-	case Json::JsonTypes::NotImplemented:
-		this->type = Json::JsonTypes::NotImplemented;
+	case SJson::JsonTypes::NotImplemented:
+		this->type = SJson::JsonTypes::NotImplemented;
 		break;
 	default:
-		this->type = Json::JsonTypes::NotImplemented;
+		this->type = SJson::JsonTypes::NotImplemented;
 		break;
 	}
 }
 
-Json::SomJson::Node::Node(long double number_value)
+SJson::SomJson::Node::Node(long double number_value)
 {
-	this->type = Json::JsonTypes::Number;
+	this->type = SJson::JsonTypes::Number;
 	this->number_value = number_value;
 }
 
-Json::SomJson::Node::Node(double number_value)
+SJson::SomJson::Node::Node(double number_value)
 {
-	this->type = Json::JsonTypes::Number;
+	this->type = SJson::JsonTypes::Number;
 	this->number_value = number_value;
 }
 
-Json::SomJson::Node::Node(int number_value)
+SJson::SomJson::Node::Node(int number_value)
 {
-	this->type = Json::JsonTypes::Number;
+	this->type = SJson::JsonTypes::Number;
 	this->number_value = static_cast<long double>(number_value);
 }
 
-Json::SomJson::Node::Node(long long number_value)
+SJson::SomJson::Node::Node(long long number_value)
 {
-	this->type = Json::JsonTypes::Number;
+	this->type = SJson::JsonTypes::Number;
 	this->number_value = static_cast<long double>(number_value);
 }
 
-Json::SomJson::Node::Node(bool bool_value)
+SJson::SomJson::Node::Node(bool bool_value)
 {
-	this->type = Json::JsonTypes::Bool;
+	this->type = SJson::JsonTypes::Bool;
 	this->bool_value = bool_value;
 }
 
-Json::SomJson::Node::Node(std::string string_value)
+SJson::SomJson::Node::Node(std::string string_value)
 {
-	this->type = Json::JsonTypes::String;
+	this->type = SJson::JsonTypes::String;
 	this->string_value = string_value;
 }
 
-Json::SomJson::Node::Node(const char* string_value)
+SJson::SomJson::Node::Node(const char* string_value)
 {
-	this->type = Json::JsonTypes::String;
+	this->type = SJson::JsonTypes::String;
 	this->string_value = string_value;
 }
 
-Json::SomJson::Node::Node(std::nullptr_t null_value)
+SJson::SomJson::Node::Node(std::nullptr_t null_value)
 {
-	this->type = Json::JsonTypes::Null;
+	this->type = SJson::JsonTypes::Null;
 	this->null_value = null_value;
 }
 
-Json::SomJson::Node::Node(std::unordered_map<std::string, Json::SomJson> object_value)
+SJson::SomJson::Node::Node(std::unordered_map<std::string, SJson::SomJson> object_value)
 {
-	this->type = Json::JsonTypes::Object;
+	this->type = SJson::JsonTypes::Object;
 	this->object_value = object_value;
 }
 
-Json::SomJson::Node::Node(std::vector<Json::SomJson> array_value)
+SJson::SomJson::Node::Node(std::vector<SJson::SomJson> array_value)
 {
-	this->type = Json::JsonTypes::Array;
+	this->type = SJson::JsonTypes::Array;
 	this->array_value = array_value;
 }
 
-bool Json::SomJson::Node::operator==(const Node& value) const
+bool SJson::SomJson::Node::operator==(const Node& value) const
 {
-	/*if (this->type != value.type)
+	if (this->type != value.type)
 	{
 		return false;
-	}*/
-	if (this->type == Json::JsonTypes::Object)
+	}
+	if (this->type == SJson::JsonTypes::Object)
 	{
 		for (auto& elem : this->object_value)
 		{
@@ -667,7 +667,7 @@ bool Json::SomJson::Node::operator==(const Node& value) const
 
 		return false;
 	}
-	else if (this->type == Json::JsonTypes::Array)
+	else if (this->type == SJson::JsonTypes::Array)
 	{
 		for (auto& elem : this->array_value)
 		{
@@ -679,19 +679,19 @@ bool Json::SomJson::Node::operator==(const Node& value) const
 
 		return true;
 	}
-	else if (this->type == Json::JsonTypes::Bool)
+	else if (this->type == SJson::JsonTypes::Bool)
 	{
 		return this->bool_value == value.bool_value;
 	}
-	else if (this->type == Json::JsonTypes::Number)
+	else if (this->type == SJson::JsonTypes::Number)
 	{
 		return this->number_value == value.number_value;
 	}
-	else if (this->type == Json::JsonTypes::String)
+	else if (this->type == SJson::JsonTypes::String)
 	{
 		return this->string_value == value.string_value;
 	}
-	else if (this->type == Json::JsonTypes::NotImplemented)
+	else if (this->type == SJson::JsonTypes::NotImplemented)
 	{
 		return false;
 	}
@@ -718,22 +718,22 @@ bool Json::SomJson::Node::operator==(const Node& value) const
 	return false;
 }
 
-bool Json::SomJson::Node::operator!=(const Node& value) const
+bool SJson::SomJson::Node::operator!=(const Node& value) const
 {
 	return !(*this == value);
 }
 
-size_t Json::SomJson::get_count()
+size_t SJson::SomJson::get_count()
 {
-	if (this->value == nullptr || this->get_type() == Json::JsonTypes::NotImplemented)
+	if (this->value == nullptr || this->get_type() == SJson::JsonTypes::NotImplemented)
 	{
 		return 0;
 	}
-	else if (this->get_type() == Json::JsonTypes::Object)
+	else if (this->get_type() == SJson::JsonTypes::Object)
 	{
 		return this->value->object_value.size();
 	}
-	else if (this->get_type() == Json::JsonTypes::Array)
+	else if (this->get_type() == SJson::JsonTypes::Array)
 	{
 		return this->value->array_value.size();
 	}
@@ -741,7 +741,7 @@ size_t Json::SomJson::get_count()
 	return 1;
 }
 
-Json::JsonTypes Json::SomJson::get_type()
+SJson::JsonTypes SJson::SomJson::get_type()
 {
 	//return this->value->type;
 	if (this->value)

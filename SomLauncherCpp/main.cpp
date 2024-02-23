@@ -53,7 +53,7 @@ int main(int argc, char* argv[])
 			[&main_window, &account_window](const std::string& json_string_data) -> void
 			{
 				qInfo() << "accountDataReceivedSignal detected" << std::endl;
-				Json::JsonValue data = Json::JsonParcer::ParseJson(json_string_data);
+				SJson::JsonValue data = SJson::JsonParcer::ParseJson(json_string_data);
 				main_window.setAccountData(data);
 				main_window.setUuidFromAccount();
 				main_window._settingAccountDataInUi();

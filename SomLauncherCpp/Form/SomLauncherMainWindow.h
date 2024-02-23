@@ -75,11 +75,11 @@ private:
 	MinecraftCpp::option::MinecraftOptions default_options = options;
 	std::unique_ptr<SettingsDialog> settings_dialog;
 
-	Json::JsonValue config_parce;
-	Json::JsonValue servers_parce;
-	Json::JsonValue account_data;
+	SJson::JsonValue config_parce;
+	SJson::JsonValue servers_parce;
+	SJson::JsonValue account_data;
 
-	Json::JsonParcer global_parcer;
+	SJson::JsonParcer global_parcer;
 
 	int max_memory = 1024;
 	int recomended_memory = 1024;
@@ -120,8 +120,8 @@ public:
 	void setUiToDownload(bool status);
 
 	void setConnectionWithDatabase();
-	Json::JsonValue getServersFromDatabase();
-	Json::JsonValue getServersFromDatabase(sql::Connection* connect);
+	SJson::JsonValue getServersFromDatabase();
+	SJson::JsonValue getServersFromDatabase(sql::Connection* connect);
 
 	void start_minecraft_params();
 	void setupInstallMinecraft(const size_t& index);
@@ -151,12 +151,12 @@ public:
 	const std::filesystem::path getConfigPath();
 	void _settingServerNameInChangeServerButton();
 	std::string getLatestVersionFromGithub();
-	Json::JsonValue getLatestVersionFromDatabase();
+	SJson::JsonValue getLatestVersionFromDatabase();
 	std::string getCurrentVersionFromConfig();
 	void setCurrentVersionFromGithub();
 	void setCurrentVersionFromDatabase();
 	bool isVersionOld();
-	void setAccountData(const Json::JsonValue& data);
+	void setAccountData(const SJson::JsonValue& data);
 	void setUuidFromAccount();
 	std::unique_ptr<SettingsDialog>& getSettingsDialog();
 
