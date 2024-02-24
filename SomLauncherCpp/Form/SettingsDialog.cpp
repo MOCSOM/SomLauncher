@@ -119,10 +119,7 @@ std::filesystem::path SettingsDialog::getPathFromWindowSelector(const QFileDialo
 	dialog.setOptions(option);
 	dialog.setNameFilters(file_types_display);
 
-	if (dialog.exec())
-		return dialog.getExistingDirectory().toStdString();
-
-	return std::filesystem::path();
+	return dialog.getExistingDirectory().toStdWString();
 }
 
 std::string SettingsDialog::getJavaPath()

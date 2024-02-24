@@ -317,6 +317,13 @@ void SomLauncherMainWindow::onClickedpushButton_settings()
 		[=](const std::filesystem::path& path) -> void
 		{
 			this->config_path = path.u8string();
+			//Проверка и создание конфига
+			qInfo() << "Checking config..." << std::endl;
+			if (!isConfigExist())
+			{
+				createConfig();
+				qInfo() << "Config created" << std::endl;
+			}
 			this->_parcingConfigs();
 		}
 	);
