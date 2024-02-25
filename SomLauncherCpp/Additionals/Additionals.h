@@ -108,7 +108,7 @@ namespace Additionals
 		wchar_t* joinW(std::initializer_list<const wchar_t*> list);
 		std::wstring joinA(std::initializer_list<const char*> list);
 		std::string joinString(std::initializer_list<const std::string> list);
-		std::vector<std::string> get_directories(const std::string& directory);
+		std::vector<std::string> get_directories(const std::filesystem::path& directory);
 
 		std::string getFileNameFromPath(const std::string& path);
 	}

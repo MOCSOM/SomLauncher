@@ -7,7 +7,7 @@ void Additionals::archives::compressFile(std::string zipfile, std::string direct
 	c_zip.close();
 }
 
-void Additionals::archives::decompressFile(const QZipReader& zip, const QZipReader::FileInfo& file, const std::string& directory)
+void Additionals::archives::decompressFile(const QZipReader& zip, const QZipReader::FileInfo& file, const std::filesystem::path& directory)
 {
 	std::filesystem::path d_file_path(directory);
 	d_file_path = d_file_path.parent_path();
@@ -22,7 +22,7 @@ void Additionals::archives::decompressFile(const QZipReader& zip, const QZipRead
 		}
 	}
 
-	QFile new_file(directory.c_str());
+	QFile new_file(directory.u8string().c_str());
 
 	new_file.open(QIODevice::WriteOnly);
 
@@ -31,7 +31,7 @@ void Additionals::archives::decompressFile(const QZipReader& zip, const QZipRead
 	new_file.close();
 }
 
-std::string Additionals::archives::decompressArchive(const QZipReader& zip, const std::string& directory)
+std::filesystem::path Additionals::archives::decompressArchive(const QZipReader& zip, const std::filesystem::path& directory)
 {
 	std::filesystem::path d_file_path(directory);
 	d_file_path = d_file_path.parent_path();
@@ -46,23 +46,23 @@ std::string Additionals::archives::decompressArchive(const QZipReader& zip, cons
 		}
 	}
 
-	std::string return_val = "";
+	std::filesystem::path return_val = "";
 	bool is_first = true;
 
 	for (auto& file : zip.fileInfoList())
 	{
 		if (file.isDir)
 		{
-			std::filesystem::create_directories(directory + "\\" + file.filePath.toStdString());
+			std::filesystem::create_directories(directory / file.filePath.toStdString());
 			if (is_first == true)
 			{
-				return_val = directory + "\\" + file.filePath.toStdString();
+				return_val = directory / file.filePath.toStdString();
 				is_first = false;
 			}
 			continue;
 		}
 
-		QFile new_file((directory + "\\" + file.filePath.toStdString()).c_str());
+		QFile new_file((directory / file.filePath.toStdString()).u8string().c_str());
 
 		new_file.open(QIODevice::WriteOnly);
 

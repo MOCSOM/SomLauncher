@@ -1,88 +1,59 @@
 ﻿#include "SomLauncherMainWindow.h"
 
-void SomLauncherMainWindow::setConnectionWithDatabase()
+nlohmann::json SomLauncherMainWindow::getServersFromServer()
 {
+	nlohmann::json result;
 	try
 	{
-		this->database_connection = sqlbase::mysql::sqlconnector::connect(
-			"79.174.93.203", "sombd", "somuser", "Vblyfqn_jqk23");
-	}
-	catch (sql::SQLException& exc)
-	{
-		qWarning() << "exception " << exc.what() << " trying again";
-		if (connection_tries != 0)
+		std::stringstream response;
+		curlpp::Cleanup cleaner;
+		curlpp::Easy request;
+
+		request.setOpt(curlpp::options::Verbose(true));
+		request.setOpt(curlpp::options::Url("https://mocsom.site/api/servers/?format=json"));
+		request.setOpt(curlpp::options::WriteStream(&response));
+
+		request.perform();
+		long http_code = curlpp::infos::ResponseCode::get(request);
+
+
+		if (http_code != 200)
 		{
-			--connection_tries;
-			setConnectionWithDatabase();
+			qWarning() << "code not 200" << std::endl;
 		}
-	}
-}
 
-SJson::JsonValue SomLauncherMainWindow::getServersFromDatabase()
-{
-	sql::ResultSet* res = nullptr;
-	QString querry =
-		R"(
-SELECT
-	JSON_OBJECT('servers',
-	JSON_ARRAYAGG(JSON_OBJECT('server_id',server_id, 'name',server_name, 'server_img',server_img, 'description',server_description, 'server_ip',server_ip, 'java',java_versions, 'version',minecraft_version, 'core',loader_core, 'loaderVersion',minimal_loader_version, 'server_type',server_type, 'server_slug',server_slug, 'modpack_id_id',modpack_id_id)))
-FROM servers_server)";
+		result = nlohmann::json::parse(response.str());
+	}
+	catch (curlpp::LogicError& e)
+	{
+		qWarning() << e.what() << std::endl;
+	}
+	catch (curlpp::RuntimeError& e)
+	{
+		qWarning() << e.what() << std::endl;
+	}
 
-	try
-	{
-		res = sqlbase::mysql::sqlconnector::sendQuerry(this->database_connection, querry.toStdString());
-	}
-	catch (sql::SQLException& eSQL)
-	{
-		qFatal() << "Failed with exception: " << eSQL.what();
-	}
-	SJson::JsonValue returned;
-
-	while (res->next())
-	{
-		//std::cout << res->getString(1) << std::endl;
-		returned = SJson::JsonParcer::ParseJson(res->getString(1));
-	}
-	return returned;
-}
-
-SJson::JsonValue SomLauncherMainWindow::getServersFromDatabase(sql::Connection* connect)
-{
-	sql::ResultSet* res = nullptr;
-	QString querry =
-		"SELECT JSON_OBJECTAGG('servers',JSON_ARRAY(JSON_OBJECT('server_id',server_id, 'name',server_name, 'server_img',server_img, 'description',server_description, 'server_ip',server_ip, 'java',java_versions, 'version',minecraft_version, 'core',loader_core, 'loaderVersion',minimal_loader_version, 'server_type',server_type, 'server_slug',server_slug, 'modpack_id_id',modpack_id_id))) FROM servers_server";
-	try
-	{
-		res = sqlbase::mysql::sqlconnector::sendQuerry(connect, querry.toStdString());
-	}
-	catch (sql::SQLException& eSQL)
-	{
-		qFatal() << "Failed with exception: " << eSQL.what();
-	}
-	SJson::JsonValue returned;
-
-	while (res->next())
-	{
-		//std::cout << res->getString(1) << std::endl;
-		returned = SJson::JsonParcer::ParseJson(res->getString(1));
-	}
-	return returned;
+	return result;
 }
 
 void SomLauncherMainWindow::start_minecraft_params()
 {
 	qInfo() << "Config loaded" << std::endl;
-	qInfo() << this->config_parce["user"]["name"].to_string() << std::endl;
-	qInfo() << this->config_parce["user"]["memory"].to_string() << std::endl;
-	qInfo() << this->config_parce["user"]["mcdir"].to_string() << std::endl;
-	qInfo() << this->config_parce["user"]["isInstallMods"].to_string() << std::endl;
-	qInfo() << this->config_parce["user"]["server"].to_string() << std::endl;
+	qInfo() << this->config_parce["user"]["name"].template get<std::string>() << std::endl;
+	qInfo() << this->config_parce["user"]["memory"].template get<int>() << std::endl;
+	if (this->config_parce["user"]["mcdir"].is_array())
+	{
+		this->config_parce["user"]["mcdir"].template get<std::filesystem::path>();
+	}
+	//qInfo() << this->config_parce["user"]["mcdir"].template get<std::filesystem::path>() << std::endl;
+	qInfo() << this->config_parce["user"]["isInstallMods"].template get<bool>() << std::endl;
+	qInfo() << this->config_parce["user"]["server"].template get<int>() << std::endl;
 
 	qInfo() << "Configurate options..." << std::endl;
 	this->configureOptions();
 	this->setUuidFromAccount();
 
-	switch (this->config_parce["user"]["server"].to_int())
+	switch (this->config_parce["user"]["server"].template get<int>())
 	{
 	case 0:
 	{
@@ -117,16 +88,16 @@ void SomLauncherMainWindow::start_minecraft_params()
 
 void SomLauncherMainWindow::setupInstallMinecraft(const size_t& index)
 {
-	std::string java = this->servers_parce["servers"][index]["java"].to_string();
-	std::string core = this->servers_parce["servers"][index]["core"].to_string();
-	std::string version = this->servers_parce["servers"][index]["version"].to_string();
-	std::string name = this->servers_parce["servers"][index]["server_slug"].to_string();
-	std::string ip_port = this->servers_parce["servers"][index]["server_ip"].to_string();
-	std::string modpack_id = this->servers_parce["servers"][index]["modpack_id_id"].to_string();
+	std::string java = std::to_string(this->servers_parce[index]["java_versions"].template get<int>());
+	std::string core = this->servers_parce[index]["loader_core"].template get<std::string>();
+	std::string version = this->servers_parce[index]["minecraft_version"].template get<std::string>();
+	std::string name = this->servers_parce[index]["server_slug"].template get<std::string>();
+	std::string ip_port = this->servers_parce[index]["server_ip"].template get<std::string>();
+	std::string modpack_id = this->servers_parce[index]["modpack_id"].template get<std::string>();
 
 	name.erase(Additionals::String::remove_if(name.begin(), name.end(), isspace));
 
-	std::filesystem::path instance_path = this->minecraft_core_dir_path + "\\" + name;
+	std::filesystem::path instance_path = this->minecraft_core_dir_path / name;
 
 	std::shared_ptr<QCallback> callback = std::make_shared<QCallback>();
 	callback->setQProgressBar(ui.progressBar_ahtung);
@@ -141,14 +112,15 @@ void SomLauncherMainWindow::setupInstallMinecraft(const size_t& index)
 		instance_path,
 		version,
 		core,
-		this->servers_parce["servers"][index]["loaderVersion"].to_string(),
+		this->servers_parce[index]["minimal_loader_version"].template get<std::string>(),
 		java,
-		this->config_parce["user"]["mcdir"].to_string(),
+		this->config_parce["user"]["mcdir"].template get<std::string>(),
 		this->options,
 		callback
 	);
 
-	installMods(instance_path / "mods", name, "0", callback);
+	nlohmann::json modpack_info = getModpackInfoFromServer(modpack_id);
+	installMods(instance_path / "mods", modpack_info, callback);
 
 	serversdat::createServersDat(instance_path / "servers.dat", name, ip_port);
 
@@ -206,7 +178,7 @@ std::string SomLauncherMainWindow::install_minecraft(
 
 		qInfo() << "Starting download forge..." << std::endl;
 		MinecraftCpp::forge::install_forge_version(
-			install_version, install_path.u8string(), callback, options.executablePath);
+			install_version, install_path, callback, options.executablePath);
 
 		return launch_version;
 	}
@@ -216,7 +188,7 @@ std::string SomLauncherMainWindow::install_minecraft(
 
 		qInfo() << "Starting download fabric..." << std::endl;
 		MinecraftCpp::fabric::install_fabric_version(
-			version, install_path.u8string(), loader_version, callback, options.executablePath);
+			version, install_path, loader_version, callback, options.executablePath);
 
 		std::filesystem::copy_file(Join({ install_path.u8string(), "versions", version, version + ".jar" }),
 			Join({ install_path.u8string(), "versions", launch_version, launch_version + ".jar" }),
@@ -229,32 +201,55 @@ std::string SomLauncherMainWindow::install_minecraft(
 	return std::string();
 }
 
-void SomLauncherMainWindow::installMods(const std::filesystem::path& install_path,
-	const std::string& modpack_name, const std::string& version,
-	std::shared_ptr<CallbackNull> callback)
+nlohmann::json SomLauncherMainWindow::getModpackInfoFromServer(const std::string& modpack_id)
 {
-	std::string querry = R"(SELECT mods_mod.mod_link FROM servers_server
-INNER JOIN mods_modpack_mods ON servers_server.modpack_id_id = mods_modpack_mods.modpack_id
-INNER JOIN mods_mod ON mods_modpack_mods.mod_id = mods_mod.mod_id
-WHERE servers_server.server_slug LIKE )" + std::string("'%") + modpack_name + "%'";
-	sql::ResultSet* result = nullptr;
+	nlohmann::json modpacks;
 	try
 	{
-		sql::ResultSet* result = sqlbase::mysql::sqlconnector::sendQuerry(this->database_connection, querry);
+		std::stringstream response;
+		curlpp::Cleanup cleaner;
+		curlpp::Easy request;
 
-		while (result->next())
+		request.setOpt(curlpp::options::Verbose(true));
+		request.setOpt(curlpp::options::Url("https://mocsom.site/api/modpacks/" + modpack_id + "/?format=json"));
+		request.setOpt(curlpp::options::WriteStream(&response));
+
+		request.perform();
+		long http_code = curlpp::infos::ResponseCode::get(request);
+
+		modpacks = nlohmann::json::parse(response.str());
+
+		if (http_code != 200)
 		{
-			std::filesystem::create_directories(install_path);
-			std::filesystem::path downloaded_path = DownloadFile(result->getString(1),
-				install_path, callback);
+			qWarning() << "code not 200" << std::endl;
 		}
 	}
-	catch (const sql::SQLException& exc)
+	catch (curlpp::LogicError& e)
 	{
-		qWarning() << exc.what() << " " << exc.getErrorCode() << " " << exc.getSQLState();
+		qWarning() << e.what() << std::endl;
 	}
+	catch (curlpp::RuntimeError& e)
+	{
+		qWarning() << e.what() << std::endl;
+	}
+	return modpacks;
+}
 
-	//MinecraftCpp::modpacks::download::database::installModPack(, install_path, callback);
+void SomLauncherMainWindow::installMods(const std::filesystem::path& install_path,
+	const nlohmann::json& modpack_info,
+	std::shared_ptr<CallbackNull> callback)
+{
+	std::filesystem::create_directories(install_path);
+	for (auto& mod : modpack_info["mods"])
+	{
+		std::string url = mod["mod_link"].template get<std::string>();
+		std::string sha1 = mod["sha1"].template get<std::string>();
+
+		callback->setTotalDownloadSize(web::utils::getFileSizeFromUrl(url));
+
+		std::filesystem::path downloaded_path = DownloadFile(url,
+			install_path, callback, sha1);
+	}
 }
 
 void SomLauncherMainWindow::createSettingsForm()
@@ -271,7 +266,7 @@ void SomLauncherMainWindow::createSettingsForm()
 		});
 }
 
-bool SomLauncherMainWindow::isConfigExist()
+bool SomLauncherMainWindow::isConfigExist() const
 {
 	if (std::filesystem::exists(this->config_path))
 	{
@@ -283,7 +278,7 @@ bool SomLauncherMainWindow::isConfigExist()
 	}
 }
 
-void SomLauncherMainWindow::createConfig()
+void SomLauncherMainWindow::createConfig() const
 {
 	std::filesystem::copy(this->template_config_path, this->config_path, std::filesystem::copy_options::overwrite_existing);
 }
@@ -305,7 +300,7 @@ void SomLauncherMainWindow::configureOptions()
 	this->options.launcherName = this->launcher_name;
 	this->options.launcherVersion = this->launcher_version;
 	this->options.username = this->username;
-	this->options.jvmArguments = "-Xms1024M -Xmx" + this->config_parce["user"]["memory"].to_string() + "M";
+	this->options.jvmArguments = "-Xms1024M -Xmx" + std::to_string(this->config_parce["user"]["memory"].template get<int>()) + "M";
 	this->options.executablePath = "";
 	this->options.uuid = "uuu";
 	this->options.token = "uuu";
@@ -318,12 +313,12 @@ void SomLauncherMainWindow::configureOptions()
 void SomLauncherMainWindow::checkJava(MinecraftCpp::option::MinecraftOptions& options, std::string java_verison, CallbackNull* callback) const
 {
 	qInfo() << "Checking java..." << std::endl;
-	std::string java_dir = "";
+	std::filesystem::path java_dir = "";
 
 	if (java_verison == "")
 	{
 		qInfo() << "Getting installed java in directory..." << std::endl;
-		std::string java_path =
+		std::filesystem::path java_path =
 			DDIC::Download::Files::getInstalledJavaInDirectory(this->minecraft_core_dir_path);
 
 		if (java_path == "")
@@ -333,7 +328,7 @@ void SomLauncherMainWindow::checkJava(MinecraftCpp::option::MinecraftOptions& op
 			return;
 		}
 
-		options.executablePath = java_path + "\\" + "bin" + "\\" + "java.exe";
+		options.executablePath = java_path / "bin" / "java.exe";
 
 		return;
 	}
@@ -345,7 +340,7 @@ void SomLauncherMainWindow::checkJava(MinecraftCpp::option::MinecraftOptions& op
 		{
 			qInfo() << "Install java..." << std::endl;
 			java_dir = DDIC::Download::Java::install(java_verison, this->minecraft_core_dir_path, callback);
-			options.executablePath = java_dir + "\\" + "bin" + "\\" + "java.exe";
+			options.executablePath = java_dir / "bin" / "java.exe";
 		}
 		else
 		{
@@ -354,7 +349,7 @@ void SomLauncherMainWindow::checkJava(MinecraftCpp::option::MinecraftOptions& op
 			{
 				if (var.second == java_verison)
 				{
-					options.executablePath = var.first + "\\" + "bin" + "\\" + "java.exe";
+					options.executablePath = var.first / "bin" / "java.exe";
 				}
 			}
 		}
@@ -373,7 +368,7 @@ void SomLauncherMainWindow::checkJava(MinecraftCpp::option::MinecraftOptions& op
 		{
 			if (var.second == java_verison)
 			{
-				options.executablePath = "\"" + var.first + "\\" + "bin" + "\\" + "java.exe" + "\"";
+				options.executablePath = var.first / "bin" / "java.exe";
 			}
 		}
 	}
@@ -386,7 +381,7 @@ size_t SomLauncherMainWindow::getMinecraftModsCount()
 
 	try
 	{
-		directory = std::filesystem::directory_iterator(this->minecraft_core_dir_path + "\\" + "mods");
+		directory = std::filesystem::directory_iterator(this->minecraft_core_dir_path / "mods");
 	}
 	catch (const std::exception&)
 	{
@@ -412,9 +407,9 @@ ServerTypes SomLauncherMainWindow::getServerType()
 
 std::string SomLauncherMainWindow::getCurrentServerName()
 {
-	if (this->servers_parce["servers"].get_array().size() > this->config_parce["user"]["server"].to_int())
+	if (this->servers_parce.size() > this->config_parce["user"]["server"].template get<int>())
 	{
-		return this->servers_parce["servers"][this->config_parce["user"]["server"].to_int()]["name"].to_string();
+		return this->servers_parce[this->config_parce["user"]["server"].template get<int>()]["server_name"].template get<std::string>();
 	}
 	else
 	{
@@ -456,37 +451,14 @@ std::string SomLauncherMainWindow::getLatestVersionFromGithub()
 	}
 }
 
-SJson::JsonValue SomLauncherMainWindow::getLatestVersionFromDatabase()
+nlohmann::json SomLauncherMainWindow::getLatestVersionFromDatabase()
 {
-	setConnectionWithDatabase();
-	sql::ResultSet* res = nullptr;
-	QString querry =
-		R"(
-SELECT
-	JSON_ARRAYAGG(JSON_OBJECT('file',file, 'version',version))
-FROM launcher_download_launcher)";
-
-	try
-	{
-		res = sqlbase::mysql::sqlconnector::sendQuerry(this->database_connection, querry.toStdString());
-	}
-	catch (sql::SQLException& eSQL)
-	{
-		qFatal() << "Failed with exception: " << eSQL.what();
-	}
-	SJson::JsonValue returned;
-
-	while (res->next())
-	{
-		//std::cout << res->getString(1) << std::endl;
-		returned = SJson::JsonParcer::ParseJson(res->getString(1));
-	}
-	return returned;
+	return nlohmann::json();
 }
 
 std::string SomLauncherMainWindow::getCurrentVersionFromConfig()
 {
-	return this->config_parce["launcher"]["verison"].to_string();
+	return this->config_parce["launcher"]["verison"].template get<std::string>();
 }
 
 void SomLauncherMainWindow::setCurrentVersionFromGithub()
@@ -494,7 +466,10 @@ void SomLauncherMainWindow::setCurrentVersionFromGithub()
 	if (getCurrentVersionFromConfig() == "")
 	{
 		this->config_parce["launcher"]["verison"] = getLatestVersionFromGithub();
-		this->config_parce.save_json_to_file(this->config_path, 4);
+
+		std::ofstream o(this->config_path);
+		o << this->config_parce.dump(4) << std::endl;
+		o.close();
 	}
 }
 
@@ -502,38 +477,30 @@ void SomLauncherMainWindow::setCurrentVersionFromDatabase()
 {
 	if (getCurrentVersionFromConfig().empty())
 	{
-		this->config_parce["launcher"]["verison"] = getLatestVersionFromDatabase()[getLatestVersionFromDatabase().get_array().size() - 1]["file"].to_string();
-		this->config_parce.save_json_to_file(this->config_path, 4);
+		/*this->config_parce["launcher"]["verison"] = getLatestVersionFromDatabase()[getLatestVersionFromDatabase().size() - 1]["file"].template get<std::string>();
+		std::ofstream o(this->config_path);
+		o << this->config_parce.dump(4) << std::endl;
+		o.close();*/
 	}
 }
 
 bool SomLauncherMainWindow::isVersionOld()
 {
-	/*if (getCurrentVersionFromConfig() != getLatestVersionFromGithub())
+	/*if (getCurrentVersionFromConfig() != getLatestVersionFromDatabase()[getLatestVersionFromDatabase().size()]["file"].template get<std::string>())
 	{
 		return true;
 	}*/
-	if (getCurrentVersionFromConfig() != getLatestVersionFromDatabase()[getLatestVersionFromDatabase().get_array().size() - 1]["file"].to_string())
-	{
-		return true;
-	}
 	return false;
 }
 
-void SomLauncherMainWindow::setAccountData(const SJson::JsonValue& data)
+void SomLauncherMainWindow::setAccountData(const nlohmann::json& data)
 {
 	this->account_data = data;
 }
 
 void SomLauncherMainWindow::setUuidFromAccount()
 {
-	for (auto& elem : this->account_data.get_array())
-	{
-		if (elem.is_exist("id"))
-		{
-			this->options.uuid = elem["id"].to_string();
-		}
-	}
+	this->options.uuid = this->account_data["id"].template get<std::string>();
 }
 
 std::unique_ptr<SettingsDialog>& SomLauncherMainWindow::getSettingsDialog()

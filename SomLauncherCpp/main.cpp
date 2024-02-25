@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
 		account_window._setPasswordAndLoginInUi();
 
 		//main_window.setConnectionWithDatabase();
-		//std::cout << main_window.getServersFromDatabase().to_string() << std::endl;
+		//std::cout << main_window.getServersFromServer().to_string() << std::endl;
 
 		QObject::connect(&main_window, &SomLauncherMainWindow::updateSignal,
 			[=](const std::string& url) -> void
@@ -53,12 +53,12 @@ int main(int argc, char* argv[])
 			[&main_window, &account_window](const std::string& json_string_data) -> void
 			{
 				qInfo() << "accountDataReceivedSignal detected" << std::endl;
-				SJson::JsonValue data = SJson::JsonParcer::ParseJson(json_string_data);
+				nlohmann::json data = nlohmann::json::parse(json_string_data);
 				main_window.setAccountData(data);
 				main_window.setUuidFromAccount();
 				main_window._settingAccountDataInUi();
 				main_window.createSettingsForm();
-				main_window.setConnectionWithDatabase();
+				//main_window.setConnectionWithDatabase();
 				main_window._parcingServers();
 				main_window._settingServersWidgets();
 				main_window._settingModsCount();
@@ -84,6 +84,7 @@ int main(int argc, char* argv[])
 	}
 	catch (const std::exception& exc)
 	{
+		QMessageBox::critical(nullptr, QObject::tr("Error"), exc.what());
 		qFatal() << "Exception:" << exc.what();
 		/*QMessageBox messageBox;
 		messageBox.critical(nullptr, "Error", exc.what());

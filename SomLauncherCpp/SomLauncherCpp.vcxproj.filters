@@ -161,6 +161,9 @@
     <ClCompile Include="Json\Json\JsonParcer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Web\Utils\WebUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -263,6 +266,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Json\SomJson.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Web\Utils\WebUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

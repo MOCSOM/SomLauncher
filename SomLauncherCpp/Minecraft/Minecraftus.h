@@ -55,11 +55,11 @@ namespace MinecraftCpp
 			std::string username = "";
 			std::string uuid = "";
 			std::string token = "";
-			std::string executablePath = "";
+			std::filesystem::path executablePath = "";
 			std::string jvmArguments = "";
 			std::string launcherName = "";
 			std::string launcherVersion = "";
-			std::string gameDirectory = "";
+			std::filesystem::path gameDirectory = "";
 			bool		demo = NULL;
 			bool		customResolution = NULL;
 			std::string resolutionWidth = "";
@@ -91,16 +91,16 @@ namespace MinecraftCpp
 	std::string get_classpath_separator();
 	bool parse_single_rule(nlohmann::json rule, MinecraftCpp::option::MinecraftOptions options);
 	bool parse_rule_list(nlohmann::json data, const std::string& rule_string, MinecraftCpp::option::MinecraftOptions options);
-	std::string get_library_path(const std::string& name, const std::string& path);
+	std::filesystem::path get_library_path(const std::string& name, const std::filesystem::path& path);
 	std::string get_natives(nlohmann::json data);
 	std::string _get_jvm_platform_string();
 	std::string replace_arguments(std::string argstr, nlohmann::json versionData,
 		const std::string& path, MinecraftCpp::option::MinecraftOptions options);
 
 	std::string get_executable_path(const std::string& jvm_version, const std::string& minecraft_directory);
-	bool install_libraries(nlohmann::json& data, const std::string& path, std::shared_ptr<CallbackNull> callback);
-	bool extract_natives_file(const std::string& filename, const std::string& extract_path, nlohmann::json& extract_data);
-	bool install_assets(nlohmann::json& data, const std::string& path, std::shared_ptr<CallbackNull> callback);
+	bool install_libraries(nlohmann::json& data, const std::filesystem::path& path, std::shared_ptr<CallbackNull> callback);
+	bool extract_natives_file(const std::filesystem::path& filename, const std::filesystem::path& extract_path, nlohmann::json& extract_data);
+	bool install_assets(nlohmann::json& data, const std::filesystem::path& path, std::shared_ptr<CallbackNull> callback);
 
 	/// <summary>
 	/// Installs the given jvm runtime. callback is the same dict as in the install module.
@@ -130,27 +130,27 @@ namespace MinecraftCpp
 
 	namespace forge
 	{
-		bool install_forge_version(const std::string& versionid, const std::string& path,
-			std::shared_ptr<CallbackNull> callback = std::make_shared<CallbackNull>(), const std::string& java = "");
+		bool install_forge_version(const std::string& versionid, const std::filesystem::path& path,
+			std::shared_ptr<CallbackNull> callback = std::make_shared<CallbackNull>(), const std::filesystem::path& java = "");
 
-		bool extract_file(const QZipReader& handler, const std::string& zip_path, const std::string& extract_path);
-		std::string get_data_library_path(const std::string& libname, const std::string& path);
-		std::string get_jar_mainclass(const std::string& path);
+		bool extract_file(const QZipReader& handler, const std::string& zip_path, const std::filesystem::path& extract_path);
+		std::filesystem::path get_data_library_path(const std::string& libname, const std::filesystem::path& path);
+		std::string get_jar_mainclass(const std::filesystem::path& path);
 
 		bool forge_processors(
 			nlohmann::json& data,
-			const std::string& minecraft_directory,
-			const std::string& lzma_path,
-			const std::string& installer_path,
+			const std::filesystem::path& minecraft_directory,
+			const std::filesystem::path& lzma_path,
+			const std::filesystem::path& installer_path,
 			std::shared_ptr<CallbackNull> callback,
-			const std::string& java);
+			const std::filesystem::path& java);
 	}
 
 	namespace fabric
 	{
-		int install_fabric_version(const std::string& minecraft_version, const std::string& minecraft_directory,
+		int install_fabric_version(const std::string& minecraft_version, const std::filesystem::path& minecraft_directory,
 			const std::string& loader_version = "", std::shared_ptr<CallbackNull> callback = std::make_shared<CallbackNull>(),
-			const std::string& java = "");
+			const std::filesystem::path& java = "");
 
 		bool _is_version_valid(const std::string& version, const std::string& minecraft_directory);
 		bool _is_minecraft_version_supported(const std::string& version);
@@ -174,22 +174,22 @@ namespace MinecraftCpp
 
 	bool install_minecraft_version(
 		const std::string& versionid,
-		const std::string& minecraft_directory,
+		const std::filesystem::path& minecraft_directory,
 		std::shared_ptr<CallbackNull> callback = std::make_shared<CallbackNull>());
 
 	bool do_version_install(
 		const std::string& versionid,
-		const std::string& path,
+		const std::filesystem::path& path,
 		std::shared_ptr<CallbackNull> callback,
 		const std::string& url = "");
 
 	nlohmann::json inherit_json(
 		nlohmann::json original_data,
-		const std::string& path);
+		const std::filesystem::path& path);
 
 	std::string get_libraries(
 		nlohmann::json data,
-		const std::string& path);
+		const std::filesystem::path& path);
 
 	std::chrono::system_clock::time_point _parseDateTime(const std::string& isoDateTime);
 }

@@ -89,8 +89,8 @@ namespace DDIC
 			//inline std::string download_file(const std::string& s_url, const std::string& d_file = "", CallbackNull* callback = new CallbackNull(), const std::string& sha1 = "", bool lzma_compressed = false);
 			std::string download_file(const std::string& s_url, const std::string& d_file = "", CallbackNull* callback = new CallbackNull(), const std::string& sha1 = "", bool lzma_compressed = false);
 			int _get_java_exist_ver(const std::string& direct);
-			std::vector<std::pair<std::string, std::string>> _get_java_path(const std::string& dir);
-			std::string getInstalledJavaInDirectory(std::string directory_path = "", int version = 0);
+			std::vector<std::pair<std::filesystem::path, std::string>> _get_java_path(const std::filesystem::path& dir);
+			std::filesystem::path getInstalledJavaInDirectory(std::filesystem::path directory_path = "", int version = 0);
 			//bool delete_file();
 			//bool delete_all_files();
 			//bool delete_repos();
@@ -104,9 +104,9 @@ namespace DDIC
 		}
 		namespace Java
 		{
-			std::string install(
+			std::filesystem::path install(
 				const std::string& version,
-				const std::string& path = "",
+				const std::filesystem::path& path = "",
 				CallbackNull* callback = new CallbackNull(),
 				const std::string& operating_system = OS,
 				const std::string& arch = ARCH,
@@ -121,15 +121,15 @@ namespace DDIC
 				const std::string& impl = "hotspot",
 				bool jre = false);
 
-			std::string _decompress_archive(
-				const std::string& repo_root,
+			std::filesystem::path _decompress_archive(
+				const std::filesystem::path& repo_root,
 				const std::string& file_ending,
-				const std::string& destination_folder);
+				const std::filesystem::path& destination_folder);
 
 			bool check_system_verison_java(const std::string& java);
-			bool check_downloaded_version_java(const std::string& path, const std::string& java);
+			bool check_downloaded_version_java(const std::filesystem::path& path, const std::string& java);
 
-			std::string _get_normalized_compressed_file_ext(const std::string& file);
+			std::string _get_normalized_compressed_file_ext(const std::filesystem::path& file);
 			std::string normalize_version(const std::string& version);
 			std::string expand_user(std::string path);
 		}

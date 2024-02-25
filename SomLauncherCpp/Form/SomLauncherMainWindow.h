@@ -18,6 +18,15 @@
 #include <string>
 #include <windows.h>
 #include <thread>
+#include <charconv>
+
+#include <nlohmann/json.hpp>
+
+#include <curlpp/cURLpp.hpp>
+#include <curlpp/Easy.hpp>
+#include <curlpp/Options.hpp>
+#include <curlpp/Exception.hpp>
+#include <curlpp/Infos.hpp>
 
 #include "../Web/DownloadClasses.h"
 #include "../Callbacks/CallbackDict.h"
@@ -33,6 +42,7 @@
 #include "../Databases/SQLBased.h"
 #include "../Minecraft/Servers/ServerDatConfiguration.h"
 #include "../Callbacks/QCallback.h"
+#include "../Web/Utils/WebUtils.h"
 
 #include "ui_SomLauncherMainWindow.h"
 
@@ -56,9 +66,9 @@ class SomLauncherMainWindow : public QMainWindow
 	Q_OBJECT
 
 private:
-	std::string minecraft_core_dir_path = "";
-	std::string config_path = "";
-	std::string template_config_path = "";
+	std::filesystem::path minecraft_core_dir_path = "";
+	std::filesystem::path config_path = "";
+	std::filesystem::path template_config_path = "";
 	std::string servers_json = "";
 	std::string launcher_name = "SomLauncher";
 	std::string launcher_version = "2.0";
@@ -75,11 +85,9 @@ private:
 	MinecraftCpp::option::MinecraftOptions default_options = options;
 	std::unique_ptr<SettingsDialog> settings_dialog;
 
-	SJson::JsonValue config_parce;
-	SJson::JsonValue servers_parce;
-	SJson::JsonValue account_data;
-
-	SJson::JsonParcer global_parcer;
+	nlohmann::json config_parce;
+	nlohmann::json servers_parce;
+	nlohmann::json account_data;
 
 	int max_memory = 1024;
 	int recomended_memory = 1024;
@@ -97,7 +105,6 @@ private:
 
 	QRect progressBar_ahtung_geometry;
 
-	sql::Connection* database_connection = nullptr;
 	short int connection_tries = 5;
 
 public:
@@ -107,7 +114,6 @@ public:
 	void _settingMinecraftStandartPath();
 	void _parcingConfigs();
 	void _parcingServers();
-	void _parcingServers(sql::Connection* connect);
 	void _settingUiChanges();
 	void _settingServersWidgets();
 	void _settingCurrentServerName();
@@ -117,11 +123,11 @@ public:
 	void _settingServerType();
 	void _settingAccountDataInUi();
 
+	void disableServers();
+
 	void setUiToDownload(bool status);
 
-	void setConnectionWithDatabase();
-	SJson::JsonValue getServersFromDatabase();
-	SJson::JsonValue getServersFromDatabase(sql::Connection* connect);
+	nlohmann::json getServersFromServer();
 
 	void start_minecraft_params();
 	void setupInstallMinecraft(const size_t& index);
@@ -135,13 +141,13 @@ public:
 		MinecraftCpp::option::MinecraftOptions& options,
 		std::shared_ptr<CallbackNull> callback = std::make_shared<CallbackNull>()) const;
 
-	void installMods(const std::filesystem::path& install_path, const std::string& modpack_name,
-		const std::string& version,
+	nlohmann::json getModpackInfoFromServer(const std::string& modpack_id);
+	void installMods(const std::filesystem::path& install_path, const nlohmann::json& modpack_info,
 		std::shared_ptr<CallbackNull> callback = std::make_shared<CallbackNull>());
 
 	void createSettingsForm();
-	bool isConfigExist();
-	void createConfig();
+	bool isConfigExist() const;
+	void createConfig() const;
 	void configureOptions();
 	void checkJava(MinecraftCpp::option::MinecraftOptions& options, std::string java_verison = "", CallbackNull* callback = new CallbackNull) const;
 	void setOptionsValuesFromConfig();
@@ -151,12 +157,12 @@ public:
 	const std::filesystem::path getConfigPath();
 	void _settingServerNameInChangeServerButton();
 	std::string getLatestVersionFromGithub();
-	SJson::JsonValue getLatestVersionFromDatabase();
+	nlohmann::json getLatestVersionFromDatabase();
 	std::string getCurrentVersionFromConfig();
 	void setCurrentVersionFromGithub();
 	void setCurrentVersionFromDatabase();
 	bool isVersionOld();
-	void setAccountData(const SJson::JsonValue& data);
+	void setAccountData(const nlohmann::json& data);
 	void setUuidFromAccount();
 	std::unique_ptr<SettingsDialog>& getSettingsDialog();
 

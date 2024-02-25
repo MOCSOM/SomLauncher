@@ -587,7 +587,7 @@ std::string Additionals::Path::joinString(std::initializer_list<const std::strin
 	return path;
 }
 
-std::vector<std::string> Additionals::Path::get_directories(const std::string& directory)
+std::vector<std::string> Additionals::Path::get_directories(const std::filesystem::path& directory)
 {
 	std::vector<std::string> r;
 	for (auto& p : std::filesystem::directory_iterator(directory))

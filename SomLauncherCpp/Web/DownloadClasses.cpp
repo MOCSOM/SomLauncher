@@ -180,14 +180,14 @@ int DDIC::Download::Files::_get_java_exist_ver(const std::string& direct)
 	return 0;
 }
 
-std::vector<std::pair<std::string, std::string>> DDIC::Download::Files::_get_java_path(const std::string& dir)
+std::vector<std::pair<std::filesystem::path, std::string>> DDIC::Download::Files::_get_java_path(const std::filesystem::path& dir)
 {
 	if (!std::filesystem::exists(dir))
 	{
-		return std::vector<std::pair<std::string, std::string>>();
+		return std::vector<std::pair<std::filesystem::path, std::string>>();
 	}
 	std::vector<std::string> dirs = Additionals::Path::get_directories(dir);
-	std::vector<std::pair<std::string, std::string>> return_vector;
+	std::vector<std::pair<std::filesystem::path, std::string>> return_vector;
 	for (std::string var : dirs)
 	{
 		int count = -1;
@@ -211,7 +211,7 @@ std::vector<std::pair<std::string, std::string>> DDIC::Download::Files::_get_jav
 	return return_vector;
 }
 
-std::string DDIC::Download::Files::getInstalledJavaInDirectory(std::string directory_path, int version)
+std::filesystem::path DDIC::Download::Files::getInstalledJavaInDirectory(std::filesystem::path directory_path, int version)
 {
 	if (directory_path == "" && version == 0)
 	{
@@ -219,17 +219,17 @@ std::string DDIC::Download::Files::getInstalledJavaInDirectory(std::string direc
 		size_t program_files_sz = 0;
 		_dupenv_s(&program_files, &program_files_sz, "ProgramFiles");
 
-		std::vector<std::pair<std::string, std::string>> result_version = DDIC::Download::Files::_get_java_path(std::string(program_files == nullptr ? "" : program_files) + '\\' + "java");
+		auto result_version = DDIC::Download::Files::_get_java_path(std::string(program_files == nullptr ? "" : program_files) + '\\' + "java");
 
 		if (result_version.size() == 0)
 		{
 			return std::string();
 		}
 
-		return "\"" + result_version[0].first + "\\" + "bin" + "\\" + "java.exe" + "\"";
+		return result_version[0].first / "bin" / "java.exe";
 	}
 
-	for (std::pair<std::string, std::string> path_version : _get_java_path(directory_path))
+	for (auto& path_version : _get_java_path(directory_path))
 	{
 		if (version == 0)
 		{
@@ -296,11 +296,11 @@ int DDIC::Download::Files::progress_func(void* ptr, double TotalToDownload, doub
 	return callback->progress_func(TotalToDownload, NowDownloaded, TotalToUpload, NowUploaded);
 }
 
-std::string DDIC::Download::Java::install(const std::string& version, const std::string& path, CallbackNull* callback, const std::string& operating_system, const std::string& arch, const std::string& impl, bool jre)
+std::filesystem::path DDIC::Download::Java::install(const std::string& version, const std::filesystem::path& path, CallbackNull* callback, const std::string& operating_system, const std::string& arch, const std::string& impl, bool jre)
 {
 	std::string url = get_download_url(version, operating_system, arch, impl, jre);
 
-	std::string path2 = path;
+	std::filesystem::path path2 = path;
 	if (path == "")
 	{
 		if (jre)
@@ -313,14 +313,14 @@ std::string DDIC::Download::Java::install(const std::string& version, const std:
 		}
 	}
 
-	std::string path_wch = path2 + "\\.zip";
-	std::string path_wch_norm = path2;
+	std::filesystem::path path_wch = path2 / ".zip";
+	std::filesystem::path path_wch_norm = path2;
 
-	std::string jdk_file2 = path_wch;
+	std::filesystem::path jdk_file2 = path_wch;
 
-	HRESULT download_result = URLDownloadToFileA(NULL, url.c_str(), path_wch.c_str(), NULL, callback);
+	HRESULT download_result = URLDownloadToFileA(NULL, url.c_str(), path_wch.u8string().c_str(), NULL, callback);
 
-	std::string jdk_file = jdk_file2;
+	std::filesystem::path jdk_file = jdk_file2;
 
 	if (jdk_file == "")
 	{
@@ -328,16 +328,11 @@ std::string DDIC::Download::Java::install(const std::string& version, const std:
 		return "";
 	}
 	std::string jdk_ext = _get_normalized_compressed_file_ext(jdk_file);
-	std::string jdk_dir = _decompress_archive(jdk_file, jdk_ext, path_wch_norm);
+	std::filesystem::path jdk_dir = _decompress_archive(jdk_file, jdk_ext, path_wch_norm);
 
 	if (jdk_file != "")
 	{
-		std::string fifa;
-		for (size_t i = 0; jdk_file[i] != L'\0'; ++i)
-		{
-			fifa += jdk_file[i];
-		}
-		bool del = DeleteFileA(fifa.c_str());
+		bool del = DeleteFileA(jdk_file.u8string().c_str());
 
 		callback->OnProgress(NULL, NULL, NULL, (L"Deleted archive status: " + std::to_wstring(del)).c_str());
 	}
@@ -407,15 +402,15 @@ std::string DDIC::Download::Java::get_download_url(/*wchar_t*& url,*/const std::
 	}
 }
 
-std::string DDIC::Download::Java::_decompress_archive(const std::string& repo_root, const std::string& file_ending, const std::string& destination_folder)
+std::filesystem::path DDIC::Download::Java::_decompress_archive(const std::filesystem::path& repo_root, const std::string& file_ending, const std::filesystem::path& destination_folder)
 {
 	//WIN32_FIND_DATA ffd;
 
-	std::string destination_str;
+	std::filesystem::path destination_str;
 	destination_str = destination_folder;
-	std::string destination_str_cstr = destination_str;
+	std::filesystem::path destination_str_cstr = destination_str;
 
-	std::string repo_root_str;
+	std::filesystem::path repo_root_str;
 	repo_root_str = repo_root;
 
 	if (!std::filesystem::exists(destination_str))
@@ -425,7 +420,7 @@ std::string DDIC::Download::Java::_decompress_archive(const std::string& repo_ro
 		qInfo() << "java dir is maked with status: " << out_mkdir << std::endl;
 	}
 
-	std::string jdk_file = repo_root_str;
+	std::filesystem::path jdk_file = repo_root_str;
 
 	if (std::filesystem::is_directory(jdk_file))
 	{
@@ -447,7 +442,7 @@ std::string DDIC::Download::Java::_decompress_archive(const std::string& repo_ro
 	{
 		if (std::filesystem::exists(destination_str))
 		{
-			QZipReader zip(jdk_file.c_str());
+			QZipReader zip(jdk_file.u8string().c_str());
 			return Additionals::archives::decompressArchive(zip, destination_str);
 		}
 	}
@@ -463,14 +458,14 @@ bool DDIC::Download::Java::check_system_verison_java(const std::string& java)
 	return check_downloaded_version_java(std::string(program_files == nullptr ? "" : program_files) + '\\' + "java", java);
 }
 
-bool DDIC::Download::Java::check_downloaded_version_java(const std::string& path, const std::string& java)
+bool DDIC::Download::Java::check_downloaded_version_java(const std::filesystem::path& path, const std::string& java)
 {
-	std::string java_path = "";
+	std::filesystem::path java_path = "";
 	for (auto& var : DDIC::Download::Files::_get_java_path(path))
 	{
 		if (var.second == java)
 		{
-			java_path = var.first + "\\" + "bin" + "\\" + "java.exe";
+			java_path = var.first / "bin" / "java.exe";
 		}
 	}
 
@@ -481,18 +476,21 @@ bool DDIC::Download::Java::check_downloaded_version_java(const std::string& path
 	return false;
 }
 
-std::string DDIC::Download::Java::_get_normalized_compressed_file_ext(const std::string& file)
+std::string DDIC::Download::Java::_get_normalized_compressed_file_ext(const std::filesystem::path& file)
 {
 	std::string file_str;
-	file_str = file;
+	file_str = file.u8string();
 
-	if (file_str.find(_TAR)) {
+	if (file_str.find(_TAR))
+	{
 		return _TAR;
 	}
-	else if (file_str.find(_TAR_GZ)) {
+	else if (file_str.find(_TAR_GZ))
+	{
 		return _TAR_GZ;
 	}
-	else if (file_str.find(_ZIP)) {
+	else if (file_str.find(_ZIP))
+	{
 		return _ZIP;
 	}
 	else {

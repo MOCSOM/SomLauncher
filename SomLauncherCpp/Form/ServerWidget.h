@@ -5,6 +5,8 @@
 #include "ui_ServerWidget.h"
 #include <qbuttongroup.h>
 
+#include <nlohmann/json.hpp>
+
 #include "../Moc/Logger/MocIOStream.h"
 #include "../Json/SomJson.h"
 
@@ -13,7 +15,7 @@ class ServerWidget : public QWidget
 	Q_OBJECT
 
 public:
-	explicit ServerWidget(QButtonGroup* group, SJson::JsonValue server_data, QWidget* parent = nullptr);
+	explicit ServerWidget(QButtonGroup* group, nlohmann::json server_data, QWidget* parent = nullptr);
 	~ServerWidget();
 
 	void setStatusServer(bool value);

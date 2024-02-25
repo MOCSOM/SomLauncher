@@ -1,16 +1,16 @@
 #include "ServerWidget.h"
 
-ServerWidget::ServerWidget(QButtonGroup* group, SJson::JsonValue server_data, QWidget* parent)
+ServerWidget::ServerWidget(QButtonGroup* group, nlohmann::json server_data, QWidget* parent)
 	: QWidget(parent)
 {
 	ui.setupUi(this);
 
 	group->addButton(ui.radioButton_selecterserver);
 
-	ui.label_servername->setText(server_data["name"].to_string().c_str());
-	ui.radioButton_selecterserver->setObjectName(server_data["name"].to_string());
+	ui.label_servername->setText(server_data["server_name"].template get<std::string>().c_str());
+	ui.radioButton_selecterserver->setObjectName(server_data["server_name"].template get<std::string>());
 
-	ui.textBrowser_serverdescription->setText(server_data["description"].to_string().c_str());
+	ui.textBrowser_serverdescription->setText(server_data["server_description"].template get<std::string>().c_str());
 
 	QObject::connect(ui.pushButton_selectserver, &QPushButton::clicked, this, &ServerWidget::pushButtonSelectClicked);
 	QObject::connect(ui.radioButton_selecterserver, &QAbstractButton::toggled, this, &ServerWidget::radioButtonChecked);

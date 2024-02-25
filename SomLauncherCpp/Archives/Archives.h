@@ -14,10 +14,10 @@ namespace Additionals
 	{
 		void compressFile(std::string zipfile, std::string directory);
 
-		void decompressFile(const QZipReader& zip, const QZipReader::FileInfo& file, const std::string& directory);
+		void decompressFile(const QZipReader& zip, const QZipReader::FileInfo& file, const std::filesystem::path& directory);
 
 		//TODO: Изменить возвращаемое значение
-		std::string decompressArchive(const QZipReader& zip, const std::string& directory);
+		std::filesystem::path decompressArchive(const QZipReader& zip, const std::filesystem::path& directory);
 	}
 }
 

@@ -1,17 +1,17 @@
 #include "SettingsDialog.h"
 
-SettingsDialog::SettingsDialog(SJson::JsonValue data, MinecraftCpp::option::MinecraftOptions& option, QWidget* parent)
+SettingsDialog::SettingsDialog(nlohmann::json data, MinecraftCpp::option::MinecraftOptions& option, QWidget* parent)
 	: QDialog(parent), option(option)
 {
 	ui.setupUi(this);
 
 	this->account_data = data;
 
-	for (auto& elem : this->account_data.get_array())
+	for (auto& elem : this->account_data)
 	{
-		if (elem.is_exist("username"))
+		if (elem.contains("username"))
 		{
-			ui.label_account_name->setText(elem["username"].to_string().c_str());
+			ui.label_account_name->setText(elem["username"].template get<std::string>().c_str());
 		}
 	}
 
@@ -61,14 +61,14 @@ void SettingsDialog::setCurretMemory(int value)
 	ui.horizontalSlider_memory->setValue(value);
 }
 
-void SettingsDialog::setStandartJavaPath(const std::string& new_path)
+void SettingsDialog::setStandartJavaPath(const std::filesystem::path& new_path)
 {
-	ui.lineEdit_java_path->setPlaceholderText(new_path.c_str());
+	ui.lineEdit_java_path->setPlaceholderText(new_path.u8string().c_str());
 }
 
-void SettingsDialog::setStandartMinecraftPath(const std::string& new_path)
+void SettingsDialog::setStandartMinecraftPath(const std::filesystem::path& new_path)
 {
-	ui.lineEdit_game_path->setPlaceholderText(new_path.c_str());
+	ui.lineEdit_game_path->setPlaceholderText(new_path.u8string().c_str());
 }
 
 void SettingsDialog::setJavaPath(const std::string& new_path)
@@ -91,9 +91,9 @@ int SettingsDialog::getMemoryValue()
 	return ui.horizontalSlider_memory->value();
 }
 
-std::string SettingsDialog::getMinecraftPath()
+std::filesystem::path SettingsDialog::getMinecraftPath()
 {
-	return ui.lineEdit_game_path->text().toStdString();
+	return ui.lineEdit_game_path->text().toStdWString();
 }
 
 void SettingsDialog::setToDefault(const MinecraftCpp::option::MinecraftOptions& option, int memory)

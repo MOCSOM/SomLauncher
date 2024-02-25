@@ -1,6 +1,6 @@
 ﻿#include "ServerChangerForm.h"
 
-ServerChanger::ServerChanger(QWidget* parent, std::string config_path, SJson::JsonValue server_parce)
+ServerChanger::ServerChanger(QWidget* parent, const std::filesystem::path& config_path, nlohmann::json server_parce)
 	: QDialog(parent), config_path(config_path)
 {
 	ui.setupUi(this);
@@ -12,17 +12,20 @@ ServerChanger::ServerChanger(QWidget* parent, std::string config_path, SJson::Js
 
 	ui.listWidget_changeserver->clear();
 
-	SJson::JsonValue json_parce = server_parce;
-	SJson::JsonValue parce_config = SJson::JsonParcer::ParseFile(this->config_path);
+	nlohmann::json json_parce = server_parce;
 
-	for (int i = 0; i < json_parce["servers"].get_count(); ++i)
+	std::ifstream istr(this->config_path);
+	nlohmann::json parce_config = nlohmann::json::parse(istr);
+	istr.close();
+
+	for (int i = 0; i < json_parce.size(); ++i)
 	{
-		this->item = new QListWidgetItem(json_parce["servers"][i]["name"].to_string().c_str(), ui.listWidget_changeserver);
+		this->item = new QListWidgetItem(json_parce[i]["server_name"].template get<std::string>().c_str(), ui.listWidget_changeserver);
 		this->item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
 		this->item->setCheckState(Qt::Unchecked);
 	}
 
-	if (ui.listWidget_changeserver->item(parce_config["user"]["server"].to_int())->text() == "")
+	if (ui.listWidget_changeserver->item(parce_config["user"]["server"].template get<int>())->text() == "")
 	{
 		ui.pushButton_apply->setEnabled(false);
 	}
@@ -31,7 +34,7 @@ ServerChanger::ServerChanger(QWidget* parent, std::string config_path, SJson::Js
 		ui.pushButton_apply->setEnabled(true);
 	}
 
-	ui.listWidget_changeserver->item(parce_config["user"]["server"].to_int())->setCheckState(Qt::Checked);
+	ui.listWidget_changeserver->item(parce_config["user"]["server"].template get<int>())->setCheckState(Qt::Checked);
 }
 
 ServerChanger::~ServerChanger()
@@ -41,13 +44,17 @@ ServerChanger::~ServerChanger()
 
 void ServerChanger::onClickedpushButton_apply()
 {
-	SJson::JsonParcer json_config;
-	SJson::JsonValue config_parce = json_config.ParseFile(this->config_path);
+	std::ifstream istr(this->config_path);
+	nlohmann::json config_parce = nlohmann::json::parse(istr);
+	istr.close();
+
 	config_parce["user"]["server"] = this->index;
 
-	std::cout << "Server is: " << config_parce["user"]["server"].to_string() << std::endl;
+	std::cout << "Server is: " << config_parce["user"]["server"].template get<int>() << std::endl;
 
-	config_parce.save_json_to_file(this->config_path, 4);
+	std::ofstream o(this->config_path);
+	o << config_parce.dump(4) << std::endl;
+	o.close();
 
 	std::cout << "Server saved" << std::endl;
 

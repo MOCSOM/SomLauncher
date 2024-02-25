@@ -6,6 +6,8 @@
 #include <string>
 #include <memory>
 
+#include <nlohmann/json.hpp>
+
 #include "../Json/SomJson.h"
 
 #include "ui_ServerChangerForm.h"
@@ -16,14 +18,14 @@ class ServerChanger : public QDialog
 
 private:
 	std::string server = "";
-	std::string config_path = "";
-	SJson::JsonValue json_parce;
+	std::filesystem::path config_path = "";
+	nlohmann::json json_parce;
 	int index = -1;
 
 	QListWidgetItem* item = nullptr;
 
 public:
-	explicit ServerChanger(QWidget* parent = nullptr, std::string config_path = "", SJson::JsonValue server_parce = SJson::JsonValue());
+	explicit ServerChanger(QWidget* parent = nullptr, const std::filesystem::path& config_path = "", nlohmann::json server_parce = nlohmann::json());
 	~ServerChanger();
 
 private slots:

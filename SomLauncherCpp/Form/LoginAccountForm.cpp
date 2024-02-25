@@ -16,10 +16,10 @@ LoginAccountForm::~LoginAccountForm()
 
 void LoginAccountForm::_setPasswordAndLoginInUi()
 {
-	SJson::JsonValue config = getUserDataFromConfig();
-	ui.lineEdit_login->setText(config["user"]["name"].to_string().c_str());
-	ui.lineEdit_password->setText(config["user"]["password"].to_string().c_str());
-	if (!config["user"]["password"].to_string().empty())
+	nlohmann::json config = getUserDataFromConfig();
+	ui.lineEdit_login->setText(config["user"]["name"].template get<std::string>().c_str());
+	ui.lineEdit_password->setText(config["user"]["password"].template get<std::string>().c_str());
+	if (!config["user"]["password"].template get<std::string>().empty())
 	{
 		ui.checkBox_remember_password->setChecked(true);
 	}
@@ -39,102 +39,44 @@ void LoginAccountForm::setConfigPath(const std::filesystem::path& config_path)
 	this->config_path = config_path;
 }
 
-void LoginAccountForm::setConnectionWithDataBase()
-{
-	try
-	{
-		this->connection = sqlbase::mysql::sqlconnector::connect(
-			"79.174.93.203", "sombd", "somuser", "Vblyfqn_jqk23");
-	}
-	catch (sql::SQLException& exc)
-	{
-		qWarning() << "exception " << exc.what();
-		QMessageBox messageBox;
-		messageBox.critical(nullptr, "Connection Error", exc.what());
-		messageBox.setFixedSize(500, 200);
-		//qFatal() << "Failed with exception: " << eSQL.what();
-	}
-}
-
-const std::string LoginAccountForm::getPasswordHashFromServer()
-{
-	sql::ResultSet* res = nullptr;
-	QString querry = "SELECT password FROM users_customuser WHERE username LIKE " + QString("'%") + ui.lineEdit_login->text() + "%'";
-	try
-	{
-		res = sqlbase::mysql::sqlconnector::sendQuerry(this->connection, querry.toStdString());
-	}
-	catch (sql::SQLException& eSQL)
-	{
-		qFatal() << "Failed with exception: " << eSQL.what();
-	}
-	while (res->next())
-		return res->getString(1);
-
-	return "";
-}
-
-const std::string LoginAccountForm::getLoginFromServer()
-{
-	sql::ResultSet* res = nullptr;
-	QString querry = "SELECT username FROM users_customuser WHERE username LIKE " + QString("'%") + ui.lineEdit_login->text() + "%'";
-	try
-	{
-		//std::string querry = "SELECT username FROM users_customuser WHERE username LIKE " + '%' + ui.label_login->text().toStdString() + "%";
-		res = sqlbase::mysql::sqlconnector::sendQuerry(this->connection, querry.toStdString());
-	}
-	catch (sql::SQLException& eSQL)
-	{
-		qFatal() << "Failed with exception: " << eSQL.what();
-		return "";
-	}
-	while (res->next())
-		return res->getString(1);
-
-	return "";
-}
-
 const std::string LoginAccountForm::getUserDataFromServer()
 {
-	sql::ResultSet* res = nullptr;
-	QString querry = "SELECT JSON_ARRAYAGG(JSON_OBJECT('id',id, 'email',email, 'username',username, 'password',password, 'is_staff',is_staff, 'is_active',is_active, 'is_superuser',is_superuser, 'date_joined',date_joined, 'last_login',last_login)) FROM users_customuser WHERE username LIKE " + QString("'%") + ui.lineEdit_login->text() + "%'";
+	std::stringstream response;
+
 	try
 	{
-		res = sqlbase::mysql::sqlconnector::sendQuerry(this->connection, querry.toStdString());
-	}
-	catch (sql::SQLException& eSQL)
-	{
-		qFatal() << "Failed with exception: " << eSQL.what();
-		return "";
-	}
-	while (res->next())
-		return res->getString(1);
+		curlpp::Cleanup cleaner;
+		curlpp::Easy request;
 
-	return "";
+		request.setOpt(curlpp::options::Verbose(true));
+		request.setOpt(curlpp::options::Url(
+			"https://mocsom.site/api/accounts/" + ui.lineEdit_login->text().toStdString() + "?format=json"));
+		request.setOpt(curlpp::options::WriteStream(&response));
+
+		request.perform();
+		long http_code = curlpp::infos::ResponseCode::get(request);
+
+
+		if (http_code != 200)
+		{
+			qWarning() << "code not 200" << std::endl;
+		}
+	}
+	catch (curlpp::LogicError& e)
+	{
+		qWarning() << e.what() << std::endl;
+	}
+	catch (curlpp::RuntimeError& e)
+	{
+		qWarning() << e.what() << std::endl;
+	}
+
+	return response.str();
 }
 
-std::optional<bool> LoginAccountForm::getIsFriendFromServer()
+bool LoginAccountForm::checkPassword(const nlohmann::json& data)
 {
-	sql::ResultSet* res = nullptr;
-	QString querry = "SELECT is_friend FROM users_customuser WHERE username LIKE " + QString("'%") + ui.lineEdit_login->text() + "%'";
-	try
-	{
-		res = sqlbase::mysql::sqlconnector::sendQuerry(this->connection, querry.toStdString());
-	}
-	catch (sql::SQLException& eSQL)
-	{
-		qFatal() << "Failed with exception: " << eSQL.what();
-		return {};
-	}
-	while (res->next())
-		return res->getBoolean(1);
-
-	return {};
-}
-
-bool LoginAccountForm::checkPassword()
-{
-	const std::string server_hash = getPasswordHashFromServer();
+	const std::string server_hash = data["password"];
 	const std::string config_hash = getUserPassword();
 
 	if (server_hash == config_hash)
@@ -165,34 +107,36 @@ bool LoginAccountForm::checkPassword()
 	return false;
 }
 
-bool LoginAccountForm::checkLogin()
+bool LoginAccountForm::checkLogin(const nlohmann::json& data)
 {
-	return ui.lineEdit_login->text().toStdString() == getUserLogin();
+	return ui.lineEdit_login->text().toStdString() == getUserLogin(data);
 }
 
-const std::string LoginAccountForm::getUserLogin()
+const std::string LoginAccountForm::getUserLogin(const nlohmann::json& data)
 {
-	SJson::JsonValue config = getUserDataFromConfig();
-	if (config["user"]["name"].to_string().empty())
+	nlohmann::json config = getUserDataFromConfig();
+	if (config["user"]["name"].template get<std::string>().empty())
 	{
-		return getLoginFromServer();
+		return data["username"];
 	}
-	return config["user"]["name"].to_string();
+	return config["user"]["name"].template get<std::string>();
 }
 
 const std::string LoginAccountForm::getUserPassword()
 {
-	SJson::JsonValue config = getUserDataFromConfig();
-	if (config["user"]["password"].to_string().empty())
+	nlohmann::json config = getUserDataFromConfig();
+	if (config["user"]["password"].empty())
 	{
 		return "";
 	}
-	return config["user"]["password"].to_string();
+	return config["user"]["password"].template get<std::string>();
 }
 
-const SJson::JsonValue LoginAccountForm::getUserDataFromConfig()
+const nlohmann::json LoginAccountForm::getUserDataFromConfig()
 {
-	const SJson::JsonValue parced_config = SJson::JsonParcer::ParseFile(this->config_path);
+	std::ifstream ifstr(this->config_path);
+	nlohmann::json parced_config = nlohmann::json::parse(ifstr);
+	ifstr.close();
 	return parced_config;
 }
 
@@ -204,51 +148,35 @@ void LoginAccountForm::earseAllData()
 
 void LoginAccountForm::onClickPushButtonLogin()
 {
-	setConnectionWithDataBase();
+	std::string json_data_string = getUserDataFromServer();
+	nlohmann::json json_data = nlohmann::json::parse(json_data_string);
 
-	if (checkPassword() == true && checkLogin() == true)
+	if (checkPassword(json_data) == true && checkLogin(json_data) == true)
 	{
-		std::string json_data_string = getUserDataFromServer();
-		auto is_friend = getIsFriendFromServer();
+		std::ifstream ifstr(this->config_path);
+		nlohmann::json parced_config = nlohmann::json::parse(ifstr);
+		ifstr.close();
 
 		//TODO: move this in server options
-		if (!is_friend.value_or(false))
+		if (!json_data["is_friend"])
 		{
-			qFatal() << tr("Вы не друг, извените(");
+			QMessageBox::information(this, tr("Ошибка"), tr("Вы не друг, извените("));
 		}
 
 		if (ui.checkBox_remember_password->isChecked())
 		{
-			SJson::JsonValue data_to_save = SJson::JsonParcer::ParseJson(json_data_string);
-			SJson::JsonValue parced_config = SJson::JsonParcer::ParseFile(this->config_path);
-			for (auto& elem : data_to_save.get_array())
-			{
-				if (elem.is_exist("username"))
-				{
-					parced_config["user"]["name"] = elem["username"];
-				}
-				if (elem.is_exist("password"))
-				{
-					parced_config["user"]["password"] = elem["password"];
-				}
-			}
-			parced_config.save_json_to_file(this->config_path.u8string(), 4);
+			parced_config["user"]["name"] = json_data["username"];
+			parced_config["user"]["password"] = json_data["password"];
 		}
 		else
 		{
-			SJson::JsonValue data_to_save = SJson::JsonParcer::ParseJson(json_data_string);
-			SJson::JsonValue parced_config = SJson::JsonParcer::ParseFile(this->config_path);
-			for (auto& elem : data_to_save.get_array())
-			{
-				if (elem.is_exist("username"))
-				{
-					parced_config["user"]["name"] = elem["username"];
-				}
-			}
-			parced_config.save_json_to_file(this->config_path.u8string(), 4);
+			parced_config["user"]["name"] = json_data["username"];
 		}
 
-		this->connection->close();
+		std::ofstream o(this->config_path);
+		o << parced_config.dump(4) << std::endl;
+		o.close();
+
 		emit accountDataReceivedSignal(json_data_string);
 	}
 	else
