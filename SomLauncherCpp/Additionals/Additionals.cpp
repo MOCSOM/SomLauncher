@@ -430,10 +430,112 @@ bool Additionals::String::replace(std::string& str, const std::string& from, con
 
 bool Additionals::String::replace(std::wstring& str, const std::wstring& from, const std::wstring& to)
 {
-	size_t start_pos = str.find(from);
-	if (start_pos == std::string::npos)
-		return false;
-	str.replace(start_pos, from.length(), to);
+	size_t start_pos = 0;
+	size_t found_pos;
+	bool replaced = false;
+
+	while ((found_pos = str.find(from, start_pos)) != std::wstring::npos)
+	{
+		str.replace(found_pos, from.length(), to);
+		start_pos = found_pos + to.length(); // Move start position past the newly inserted string
+		replaced = true;
+	}
+
+	return replaced;
+}
+
+bool Additionals::String::replace(std::string& replace, const std::wstring& from, const std::string& to)
+{
+	std::string to_str = std::string(to);
+	std::string from_str = Additionals::Convectors::ConvertWStringToString(from);
+
+	size_t start_pos = 0;
+	size_t found_pos;
+	bool replaced = false;
+
+	while ((found_pos = replace.find(from_str, start_pos)) != std::string::npos)
+	{
+		replace.replace(found_pos, from_str.length(), to_str);
+		start_pos = found_pos + to_str.length(); // Move start position past the newly inserted string
+		replaced = true;
+	}
+
+	return true;
+}
+
+bool Additionals::String::replace(std::string& replace, const std::string& from, const std::wstring& to)
+{
+	std::string to_str = Additionals::Convectors::ConvertWStringToString(to);
+	std::string from_str = from;
+
+	size_t start_pos = 0;
+	size_t found_pos;
+	bool replaced = false;
+
+	while ((found_pos = replace.find(from_str, start_pos)) != std::string::npos)
+	{
+		replace.replace(found_pos, from_str.length(), to_str);
+		start_pos = found_pos + to_str.length(); // Move start position past the newly inserted string
+		replaced = true;
+	}
+
+	return true;
+}
+
+bool Additionals::String::replace(std::wstring& replace, const std::string& from, const std::wstring& to)
+{
+	std::wstring to_str = std::wstring(to);
+	std::wstring from_str = Additionals::Convectors::ConvertStringToWString(from);
+
+	size_t start_pos = 0;
+	size_t found_pos;
+	bool replaced = false;
+
+	while ((found_pos = replace.find(from_str, start_pos)) != std::wstring::npos)
+	{
+		replace.replace(found_pos, from_str.length(), to_str);
+		start_pos = found_pos + to_str.length(); // Move start position past the newly inserted string
+		replaced = true;
+	}
+
+	return true;
+}
+
+bool Additionals::String::replace(std::wstring& replace, const std::string& from, const std::string& to)
+{
+	std::wstring to_str = Additionals::Convectors::ConvertStringToWString(to);
+	std::wstring from_str = Additionals::Convectors::ConvertStringToWString(from);
+
+	size_t start_pos = 0;
+	size_t found_pos;
+	bool replaced = false;
+
+	while ((found_pos = replace.find(from_str, start_pos)) != std::wstring::npos)
+	{
+		replace.replace(found_pos, from_str.length(), to_str);
+		start_pos = found_pos + to_str.length(); // Move start position past the newly inserted string
+		replaced = true;
+	}
+
+	return true;
+}
+
+bool Additionals::String::replace(std::wstring& replace, const std::wstring& from, const std::string& to)
+{
+	std::wstring to_str = Additionals::Convectors::ConvertStringToWString(to);
+	std::wstring from_str = from;
+
+	size_t start_pos = 0;
+	size_t found_pos;
+	bool replaced = false;
+
+	while ((found_pos = replace.find(from_str, start_pos)) != std::wstring::npos)
+	{
+		replace.replace(found_pos, from_str.length(), to_str);
+		start_pos = found_pos + to_str.length(); // Move start position past the newly inserted string
+		replaced = true;
+	}
+
 	return true;
 }
 

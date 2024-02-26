@@ -18,6 +18,61 @@ int client::startProcess(const std::vector<std::string>& args)
 	return utils::doProcess(buffer);
 }
 
+int client::startProcess(const std::vector<std::wstring>& args)
+{
+	std::wstring imploded;
+	for (std::vector<std::wstring>::const_iterator ii = args.begin(); ii != args.end(); ++ii)
+	{
+		imploded += (*ii);
+		if (ii + 1 != args.end())
+		{
+			imploded += L" ";
+		}
+	}
+	std::unique_ptr<wchar_t[]> ch_array = std::make_unique<wchar_t[]>(imploded.size() + 1);
+	wcsncpy(ch_array.get(), imploded.c_str(), imploded.size());
+
+	return utils::doProcess(ch_array);
+}
+
+int client::startProcess(std::vector<std::variant<std::string, std::filesystem::path, std::wstring>>& args)
+{
+	std::variant<std::string> a;
+
+	std::wstring imploded;
+	for (auto& ii : args)
+	{
+		try
+		{
+			imploded += std::get<std::wstring>(ii);
+		}
+		catch (const std::bad_variant_access& ex)
+		{
+			try
+			{
+				imploded += std::get<std::filesystem::path>(ii).wstring();
+			}
+			catch (const std::bad_variant_access& ex)
+			{
+				try
+				{
+					imploded += Additionals::Convectors::ConvertStringToWString(std::get<std::string>(ii));
+				}
+				catch (const std::bad_variant_access& ex)
+				{
+					qWarning() << ex.what() << '\n';
+				}
+			}
+		}
+
+		imploded += L" ";
+	}
+	std::unique_ptr<wchar_t[]> ch_array = std::make_unique<wchar_t[]>(imploded.size() + 1);
+	wcsncpy(ch_array.get(), imploded.c_str(), imploded.size());
+
+	return utils::doProcess(ch_array);
+}
+
 int client::utils::doProcess(std::unique_ptr<wchar_t[]>& buffer)
 {
 	SECURITY_ATTRIBUTES sa{};

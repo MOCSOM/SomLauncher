@@ -1,16 +1,16 @@
 ﻿#include "NativesInstaller.h"
 
-std::vector<std::filesystem::path> MinecraftCpp::natives::getNativesUrls()
+std::vector<std::string> MinecraftCpp::natives::getNativesUrls()
 {
 	//FIXME: Поменять определение natives на автоматику и сделать на разные платформы
-	std::vector<std::filesystem::path> returned_urls =
+	std::vector<std::string> returned_urls =
 	{
-		"https://build.lwjgl.org/stable/windows/x64/lwjgl.dll",
-		"https://build.lwjgl.org/stable/windows/x64/glfw.dll",
-		"https://build.lwjgl.org/stable/windows/x64/jemalloc.dll",
-		"https://build.lwjgl.org/stable/windows/x64/OpenAL.dll",
-		"https://build.lwjgl.org/stable/windows/x64/lwjgl_opengl.dll",
-		"https://build.lwjgl.org/stable/windows/x64/lwjgl_stb.dll"
+		"https://build.lwjgl.org/stable/" + OS + "/" + ARCH + "/lwjgl.dll",
+		"https://build.lwjgl.org/stable/" + OS + "/" + ARCH + "/glfw.dll",
+		"https://build.lwjgl.org/stable/" + OS + "/" + ARCH + "/jemalloc.dll",
+		"https://build.lwjgl.org/stable/" + OS + "/" + ARCH + "/OpenAL.dll",
+		"https://build.lwjgl.org/stable/" + OS + "/" + ARCH + "/lwjgl_opengl.dll",
+		"https://build.lwjgl.org/stable/" + OS + "/" + ARCH + "/lwjgl_stb.dll"
 	};
 	return returned_urls;
 }
@@ -21,6 +21,6 @@ void MinecraftCpp::natives::downloadNatives(const std::filesystem::path& path, s
 
 	for (auto& elem : getNativesUrls())
 	{
-		DownloadFile(elem.u8string(), path.u8string(), callback);
+		DownloadFile(elem, path, callback);
 	}
 }

@@ -20,6 +20,7 @@
 #include <string>
 
 #include <iostream>
+#include <regex>
 
 #define StrDogWA Additionals::String::strdogWA
 #define StrDogW Additionals::String::strdogW
@@ -64,6 +65,12 @@ namespace Additionals
 
 		bool replace(std::string& str, const std::string& from, const std::string& to);
 		bool replace(std::wstring& str, const std::wstring& from, const std::wstring& to);
+
+		bool replace(std::string& replace, const std::wstring& from, const std::string& to);
+		bool replace(std::string& replace, const std::string& from, const std::wstring& to);
+		bool replace(std::wstring& replace, const std::string& from, const std::wstring& to);
+		bool replace(std::wstring& replace, const std::string& from, const std::string& to);
+		bool replace(std::wstring& replace, const std::wstring& from, const std::string& to);
 
 		bool EndsWith(const std::string& str, const std::string& suffix);
 		bool EndsWith(const std::wstring& str, const std::wstring& suffix);

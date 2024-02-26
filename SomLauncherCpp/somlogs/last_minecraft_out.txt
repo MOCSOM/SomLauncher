@@ -1,0 +1,5 @@
+Task: DOWNLOAD_MOJMAPS
+MC Version: 1.19.2
+Side:       client
+Output:     D:\minecraft\Ã¿…Õ –¿‘“\new-classic\libraries\net\minecraft\client\1.19.2-20220805.130853\client-1.19.2-20220805.130853-mappings.txt
+Downloaded Mojang mappings for 1.19.2

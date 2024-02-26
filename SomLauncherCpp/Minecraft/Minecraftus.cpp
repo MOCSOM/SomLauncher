@@ -47,7 +47,7 @@ std::string MinecraftCpp::option::MinecraftOptions::get(const std::string& param
 	else if (param == "port")
 		field = this->port;
 	else if (param == "nativesDirectory")
-		field = this->nativesDirectory;
+		field = this->nativesDirectory.u8string();
 	else
 		return this->NULLES;
 
@@ -120,8 +120,6 @@ bool MinecraftCpp::install_minecraft_version(const std::string& versionid, const
 	/*
 	Install a Minecraft Version. Fore more Information take a look at the documentation"
 	*/
-	SJson::JsonParcer json_manifest;
-
 	std::filesystem::path full_dir = minecraft_directory / "versions" / versionid / (versionid + ".json");
 
 	std::filesystem::path download_dir = minecraft_directory / "downloads";
@@ -145,32 +143,36 @@ bool MinecraftCpp::install_minecraft_version(const std::string& versionid, const
 
 	auto version_manifest_file = DownloadFile("https://launchermeta.mojang.com/mc/game/version_manifest.json",
 		download_dir, callback);
-	SJson::JsonValue version_list = json_manifest.ParseFile(version_manifest_file);
+
+	std::ifstream ifstr(version_manifest_file);
+	nlohmann::json version_list = nlohmann::json::parse(ifstr);
+	ifstr.close();
+
 
 	if (version_list == nullptr)
 	{
 		qFatal() << "error in version list";
 	}
 
-	for (auto& var : version_list["versions"].get_array())
+	for (auto& var : version_list["versions"])
 	{
 		qInfo() << "doversion install" << std::endl;
-		if (var["id"].to_string() == versionid)
+		if (var["id"].template get<std::string>() == versionid)
 		{
 			qInfo() << "doversion install" << std::endl;
-			do_version_install(versionid, minecraft_directory, callback, var["url"].to_string());
+			do_version_install(versionid, minecraft_directory, callback, var["url"].template get<std::string>());
 			qInfo() << "version is installed" << std::endl;
 			return true;
 		}
 	}
 
-	for (auto& var : version_list["versions"].get_object())
+	for (auto& var : version_list["versions"].items())
 	{
 		qInfo() << "doversion install obj" << std::endl;
-		if (var.second["id"].to_string() == versionid)
+		if (var.value()["id"].template get<std::string>() == versionid)
 		{
 			qInfo() << "doversion install" << std::endl;
-			do_version_install(versionid, minecraft_directory, callback, var.second["url"].to_string());
+			do_version_install(versionid, minecraft_directory, callback, var.value()["url"].template get<std::string>());
 			qInfo() << "version is installed" << std::endl;
 			return true;
 		}
@@ -186,8 +188,6 @@ bool MinecraftCpp::do_version_install(const std::string& versionid, const std::f
 	/*
 	Install the given version
 	*/
-
-	SJson::JsonParcer json_verid;
 	std::filesystem::path path_ver_json = path / "versions" / versionid / (versionid + ".json");
 
 	// Download and read versions.json
@@ -206,7 +206,7 @@ bool MinecraftCpp::do_version_install(const std::string& versionid, const std::f
 	{
 		qInfo() << "install_minecraft_version For forge..." << std::endl;
 		install_minecraft_version(versiondata["inheritsFrom"].template get<std::string>(), path, callback);
-		//versiondata = inherit_json(versiondata, path);
+		versiondata = inherit_json(versiondata, path);
 	}
 	install_libraries(versiondata, path, callback);
 	install_assets(versiondata, path, callback);
@@ -637,14 +637,14 @@ std::vector<std::string> MinecraftCpp::generateCommandLine(const std::filesystem
 	//return res.asList();
 }
 
-std::vector<std::string> MinecraftCpp::get_minecraft_command__(const std::string& version, const std::string& minecraft_directory,
+std::vector<std::variant<std::string, std::filesystem::path, std::wstring>> MinecraftCpp::get_minecraft_command__(const std::string& version, const std::filesystem::path& minecraft_directory,
 	MinecraftCpp::option::MinecraftOptions options)
 {
 	/*
 	Returns a command for launching Minecraft.For more information take a look at the documentation.
 	*/
-	if (!std::filesystem::exists(Join({ minecraft_directory, "versions", version, (version + ".json") })) ||
-		!std::filesystem::is_directory(Join({ minecraft_directory, "versions", version })))
+	if (!std::filesystem::exists(minecraft_directory / "versions" / version / (version + ".json")) ||
+		!std::filesystem::is_directory(minecraft_directory / "versions" / version))
 	{
 		qFatal() << "Version Not Found" << version;
 		return {};
@@ -653,7 +653,7 @@ std::vector<std::string> MinecraftCpp::get_minecraft_command__(const std::string
 	//SJson::JsonValue data = SJson::JsonParcer::ParseFile(Join({ minecraft_directory, "versions", version, (version + ".json") }));
 	nlohmann::json data;
 	std::ifstream ifs;
-	ifs.open(Join({ minecraft_directory, "versions", version, (version + ".json") }));
+	ifs.open(minecraft_directory / "versions" / version / (version + ".json"));
 	ifs >> data;
 	ifs.close();
 
@@ -662,23 +662,31 @@ std::vector<std::string> MinecraftCpp::get_minecraft_command__(const std::string
 		data = MinecraftCpp::inherit_json(data, minecraft_directory);
 	}
 	qInfo() << data.dump() << std::endl;
-	options.nativesDirectory = options.get("nativesDirectory", Join({ minecraft_directory, "versions", data["id"].template get<std::string>(), "natives" }));
-	//options.nativesDirectory = JoinW({ minecraft_directory, L"versions", data["id"]->to_stringW(), L"natives" });
+	if (options.nativesDirectory.empty())
+	{
+		options.nativesDirectory = minecraft_directory / "versions" / data["id"].template get<std::string>() / "natives";
+	}
+	else
+	{
+		options.nativesDirectory = "nativesDirectory";
+	}
+	//options.nativesDirectory = options.get("nativesDirectory", minecraft_directory / "versions" / data["id"].template get<std::string>() / "natives");
+
 	options.classpath = MinecraftCpp::get_libraries(data, minecraft_directory);
 
-	std::vector<std::string> command;
+	std::vector<std::variant<std::string, std::filesystem::path, std::wstring>> command;
 
 	// Add Java executable
 	if (options.executablePath != "")
 	{
-		command.push_back(options.executablePath.u8string());
+		command.push_back(options.executablePath.wstring());
 	}
 	else if (data.contains("javaVersion"))
 	{
-		std::string java_path = MinecraftCpp::get_executable_path(data["javaVersion"]["component"].template get<std::string>(), minecraft_directory);
+		std::filesystem::path java_path = MinecraftCpp::get_executable_path(data["javaVersion"]["component"].template get<std::string>(), minecraft_directory);
 		if (java_path == "")
 		{
-			command.push_back("java");
+			command.push_back(std::string("java"));
 		}
 		else
 		{
@@ -706,15 +714,15 @@ std::vector<std::string> MinecraftCpp::get_minecraft_command__(const std::string
 		}
 		else
 		{
-			command.push_back("-Djava.library.path=" + options.nativesDirectory);
-			command.push_back("-cp");
+			command.push_back(L"-Djava.library.path=" + options.nativesDirectory.wstring());
+			command.push_back(std::string("-cp"));
 			command.push_back(options.classpath);
 		}
 	}
 	else
 	{
-		command.push_back("-Djava.library.path=" + options.nativesDirectory);
-		command.push_back("-cp");
+		command.push_back(L"-Djava.library.path=" + options.nativesDirectory.wstring());
+		command.push_back(std::string("-cp"));
 		command.push_back(options.classpath);
 	}
 
@@ -724,9 +732,9 @@ std::vector<std::string> MinecraftCpp::get_minecraft_command__(const std::string
 		{
 			if (data["logging"].template get<int>() != 0)
 			{
-				std::string logger_file = Join({ minecraft_directory, "assets", "log_configs", data["logging"]["client"]["file"]["id"].template get<std::string>() });
+				std::filesystem::path logger_file = minecraft_directory / "assets" / "log_configs" / data["logging"]["client"]["file"]["id"].template get<std::string>();
 				std::string data_replacer = data["logging"]["client"]["argument"].template get<std::string>();
-				Additionals::String::replace(data_replacer, "${path}", logger_file);
+				Additionals::String::replace(data_replacer, std::string("${path}"), logger_file.wstring());
 				command.push_back(data_replacer);
 			}
 		}
@@ -747,12 +755,12 @@ std::vector<std::string> MinecraftCpp::get_minecraft_command__(const std::string
 
 	if (options.server != "")
 	{
-		command.push_back("--server");
+		command.push_back(std::string("--server"));
 		command.push_back(options.server);
 
 		if (options.port != "")
 		{
-			command.push_back("--port");
+			command.push_back(std::string("--port"));
 			command.push_back(options.port);
 		}
 	}
@@ -760,13 +768,21 @@ std::vector<std::string> MinecraftCpp::get_minecraft_command__(const std::string
 	return command;
 }
 
-std::string MinecraftCpp::get_libraries(nlohmann::json data, const std::filesystem::path& path)
+std::wstring MinecraftCpp::get_libraries(nlohmann::json data, const std::filesystem::path& path)
 {
 	/*
 	Returns the argument with all libs that come after -cp
 	*/
-	std::string classpath_seperator = MinecraftCpp::get_classpath_separator();
-	std::string libstr = "";
+	std::wstring classpath_seperator;
+	if (OS == "windows")
+	{
+		classpath_seperator = L";";
+	}
+	else
+	{
+		classpath_seperator = L":";
+	}
+	std::wstring libstr = L"";
 	std::string native = "";
 	MinecraftCpp::option::MinecraftOptions empty;
 
@@ -783,29 +799,29 @@ std::string MinecraftCpp::get_libraries(nlohmann::json data, const std::filesyst
 			continue;
 		}
 
-		libstr += MinecraftCpp::get_library_path(elem["name"].template get<std::string>(), path).u8string() + classpath_seperator;
+		libstr += MinecraftCpp::getLibraryPath(Additionals::Convectors::ConvertStringToWString(elem["name"].template get<std::string>()), path).wstring() + classpath_seperator;
 		native = MinecraftCpp::get_natives(elem);
 
 		if (native != "")
 		{
 			if (elem.contains("downloads"))
 			{
-				libstr += (path / "libraries" / elem["downloads"]["classifiers"][native]["path"].template get<std::string>()).u8string() + classpath_seperator;
+				libstr += (path / "libraries" / elem["downloads"]["classifiers"][native]["path"].template get<std::string>()).wstring() + classpath_seperator;
 			}
 			else
 			{
-				libstr += MinecraftCpp::get_library_path((elem["name"].template get<std::string>() + ("-" + native)), path).u8string() + classpath_seperator;
+				libstr += MinecraftCpp::get_library_path((elem["name"].template get<std::string>() + ("-" + native)), path).wstring() + classpath_seperator;
 			}
 		}
 	}
 
 	if (data.contains("jar"))
 	{
-		libstr += (path / "versions" / data["jar"].template get<std::string>() / (data["jar"].template get<std::string>() + ".jar")).u8string();
+		libstr += (path / "versions" / data["jar"].template get<std::string>() / (data["jar"].template get<std::string>() + ".jar")).wstring();
 	}
 	else
 	{
-		libstr += (path / "versions" / data["id"].template get<std::string>() / (data["id"].template get<std::string>() + ".jar")).u8string();
+		libstr += (path / "versions" / data["id"].template get<std::string>() / (data["id"].template get<std::string>() + ".jar")).wstring();
 	}
 
 	return libstr;
@@ -835,6 +851,18 @@ std::string MinecraftCpp::get_classpath_separator()
 	else
 	{
 		return ":";
+	}
+}
+
+std::wstring MinecraftCpp::getWClasspathSeparator()
+{
+	if (OS == "windows")
+	{
+		return L";";
+	}
+	else
+	{
+		return L":";
 	}
 }
 
@@ -976,6 +1004,48 @@ std::filesystem::path MinecraftCpp::get_library_path(const std::string& name, co
 	return libpath;
 }
 
+std::filesystem::path MinecraftCpp::getLibraryPath(const std::wstring& name, const std::filesystem::path& path)
+{
+	/*
+	Returns the path from a libname
+	*/
+
+	std::filesystem::path libpath = path / "libraries";
+
+	std::vector<std::wstring> parts = Additionals::String::split(name, ':');
+	std::wstring& base_path = parts[0];
+	std::wstring& libname = parts[1];
+	std::wstring& version = parts[2];
+	std::wstring fileend;
+
+	for (auto& var : Additionals::String::split(base_path, '.'))
+	{
+		libpath /= var.c_str();
+	}
+	if (version.find('@') != std::wstring::npos && version[version.find('@')] == '@')
+	{
+		std::vector<std::wstring> splt = Additionals::String::split(version, '@', 2);
+		version = splt[0];
+		fileend = splt[1];
+	}
+	else
+	{
+		fileend = L"jar";
+	}
+	// construct a filename with the remaining parts
+
+	std::wstring filename = libname + L"-" + version;
+
+	for (size_t i = 3; i < parts.size(); ++i)
+	{
+		filename += L"-" + parts[i];
+	}
+	filename += L"." + fileend;
+
+	libpath = libpath / libname / version / filename;
+	return libpath;
+}
+
 std::string MinecraftCpp::get_natives(nlohmann::json data)
 {
 	/*
@@ -1074,7 +1144,7 @@ std::string MinecraftCpp::_get_jvm_platform_string()
 }
 
 std::string MinecraftCpp::replace_arguments(std::string argstr, nlohmann::json versionData,
-	const std::string& path, MinecraftCpp::option::MinecraftOptions options)
+	const std::filesystem::path& path, MinecraftCpp::option::MinecraftOptions options)
 {
 	/*
 	Replace all 20 placeholder in arguments with the needed value
@@ -1123,55 +1193,84 @@ std::string MinecraftCpp::replace_arguments(std::string argstr, nlohmann::json v
 
 	return std::string();*/
 
-	Additionals::String::replace(argstr, "${natives_directory}", options.nativesDirectory);
-	Additionals::String::replace(argstr, "${launcher_name}", options.get("launcherName", std::string("null")));
-	Additionals::String::replace(argstr, "${launcher_version}", options.get("launcherVersion", std::string("null")));
-	Additionals::String::replace(argstr, "${classpath}", options.classpath);
-	Additionals::String::replace(argstr, "${auth_player_name}", options.get("username", std::string("{username}")));
-	Additionals::String::replace(argstr, "${version_name}", versionData["id"].template get<std::string>());
-	Additionals::String::replace(argstr, "${game_directory}", options.get("gameDirectory", path));
-	Additionals::String::replace(argstr, "${assets_root}", Join({ path, "assets" }));
-	Additionals::String::replace(argstr, "${assets_index_name}", !versionData["assets"].empty() ? versionData["assets"].template get<std::string>() : versionData["id"].template get<std::string>());
-	Additionals::String::replace(argstr, "${auth_uuid}", options.get("uuid", std::string("{uuid}")));
-	Additionals::String::replace(argstr, "${auth_access_token}", options.get("token", std::string("{token}")));
-	Additionals::String::replace(argstr, "${user_type}", "mojang");
-	Additionals::String::replace(argstr, "${version_type}", versionData["type"].template get<std::string>());
-	Additionals::String::replace(argstr, "${user_properties}", "{}");
-	Additionals::String::replace(argstr, "${resolution_width}", options.get("resolutionWidth", std::string("854")));
-	Additionals::String::replace(argstr, "${resolution_height}", options.get("resolutionHeight", std::string("480")));
-	Additionals::String::replace(argstr, "${game_assets}", Join({ path, "assets", "virtual", "legacy" }));
-	Additionals::String::replace(argstr, "${auth_session}", options.get("token", std::string("{token}")));
-	Additionals::String::replace(argstr, "${library_directory}", Join({ path, "libraries" }));
-	Additionals::String::replace(argstr, "${classpath_separator}", MinecraftCpp::get_classpath_separator());
-	Additionals::String::replace(argstr, "${quickPlayPath}", options.get("quickPlayPath", std::string("quickPlayPath")));
-	Additionals::String::replace(argstr, "${quickPlaySingleplayer}", options.get("quickPlaySingleplayer", std::string("quickPlaySingleplayer")));
-	Additionals::String::replace(argstr, "${quickPlayMultiplayer}", options.get("quickPlayMultiplayer", std::string("quickPlayMultiplayer")));
-	Additionals::String::replace(argstr, "${quickPlayRealms}", options.get("quickPlayRealms", std::string("quickPlayRealms")));
+	Additionals::String::replace(argstr, std::string("${natives_directory}"), options.nativesDirectory.wstring());
+	Additionals::String::replace(argstr, std::string("${launcher_name}"), options.get("launcherName", std::string("null")));
+	Additionals::String::replace(argstr, std::string("${launcher_version}"), options.get("launcherVersion", std::string("null")));
+	Additionals::String::replace(argstr, std::string("${classpath}"), options.classpath);
+	Additionals::String::replace(argstr, std::string("${auth_player_name}"), options.get("username", std::string("{username}")));
+	Additionals::String::replace(argstr, std::string("${version_name}"), versionData["id"].template get<std::string>());
+	Additionals::String::replace(argstr, std::string("${game_directory}"), !options.gameDirectory.empty() ? options.gameDirectory.wstring() : path.wstring());
+	Additionals::String::replace(argstr, std::string("${assets_root}"), path / "assets");
+	Additionals::String::replace(argstr, std::string("${assets_index_name}"), !versionData["assets"].empty() ? versionData["assets"].template get<std::string>() : versionData["id"].template get<std::string>());
+	Additionals::String::replace(argstr, std::string("${auth_uuid}"), options.get("uuid", std::string("{uuid}")));
+	Additionals::String::replace(argstr, std::string("${auth_access_token}"), options.get("token", std::string("{token}")));
+	Additionals::String::replace(argstr, std::string("${user_type}"), std::string("mojang"));
+	Additionals::String::replace(argstr, std::string("${version_type}"), versionData["type"].template get<std::string>());
+	Additionals::String::replace(argstr, std::string("${user_properties}"), std::string("{}"));
+	Additionals::String::replace(argstr, std::string("${resolution_width}"), options.get("resolutionWidth", std::string("854")));
+	Additionals::String::replace(argstr, std::string("${resolution_height}"), options.get("resolutionHeight", std::string("480")));
+	Additionals::String::replace(argstr, std::string("${game_assets}"), path / "assets" / "virtual" / "legacy");
+	Additionals::String::replace(argstr, std::string("${auth_session}"), options.get("token", std::string("{token}")));
+	Additionals::String::replace(argstr, std::string("${library_directory}"), path / "libraries");
+	Additionals::String::replace(argstr, std::string("${classpath_separator}"), MinecraftCpp::get_classpath_separator());
+	Additionals::String::replace(argstr, std::string("${quickPlayPath}"), options.get("quickPlayPath", std::string("quickPlayPath")));
+	Additionals::String::replace(argstr, std::string("${quickPlaySingleplayer}"), options.get("quickPlaySingleplayer", std::string("quickPlaySingleplayer")));
+	Additionals::String::replace(argstr, std::string("${quickPlayMultiplayer}"), options.get("quickPlayMultiplayer", std::string("quickPlayMultiplayer")));
+	Additionals::String::replace(argstr, std::string("${quickPlayRealms}"), options.get("quickPlayRealms", std::string("quickPlayRealms")));
 
 	return argstr;
 }
 
-std::string MinecraftCpp::get_executable_path(const std::string& jvm_version, const std::string& minecraft_directory)
+std::wstring MinecraftCpp::replace_arguments(std::wstring argstr, nlohmann::json versionData, const std::filesystem::path& path, MinecraftCpp::option::MinecraftOptions options)
+{
+	Additionals::String::replace(argstr, std::wstring(L"${natives_directory}"), options.nativesDirectory.wstring());
+	Additionals::String::replace(argstr, std::wstring(L"${launcher_name}"), options.get("launcherName", std::string("null")));
+	Additionals::String::replace(argstr, std::string("${launcher_version}"), options.get("launcherVersion", std::string("null")));
+	Additionals::String::replace(argstr, std::string("${classpath}"), options.classpath);
+	Additionals::String::replace(argstr, std::string("${auth_player_name}"), options.get("username", std::string("{username}")));
+	Additionals::String::replace(argstr, std::string("${version_name}"), versionData["id"].template get<std::string>());
+	Additionals::String::replace(argstr, std::string("${game_directory}"), !options.gameDirectory.empty() ? options.gameDirectory.wstring() : path.wstring());
+	Additionals::String::replace(argstr, std::string("${assets_root}"), path / "assets");
+	Additionals::String::replace(argstr, std::string("${assets_index_name}"), !versionData["assets"].empty() ? versionData["assets"].template get<std::string>() : versionData["id"].template get<std::string>());
+	Additionals::String::replace(argstr, std::string("${auth_uuid}"), options.get("uuid", std::string("{uuid}")));
+	Additionals::String::replace(argstr, std::string("${auth_access_token}"), options.get("token", std::string("{token}")));
+	Additionals::String::replace(argstr, std::string("${user_type}"), "mojang");
+	Additionals::String::replace(argstr, std::string("${version_type}"), versionData["type"].template get<std::string>());
+	Additionals::String::replace(argstr, std::string("${user_properties}"), "{}");
+	Additionals::String::replace(argstr, std::string("${resolution_width}"), options.get("resolutionWidth", std::string("854")));
+	Additionals::String::replace(argstr, std::string("${resolution_height}"), options.get("resolutionHeight", std::string("480")));
+	Additionals::String::replace(argstr, std::wstring(L"${game_assets}"), path / "assets" / "virtual" / "legacy");
+	Additionals::String::replace(argstr, std::string("${auth_session}"), options.get("token", std::string("{token}")));
+	Additionals::String::replace(argstr, std::wstring(L"${library_directory}"), path / "libraries");
+	Additionals::String::replace(argstr, std::string("${classpath_separator}"), MinecraftCpp::get_classpath_separator());
+	Additionals::String::replace(argstr, std::string("${quickPlayPath}"), options.get("quickPlayPath", std::string("quickPlayPath")));
+	Additionals::String::replace(argstr, std::string("${quickPlaySingleplayer}"), options.get("quickPlaySingleplayer", std::string("quickPlaySingleplayer")));
+	Additionals::String::replace(argstr, std::string("${quickPlayMultiplayer}"), options.get("quickPlayMultiplayer", std::string("quickPlayMultiplayer")));
+	Additionals::String::replace(argstr, std::string("${quickPlayRealms}"), options.get("quickPlayRealms", std::string("quickPlayRealms")));
+
+	return argstr;
+}
+
+std::filesystem::path MinecraftCpp::get_executable_path(const std::string& jvm_version, const std::filesystem::path& minecraft_directory)
 {
 	/*
 	Returns the path to the executable. Returns None if none is found.
 	*/
-	std::string java_path = Join({ minecraft_directory, "runtime", jvm_version, _get_jvm_platform_string(), jvm_version, "bin", "java" });
+	std::filesystem::path java_path = minecraft_directory / "runtime" / jvm_version / _get_jvm_platform_string() / jvm_version / "bin" / "java";
 	if (std::filesystem::exists(java_path))
 	{
 		if (!std::filesystem::is_directory(java_path))
 		{
 			return java_path;
 		}
-		else if (!std::filesystem::is_directory(java_path + ".exe"))
+		else if (!std::filesystem::is_directory(java_path.wstring() + L".exe"))
 		{
-			return java_path + ".exe";
+			return java_path.wstring() + L".exe";
 		}
 	}
 
-	std::string java_w_path = java_path;
-	Additionals::String::replace(java_w_path, Join({ "bin", "java" }), Join({ "jre.bundle", "Contents", "Home", "bin", "java" }));
-
+	std::filesystem::path java_w_path = java_path;
+	java_w_path = std::regex_replace(java_w_path.wstring(), std::wregex((std::filesystem::path("bin") / "java").wstring()), (std::filesystem::path("jre.bundle") / "Contents" / "Home" / "bin" / "java").wstring());
 	if (std::filesystem::exists(java_w_path))
 	{
 		if (!std::filesystem::is_directory(java_w_path))
@@ -1273,7 +1372,7 @@ bool MinecraftCpp::install_libraries(nlohmann::json& data, const std::filesystem
 
 		std::string jarFilename = name + "-" + version + "." + fileend;
 		downloadUrl += "/" + name + "/" + version;
-		currentPath /= Join({ name, version });
+		currentPath /= name + "\\" + version;
 		std::string native /*= get_natives(var)*/;
 
 		//Check if there is a native file
@@ -1546,30 +1645,31 @@ void MinecraftCpp::check_path_inside_minecraft_directory(const std::string& mine
 
 std::string MinecraftCpp::get_sha1_hash(const std::filesystem::path& path)
 {
-	return SHA1::from_file(path.u8string());
+	return SHA1::from_file(path.wstring());
 }
 
-std::vector<std::string> MinecraftCpp::get_arguments(
+std::vector<std::wstring> MinecraftCpp::get_arguments(
 	nlohmann::json& data,
 	nlohmann::json versionData,
-	const std::string& path,
+	const std::filesystem::path& path,
 	MinecraftCpp::option::MinecraftOptions options)
 {
 	/*
 	Returns all arguments from the version.json
 	*/
 
-	std::vector<std::string> arglist;
+	std::vector<std::wstring> arglist;
 	if (data.type() == nlohmann::json_abi_v3_11_3::detail::value_t::array)
 	{
 		for (auto& var : data)
 		{
 			if (var.type() == nlohmann::json_abi_v3_11_3::detail::value_t::string)
 			{
-				std::string rep = MinecraftCpp::replace_arguments(var.template get<std::string>(), versionData, path, options);
-				if (rep != var.template get<std::string>())
+				auto s = var.template get<std::filesystem::path>();
+				std::wstring rep = MinecraftCpp::replace_arguments(s.wstring(), versionData, path, options);
+				if (rep != s)
 				{
-					arglist.push_back("\"" + rep + "\"");
+					arglist.push_back(L"\"" + rep + L"\"");
 				}
 				else
 				{
@@ -1595,29 +1695,32 @@ std::vector<std::string> MinecraftCpp::get_arguments(
 				// var could be the argument
 				if (var["value"].type() == nlohmann::json_abi_v3_11_3::detail::value_t::string)
 				{
-					std::string replace = MinecraftCpp::replace_arguments(var.template get<std::string>(), versionData, path, options);
+					auto a = var.template get<std::filesystem::path>();
+					std::wstring replace = MinecraftCpp::replace_arguments(a.wstring(), versionData, path, options);
 					if (!replace.empty())
 					{
-						arglist.push_back("\"" + replace + "\"");
+						arglist.push_back(L"\"" + replace + L"\"");
 					}
 				}
 				else
 				{
 					for (auto& v : var["value"])
 					{
-						std::string val;
+						std::wstring val;
 						if (v["value"].type() == nlohmann::json_abi_v3_11_3::detail::value_t::array)
 						{
-							val = replace_arguments(v["value"][0].template get<std::string>(), versionData, path, options);
+							auto a = v["value"][0].template get<std::filesystem::path>();
+							val = replace_arguments(a.wstring(), versionData, path, options);
 						}
 						else
 						{
-							val = replace_arguments(v["value"].template get<std::string>(), versionData, path, options);
+							auto a = v["value"].template get<std::filesystem::path>();
+							val = replace_arguments(a.wstring(), versionData, path, options);
 						}
 
 						if (!val.empty())
 						{
-							arglist.push_back("\"" + val + "\"");
+							arglist.push_back(L"\"" + val + L"\"");
 						}
 					}
 				}
@@ -1668,7 +1771,7 @@ std::vector<std::string> MinecraftCpp::get_arguments(
 	return arglist;
 }
 
-std::string MinecraftCpp::get_arguments_string(nlohmann::json versionData, const std::string& path,
+std::string MinecraftCpp::get_arguments_string(nlohmann::json versionData, const std::filesystem::path& path,
 	MinecraftCpp::option::MinecraftOptions options)
 {
 	/*
@@ -2011,7 +2114,7 @@ bool MinecraftCpp::forge::forge_processors(
 	argument_vars["{SIDE}"] = "client";
 
 	qDebug() << "Setting separator" << std::endl;
-	std::string classpath_seperator = get_classpath_separator();
+	std::wstring classpath_seperator = getWClasspathSeparator();
 
 	//callback.get("setMax", empty)(len(data["processors"]))
 	//callback->OnProgress(NULL, (*data)["processors"]->to_int(), NULL, NULL);
@@ -2037,38 +2140,39 @@ bool MinecraftCpp::forge::forge_processors(
 
 		// Get the classpath
 		qDebug() << "Get the classpath" << std::endl;
-		std::string classpath = "";
+		std::wstring classpath = L"";
 		for (auto& var2 : var["classpath"])
 		{
 			qDebug() << "Get the classpath path with separator" << std::endl;
-			classpath = classpath + get_library_path(var2.template get<std::string>(), path).u8string() + classpath_seperator;
+			classpath = classpath + get_library_path(var2.template get<std::string>(), path).wstring() + classpath_seperator;
 		}
 
 		qDebug() << "Get the classpath path" << std::endl;
-		classpath = classpath + get_library_path(var["jar"].template get<std::string>(), path).u8string();
+		classpath = classpath + get_library_path(var["jar"].template get<std::string>(), path).wstring();
 
 		qDebug() << "Get the mainclass" << std::endl;
+		std::filesystem::path classpath_paths = classpath;
 		std::string mainclass = get_jar_mainclass(get_library_path(var["jar"].template get<std::string>(), path));
-		std::vector<std::string> command;
+		std::vector<std::wstring> command;
 		qDebug() << "Configure command" << std::endl;
-		command.push_back(java.empty() ? "java" : java.u8string());
-		command.push_back("-cp");
-		command.push_back(classpath);
-		command.push_back(mainclass);
+		command.push_back(java.empty() ? L"java" : L"\"" + java.wstring() + L"\"");
+		command.push_back(L"-cp");
+		command.push_back(classpath_paths.wstring());
+		command.push_back(Additionals::Convectors::ConvertStringToWString(mainclass));
 
 		qDebug() << "cmd:" << classpath << mainclass << std::endl;
 
 		qDebug() << "Get the args" << std::endl;
-		std::string variable = "";
+		std::wstring variable = L"";
 		for (auto& var2 : var["args"])
 		{
 
-			variable = argument_vars[var2.template get<std::string>()] == nullptr ? var2.template get<std::string>() : argument_vars[var2.template get<std::string>()].template get<std::string>();
+			variable = argument_vars[var2.template get<std::string>()] == nullptr ? var2.template get<std::filesystem::path>().wstring() : argument_vars[var2.template get<std::string>()].template get<std::filesystem::path>().wstring();
 
-			if (variable._Starts_with("[") && Additionals::String::EndsWith(variable, "]"))
+			if (variable._Starts_with(L"[") && Additionals::String::EndsWith(variable, L"]"))
 			{
 				qDebug() << variable << path << std::endl;
-				command.push_back(get_library_path(variable.substr(1, variable.size() - 2), path).u8string());
+				command.push_back(getLibraryPath(variable.substr(1, variable.size() - 2), path).wstring());
 			}
 			else
 			{
@@ -2077,11 +2181,30 @@ bool MinecraftCpp::forge::forge_processors(
 		}
 
 		qDebug() << command << std::endl;
-		std::ostringstream imploded;
+		/*std::wostringstream imploded;
 		std::copy(command.begin(), command.end(),
-			std::ostream_iterator<std::string>(imploded, " "));
+			std::ostream_iterator<std::wstring, wchar_t, std::char_traits<wchar_t>>(imploded, L" "));*/
 
-		int out = system(imploded.str().c_str());
+		std::wstring imploded;
+		for (std::vector<std::wstring>::const_iterator ii = command.begin(); ii != command.end(); ++ii)
+		{
+			imploded += (*ii);
+			if (ii + 1 != command.end())
+			{
+				imploded += L" ";
+			}
+		}
+		std::unique_ptr<wchar_t[]> ch_array = std::make_unique<wchar_t[]>(imploded.size() + 1);
+		wcsncpy(ch_array.get(), imploded.c_str(), imploded.size());
+
+		UIThread::run(
+			[&]()
+			{
+				int out = _wsystem(ch_array.get());
+
+			});
+
+		//int out = client::startProcess(command);
 
 		//callback->OnProgress(count, NULL, NULL, NULL);
 		//callback->setQProgressValue(count);

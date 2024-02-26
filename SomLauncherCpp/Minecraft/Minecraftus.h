@@ -66,9 +66,9 @@ namespace MinecraftCpp
 			std::string resolutionHeight = "";
 			std::string server = "";
 			std::string port = "";
-			std::string nativesDirectory = "";
+			std::filesystem::path nativesDirectory = "";
 			bool		enableLoggingConfig = NULL;
-			std::string classpath = "";
+			std::wstring classpath = L"";
 			std::string NULLES = "";
 			ProcessPriority process_priority = NORMAL;
 
@@ -83,21 +83,25 @@ namespace MinecraftCpp
 
 	std::vector<std::string> generateCommandLine(const std::filesystem::path& nativeFolder, MinecraftCpp::option::LaunchOptions& options);
 
-	std::vector<std::string> get_minecraft_command__(
+	std::vector<std::variant<std::string, std::filesystem::path, std::wstring>> get_minecraft_command__(
 		const std::string& version,
-		const std::string& minecraft_directory,
+		const std::filesystem::path& minecraft_directory,
 		MinecraftCpp::option::MinecraftOptions options);
 
 	std::string get_classpath_separator();
+	std::wstring getWClasspathSeparator();
 	bool parse_single_rule(nlohmann::json rule, MinecraftCpp::option::MinecraftOptions options);
 	bool parse_rule_list(nlohmann::json data, const std::string& rule_string, MinecraftCpp::option::MinecraftOptions options);
 	std::filesystem::path get_library_path(const std::string& name, const std::filesystem::path& path);
+	std::filesystem::path getLibraryPath(const std::wstring& name, const std::filesystem::path& path);
 	std::string get_natives(nlohmann::json data);
 	std::string _get_jvm_platform_string();
 	std::string replace_arguments(std::string argstr, nlohmann::json versionData,
-		const std::string& path, MinecraftCpp::option::MinecraftOptions options);
+		const std::filesystem::path& path, MinecraftCpp::option::MinecraftOptions options);
+	std::wstring replace_arguments(std::wstring argstr, nlohmann::json versionData,
+		const std::filesystem::path& path, MinecraftCpp::option::MinecraftOptions options);
 
-	std::string get_executable_path(const std::string& jvm_version, const std::string& minecraft_directory);
+	std::filesystem::path get_executable_path(const std::string& jvm_version, const std::filesystem::path& minecraft_directory);
 	bool install_libraries(nlohmann::json& data, const std::filesystem::path& path, std::shared_ptr<CallbackNull> callback);
 	bool extract_natives_file(const std::filesystem::path& filename, const std::filesystem::path& extract_path, nlohmann::json& extract_data);
 	bool install_assets(nlohmann::json& data, const std::filesystem::path& path, std::shared_ptr<CallbackNull> callback);
@@ -161,15 +165,15 @@ namespace MinecraftCpp
 		SJson::JsonValue parse_maven_metadata(const std::string& url);
 	}
 
-	std::vector<std::string> get_arguments(
+	std::vector<std::wstring> get_arguments(
 		nlohmann::json& data,
 		nlohmann::json versionData,
-		const std::string& path,
+		const std::filesystem::path& path,
 		MinecraftCpp::option::MinecraftOptions options);
 
 	std::string get_arguments_string(
 		nlohmann::json versionData,
-		const std::string& path,
+		const std::filesystem::path& path,
 		MinecraftCpp::option::MinecraftOptions options);
 
 	bool install_minecraft_version(
@@ -187,7 +191,7 @@ namespace MinecraftCpp
 		nlohmann::json original_data,
 		const std::filesystem::path& path);
 
-	std::string get_libraries(
+	std::wstring get_libraries(
 		nlohmann::json data,
 		const std::filesystem::path& path);
 

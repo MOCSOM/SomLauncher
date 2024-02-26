@@ -15,6 +15,8 @@ namespace client
 {
 	int startProcess(const std::string& args);
 	int startProcess(const std::vector<std::string>& args);
+	int startProcess(const std::vector<std::wstring>& args);
+	int startProcess(std::vector<std::variant<std::string, std::filesystem::path, std::wstring>>& args);
 
 	namespace utils
 	{

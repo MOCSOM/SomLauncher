@@ -137,7 +137,6 @@ public:
 		std::string loader_mame,
 		std::string loader_version,
 		std::string java,
-		std::string mcdir,
 		MinecraftCpp::option::MinecraftOptions& options,
 		std::shared_ptr<CallbackNull> callback = std::make_shared<CallbackNull>()) const;
 

@@ -43,9 +43,17 @@ void SomLauncherMainWindow::start_minecraft_params()
 	qInfo() << this->config_parce["user"]["memory"].template get<int>() << std::endl;
 	if (this->config_parce["user"]["mcdir"].is_array())
 	{
-		this->config_parce["user"]["mcdir"].template get<std::filesystem::path>();
+		std::filesystem::path pat = "";
+		for (auto& symbol : this->config_parce["user"]["mcdir"])
+		{
+			pat += static_cast<wchar_t>(symbol.template get<int>());
+		}
+		qInfo() << pat << std::endl;
 	}
-	//qInfo() << this->config_parce["user"]["mcdir"].template get<std::filesystem::path>() << std::endl;
+	else
+	{
+		qInfo() << this->config_parce["user"]["mcdir"].template get<std::filesystem::path>() << std::endl;
+	}
 	qInfo() << this->config_parce["user"]["isInstallMods"].template get<bool>() << std::endl;
 	qInfo() << this->config_parce["user"]["server"].template get<int>() << std::endl;
 
@@ -114,7 +122,6 @@ void SomLauncherMainWindow::setupInstallMinecraft(const size_t& index)
 		core,
 		this->servers_parce[index]["minimal_loader_version"].template get<std::string>(),
 		java,
-		this->config_parce["user"]["mcdir"].template get<std::string>(),
 		this->options,
 		callback
 	);
@@ -124,9 +131,10 @@ void SomLauncherMainWindow::setupInstallMinecraft(const size_t& index)
 
 	serversdat::createServersDat(instance_path / "servers.dat", name, ip_port);
 
-	options.gameDirectory = instance_path.u8string();
-	std::vector<std::string> command = MinecraftCpp::get_minecraft_command__(launch_version, instance_path.u8string(), options);
-	qInfo() << command;
+	options.gameDirectory = instance_path.wstring();
+
+	std::vector<std::variant<std::string, std::filesystem::path, std::wstring>> command = MinecraftCpp::get_minecraft_command__(launch_version, instance_path, options);
+	//qInfo() << command;
 
 	//MinecraftCpp::option::LaunchOptions _options;
 	//_options.gameDir = options.gameDirectory;
@@ -155,7 +163,6 @@ std::string SomLauncherMainWindow::install_minecraft(
 	std::string loader_mame,
 	std::string loader_version,
 	std::string java,
-	std::string mcdir,
 	MinecraftCpp::option::MinecraftOptions& options,
 	std::shared_ptr<CallbackNull> callback) const
 {
