@@ -3,9 +3,6 @@
 std::filesystem::path web::download::downloadFile(const std::string& url, const std::filesystem::path& dist,
 	std::shared_ptr<CallbackNull> callback, const std::string& sha1, bool lzma_compressed)
 {
-	//d.first = path
-	//d.second = url
-
 	std::filesystem::path destanation_file = dist;
 	QFileInfo fi(destanation_file);
 	if (!fi.isFile() && fi.isDir())
@@ -16,9 +13,12 @@ std::filesystem::path web::download::downloadFile(const std::string& url, const 
 	QFile qfile = QFile(destanation_file);
 	if (!sha1.empty() && sha1 == crypto::sha1(qfile).toStdString())
 	{
+		callback->setQProgressValue(0);
 		callback->setQLabelProggressValue("Checking hashes..");
 		return destanation_file;
 	}
+
+	callback->setTotalDownloadSize(web::utils::getFileSizeFromUrl(url));
 
 	quint64 mTotalDownloadSize = callback->getTotalDownloadSize();
 
@@ -33,41 +33,7 @@ std::filesystem::path web::download::downloadFile(const std::string& url, const 
 	QNetworkReply* reply = network.get(QNetworkRequest(QUrl::fromUserInput(url.c_str())));
 
 	QFile* file = new QFile(destanation_file, &network);
-
-	auto prettySize = [](quint64 size, bool isSpeed)
-		{
-			long double fsize = size;
-			long double power = log(fsize) / log(2);
-			long double index = std::max(int(std::floor(power / 10 - 0.01)), 0);
-
-			QVector<QString> strs;
-			if (isSpeed)
-			{
-				strs = {
-					QObject::tr("B/sec"),
-					QObject::tr("Kb/sec"),
-					QObject::tr("Mb/sec"),
-					QObject::tr("Gb/sec"),
-					QObject::tr("Tb/sec"),
-					QObject::tr("Pb/sec")
-				};
-			}
-			else
-			{
-				strs = {
-					QObject::tr("B"),
-					QObject::tr("Kb"),
-					QObject::tr("Mb"),
-					QObject::tr("Gb"),
-					QObject::tr("Tb"),
-					QObject::tr("Pb")
-				};
-			}
-
-			uint32_t i = index;
-
-			return QString("%1 %2").arg(double(size / pow(1024, index)), 0, 'f', 1).arg(i < strs.size() ? strs[i] : "??");
-		};
+		
 
 	QObject::connect(reply, &QNetworkReply::readyRead, dummy,
 		[&, reply, file]()
@@ -133,7 +99,6 @@ std::filesystem::path web::download::downloadFile(const std::string& url, const 
 				{
 					// it's time to show up the speed
 					float time = (mTotalDownloadSize - downloaded) / averangeDelta;
-					//auto k = QDateTime::fromMSecsSinceEpoch(time * 1000).toUTC().toString("HH:mm:ss");
 					UIThread::run([&, time]()
 						{
 							auto k = QDateTime::fromMSecsSinceEpoch(time * 1000).toUTC().toString("HH:mm:ss");
@@ -147,7 +112,7 @@ std::filesystem::path web::download::downloadFile(const std::string& url, const 
 				lastPeriodDownloaded = downloaded;
 			}
 			//mLauncher->ui.downloaded->setText(StringHelper::prettySize(d));
-			callback->setQLabelDownloadSpeed(prettySize(averangeDelta, true));
+			callback->setQLabelDownloadSpeed(utils::prettySize(averangeDelta, true));
 
 			// copy this value to prevent data racing
 			quint64 d = downloaded;
@@ -161,20 +126,6 @@ std::filesystem::path web::download::downloadFile(const std::string& url, const 
 			}
 
 			callback->setQLabelProggressValue(destanation_file.u8string().c_str());
-			/*UIThread::run([&, d]()
-				{
-					mLauncher->ui.downloaded->setText(StringHelper::prettySize(d));
-					mLauncher->ui.speed->setText(StringHelper::prettySize(averangeDelta, true));
-					if (mTotalDownloadSize)
-					{
-						mLauncher->ui.progressBar->setValue(d * 1000 / mTotalDownloadSize);
-					}
-					else
-					{
-
-						mLauncher->ui.progressBar->setValue(0);
-					}
-				});*/
 		});
 	t.setInterval(100);
 	t.start();
@@ -183,4 +134,41 @@ std::filesystem::path web::download::downloadFile(const std::string& url, const 
 
 
 	return destanation_file;
+}
+
+QString web::download::utils::prettySize(quint64 size, bool isSpeed)
+{
+	long double fsize = size;
+	long double power = log(fsize) / log(2);
+	long double index = std::max(int(std::floor(power / 10 - 0.01)), 0);
+
+	QVector<QString> strs;
+	if (isSpeed)
+	{
+		strs = 
+		{
+			QObject::tr("B/sec"),
+			QObject::tr("Kb/sec"),
+			QObject::tr("Mb/sec"),
+			QObject::tr("Gb/sec"),
+			QObject::tr("Tb/sec"),
+			QObject::tr("Pb/sec")
+		};
+	}
+	else
+	{
+		strs = 
+		{
+			QObject::tr("B"),
+			QObject::tr("Kb"),
+			QObject::tr("Mb"),
+			QObject::tr("Gb"),
+			QObject::tr("Tb"),
+			QObject::tr("Pb")
+		};
+	}
+
+	uint32_t i = index;
+
+	return QString("%1 %2").arg(double(size / pow(1024, index)), 0, 'f', 1).arg(i < strs.size() ? strs[i] : "??");
 }

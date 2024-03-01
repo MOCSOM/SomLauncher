@@ -157,12 +157,6 @@ void LoginAccountForm::onClickPushButtonLogin()
 		nlohmann::json parced_config = nlohmann::json::parse(ifstr);
 		ifstr.close();
 
-		//TODO: move this in server options
-		if (!json_data["is_friend"])
-		{
-			QMessageBox::information(this, tr("Ошибка"), tr("Вы не друг, извените("));
-		}
-
 		if (ui.checkBox_remember_password->isChecked())
 		{
 			parced_config["user"]["name"] = json_data["username"];

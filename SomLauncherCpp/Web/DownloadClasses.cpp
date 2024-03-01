@@ -226,7 +226,7 @@ std::filesystem::path DDIC::Download::Files::getInstalledJavaInDirectory(std::fi
 			return std::string();
 		}
 
-		return result_version[0].first / "bin" / "java.exe";
+		return result_version[0].first / "bin" / "javaw.exe";
 	}
 
 	for (auto& path_version : _get_java_path(directory_path))

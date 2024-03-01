@@ -50,9 +50,6 @@
     <ClCompile Include="Web\DownloadClasses.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Databases\SQLBased.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Minecraft\Mods.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -164,15 +161,18 @@
     <ClCompile Include="Web\Utils\WebUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Web\Minecraft\Status\MinecraftStatus.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\Config\Config.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Web\DownloadClasses.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Databases\SQLBased.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Minecraft\Mods.h">
@@ -269,6 +269,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Web\Utils\WebUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Web\Minecraft\Status\MinecraftStatus.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\Config\Config.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

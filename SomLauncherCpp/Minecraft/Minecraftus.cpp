@@ -23,7 +23,7 @@ std::string MinecraftCpp::option::MinecraftOptions::get(const std::string& param
 	std::string field = "";
 
 	if (param == "username")
-		field = this->username;
+		field;// = this->username;
 	else if (param == "uuid")
 		field = this->uuid;
 	else if (param == "token")
@@ -127,7 +127,7 @@ bool MinecraftCpp::install_minecraft_version(const std::string& versionid, const
 	if (!std::filesystem::exists(download_dir))
 	{
 		bool out_mkdir = std::filesystem::create_directories(download_dir);
-		qInfo() << "java dir is maked with status: " << out_mkdir << std::endl;
+		qDebug() << "java dir is maked with status: " << out_mkdir << std::endl;
 	}
 
 	if (std::filesystem::exists(full_dir))
@@ -156,7 +156,7 @@ bool MinecraftCpp::install_minecraft_version(const std::string& versionid, const
 
 	for (auto& var : version_list["versions"])
 	{
-		qInfo() << "doversion install" << std::endl;
+		qDebug() << "doversion install" << std::endl;
 		if (var["id"].template get<std::string>() == versionid)
 		{
 			qInfo() << "doversion install" << std::endl;
@@ -168,10 +168,10 @@ bool MinecraftCpp::install_minecraft_version(const std::string& versionid, const
 
 	for (auto& var : version_list["versions"].items())
 	{
-		qInfo() << "doversion install obj" << std::endl;
+		qDebug() << "doversion install obj" << std::endl;
 		if (var.value()["id"].template get<std::string>() == versionid)
 		{
-			qInfo() << "doversion install" << std::endl;
+			qInfo() << "doversion install obj" << std::endl;
 			do_version_install(versionid, minecraft_directory, callback, var.value()["url"].template get<std::string>());
 			qInfo() << "version is installed" << std::endl;
 			return true;
@@ -277,8 +277,8 @@ nlohmann::json MinecraftCpp::inherit_json(nlohmann::json original_data, const st
 
 	for (auto& var : original_data.items())
 	{
-		if (var.value().type() == nlohmann::json_abi_v3_11_3::detail::value_t::array &&
-			new_data[var.key()].type() == nlohmann::json_abi_v3_11_3::detail::value_t::array)
+		if (var.value().type() == nlohmann::json::value_t::array &&
+			new_data[var.key()].type() == nlohmann::json::value_t::array)
 		{
 			//std::cout << new_data[var.key()] << std::endl;
 			for (auto& elem : var.value())
@@ -286,12 +286,12 @@ nlohmann::json MinecraftCpp::inherit_json(nlohmann::json original_data, const st
 				new_data[var.key()].push_back(elem);
 			}
 		}
-		else if (var.value().type() == nlohmann::json_abi_v3_11_3::detail::value_t::object &&
-			new_data[var.key()].type() == nlohmann::json_abi_v3_11_3::detail::value_t::object)
+		else if (var.value().type() == nlohmann::json::value_t::object &&
+			new_data[var.key()].type() == nlohmann::json::value_t::object)
 		{
 			for (auto& variable : var.value().items())
 			{
-				if (variable.value().type() == nlohmann::json_abi_v3_11_3::detail::value_t::array)
+				if (variable.value().type() == nlohmann::json::value_t::array)
 				{
 					for (auto& elem : variable.value())
 					{
@@ -661,7 +661,7 @@ std::vector<std::variant<std::string, std::filesystem::path, std::wstring>> Mine
 	{
 		data = MinecraftCpp::inherit_json(data, minecraft_directory);
 	}
-	qInfo() << data.dump() << std::endl;
+	qDebug() << data.dump() << std::endl;
 	if (options.nativesDirectory.empty())
 	{
 		options.nativesDirectory = minecraft_directory / "versions" / data["id"].template get<std::string>() / "natives";
@@ -703,9 +703,9 @@ std::vector<std::variant<std::string, std::filesystem::path, std::wstring>> Mine
 		command.push_back(options.jvmArguments);
 	}
 
-	qInfo() << data.dump() << std::endl;
+	qDebug() << data.dump() << std::endl;
 	// Newer Versions have jvmArguments in version.json
-	if (data["arguments"].type() == nlohmann::json_abi_v3_11_3::detail::value_t::object)
+	if (data["arguments"].type() == nlohmann::json::value_t::object)
 	{
 		if (data["arguments"].contains("jvm"))
 		{
@@ -790,7 +790,7 @@ std::wstring MinecraftCpp::get_libraries(nlohmann::json data, const std::filesys
 
 	for (auto& elem : data["libraries"])
 	{
-		if (elem.type() != nlohmann::json_abi_v3_11_3::detail::value_t::object)
+		if (elem.type() != nlohmann::json::value_t::object)
 		{
 			continue;
 		}
@@ -1061,11 +1061,11 @@ std::string MinecraftCpp::get_natives(nlohmann::json data)
 		arch_type = "64";
 	}
 
-	if (data.type() != nlohmann::json_abi_v3_11_3::detail::value_t::object && data.contains("natives"))
+	if (data.type() != nlohmann::json::value_t::object && data.contains("natives"))
 	{
 		if (OS == "windows")
 		{
-			if (data.type() != nlohmann::json_abi_v3_11_3::detail::value_t::object && data["natives"].contains("windows"))
+			if (data.type() != nlohmann::json::value_t::object && data["natives"].contains("windows"))
 			{
 				std::string replace_string = data["natives"]["windows"].template get<std::string>();
 				Additionals::String::replace(replace_string, "${arch}", arch_type);
@@ -1078,7 +1078,7 @@ std::string MinecraftCpp::get_natives(nlohmann::json data)
 		}
 		else if (OS == "mac")
 		{
-			if (data.type() != nlohmann::json_abi_v3_11_3::detail::value_t::object && data["natives"].contains("osx"))
+			if (data.type() != nlohmann::json::value_t::object && data["natives"].contains("osx"))
 			{
 				std::string replace_string = data["natives"]["osx"].template get<std::string>();
 				Additionals::String::replace(replace_string, "${arch}", arch_type);
@@ -1091,7 +1091,7 @@ std::string MinecraftCpp::get_natives(nlohmann::json data)
 		}
 		else
 		{
-			if (data.type() != nlohmann::json_abi_v3_11_3::detail::value_t::object && data["natives"].contains("linux"))
+			if (data.type() != nlohmann::json::value_t::object && data["natives"].contains("linux"))
 			{
 				std::string replace_string = data["natives"]["linux"].template get<std::string>();
 				Additionals::String::replace(replace_string, "${arch}", arch_type);
@@ -1227,7 +1227,7 @@ std::wstring MinecraftCpp::replace_arguments(std::wstring argstr, nlohmann::json
 	Additionals::String::replace(argstr, std::wstring(L"${launcher_name}"), options.get("launcherName", std::string("null")));
 	Additionals::String::replace(argstr, std::string("${launcher_version}"), options.get("launcherVersion", std::string("null")));
 	Additionals::String::replace(argstr, std::string("${classpath}"), options.classpath);
-	Additionals::String::replace(argstr, std::string("${auth_player_name}"), options.get("username", std::string("{username}")));
+	Additionals::String::replace(argstr, std::string("${auth_player_name}"), !options.username.empty() ? options.username : std::wstring(L"{username}"));
 	Additionals::String::replace(argstr, std::string("${version_name}"), versionData["id"].template get<std::string>());
 	Additionals::String::replace(argstr, std::string("${game_directory}"), !options.gameDirectory.empty() ? options.gameDirectory.wstring() : path.wstring());
 	Additionals::String::replace(argstr, std::string("${assets_root}"), path / "assets");
@@ -1659,11 +1659,11 @@ std::vector<std::wstring> MinecraftCpp::get_arguments(
 	*/
 
 	std::vector<std::wstring> arglist;
-	if (data.type() == nlohmann::json_abi_v3_11_3::detail::value_t::array)
+	if (data.type() == nlohmann::json::value_t::array)
 	{
 		for (auto& var : data)
 		{
-			if (var.type() == nlohmann::json_abi_v3_11_3::detail::value_t::string)
+			if (var.type() == nlohmann::json::value_t::string)
 			{
 				auto s = var.template get<std::filesystem::path>();
 				std::wstring rep = MinecraftCpp::replace_arguments(s.wstring(), versionData, path, options);
@@ -1693,7 +1693,7 @@ std::vector<std::wstring> MinecraftCpp::get_arguments(
 				}
 
 				// var could be the argument
-				if (var["value"].type() == nlohmann::json_abi_v3_11_3::detail::value_t::string)
+				if (var["value"].type() == nlohmann::json::value_t::string)
 				{
 					auto a = var.template get<std::filesystem::path>();
 					std::wstring replace = MinecraftCpp::replace_arguments(a.wstring(), versionData, path, options);
@@ -1707,7 +1707,7 @@ std::vector<std::wstring> MinecraftCpp::get_arguments(
 					for (auto& v : var["value"])
 					{
 						std::wstring val;
-						if (v["value"].type() == nlohmann::json_abi_v3_11_3::detail::value_t::array)
+						if (v["value"].type() == nlohmann::json::value_t::array)
 						{
 							auto a = v["value"][0].template get<std::filesystem::path>();
 							val = replace_arguments(a.wstring(), versionData, path, options);
@@ -1814,14 +1814,14 @@ bool MinecraftCpp::forge::install_forge_version(const std::string& versionid, co
 	int random_num = 1 + (rand() % 100000);
 
 	std::string FORGE_DOWNLOAD_URL = "https://maven.minecraftforge.net/net/minecraftforge/forge/" + versionid + "/forge-" + versionid + "-installer.jar";
-	std::string temp_file_path = Additionals::TempFile::get_tempdir_SYSTEM() + ("forge-installer-" + std::to_string(random_num) + ".tmp");
+	std::filesystem::path temp_file_path = std::filesystem::temp_directory_path() / ("forge-installer-" + std::to_string(random_num) + ".tmp");
 	if (DownloadFile(FORGE_DOWNLOAD_URL, temp_file_path, callback) == "")
 	{
 		std::cout << "Version Not Found" << versionid << std::endl;
 		return false;
 	}
 
-	QZipReader zArchive(temp_file_path.c_str());
+	QZipReader zArchive(QString::fromStdWString(temp_file_path.wstring()));
 
 	// Read the install_profile.json
 	nlohmann::json version_data = nullptr;
@@ -1866,7 +1866,7 @@ bool MinecraftCpp::forge::install_forge_version(const std::string& versionid, co
 	extract_file(zArchive, ("forge-" + versionid + "-universal.jar"), forge_lib_path / ("forge-" + versionid + ".jar"));
 
 	// Extract the client.lzma
-	std::string lzma_path = Additionals::TempFile::get_tempdir_SYSTEM() + ("lzma-" + std::to_string(random_num) + ".tmp");
+	std::filesystem::path lzma_path = std::filesystem::temp_directory_path() / ("lzma-" + std::to_string(random_num) + ".tmp");
 
 	extract_file(zArchive, "data/client.lzma", lzma_path);
 
@@ -1885,7 +1885,7 @@ bool MinecraftCpp::forge::install_forge_version(const std::string& versionid, co
 	// Delete the temporary files
 	qInfo() << "Delete the temporary files" << std::endl;
 	//std::filesystem::permissions(temp_file_path, std::filesystem::perms::all);
-	DeleteFileA(temp_file_path.c_str());
+	DeleteFileW(temp_file_path.wstring().c_str());
 	if (std::filesystem::exists(lzma_path) && !std::filesystem::is_directory(lzma_path))
 	{
 		std::filesystem::permissions(lzma_path, std::filesystem::perms::all);
@@ -1938,20 +1938,20 @@ std::filesystem::path MinecraftCpp::forge::get_data_library_path(const std::stri
 	/*
 	Turns the libname into a path
 	*/
-	qInfo() << "Get data library path" << std::endl;
+	qInfo() << "Get data library path from:" << path << std::endl;
 	std::string _libname = libname;
 
 	_libname = _libname.substr(1, _libname.size() - 2);
 	qDebug() << "libname:" << _libname << std::endl;
 
-	qInfo() << "Get data library path split" << std::endl;
+	qDebug() << "Get data library path split" << std::endl;
 	std::filesystem::path libpath = path / "libraries";
 	std::string base_path = Additionals::String::split(_libname, ':')[0];
 	std::string version = Additionals::String::split(_libname, ':')[2];
 	std::string extra = Additionals::String::split(_libname, ':')[3];
 	_libname = Additionals::String::split(_libname, ':')[1];
 	std::string fileend;
-	qInfo() << "Get data library path split completed" << std::endl;
+	qDebug() << "Get data library path split completed" << std::endl;
 
 	for (auto& var : Additionals::String::split(base_path, '.'))
 	{
@@ -1973,7 +1973,7 @@ std::filesystem::path MinecraftCpp::forge::get_data_library_path(const std::stri
 		}
 		else
 		{
-			qInfo() << "Get data library path split extra" << Additionals::String::split(extra, '@').size() << std::endl;
+			qDebug() << "Get data library path split extra" << Additionals::String::split(extra, '@').size() << std::endl;
 
 			auto splt = Additionals::String::split(extra, '@');
 
@@ -1985,7 +1985,7 @@ std::filesystem::path MinecraftCpp::forge::get_data_library_path(const std::stri
 			qDebug() << extra << fileend << std::endl;
 		}
 	}
-	qInfo() << "Get data library path split extra completed" << std::endl;
+	qDebug() << "Get data library path split extra completed" << std::endl;
 
 	libpath = libpath / _libname / version / (_libname + "-" + version + "-" + extra + "." + fileend);
 
@@ -2090,7 +2090,7 @@ bool MinecraftCpp::forge::forge_processors(
 	//qDebug() << argument_vars.template get<std::string>() << std::endl;
 
 	qDebug() << "Get root path" << std::endl;
-	std::string root_path = Additionals::TempFile::get_tempdir_SYSTEM() + "forge-root-" + std::to_string(random_num);
+	std::filesystem::path root_path = std::filesystem::temp_directory_path() / ("forge-root-" + std::to_string(random_num));
 
 	if (argument_vars.contains("{INSTALLER}"))
 	{
@@ -2155,7 +2155,7 @@ bool MinecraftCpp::forge::forge_processors(
 		std::string mainclass = get_jar_mainclass(get_library_path(var["jar"].template get<std::string>(), path));
 		std::vector<std::wstring> command;
 		qDebug() << "Configure command" << std::endl;
-		command.push_back(java.empty() ? L"java" : L"\"" + java.wstring() + L"\"");
+		command.push_back(java.empty() ? L"javaw" : L"\"" + java.wstring() + L"\"");
 		command.push_back(L"-cp");
 		command.push_back(classpath_paths.wstring());
 		command.push_back(Additionals::Convectors::ConvertStringToWString(mainclass));
@@ -2200,8 +2200,10 @@ bool MinecraftCpp::forge::forge_processors(
 		UIThread::run(
 			[&]()
 			{
-				int out = _wsystem(ch_array.get());
-
+				qInfo() << "Forge prcessor command" << imploded << std::endl;
+				int out = client::startProcess(command, std::filesystem::path("somlogs") / "forge_proccess_info.txt");
+				//int out = _wsystem(ch_array.get());
+				qInfo() << "Forge prcessor out code" << out << std::endl;
 			});
 
 		//int out = client::startProcess(command);

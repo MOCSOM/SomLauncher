@@ -3,7 +3,6 @@
 #include <QtWidgets/QApplication>
 
 #include "Web/DownloadClasses.h"
-#include "Databases/SQLBased.h"
 
 #include <qexception.h>
 #include <qmessagebox.h>
@@ -61,6 +60,7 @@ int main(int argc, char* argv[])
 				//main_window.setConnectionWithDatabase();
 				main_window._parcingServers();
 				main_window._settingServersWidgets();
+				main_window._settingServerType();
 				main_window._settingModsCount();
 				main_window._settingCurrentServerName();
 
@@ -78,8 +78,28 @@ int main(int argc, char* argv[])
 			}
 		);
 
+		qInfo() << "Checking user data" << std::endl;
+		std::string json_data_string = account_window.getUserDataFromServer();
+		nlohmann::json json_data = nlohmann::json::parse(json_data_string);
+
+		if (account_window.getUserPassword().empty())
+		{
+			account_window.show();
+		}
+		else
+		{
+			if (account_window.checkPassword(json_data) == true && account_window.checkLogin(json_data) == true)
+			{
+				emit account_window.accountDataReceivedSignal(json_data_string);
+			}
+			else
+			{
+				account_window.show();
+			}
+		}
+
 		//main_window.show();
-		account_window.show();
+		
 		returned_id = application.exec();
 	}
 	catch (const std::exception& exc)

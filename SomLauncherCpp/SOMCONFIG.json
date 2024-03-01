@@ -1,35 +1,17 @@
 {
     "launcher": {
-        "verison": "launchers/SomSetup-Release-1.3.1.msi"
+        "verison": ""
+    },
+    "modpack": {
+        "new-classic": {
+            "version": "0.0.1"
+        }
     },
     "user": {
         "hight": 480,
         "isInstallMods": false,
-        "mcdir": [
-            68,
-            58,
-            47,
-            109,
-            105,
-            110,
-            101,
-            99,
-            114,
-            97,
-            102,
-            116,
-            47,
-            1052,
-            1040,
-            1049,
-            1053,
-            1050,
-            1056,
-            1040,
-            1060,
-            1058
-        ],
-        "memory": 17408,
+        "mcdir": "",
+        "memory": 7168,
         "name": "NanLeb",
         "password": "pbkdf2_sha256$600000$1bd5bde3.gbge.5g38.c4ce.e3ced19f272d$tPiJxUxC1gojJBF39XkRdKvl+wNfMyoH8YYwroTRNOw=",
         "server": 1,

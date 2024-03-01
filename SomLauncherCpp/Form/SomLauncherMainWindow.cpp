@@ -71,6 +71,10 @@ void SomLauncherMainWindow::_settingMinecraftStandartPath()
 void SomLauncherMainWindow::_parcingConfigs()
 {
 	qDebug() << this->config_path << std::endl;
+
+	this->config = Config(config_path);
+	this->config.checkAndCreateConfig();
+
 	std::ifstream ifstr(this->config_path);
 	try
 	{
@@ -132,12 +136,10 @@ void SomLauncherMainWindow::_settingUiChanges()
 
 	//_settingServersWidgets();
 
-	ui.label_minecraft_directory->setText(this->minecraft_core_dir_path.u8string().c_str());
+	ui.label_minecraft_directory->setText(QString::fromStdWString(this->minecraft_core_dir_path.wstring()));
 
 	NewsViewWidget* news_view = new NewsViewWidget();
 	ui.gridLayout_page_news->addWidget(news_view);
-
-	_settingServerType();
 
 	ui.progressBar_ahtung->setHidden(true);
 	ui.label_download_status_change->setHidden(true);
@@ -218,6 +220,8 @@ void SomLauncherMainWindow::_settingConnections()
 	QObject::connect(ui.stackedWidget_bottommenu, &QStackedWidget::currentChanged, this, &SomLauncherMainWindow::pageChangedSlidedWidget);
 
 	QObject::connect(ui.pushButton_checkupdates, &QPushButton::released, this, &SomLauncherMainWindow::onClickedPushButton_check_update);
+
+	QObject::connect(ui.pushButton_reportbug, &QPushButton::released, this, &SomLauncherMainWindow::onClickedPushButtonSendBugReport);
 }
 
 void SomLauncherMainWindow::_settingMemory()
@@ -236,8 +240,8 @@ void SomLauncherMainWindow::_settingModsCount()
 
 void SomLauncherMainWindow::_settingServerType()
 {
-	ServerTypes type = getServerType();
-	ui.label_client_type->setText(ServerTypesToString(type).c_str());
+	std::string type = getServerType();
+	ui.label_client_type->setText(type.c_str());
 }
 
 void SomLauncherMainWindow::_settingAccountDataInUi()
@@ -448,6 +452,7 @@ void SomLauncherMainWindow::groupButtonsClicked(QAbstractButton* id, bool status
 
 		_settingServerNameInChangeServerButton();
 		_settingCurrentServerName();
+		_settingModsCount();
 	}
 }
 
@@ -598,6 +603,11 @@ void SomLauncherMainWindow::onClickedPushButton_check_update()
 	}
 }
 
+void SomLauncherMainWindow::onClickedPushButtonSendBugReport()
+{
+	QDesktopServices::openUrl(QUrl("https://mocsom.site/bug_report/"));
+}
+
 void SomLauncherMainWindow::setReinstallMods(bool state)
 {
 	qInfo() << "setReinstallMods " << state << std::endl;
@@ -627,7 +637,15 @@ void SomLauncherMainWindow::setOptionsValuesFromConfig()
 		}
 	}
 
-	this->username = this->config_parce["user"]["name"].template get<std::string>();
+	if (this->config_parce["user"]["name"].is_array())
+	{
+		this->username = this->config_parce["user"]["name"].template get<std::wstring>();
+	}
+	else
+	{
+		this->username = Additionals::Convectors::ConvertStringToWString(this->config_parce["user"]["name"].template get<std::string>());
+	}
+
 	this->options.resolutionWidth = this->config_parce["user"]["wight"].template get<int>();
 	this->options.resolutionHeight = this->config_parce["user"]["hight"].template get<int>();
 	this->curret_memory = this->config_parce["user"]["memory"].template get<int>();

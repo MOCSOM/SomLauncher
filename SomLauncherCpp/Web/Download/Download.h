@@ -22,6 +22,7 @@
 #include "../../QObjects/Threads/UIThread.h"
 #include "../../QObjects/Threads/LambdaTask.h"
 #include "../../Hashes/Crypto.h"
+#include "../Utils/WebUtils.h"
 
 #undef max
 
@@ -35,6 +36,11 @@ namespace web
 			std::shared_ptr<CallbackNull> callback = std::make_shared<CallbackNull>(),
 			const std::string& sha1 = "",
 			bool lzma_compressed = false);
+
+		namespace utils
+		{
+			QString prettySize(quint64 size, bool isSpeed);
+		}
 	}
 }
 

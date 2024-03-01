@@ -25,11 +25,11 @@ int64_t web::utils::getFileSizeFromUrl(const std::string& url)
 			{
 				// Получаем размер файла из заголовков ответа
 				file_size = reply->header(QNetworkRequest::ContentLengthHeader).toLongLong();
-				qDebug() << "File size:" << file_size << "bytes";
+				qDebug() << "File size:" << file_size << "bytes" << std::endl;
 			}
 			else
 			{
-				qDebug() << "Error:" << reply->errorString();
+				qDebug() << "Error:" << reply->errorString() << std::endl;
 			}
 
 			// Освобождаем ресурсы

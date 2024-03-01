@@ -127,11 +127,25 @@ void SomLauncherMainWindow::setupInstallMinecraft(const size_t& index)
 	);
 
 	nlohmann::json modpack_info = getModpackInfoFromServer(modpack_id);
-	installMods(instance_path / "mods", modpack_info, callback);
+	std::string server_version = "0";
+	try
+	{
+		server_version = this->config_parce["modpack"][name]["version"].template get<std::string>();
+	}
+	catch (const std::exception&) 
+	{
+		this->config_parce["modpack"][name]["version"] = modpack_info["modpack_version"];
+		std::ofstream o(this->config_path);
+		o << this->config_parce.dump(4) << std::endl;
+		o.close();
+		this->is_install_mods = true;
+	}
+	installMods(instance_path / "mods", modpack_info, server_version, callback);
 
 	serversdat::createServersDat(instance_path / "servers.dat", name, ip_port);
 
 	options.gameDirectory = instance_path.wstring();
+	options.username = this->top_frame->getLabelProfile()->text().toStdWString();
 
 	std::vector<std::variant<std::string, std::filesystem::path, std::wstring>> command = MinecraftCpp::get_minecraft_command__(launch_version, instance_path, options);
 	//qInfo() << command;
@@ -243,16 +257,34 @@ nlohmann::json SomLauncherMainWindow::getModpackInfoFromServer(const std::string
 }
 
 void SomLauncherMainWindow::installMods(const std::filesystem::path& install_path,
-	const nlohmann::json& modpack_info,
-	std::shared_ptr<CallbackNull> callback)
+	const nlohmann::json& modpack_info, const std::string& modpack_old_version,
+	std::shared_ptr<CallbackNull> callback) const
 {
+	if (modpack_old_version == modpack_info["modpack_version"])
+	{
+		if (!this->is_install_mods)
+		{
+			return;
+		}
+	}
+	
 	std::filesystem::create_directories(install_path);
+	std::filesystem::directory_iterator mods_in_dir(install_path);
+	for (auto& mod : mods_in_dir)
+	{
+		auto finder = modpack_info["mods"].find("https://mocsom.site/media/mods/" + mod.path().filename().u8string());
+		if (finder != modpack_info["mods"].end())
+		{
+			/*for (const auto& entry : std::filesystem::directory_iterator(install_path))
+				std::filesystem::remove_all(entry.path());*/
+			std::filesystem::remove_all(mod.path());
+			break;
+		}
+	}
 	for (auto& mod : modpack_info["mods"])
 	{
 		std::string url = mod["mod_link"].template get<std::string>();
 		std::string sha1 = mod["sha1"].template get<std::string>();
-
-		callback->setTotalDownloadSize(web::utils::getFileSizeFromUrl(url));
 
 		std::filesystem::path downloaded_path = DownloadFile(url,
 			install_path, callback, sha1);
@@ -335,7 +367,7 @@ void SomLauncherMainWindow::checkJava(MinecraftCpp::option::MinecraftOptions& op
 			return;
 		}
 
-		options.executablePath = java_path / "bin" / "java.exe";
+		options.executablePath = java_path / "bin" / "javaw.exe";
 
 		return;
 	}
@@ -347,7 +379,7 @@ void SomLauncherMainWindow::checkJava(MinecraftCpp::option::MinecraftOptions& op
 		{
 			qInfo() << "Install java..." << std::endl;
 			java_dir = DDIC::Download::Java::install(java_verison, this->minecraft_core_dir_path, callback);
-			options.executablePath = java_dir / "bin" / "java.exe";
+			options.executablePath = java_dir / "bin" / "javaw.exe";
 		}
 		else
 		{
@@ -356,7 +388,7 @@ void SomLauncherMainWindow::checkJava(MinecraftCpp::option::MinecraftOptions& op
 			{
 				if (var.second == java_verison)
 				{
-					options.executablePath = var.first / "bin" / "java.exe";
+					options.executablePath = var.first / "bin" / "javaw.exe";
 				}
 			}
 		}
@@ -375,7 +407,7 @@ void SomLauncherMainWindow::checkJava(MinecraftCpp::option::MinecraftOptions& op
 		{
 			if (var.second == java_verison)
 			{
-				options.executablePath = var.first / "bin" / "java.exe";
+				options.executablePath = var.first / "bin" / "javaw.exe";
 			}
 		}
 	}
@@ -388,7 +420,10 @@ size_t SomLauncherMainWindow::getMinecraftModsCount()
 
 	try
 	{
-		directory = std::filesystem::directory_iterator(this->minecraft_core_dir_path / "mods");
+		directory = std::filesystem::directory_iterator(
+			this->minecraft_core_dir_path / 
+			this->servers_parce[this->config_parce["user"]["server"].template get<int>()]["server_slug"].template get<std::string>() /
+			"mods");
 	}
 	catch (const std::exception&)
 	{
@@ -399,7 +434,7 @@ size_t SomLauncherMainWindow::getMinecraftModsCount()
 	{
 		if (elem.is_regular_file())
 		{
-			if (elem.path().extension().u8string() == ".jar" || elem.path().extension().u8string() == ".disabled")
+			if (elem.path().extension().wstring() == L".jar" || elem.path().extension().wstring() == L".disabled")
 				++count;
 		}
 	}
@@ -407,9 +442,9 @@ size_t SomLauncherMainWindow::getMinecraftModsCount()
 	return count;
 }
 
-ServerTypes SomLauncherMainWindow::getServerType()
+std::string SomLauncherMainWindow::getServerType()
 {
-	return ServerTypes::LIVE;
+	return this->servers_parce[this->config_parce["user"]["server"].template get<int>()]["server_type"].template get<std::string>();
 }
 
 std::string SomLauncherMainWindow::getCurrentServerName()

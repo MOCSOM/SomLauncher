@@ -40,7 +40,6 @@
 #include <regex>
 #include <set>
 
-#include <json/json.h>
 #include <nlohmann/json.hpp>
 
 namespace MinecraftCpp
@@ -52,7 +51,7 @@ namespace MinecraftCpp
 			MinecraftOptions() {}
 			~MinecraftOptions() {}
 
-			std::string username = "";
+			std::wstring username = L"";
 			std::string uuid = "";
 			std::string token = "";
 			std::filesystem::path executablePath = "";
@@ -78,7 +77,7 @@ namespace MinecraftCpp
 			bool is_exist(const std::string& param);
 		};
 	}
-
+	
 	SJson::JsonValue get_version_list();
 
 	std::vector<std::string> generateCommandLine(const std::filesystem::path& nativeFolder, MinecraftCpp::option::LaunchOptions& options);

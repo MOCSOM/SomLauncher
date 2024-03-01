@@ -1,7 +1,7 @@
 #include "ServerWidget.h"
 
 ServerWidget::ServerWidget(QButtonGroup* group, nlohmann::json server_data, QWidget* parent)
-	: QWidget(parent)
+	: QWidget(parent), server_data(server_data)
 {
 	ui.setupUi(this);
 
@@ -11,6 +11,8 @@ ServerWidget::ServerWidget(QButtonGroup* group, nlohmann::json server_data, QWid
 	ui.radioButton_selecterserver->setObjectName(server_data["server_name"].template get<std::string>());
 
 	ui.textBrowser_serverdescription->setText(server_data["server_description"].template get<std::string>().c_str());
+
+	setServerDataFromApi();
 
 	QObject::connect(ui.pushButton_selectserver, &QPushButton::clicked, this, &ServerWidget::pushButtonSelectClicked);
 	QObject::connect(ui.radioButton_selecterserver, &QAbstractButton::toggled, this, &ServerWidget::radioButtonChecked);
@@ -25,6 +27,24 @@ void ServerWidget::setStatusServer(bool value)
 	ui.radioButton_selecterserver->setChecked(value);
 
 	emit toggled();
+}
+
+void ServerWidget::setServerDataFromApi()
+{
+	nlohmann::json status = web::minecraft::status::getMinecraftStatusServer(this->server_data["server_ip"].template get<std::string>());
+
+	try
+	{
+		ui.label_playerscount->setText(std::to_string(status["players"]["online"].template get<int>()).c_str());
+		ui.progressBar_capacityserver->setValue(status["players"]["online"].template get<int>());
+		ui.progressBar_capacityserver->setMaximum(status["players"]["max"].template get<int>());
+	}
+	catch (const std::exception&)
+	{
+		ui.label_playerscount->setHidden(true);
+		ui.progressBar_capacityserver->setHidden(true);
+	}
+	ui.label_onlinestatus->setText(status["online"].template get<bool>() ? tr("Online") : tr("Offline"));
 }
 
 void ServerWidget::pushButtonSelectClicked()

@@ -9,6 +9,7 @@
 
 #include "../Moc/Logger/MocIOStream.h"
 #include "../Json/SomJson.h"
+#include "../Web/Minecraft/Status/MinecraftStatus.h"
 
 class ServerWidget : public QWidget
 {
@@ -20,6 +21,8 @@ public:
 
 	void setStatusServer(bool value);
 
+	void setServerDataFromApi();
+
 signals:
 	void toggled();
 
@@ -30,6 +33,8 @@ private slots:
 
 private:
 	Ui::ServerWidgetClass ui;
+
+	nlohmann::json server_data;
 };
 
 #endif /*SERVERWIDGET_H_*/

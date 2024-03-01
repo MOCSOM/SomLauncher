@@ -102,9 +102,11 @@ void customHandler(QtMsgType type, const QMessageLogContext& context, const QStr
 	switch (type)
 	{
 	case QtDebugMsg:
+#ifdef DEBUG
 		std::fstream(stdout) << "[Debug]: " << localMsg.constData();
 		textStream << "[" << now->tm_sec << ":" << now->tm_min << ":" << now->tm_hour << "]"
 			<< " " << "[" << function << "\\" << "DEBUG]: " << localMsg.constData();
+#endif // DEBUG
 		break;
 	case QtInfoMsg:
 		std::fstream(stdout) << "[Info]: " << localMsg.constData();

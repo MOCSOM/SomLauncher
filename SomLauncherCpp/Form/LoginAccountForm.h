@@ -6,6 +6,7 @@
 
 #include <string>
 #include <optional>
+#include <sstream>
 
 #include <curlpp/cURLpp.hpp>
 #include <curlpp/Easy.hpp>
@@ -15,7 +16,6 @@
 
 #include <nlohmann/json.hpp>
 
-#include "../Databases/SQLBased.h"
 #include "../Json/SomJson.h"
 #include "../Moc/Logger/MocIOStream.h"
 #include "../Encryption/PBKDF2SHA256.h"

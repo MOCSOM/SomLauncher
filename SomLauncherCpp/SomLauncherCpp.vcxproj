@@ -94,7 +94,6 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <AllProjectIncludesArePublic>true</AllProjectIncludesArePublic>
     <AllProjectBMIsArePublic>true</AllProjectBMIsArePublic>
-    <ExecutablePath>C:\Users\alkor\source\libs\dlls\$(PlatformTarget)\$(Configuration)\bin;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <ExternalIncludePath>$(ExternalIncludePath)</ExternalIncludePath>
@@ -121,11 +120,11 @@
       <AdditionalIncludeDirectories>$(ProgramFiles)\MySQL\MySQL Connector C++ 8.2\include\jdbc;$(VcpkgRoot)\installed\x64-windows\include;$(Qt_INCLUDEPATH_)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>$(Qt_DEFINES_);%(PreprocessorDefinitions);STATIC_CONCPP;CURL_STATICLIB</PreprocessorDefinitions>
       <LanguageStandard>$(Qt_STDCPP_)</LanguageStandard>
+      <Optimization>Disabled</Optimization>
     </ClCompile>
     <Link>
-      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <AdditionalLibraryDirectories>$(VcpkgRoot)\installed\x64-windows\debug\lib;$(ProgramFiles)\MySQL\MySQL Connector C++ 8.2\lib64\vs14\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>%(AdditionalDependencies);$(Qt_LIBS_);mysqlcppconn-static.lib;lzma.lib;libcrypto.lib;libssl.lib;Urlmon.lib;User32.lib;libcurl-d.lib;curlpp.lib</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies);$(Qt_LIBS_);lzma.lib;libcrypto.lib;libssl.lib;libcurl-d.lib;curlpp.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -138,19 +137,15 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(VcpkgRoot)\installed\x64-windows\lib;$(ProgramFiles)\MySQL\MySQL Connector C++ 8.2\lib64\vs14;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>%(AdditionalDependencies);$(Qt_LIBS_);mysqlcppconn-static.lib;lzma.lib;libcrypto.lib;libssl.lib;Urlmon.lib;User32.lib;libcurl.lib;curlpp.lib</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies);$(Qt_LIBS_);lzma.lib;libcrypto.lib;libssl.lib;Urlmon.lib;User32.lib;libcurl.lib;curlpp.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
     <ClCompile>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <Optimization>Disabled</Optimization>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="Configuration">
@@ -195,8 +190,8 @@
     <ClCompile Include="basic_xml.cpp" />
     <ClCompile Include="Callbacks\CallbackDict.cpp" />
     <ClCompile Include="Callbacks\QCallback.cpp" />
+    <ClCompile Include="Client\Config\Config.cpp" />
     <ClCompile Include="Client\StartProcess.cpp" />
-    <ClCompile Include="Databases\SQLBased.cpp" />
     <ClCompile Include="Encryption\LZMA\LzmaDecompress.cpp" />
     <ClCompile Include="Encryption\PBKDF2SHA256.cpp" />
     <ClCompile Include="Exceptions\FileOutsideMinecraftDirectoryException.cpp" />
@@ -230,6 +225,7 @@
     <ClCompile Include="Upgrader.cpp" />
     <ClCompile Include="Web\DownloadClasses.cpp" />
     <ClCompile Include="Web\Download\Download.cpp" />
+    <ClCompile Include="Web\Minecraft\Status\MinecraftStatus.cpp" />
     <ClCompile Include="Web\Utils\WebUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -239,8 +235,9 @@
     <ClInclude Include="Archives\qzipwriter_p.h" />
     <ClInclude Include="basic_xml.h" />
     <ClInclude Include="Callbacks\QCallback.h" />
+    <ClInclude Include="Client\Config\Config.h" />
     <ClInclude Include="Client\StartProcess.h" />
-    <ClInclude Include="Databases\SQLBased.h" />
+    <ClInclude Include="Web\Minecraft\Status\MinecraftStatus.h" />
     <ClInclude Include="Web\Utils\WebUtils.h" />
     <QtMoc Include="QObjects\Threads\UIThread.h" />
     <ClInclude Include="Hashes\Crypto.h" />

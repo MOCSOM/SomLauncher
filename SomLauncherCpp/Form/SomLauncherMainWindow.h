@@ -12,6 +12,7 @@
 #include <qnetworkrequest.h>
 #include <qnetworkaccessmanager.h>
 #include <qnetworkreply.h>
+#include <QDesktopServices>
 //#include <qgraphicsview.h>
 
 #include <iostream>
@@ -39,10 +40,10 @@
 //#include "../Minecraft/CommandBuilder.h"
 #include "../Client/StartProcess.h"
 #include "../Minecraft/Mods.h"
-#include "../Databases/SQLBased.h"
 #include "../Minecraft/Servers/ServerDatConfiguration.h"
 #include "../Callbacks/QCallback.h"
 #include "../Web/Utils/WebUtils.h"
+#include "../Client/Config/Config.h"
 
 #include "ui_SomLauncherMainWindow.h"
 
@@ -72,7 +73,7 @@ private:
 	std::string servers_json = "";
 	std::string launcher_name = "SomLauncher";
 	std::string launcher_version = "2.0";
-	std::string username = "Debug";
+	std::wstring username = L"Debug";
 	bool is_install_mods = true;
 
 	std::string server_changer_button_text = "";
@@ -84,6 +85,8 @@ private:
 	MinecraftCpp::option::MinecraftOptions options;
 	MinecraftCpp::option::MinecraftOptions default_options = options;
 	std::unique_ptr<SettingsDialog> settings_dialog;
+
+	Config config;
 
 	nlohmann::json config_parce;
 	nlohmann::json servers_parce;
@@ -141,8 +144,9 @@ public:
 		std::shared_ptr<CallbackNull> callback = std::make_shared<CallbackNull>()) const;
 
 	nlohmann::json getModpackInfoFromServer(const std::string& modpack_id);
-	void installMods(const std::filesystem::path& install_path, const nlohmann::json& modpack_info,
-		std::shared_ptr<CallbackNull> callback = std::make_shared<CallbackNull>());
+	void installMods(const std::filesystem::path& install_path, const nlohmann::json& modpack_info, 
+		const std::string& modpack_old_version,
+		std::shared_ptr<CallbackNull> callback = std::make_shared<CallbackNull>()) const;
 
 	void createSettingsForm();
 	bool isConfigExist() const;
@@ -151,7 +155,7 @@ public:
 	void checkJava(MinecraftCpp::option::MinecraftOptions& options, std::string java_verison = "", CallbackNull* callback = new CallbackNull) const;
 	void setOptionsValuesFromConfig();
 	size_t getMinecraftModsCount();
-	ServerTypes getServerType();
+	std::string getServerType();
 	std::string getCurrentServerName();
 	const std::filesystem::path getConfigPath();
 	void _settingServerNameInChangeServerButton();
@@ -176,6 +180,7 @@ private slots:
 	void onClickedpushLable_profile();
 	void onClickedpushButton_settings();
 	void onClickedPushButton_check_update();
+	void onClickedPushButtonSendBugReport();
 
 	void onClickpushButton_startgame();
 
