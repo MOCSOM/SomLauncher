@@ -5,11 +5,16 @@
 #include "ui_ServerWidget.h"
 #include <qbuttongroup.h>
 
+#include <string>
+
 #include <nlohmann/json.hpp>
 
 #include "../Moc/Logger/MocIOStream.h"
 #include "../Json/SomJson.h"
 #include "../Web/Minecraft/Status/MinecraftStatus.h"
+
+#define FRIENDS_SERVERS_TYPE std::string("FRIEND")
+#define CLOSE_SERVERS_TYPE std::string("CLOSE")
 
 class ServerWidget : public QWidget
 {
@@ -22,6 +27,8 @@ public:
 	void setStatusServer(bool value);
 
 	void setServerDataFromApi();
+
+	bool isToFriends();
 
 signals:
 	void toggled();

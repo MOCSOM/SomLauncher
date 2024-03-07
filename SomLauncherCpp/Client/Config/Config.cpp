@@ -4,7 +4,15 @@ Config::Config(const std::filesystem::path& config_path)
 	: config_path(config_path)
 {
 	std::ifstream ifstr(config_path);
-	this->config_json = nlohmann::json::parse(ifstr);
+	try
+	{
+		this->config_json = nlohmann::json::parse(ifstr);
+	}
+	catch (const std::exception&)
+	{
+		this->createConfig();
+		this->config_json = nlohmann::json::parse(ifstr);
+	}
 	ifstr.close();
 }
 
@@ -42,7 +50,59 @@ void Config::checkAndCreateConfig() const
 	}
 }
 
-nlohmann::json Config::getConfigJson()
+void Config::saveJsonToFile(const nlohmann::json& json, const std::filesystem::path& file_path)
+{
+	std::ofstream ofstr(file_path);
+	ofstr << json.dump(4) << std::endl;
+	ofstr.close();
+}
+
+void Config::saveJsonToFile(const std::filesystem::path& file_path)
+{
+	std::ofstream ofstr(file_path);
+	ofstr << this->config_json.dump(4) << std::endl;
+	ofstr.close();
+}
+
+void Config::saveJsonToFile()
+{
+	std::ofstream ofstr(this->config_path);
+	ofstr << this->config_json.dump(4) << std::endl;
+	ofstr.close();
+}
+
+void Config::reopenConfig()
+{
+	std::ifstream ifstr(this->config_path);
+	try
+	{
+		this->config_json = nlohmann::json::parse(ifstr);
+	}
+	catch (const std::exception&)
+	{
+		this->createConfig();
+		this->config_json = nlohmann::json::parse(ifstr);
+	}
+	ifstr.close();
+}
+
+void Config::reopenConfig(const std::filesystem::path& config_path)
+{
+	this->config_path = config_path;
+	std::ifstream ifstr(config_path);
+	try
+	{
+		this->config_json = nlohmann::json::parse(ifstr);
+	}
+	catch (const std::exception&)
+	{
+		this->createConfig();
+		this->config_json = nlohmann::json::parse(ifstr);
+	}
+	ifstr.close();
+}
+
+nlohmann::json& Config::json()
 {
 	return this->config_json;
 }

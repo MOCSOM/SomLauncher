@@ -15,6 +15,8 @@
 #include <QDesktopServices>
 //#include <qgraphicsview.h>
 
+#include <QSimpleUpdater.h>
+
 #include <iostream>
 #include <string>
 #include <windows.h>
@@ -44,6 +46,8 @@
 #include "../Callbacks/QCallback.h"
 #include "../Web/Utils/WebUtils.h"
 #include "../Client/Config/Config.h"
+
+#include "../Updater/UpdateController.h"
 
 #include "ui_SomLauncherMainWindow.h"
 
@@ -80,6 +84,8 @@ private:
 
 	std::string background = "resources\\background_normal2.png";
 	std::string mocsom_site_url = "https://mocsom.site/";
+	std::string mocsom_site_api = "api/";
+	std::string mocsom_api_launcher = "launcher/";
 	std::string style_sheet = "resources\\StyleSheets\\Wstartpage_modyfied.qss";
 
 	MinecraftCpp::option::MinecraftOptions options;
@@ -88,9 +94,10 @@ private:
 
 	Config config;
 
-	nlohmann::json config_parce;
 	nlohmann::json servers_parce;
 	nlohmann::json account_data;
+
+	QSimpleUpdater* updater;
 
 	int max_memory = 1024;
 	int recomended_memory = 1024;
@@ -126,7 +133,11 @@ public:
 	void _settingServerType();
 	void _settingAccountDataInUi();
 
-	void disableServers();
+	void settingUserProfileImage();
+
+	void checkUpdates();
+
+	void disableServer();
 
 	void setUiToDownload(bool status);
 
@@ -160,10 +171,10 @@ public:
 	const std::filesystem::path getConfigPath();
 	void _settingServerNameInChangeServerButton();
 	std::string getLatestVersionFromGithub();
-	nlohmann::json getLatestVersionFromDatabase();
+	nlohmann::json getLatestVersionFromSite();
 	std::string getCurrentVersionFromConfig();
 	void setCurrentVersionFromGithub();
-	void setCurrentVersionFromDatabase();
+	void setCurrentVersionFromSite();
 	bool isVersionOld();
 	void setAccountData(const nlohmann::json& data);
 	void setUuidFromAccount();
@@ -191,6 +202,8 @@ private slots:
 	void groupButtonsClicked(QAbstractButton* id, bool status);
 
 	void saveSettings();
+
+	void setNewVersionInConfig(const QString& url, const QString& file_path);
 
 	void updateProgressBar(int value);
 	void updateProgressLabel(const QString& text);

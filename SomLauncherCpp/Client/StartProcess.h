@@ -21,7 +21,6 @@ namespace client
 
 	namespace utils
 	{
-		int doProcess(std::unique_ptr<wchar_t[]>& args);
 		int doProcess(std::unique_ptr<wchar_t[]>& args, const std::filesystem::path& output_file);
 	}
 }

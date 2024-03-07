@@ -44,6 +44,11 @@ QPushButton* TopSlideFrameWidget::getPushButtonGame() const
 	return ui.pushButton_game;
 }
 
+QLabel* TopSlideFrameWidget::getAccountIcon() const
+{
+	return ui.label_avatar_image;
+}
+
 void TopSlideFrameWidget::setMainButtonsTextAlightButtom()
 {
 	ui.pushButton_game->setStyleSheet("text-align:bottom;");

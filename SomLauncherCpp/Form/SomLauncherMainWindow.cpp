@@ -6,6 +6,9 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget* parent)
 	ui.setupUi(this);
 	qInfo() << "ui setup completed" << std::endl;
 
+	UpdateController cont(this, "tedts", "test", GoUpdate::OperationList{ GoUpdate::Operation::OP_REPLACE });
+	cont.installUpdates();
+
 	this->progressBar_ahtung_geometry = ui.progressBar_ahtung->geometry();
 
 	qInfo() << "Setting mc standart path..." << std::endl;
@@ -38,17 +41,17 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget* parent)
 	_settingConnections();
 
 	qInfo() << "Setting cyrrentversion..." << std::endl;
-	setCurrentVersionFromDatabase();
+	setCurrentVersionFromSite();
 
 	/*qInfo() << "Checking verison..." << std::endl;
 	if (isVersionOld())
 	{
 		qInfo() << "Start updater" << std::endl;
-		emit this->updateSignal(getLatestVersionFromDatabase()[getLatestVersionFromDatabase().get_array().size() - 1]["file"].to_string());
+		emit this->updateSignal(getLatestVersionFromSite()[getLatestVersionFromSite().get_array().size() - 1]["file"].to_string());
 	}*/
 
 	this->recomended_memory = 3072;
-	this->curret_memory = this->config_parce["user"]["memory"].template get<int>();
+	this->curret_memory = this->config.json()["user"]["memory"].template get<int>();
 
 	qInfo() << "Create main window complete" << std::endl;
 }
@@ -72,20 +75,8 @@ void SomLauncherMainWindow::_parcingConfigs()
 {
 	qDebug() << this->config_path << std::endl;
 
-	this->config = Config(config_path);
+	this->config = Config(this->config_path);
 	this->config.checkAndCreateConfig();
-
-	std::ifstream ifstr(this->config_path);
-	try
-	{
-		this->config_parce = nlohmann::json::parse(ifstr);
-	}
-	catch (const std::exception&)
-	{
-		this->createConfig();
-		this->_parcingConfigs();
-	}
-	ifstr.close();
 }
 
 void SomLauncherMainWindow::_parcingServers()
@@ -151,10 +142,10 @@ void SomLauncherMainWindow::_settingServersWidgets()
 {
 	try
 	{
-		if (this->servers_parce.size() > this->config_parce["user"]["server"].template get<int>())
+		if (this->servers_parce.size() > this->config.json()["user"]["server"].template get<int>())
 		{
 			ui.pushButton_changeserver->setText((this->server_changer_button_text +
-				this->servers_parce[this->config_parce["user"]["server"].template get<int>()]["server_name"].template get<std::string>() +
+				this->servers_parce[this->config.json()["user"]["server"].template get<int>()]["server_name"].template get<std::string>() +
 				")").c_str());
 
 			this->server_radio_button_group = std::make_unique<QButtonGroup>();
@@ -165,11 +156,13 @@ void SomLauncherMainWindow::_settingServersWidgets()
 
 				this->widget_list.append(widget);
 
-				if (this->config_parce["user"]["server"].type() != nlohmann::json::value_t::null && this->config_parce["user"]["server"].template get<int>() == i)
+				if (this->config.json()["user"]["server"].type() != nlohmann::json::value_t::null && this->config.json()["user"]["server"].template get<int>() == i)
 				{
 					widget->setStatusServer(true);
 				}
 			}
+
+			disableServer();
 
 			int index = 0;
 			for (int i = 0; i < (this->servers_parce.size() - 1) / 2 + 1; ++i)
@@ -249,9 +242,30 @@ void SomLauncherMainWindow::_settingAccountDataInUi()
 	this->top_frame->getLabelProfile()->setText(this->account_data["username"].template get<std::string>().c_str());
 }
 
-void SomLauncherMainWindow::disableServers()
+void SomLauncherMainWindow::settingUserProfileImage()
 {
-	//this->ser
+	std::string user_icon_string = this->account_data["avatar"].template get<std::string>();
+	QPixmap user_icon;
+	user_icon.loadFromData(QByteArray::fromBase64(user_icon_string.c_str()), "PNG");
+	this->top_frame->getAccountIcon()->setPixmap(user_icon);
+}
+
+void SomLauncherMainWindow::disableServer()
+{
+	bool is_friend = this->account_data["is_friend"].template get<bool>();
+	
+	if (is_friend)
+	{
+		return;
+	}
+
+	for (auto& elem : this->widget_list)
+	{
+		if (elem->isToFriends())
+		{
+			elem->setDisabled(true);
+		}
+	}
 }
 
 void SomLauncherMainWindow::onClickedpushButton_game()
@@ -293,7 +307,7 @@ void SomLauncherMainWindow::onClickedpushButton_changeserver()
 		{
 			_settingServerNameInChangeServerButton();
 			_settingCurrentServerName();
-			this->widget_list[this->config_parce["user"]["server"].template get<int>()]->setStatusServer(true);
+			this->widget_list[this->config.json()["user"]["server"].template get<int>()]->setStatusServer(true);
 		});
 
 	dialog.exec(); //modal server changer
@@ -301,12 +315,10 @@ void SomLauncherMainWindow::onClickedpushButton_changeserver()
 
 void SomLauncherMainWindow::_settingServerNameInChangeServerButton()
 {
-	std::ifstream istr(this->config_path);
-	this->config_parce = nlohmann::json::parse(istr);
-	istr.close();
+	this->config.reopenConfig();
 
 	ui.pushButton_changeserver->setText((this->server_changer_button_text +
-		this->servers_parce[this->config_parce["user"]["server"].template get<int>()]["server_name"].template get<std::string>() +
+		this->servers_parce[this->config.json()["user"]["server"].template get<int>()]["server_name"].template get<std::string>() +
 		")").c_str());
 	//this->widget_list[this->config_parce["user"]["server"].to_int()]->setStatusServer(true);
 }
@@ -323,7 +335,7 @@ void SomLauncherMainWindow::onClickedpushButton_settings()
 	QObject::connect(this->settings_dialog.get(), &SettingsDialog::changedMinecraftPathSignal,
 		[=](const std::filesystem::path& path) -> void
 		{
-			this->config_parce["user"]["mcdir"] = path;
+			this->config.json()["user"]["mcdir"] = path;
 			//this->config_path = path / "SOMCONFIG.json";
 			////Проверка и создание конфига
 			//qInfo() << "Checking config..." << std::endl;
@@ -436,23 +448,19 @@ void SomLauncherMainWindow::groupButtonsClicked(QAbstractButton* id, bool status
 			}
 		}
 
-		this->config_parce["user"]["server"] = index;
+		this->config.json()["user"]["server"] = index;
 
-		qInfo() << "Server is: " << this->config_parce["user"]["server"].template get<int>() << std::endl;
+		qInfo() << "Server is: " << this->config.json()["user"]["server"].template get<int>() << std::endl;
 
-		std::ofstream o(this->config_path);
-		o << this->config_parce.dump(4) << std::endl;
-		o.close();
-
-		std::ifstream ifstr(this->config_path);
-		this->config_parce = nlohmann::json::parse(ifstr);
-		ifstr.close();
+		this->config.saveJsonToFile();
+		this->config.reopenConfig();
 
 		qInfo() << "Server saved" << std::endl;
 
 		_settingServerNameInChangeServerButton();
 		_settingCurrentServerName();
 		_settingModsCount();
+		_settingServerType();
 	}
 }
 
@@ -496,14 +504,14 @@ void SomLauncherMainWindow::saveSettings()
 	if (this->settings_dialog->getReintsallModsState() == true)
 	{
 		this->is_install_mods = true;
-		this->config_parce["user"]["isInstallMods"] = this->is_install_mods;
+		this->config.json()["user"]["isInstallMods"] = this->is_install_mods;
 		//qInfo() << "isInstallMods is: " << this->config_parce["user"]["isInstallMods"].template get<std::string>() << std::endl;
 	}
 	//qInfo() << "isInstallMods is: " << this->config_parce["user"]["isInstallMods"].template get<std::string>() << std::endl;
 
 	this->curret_memory = memory_value;
 
-	config_parce["user"]["memory"] = memory_value;
+	this->config.json()["user"]["memory"] = memory_value;
 
 	//qInfo() << "Memory is: " << this->config_parce["user"]["memory"].template get<std::string>() << std::endl;
 
@@ -524,40 +532,35 @@ void SomLauncherMainWindow::saveSettings()
 	if (minecraft_path != "")
 	{
 		this->minecraft_core_dir_path = minecraft_path;
-		this->config_parce["user"]["mcdir"] = this->minecraft_core_dir_path.wstring();
+		this->config.json()["user"]["mcdir"] = this->minecraft_core_dir_path.wstring();
 	}
 	else
 	{
 		this->minecraft_core_dir_path = this->default_options.gameDirectory;
-		this->config_parce["user"]["mcdir"] = "";
+		this->config.json()["user"]["mcdir"] = "";
 	}
 
-	std::ofstream o(this->config_path);
-	o << this->config_parce.dump(4) << std::endl;
-	o.close();
+	this->config.saveJsonToFile();
+	this->config.reopenConfig();
 
-	std::ifstream istr(this->config_path);
-	this->config_parce = nlohmann::json::parse(istr);
-	istr.close();
-
-	if (this->config_parce["user"]["mcdir"].is_array())
+	if (this->config.json()["user"]["mcdir"].is_array())
 	{
 		this->minecraft_core_dir_path = "";
-		for (auto& symbol : this->config_parce["user"]["mcdir"])
+		for (auto& symbol : this->config.json()["user"]["mcdir"])
 		{
 			this->minecraft_core_dir_path += static_cast<wchar_t>(symbol.template get<int>());
 		}
 	}
 	else
 	{
-		if (this->config_parce["user"]["mcdir"].template get<std::filesystem::path>() != "")
+		if (this->config.json()["user"]["mcdir"].template get<std::filesystem::path>() != "")
 		{
-			this->minecraft_core_dir_path = this->config_parce["user"]["mcdir"].template get<std::filesystem::path>();
+			this->minecraft_core_dir_path = this->config.json()["user"]["mcdir"].template get<std::filesystem::path>();
 		}
 		else
 		{
 			this->minecraft_core_dir_path = this->default_options.gameDirectory;
-			this->config_parce["user"]["mcdir"] = "";
+			this->config.json()["user"]["mcdir"] = "";
 		}
 	}
 
@@ -590,17 +593,17 @@ void SomLauncherMainWindow::pageChangedSlidedWidget(int value)
 void SomLauncherMainWindow::onClickedPushButton_check_update()
 {
 	qInfo() << "onClickedPushButton_check_update" << std::endl;
-	if (isVersionOld())
+	/*if (isVersionOld())
 	{
 		qInfo() << "Start updater" << std::endl;
-		this->config_parce["launcher"]["verison"] = getLatestVersionFromDatabase()[getLatestVersionFromDatabase().size() - 1]["version"].template get<std::string>();
+		this->config.json()["launcher"]["verison"] = getLatestVersionFromSite()[getLatestVersionFromSite().size() - 1]["version"].template get<std::string>();
 
-		std::ofstream o(this->config_path);
-		o << this->config_parce.dump(4) << std::endl;
-		o.close();
+		this->config.saveJsonToFile();
 
-		emit this->updateSignal(getLatestVersionFromDatabase()[getLatestVersionFromDatabase().size() - 1]["file"].template get<std::string>());
-	}
+		emit this->updateSignal(getLatestVersionFromSite()[getLatestVersionFromSite().size() - 1]["file"].template get<std::string>());
+	}*/
+
+	checkUpdates();
 }
 
 void SomLauncherMainWindow::onClickedPushButtonSendBugReport()
@@ -611,7 +614,7 @@ void SomLauncherMainWindow::onClickedPushButtonSendBugReport()
 void SomLauncherMainWindow::setReinstallMods(bool state)
 {
 	qInfo() << "setReinstallMods " << state << std::endl;
-	this->config_parce["user"]["isInstallMods"] = state;
+	this->config.json()["user"]["isInstallMods"] = state;
 }
 
 void SomLauncherMainWindow::updateProgressLabel(const QString& text)
@@ -621,37 +624,37 @@ void SomLauncherMainWindow::updateProgressLabel(const QString& text)
 
 void SomLauncherMainWindow::setOptionsValuesFromConfig()
 {
-	if (this->config_parce["user"]["mcdir"].is_array())
+	if (this->config.json()["user"]["mcdir"].is_array())
 	{
 		this->minecraft_core_dir_path = "";
-		for (auto& symbol : this->config_parce["user"]["mcdir"])
+		for (auto& symbol : this->config.json()["user"]["mcdir"])
 		{
 			this->minecraft_core_dir_path += static_cast<wchar_t>(symbol.template get<int>());
 		}
 	}
 	else
 	{
-		if (this->config_parce["user"]["mcdir"].template get<std::string>() != "")
+		if (this->config.json()["user"]["mcdir"].template get<std::string>() != "")
 		{
-			this->minecraft_core_dir_path = this->config_parce["user"]["mcdir"].template get<std::string>();
+			this->minecraft_core_dir_path = this->config.json()["user"]["mcdir"].template get<std::string>();
 		}
 	}
 
-	if (this->config_parce["user"]["name"].is_array())
+	if (this->config.json()["user"]["name"].is_array())
 	{
-		this->username = this->config_parce["user"]["name"].template get<std::wstring>();
+		this->username = this->config.json()["user"]["name"].template get<std::wstring>();
 	}
 	else
 	{
-		this->username = Additionals::Convectors::ConvertStringToWString(this->config_parce["user"]["name"].template get<std::string>());
+		this->username = Additionals::Convectors::ConvertStringToWString(this->config.json()["user"]["name"].template get<std::string>());
 	}
 
-	this->options.resolutionWidth = this->config_parce["user"]["wight"].template get<int>();
-	this->options.resolutionHeight = this->config_parce["user"]["hight"].template get<int>();
-	this->curret_memory = this->config_parce["user"]["memory"].template get<int>();
+	this->options.resolutionWidth = this->config.json()["user"]["wight"].template get<int>();
+	this->options.resolutionHeight = this->config.json()["user"]["hight"].template get<int>();
+	this->curret_memory = this->config.json()["user"]["memory"].template get<int>();
 
 	this->options.gameDirectory = this->minecraft_core_dir_path;
 	this->options.username = this->username;
 
-	this->is_install_mods = this->config_parce["user"]["isInstallMods"].template get<bool>();
+	this->is_install_mods = this->config.json()["user"]["isInstallMods"].template get<bool>();
 }

@@ -1,7 +1,7 @@
 #ifndef UPGRADER_H_
 #define UPGRADER_H_
 
-#include "Web/DownloadClasses.h"
+#include "../Web/DownloadClasses.h"
 
 void downloadInstaller();
 

@@ -7,10 +7,10 @@ ServerWidget::ServerWidget(QButtonGroup* group, nlohmann::json server_data, QWid
 
 	group->addButton(ui.radioButton_selecterserver);
 
-	ui.label_servername->setText(server_data["server_name"].template get<std::string>().c_str());
-	ui.radioButton_selecterserver->setObjectName(server_data["server_name"].template get<std::string>());
+	ui.label_servername->setText(this->server_data["server_name"].template get<std::string>().c_str());
+	ui.radioButton_selecterserver->setObjectName(this->server_data["server_name"].template get<std::string>());
 
-	ui.textBrowser_serverdescription->setText(server_data["server_description"].template get<std::string>().c_str());
+	ui.textBrowser_serverdescription->setText(this->server_data["server_description"].template get<std::string>().c_str());
 
 	setServerDataFromApi();
 
@@ -45,6 +45,12 @@ void ServerWidget::setServerDataFromApi()
 		ui.progressBar_capacityserver->setHidden(true);
 	}
 	ui.label_onlinestatus->setText(status["online"].template get<bool>() ? tr("Online") : tr("Offline"));
+}
+
+bool ServerWidget::isToFriends()
+{
+	return (this->server_data["server_type"].template get<std::string>() == FRIENDS_SERVERS_TYPE) ||
+		(this->server_data["server_type"].template get<std::string>() == CLOSE_SERVERS_TYPE);
 }
 
 void ServerWidget::pushButtonSelectClicked()

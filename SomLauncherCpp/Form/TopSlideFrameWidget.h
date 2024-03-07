@@ -25,6 +25,7 @@ public:
 	QPushButton* getPushButtonNews() const;
 	QPushButton* getPushButtonServers() const;
 	QPushButton* getPushButtonGame() const;
+	QLabel* getAccountIcon() const;
 
 	void setMainButtonsTextAlightButtom();
 	void setMainButtonsTextAlightCenter();

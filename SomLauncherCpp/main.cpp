@@ -1,18 +1,21 @@
-#include "Form/SomLauncherMainWindow.h"
-#include "Form/LoginAccountForm.h"
 #include <QtWidgets/QApplication>
-
-#include "Web/DownloadClasses.h"
 
 #include <qexception.h>
 #include <qmessagebox.h>
 #include <exception>
 #include <filesystem>
 
+#include "Form/SomLauncherMainWindow.h"
+#include "Form/LoginAccountForm.h"
+
+#include "Web/DownloadClasses.h"
+
 int main(int argc, char* argv[])
 {
 	int returned_id = -1;
 	QApplication application(argc, argv);
+	application.setApplicationName("SomLauncher");
+	//application.setApplicationDisplayName("SomLauncher");
 
 	qInstallMessageHandler(customHandler);
 	try
@@ -68,7 +71,7 @@ int main(int argc, char* argv[])
 					[&main_window, &account_window]() -> void
 					{
 						main_window.close();
-						account_window.earseAllData();
+						account_window.eraseAllData();
 						account_window.show();
 					}
 				);
@@ -82,19 +85,27 @@ int main(int argc, char* argv[])
 		std::string json_data_string = account_window.getUserDataFromServer();
 		nlohmann::json json_data = nlohmann::json::parse(json_data_string);
 
-		if (account_window.getUserPassword().empty())
+		if (!json_data.contains("id"))
 		{
+			account_window.eraseAllData();
 			account_window.show();
 		}
 		else
 		{
-			if (account_window.checkPassword(json_data) == true && account_window.checkLogin(json_data) == true)
+			if (account_window.getUserPassword().empty())
 			{
-				emit account_window.accountDataReceivedSignal(json_data_string);
+				account_window.show();
 			}
 			else
 			{
-				account_window.show();
+				if (account_window.checkPassword(json_data) == true && account_window.checkLogin(json_data) == true)
+				{
+					emit account_window.accountDataReceivedSignal(json_data_string);
+				}
+				else
+				{
+					account_window.show();
+				}
 			}
 		}
 

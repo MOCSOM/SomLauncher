@@ -7,13 +7,7 @@ SettingsDialog::SettingsDialog(nlohmann::json data, MinecraftCpp::option::Minecr
 
 	this->account_data = data;
 
-	for (auto& elem : this->account_data)
-	{
-		if (elem.contains("username"))
-		{
-			ui.label_account_name->setText(elem["username"].template get<std::string>().c_str());
-		}
-	}
+	ui.label_account_name->setText(this->account_data["username"].template get<std::string>().c_str());
 
 	ui.label_modreinstall_notifiy->setStyleSheet("#label_modreinstall_notifiy{color: rgb(255, 0, 0);}");
 

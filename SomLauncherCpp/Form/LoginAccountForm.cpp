@@ -4,8 +4,9 @@ LoginAccountForm::LoginAccountForm(QWidget* parent)
 	: QDialog(parent)
 {
 	ui.setupUi(this);
-
+	
 	QObject::connect(ui.pushButton_login, &QPushButton::pressed, this, &LoginAccountForm::onClickPushButtonLogin);
+	QObject::connect(ui.pushButton_registration, &QPushButton::pressed, this, &LoginAccountForm::onClickPushButtonRegistrate);
 
 	ui.label_wrong_password->setHidden(true);
 }
@@ -36,7 +37,7 @@ void LoginAccountForm::setStyleSheet(const std::filesystem::path& path)
 
 void LoginAccountForm::setConfigPath(const std::filesystem::path& config_path)
 {
-	this->config_path = config_path;
+	this->config.reopenConfig(config_path);
 }
 
 const std::string LoginAccountForm::getUserDataFromServer()
@@ -50,16 +51,26 @@ const std::string LoginAccountForm::getUserDataFromServer()
 
 		request.setOpt(curlpp::options::Verbose(true));
 		request.setOpt(curlpp::options::Url(
-			"https://mocsom.site/api/accounts/" + ui.lineEdit_login->text().toStdString() + "?format=json"));
+			"https://mocsom.site/api/accounts/" + ui.lineEdit_login->text().toStdString()));
 		request.setOpt(curlpp::options::WriteStream(&response));
 
 		request.perform();
 		long http_code = curlpp::infos::ResponseCode::get(request);
 
-
-		if (http_code != 200)
+		switch (http_code)
 		{
+		case 200:
+			break;
+		case 404:
+			//response.str(std::string());
+			//response << R"({})" << std::endl;
+			break;
+		default:
+			//response.str(std::string());
 			qWarning() << "code not 200" << std::endl;
+			QMessageBox::critical(this, tr("Server Connection error"), tr("Unable to connect to mocsom server"));
+			QApplication::exit(1);
+			break;
 		}
 	}
 	catch (curlpp::LogicError& e)
@@ -134,16 +145,16 @@ const std::string LoginAccountForm::getUserPassword()
 
 const nlohmann::json LoginAccountForm::getUserDataFromConfig()
 {
-	std::ifstream ifstr(this->config_path);
-	nlohmann::json parced_config = nlohmann::json::parse(ifstr);
-	ifstr.close();
-	return parced_config;
+	return this->config.json();
 }
 
-void LoginAccountForm::earseAllData()
+void LoginAccountForm::eraseAllData()
 {
 	ui.lineEdit_login->setText("");
 	ui.lineEdit_password->setText("");
+	this->config.json()["user"]["name"] = "";
+	this->config.json()["user"]["password"] = "";
+	this->config.saveJsonToFile();
 }
 
 void LoginAccountForm::onClickPushButtonLogin()
@@ -153,9 +164,7 @@ void LoginAccountForm::onClickPushButtonLogin()
 
 	if (checkPassword(json_data) == true && checkLogin(json_data) == true)
 	{
-		std::ifstream ifstr(this->config_path);
-		nlohmann::json parced_config = nlohmann::json::parse(ifstr);
-		ifstr.close();
+		nlohmann::json& parced_config = this->config.json();;
 
 		if (ui.checkBox_remember_password->isChecked())
 		{
@@ -167,22 +176,72 @@ void LoginAccountForm::onClickPushButtonLogin()
 			parced_config["user"]["name"] = json_data["username"];
 		}
 
-		std::ofstream o(this->config_path);
-		o << parced_config.dump(4) << std::endl;
-		o.close();
+		this->config.saveJsonToFile();
 
 		emit accountDataReceivedSignal(json_data_string);
 	}
 	else
 	{
 		ui.label_wrong_password->setHidden(false);
+
+		wrongPasswordOrLogin();
 	}
 }
 
 void LoginAccountForm::onClickPushButtonRegistrate()
 {
+	QDesktopServices::openUrl(QUrl("https://mocsom.site/accounts/registration/"));
 }
 
 void LoginAccountForm::onClickLableForgotPassword()
 {
+}
+
+void LoginAccountForm::erasePassword()
+{
+	ui.lineEdit_password->setText("");
+	this->config.json()["user"]["password"] = "";
+	this->config.saveJsonToFile();
+}
+
+void LoginAccountForm::eraseLogin()
+{
+	ui.lineEdit_login->setText("");
+	this->config.json()["user"]["name"] = "";
+	this->config.saveJsonToFile();
+}
+
+void LoginAccountForm::wrongPasswordOrLogin()
+{
+	QEventLoop zaloop;
+
+
+	QTimer timer_white(this);
+	QTimer timer_red(this);
+	QTimer timer_big(this);
+
+	connect(&timer_white, &QTimer::timeout,
+		[&]()
+		{
+			UIThread::run([&]() {ui.label_wrong_password->setStyleSheet(R"(#label_wrong_password {color: white;})"); });
+			timer_white.stop();
+			timer_red.start(150);
+		}
+	);
+	connect(&timer_red, &QTimer::timeout,
+		[&]()
+		{
+			UIThread::run([&]() {ui.label_wrong_password->setStyleSheet(R"(#label_wrong_password {color: red;})"); });
+			timer_red.stop();
+			timer_white.start(150);
+		}
+	);
+	connect(&timer_big, &QTimer::timeout, [&]() {zaloop.exit(); });
+
+	timer_white.start(150);
+	timer_big.start(1000);
+
+	zaloop.exec();
+
+	ui.label_wrong_password->setStyleSheet(R"(QLabel {color: white;})");
 }

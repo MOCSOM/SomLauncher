@@ -1659,114 +1659,66 @@ std::vector<std::wstring> MinecraftCpp::get_arguments(
 	*/
 
 	std::vector<std::wstring> arglist;
-	if (data.type() == nlohmann::json::value_t::array)
+	for (auto& var : data)
 	{
-		for (auto& var : data)
+		if (var.type() == nlohmann::json::value_t::string)
 		{
-			if (var.type() == nlohmann::json::value_t::string)
+			auto s = var.template get<std::filesystem::path>();
+			std::wstring rep = MinecraftCpp::replace_arguments(s.wstring(), versionData, path, options);
+			if (rep != s)
 			{
-				auto s = var.template get<std::filesystem::path>();
-				std::wstring rep = MinecraftCpp::replace_arguments(s.wstring(), versionData, path, options);
-				if (rep != s)
+				arglist.push_back(L"\"" + rep + L"\"");
+			}
+			else
+			{
+				arglist.push_back(rep);
+			}
+		}
+		else
+		{
+			// Rules might has 2 different names in different versions.json
+			if (var.contains("compatibilityRules") && !parse_rule_list(var, "compatibilityRules", options))
+			{
+				continue;
+			}
+			if (var.contains("rules") && !parse_rule_list(var, "rules", options))
+			{
+				continue;
+			}
+
+			// var could be the argument
+			if (var["value"].type() == nlohmann::json::value_t::string)
+			{
+				auto a = var.template get<std::filesystem::path>();
+				std::wstring replace = MinecraftCpp::replace_arguments(a.wstring(), versionData, path, options);
+				if (!replace.empty())
 				{
-					arglist.push_back(L"\"" + rep + L"\"");
-				}
-				else
-				{
-					arglist.push_back(rep);
+					arglist.push_back(L"\"" + replace + L"\"");
 				}
 			}
 			else
 			{
-				// Rules might has 2 different names in different versions.json
-				if (var.type() != nlohmann::json::value_t::object)
+				for (auto& v : var["value"])
 				{
-					continue;
-				}
-				if (var.contains("compatibilityRules") && !parse_rule_list(var, "compatibilityRules", options))
-				{
-					continue;
-				}
-				if (var.contains("rules") && !parse_rule_list(var, "rules", options))
-				{
-					continue;
-				}
-
-				// var could be the argument
-				if (var["value"].type() == nlohmann::json::value_t::string)
-				{
-					auto a = var.template get<std::filesystem::path>();
-					std::wstring replace = MinecraftCpp::replace_arguments(a.wstring(), versionData, path, options);
-					if (!replace.empty())
+					std::wstring val;
+					if (v["value"].type() == nlohmann::json::value_t::array)
 					{
-						arglist.push_back(L"\"" + replace + L"\"");
+						auto a = v["value"][0].template get<std::filesystem::path>();
+						val = replace_arguments(a.wstring(), versionData, path, options);
 					}
-				}
-				else
-				{
-					for (auto& v : var["value"])
+					else
 					{
-						std::wstring val;
-						if (v["value"].type() == nlohmann::json::value_t::array)
-						{
-							auto a = v["value"][0].template get<std::filesystem::path>();
-							val = replace_arguments(a.wstring(), versionData, path, options);
-						}
-						else
-						{
-							auto a = v["value"].template get<std::filesystem::path>();
-							val = replace_arguments(a.wstring(), versionData, path, options);
-						}
+						auto a = v["value"].template get<std::filesystem::path>();
+						val = replace_arguments(a.wstring(), versionData, path, options);
+					}
 
-						if (!val.empty())
-						{
-							arglist.push_back(L"\"" + val + L"\"");
-						}
+					if (!val.empty())
+					{
+						arglist.push_back(L"\"" + val + L"\"");
 					}
 				}
 			}
 		}
-	}
-	else
-	{
-		//for (auto& var : data.get_array())
-		//{
-		//	if (var.get_type() == SJson::JsonTypes::String)
-		//	{
-		//		arglist += MinecraftCpp::replace_arguments(var.to_string(), versionData, path, options);
-		//	}
-		//	else
-		//	{
-		//		// Rules might has 2 different names in different versions.json
-		//		if (var.is_exist("compatibilityRules") && !parse_rule_list(var, "compatibilityRules", options))
-		//		{
-		//			continue;
-		//		}
-		//		if (var.is_exist("rules") && !parse_rule_list(var, "rules", options))
-		//		{
-		//			continue;
-		//		}
-
-		//		// var could be the argument
-		//		if (var["value"].get_type() == SJson::JsonTypes::String)
-		//		{
-		//			qInfo() << "data " << data.to_string() << std::endl;
-		//			qInfo() << "var " << var.to_string() << std::endl;
-		//			std::string replace = MinecraftCpp::replace_arguments(var["value"].to_string(), versionData, path, options);
-		//			arglist += replace;
-		//			arglist += " ";
-		//		}
-		//		else
-		//		{
-		//			for (auto& v : var["value"].get_object())
-		//			{
-		//				std::string val = replace_arguments(v.second.to_string(), versionData, path, options);
-		//				arglist += val;
-		//				arglist += " ";
-		//			}
-		//		}
-		//	}
-		//}
 	}
 	return arglist;
 }
@@ -1814,8 +1766,12 @@ bool MinecraftCpp::forge::install_forge_version(const std::string& versionid, co
 	int random_num = 1 + (rand() % 100000);
 
 	std::string FORGE_DOWNLOAD_URL = "https://maven.minecraftforge.net/net/minecraftforge/forge/" + versionid + "/forge-" + versionid + "-installer.jar";
-	std::filesystem::path temp_file_path = std::filesystem::temp_directory_path() / ("forge-installer-" + std::to_string(random_num) + ".tmp");
-	if (DownloadFile(FORGE_DOWNLOAD_URL, temp_file_path, callback) == "")
+	
+	std::string installer_name = "forge-installer-" + std::to_string(random_num) + ".tmp";
+	std::filesystem::path temp_file_path = std::filesystem::temp_directory_path() / installer_name;
+	std::filesystem::path download_forgeisntaller_path = temp_file_path;
+
+	if (DownloadFile(FORGE_DOWNLOAD_URL, download_forgeisntaller_path, callback) == "")
 	{
 		std::cout << "Version Not Found" << versionid << std::endl;
 		return false;
@@ -2151,13 +2107,12 @@ bool MinecraftCpp::forge::forge_processors(
 		classpath = classpath + get_library_path(var["jar"].template get<std::string>(), path).wstring();
 
 		qDebug() << "Get the mainclass" << std::endl;
-		std::filesystem::path classpath_paths = classpath;
 		std::string mainclass = get_jar_mainclass(get_library_path(var["jar"].template get<std::string>(), path));
 		std::vector<std::wstring> command;
 		qDebug() << "Configure command" << std::endl;
 		command.push_back(java.empty() ? L"javaw" : L"\"" + java.wstring() + L"\"");
 		command.push_back(L"-cp");
-		command.push_back(classpath_paths.wstring());
+		command.push_back(L"\"" + classpath + L"\"");
 		command.push_back(Additionals::Convectors::ConvertStringToWString(mainclass));
 
 		qDebug() << "cmd:" << classpath << mainclass << std::endl;
@@ -2172,36 +2127,20 @@ bool MinecraftCpp::forge::forge_processors(
 			if (variable._Starts_with(L"[") && Additionals::String::EndsWith(variable, L"]"))
 			{
 				qDebug() << variable << path << std::endl;
-				command.push_back(getLibraryPath(variable.substr(1, variable.size() - 2), path).wstring());
+				command.push_back(L"\"" + getLibraryPath(variable.substr(1, variable.size() - 2), path).wstring() + L"\"");
 			}
 			else
 			{
-				command.push_back(variable);
+				command.push_back(L"\"" + variable + L"\"");
 			}
 		}
 
 		qDebug() << command << std::endl;
-		/*std::wostringstream imploded;
-		std::copy(command.begin(), command.end(),
-			std::ostream_iterator<std::wstring, wchar_t, std::char_traits<wchar_t>>(imploded, L" "));*/
-
-		std::wstring imploded;
-		for (std::vector<std::wstring>::const_iterator ii = command.begin(); ii != command.end(); ++ii)
-		{
-			imploded += (*ii);
-			if (ii + 1 != command.end())
-			{
-				imploded += L" ";
-			}
-		}
-		std::unique_ptr<wchar_t[]> ch_array = std::make_unique<wchar_t[]>(imploded.size() + 1);
-		wcsncpy(ch_array.get(), imploded.c_str(), imploded.size());
 
 		UIThread::run(
 			[&]()
 			{
-				qInfo() << "Forge prcessor command" << imploded << std::endl;
-				int out = client::startProcess(command, std::filesystem::path("somlogs") / "forge_proccess_info.txt");
+				int out = client::startProcess(command, std::filesystem::path("somlogs") / ("last_forge_proccess_" + mainclass + "_log.txt"));
 				//int out = _wsystem(ch_array.get());
 				qInfo() << "Forge prcessor out code" << out << std::endl;
 			});

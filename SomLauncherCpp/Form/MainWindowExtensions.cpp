@@ -39,12 +39,12 @@ nlohmann::json SomLauncherMainWindow::getServersFromServer()
 void SomLauncherMainWindow::start_minecraft_params()
 {
 	qInfo() << "Config loaded" << std::endl;
-	qInfo() << this->config_parce["user"]["name"].template get<std::string>() << std::endl;
-	qInfo() << this->config_parce["user"]["memory"].template get<int>() << std::endl;
-	if (this->config_parce["user"]["mcdir"].is_array())
+	qInfo() << this->config.json()["user"]["name"].template get<std::string>() << std::endl;
+	qInfo() << this->config.json()["user"]["memory"].template get<int>() << std::endl;
+	if (this->config.json()["user"]["mcdir"].is_array())
 	{
 		std::filesystem::path pat = "";
-		for (auto& symbol : this->config_parce["user"]["mcdir"])
+		for (auto& symbol : this->config.json()["user"]["mcdir"])
 		{
 			pat += static_cast<wchar_t>(symbol.template get<int>());
 		}
@@ -52,16 +52,16 @@ void SomLauncherMainWindow::start_minecraft_params()
 	}
 	else
 	{
-		qInfo() << this->config_parce["user"]["mcdir"].template get<std::filesystem::path>() << std::endl;
+		qInfo() << this->config.json()["user"]["mcdir"].template get<std::filesystem::path>() << std::endl;
 	}
-	qInfo() << this->config_parce["user"]["isInstallMods"].template get<bool>() << std::endl;
-	qInfo() << this->config_parce["user"]["server"].template get<int>() << std::endl;
+	qInfo() << this->config.json()["user"]["isInstallMods"].template get<bool>() << std::endl;
+	qInfo() << this->config.json()["user"]["server"].template get<int>() << std::endl;
 
 	qInfo() << "Configurate options..." << std::endl;
 	this->configureOptions();
 	this->setUuidFromAccount();
 
-	switch (this->config_parce["user"]["server"].template get<int>())
+	switch (this->config.json()["user"]["server"].template get<int>())
 	{
 	case 0:
 	{
@@ -130,14 +130,12 @@ void SomLauncherMainWindow::setupInstallMinecraft(const size_t& index)
 	std::string server_version = "0";
 	try
 	{
-		server_version = this->config_parce["modpack"][name]["version"].template get<std::string>();
+		server_version = this->config.json()["modpack"][name]["version"].template get<std::string>();
 	}
 	catch (const std::exception&) 
 	{
-		this->config_parce["modpack"][name]["version"] = modpack_info["modpack_version"];
-		std::ofstream o(this->config_path);
-		o << this->config_parce.dump(4) << std::endl;
-		o.close();
+		this->config.json()["modpack"][name]["version"] = modpack_info["modpack_version"];
+		this->config.saveJsonToFile();
 		this->is_install_mods = true;
 	}
 	installMods(instance_path / "mods", modpack_info, server_version, callback);
@@ -339,7 +337,7 @@ void SomLauncherMainWindow::configureOptions()
 	this->options.launcherName = this->launcher_name;
 	this->options.launcherVersion = this->launcher_version;
 	this->options.username = this->username;
-	this->options.jvmArguments = "-Xms1024M -Xmx" + std::to_string(this->config_parce["user"]["memory"].template get<int>()) + "M";
+	this->options.jvmArguments = "-Xms1024M -Xmx" + std::to_string(this->config.json()["user"]["memory"].template get<int>()) + "M";
 	this->options.executablePath = "";
 	this->options.uuid = "uuu";
 	this->options.token = "uuu";
@@ -422,7 +420,7 @@ size_t SomLauncherMainWindow::getMinecraftModsCount()
 	{
 		directory = std::filesystem::directory_iterator(
 			this->minecraft_core_dir_path / 
-			this->servers_parce[this->config_parce["user"]["server"].template get<int>()]["server_slug"].template get<std::string>() /
+			this->servers_parce[this->config.json()["user"]["server"].template get<int>()]["server_slug"].template get<std::string>() /
 			"mods");
 	}
 	catch (const std::exception&)
@@ -444,14 +442,14 @@ size_t SomLauncherMainWindow::getMinecraftModsCount()
 
 std::string SomLauncherMainWindow::getServerType()
 {
-	return this->servers_parce[this->config_parce["user"]["server"].template get<int>()]["server_type"].template get<std::string>();
+	return this->servers_parce[this->config.json()["user"]["server"].template get<int>()]["server_type"].template get<std::string>();
 }
 
 std::string SomLauncherMainWindow::getCurrentServerName()
 {
-	if (this->servers_parce.size() > this->config_parce["user"]["server"].template get<int>())
+	if (this->servers_parce.size() > this->config.json()["user"]["server"].template get<int>())
 	{
-		return this->servers_parce[this->config_parce["user"]["server"].template get<int>()]["server_name"].template get<std::string>();
+		return this->servers_parce[this->config.json()["user"]["server"].template get<int>()]["server_name"].template get<std::string>();
 	}
 	else
 	{
@@ -493,33 +491,66 @@ std::string SomLauncherMainWindow::getLatestVersionFromGithub()
 	}
 }
 
-nlohmann::json SomLauncherMainWindow::getLatestVersionFromDatabase()
+void SomLauncherMainWindow::checkUpdates()
+{
+	std::string version_url = this->mocsom_site_api + this->mocsom_site_api + this->mocsom_api_launcher;
+	QString ver_url_qstr = version_url.c_str();
+
+	/* Get settings from the UI */
+	QString version = this->config.json()["launcher"]["verison"].template get<std::string>().c_str();
+	/*bool customAppcast = m_ui->customAppcast->isChecked();
+	bool downloaderEnabled = m_ui->enableDownloader->isChecked();
+	bool notifyOnFinish = m_ui->showAllNotifcations->isChecked();
+	bool notifyOnUpdate = m_ui->showUpdateNotifications->isChecked();
+	bool mandatoryUpdate = m_ui->mandatoryUpdate->isChecked();*/
+
+	QObject::connect(this->updater, &QSimpleUpdater::downloadFinished, this, SomLauncherMainWindow::setNewVersionInConfig);
+
+	/* Apply the settings */
+	this->updater->setModuleVersion(ver_url_qstr, version);
+	this->updater->setNotifyOnFinish(ver_url_qstr, true);
+	this->updater->setNotifyOnUpdate(ver_url_qstr, true);
+	this->updater->setUseCustomAppcast(ver_url_qstr, true);
+	this->updater->setDownloaderEnabled(ver_url_qstr, true);
+	this->updater->setMandatoryUpdate(ver_url_qstr, false);
+
+	this->launcher_version = this->updater->getLatestVersion(ver_url_qstr).toStdString();
+
+	/* Check for updates */
+	this->updater->checkForUpdates(ver_url_qstr);
+}
+
+void SomLauncherMainWindow::setNewVersionInConfig(const QString& url, const QString& file_path)
+{
+	this->config.json()["launcher"]["verison"] = this->launcher_version;
+	this->config.saveJsonToFile();
+}
+
+nlohmann::json SomLauncherMainWindow::getLatestVersionFromSite()
 {
 	return nlohmann::json();
 }
 
 std::string SomLauncherMainWindow::getCurrentVersionFromConfig()
 {
-	return this->config_parce["launcher"]["verison"].template get<std::string>();
+	return this->config.json()["launcher"]["verison"].template get<std::string>();
 }
 
 void SomLauncherMainWindow::setCurrentVersionFromGithub()
 {
 	if (getCurrentVersionFromConfig() == "")
 	{
-		this->config_parce["launcher"]["verison"] = getLatestVersionFromGithub();
+		this->config.json()["launcher"]["verison"] = getLatestVersionFromGithub();
 
-		std::ofstream o(this->config_path);
-		o << this->config_parce.dump(4) << std::endl;
-		o.close();
+		this->config.saveJsonToFile();
 	}
 }
 
-void SomLauncherMainWindow::setCurrentVersionFromDatabase()
+void SomLauncherMainWindow::setCurrentVersionFromSite()
 {
 	if (getCurrentVersionFromConfig().empty())
 	{
-		/*this->config_parce["launcher"]["verison"] = getLatestVersionFromDatabase()[getLatestVersionFromDatabase().size() - 1]["file"].template get<std::string>();
+		/*this->config_parce["launcher"]["verison"] = getLatestVersionFromSite()[getLatestVersionFromSite().size() - 1]["file"].template get<std::string>();
 		std::ofstream o(this->config_path);
 		o << this->config_parce.dump(4) << std::endl;
 		o.close();*/
@@ -528,7 +559,7 @@ void SomLauncherMainWindow::setCurrentVersionFromDatabase()
 
 bool SomLauncherMainWindow::isVersionOld()
 {
-	/*if (getCurrentVersionFromConfig() != getLatestVersionFromDatabase()[getLatestVersionFromDatabase().size()]["file"].template get<std::string>())
+	/*if (getCurrentVersionFromConfig() != getLatestVersionFromSite()[getLatestVersionFromSite().size()]["file"].template get<std::string>())
 	{
 		return true;
 	}*/

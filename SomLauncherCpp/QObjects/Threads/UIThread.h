@@ -2,10 +2,11 @@
 #define THREADS_UITHREAD_H_
 
 #include <QObject>
+#include <QThread>
 
 #include <functional>
 
-class UIThread : public QObject
+class UIThread : public QObject, public QThread
 {
 	Q_OBJECT
 

@@ -3,10 +3,15 @@
 
 #include <qdialog.h>
 #include <qmessagebox.h>
+#include <QStyle>
+#include <QTimer>
+#include <QDesktopServices>
 
 #include <string>
 #include <optional>
 #include <sstream>
+#include <thread>
+#include <chrono>
 
 #include <curlpp/cURLpp.hpp>
 #include <curlpp/Easy.hpp>
@@ -18,7 +23,9 @@
 
 #include "../Json/SomJson.h"
 #include "../Moc/Logger/MocIOStream.h"
-#include "../Encryption/PBKDF2SHA256.h"
+#include "../Encryption/Hashes/PBKDF2SHA256.h"
+#include "../QObjects/Threads/UIThread.h"
+#include "../Client/Config/Config.h"
 
 #include "../../../QObjects/ClickableLabel.h"
 
@@ -29,7 +36,7 @@ class LoginAccountForm : public QDialog
 	Q_OBJECT
 
 private:
-	std::filesystem::path config_path;
+	Config config;
 
 	std::string username;
 	std::string password_hash;
@@ -50,12 +57,16 @@ public:
 	const std::string getUserPassword();
 	const nlohmann::json getUserDataFromConfig();
 
-	void earseAllData();
+	void eraseAllData();
+	void erasePassword();
+	void eraseLogin();
 
 private slots:
 	void onClickPushButtonLogin();
 	void onClickPushButtonRegistrate();
 	void onClickLableForgotPassword();
+
+	void wrongPasswordOrLogin();
 
 signals:
 	void accountDataReceivedSignal(const std::string& json_string_data);

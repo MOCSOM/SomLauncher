@@ -39,6 +39,18 @@
     <Filter Include="Web\Download">
       <UniqueIdentifier>{b029d65b-8b12-4616-89fa-5f1b0ff2b48f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\..%255cthird-party%255cQSimpleUpdater%255csrc">
+      <UniqueIdentifier>{1e008796-7e2f-424f-8c1a-d94b17b7966f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\..%255cthird-party%255cQSimpleUpdater%255cinclude">
+      <UniqueIdentifier>{90f2baee-94e6-47f6-b715-cebe8c17dcb6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\..%255cthird-party%255cQSimpleUpdater%255csrc">
+      <UniqueIdentifier>{ede9db28-cfe0-4846-af3e-24e93aff918b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Form Files\..%255cthird-party%255cQSimpleUpdater%255csrc">
+      <UniqueIdentifier>{464f2779-653a-47e8-a1c3-245566825544}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -92,7 +104,7 @@
     <ClCompile Include="Servers\ServerTypes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Upgrader.cpp">
+    <ClCompile Include="Updater\Upgrader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Exceptions\FileOutsideMinecraftDirectoryException.cpp">
@@ -125,7 +137,7 @@
     <ClCompile Include="Form\TopSlideFrameWidget.cpp">
       <Filter>Custom Qt Files</Filter>
     </ClCompile>
-    <ClCompile Include="Encryption\PBKDF2SHA256.cpp">
+    <ClCompile Include="Encryption\Hashes\PBKDF2SHA256.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Encryption\LZMA\LzmaDecompress.cpp">
@@ -143,7 +155,7 @@
     <ClCompile Include="Callbacks\QCallback.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Hashes\Crypto.cpp">
+    <ClCompile Include="Encryption\Hashes\Crypto.cpp">
       <Filter>Hashes</Filter>
     </ClCompile>
     <ClCompile Include="Web\Download\Download.cpp">
@@ -166,6 +178,27 @@
     </ClCompile>
     <ClCompile Include="Client\Config\Config.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Updater\UpdateController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libraries\LocalPeer\src\LocalPeer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libraries\LocalPeer\src\LockedFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libraries\LocalPeer\src\LockedFile_win.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third-party\QSimpleUpdater\src\Updater.cpp">
+      <Filter>Source Files\..%255cthird-party%255cQSimpleUpdater%255csrc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third-party\QSimpleUpdater\src\Downloader.cpp">
+      <Filter>Source Files\..%255cthird-party%255cQSimpleUpdater%255csrc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third-party\QSimpleUpdater\src\QSimpleUpdater.cpp">
+      <Filter>Source Files\..%255cthird-party%255cQSimpleUpdater%255csrc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -199,10 +232,10 @@
     <ClInclude Include="Servers\ServerTypes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Upgrader.h">
+    <ClInclude Include="Updater\Upgrader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Hashes\sha1.h">
+    <ClInclude Include="Encryption\Hashes\sha1.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Exceptions\FileOutsideMinecraftDirectoryException.h">
@@ -232,7 +265,7 @@
     <ClInclude Include="Client\StartProcess.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Encryption\PBKDF2SHA256.h">
+    <ClInclude Include="Encryption\Hashes\PBKDF2SHA256.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Encryption\LZMA\LzmaDecompress.h">
@@ -250,7 +283,7 @@
     <ClInclude Include="Callbacks\QCallback.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Hashes\Crypto.h">
+    <ClInclude Include="Encryption\Hashes\Crypto.h">
       <Filter>Hashes</Filter>
     </ClInclude>
     <ClInclude Include="Additionals\Additionals.h">
@@ -275,6 +308,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Client\Config\Config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Updater\UpdateController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libraries\LocalPeer\src\LockedFile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -337,6 +376,18 @@
     <QtMoc Include="QObjects\Threads\UIThread.h">
       <Filter>Custom Qt Files</Filter>
     </QtMoc>
+    <QtMoc Include="..\libraries\LocalPeer\include\LocalPeer.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="..\third-party\QSimpleUpdater\include\QSimpleUpdater.h">
+      <Filter>Header Files\..%255cthird-party%255cQSimpleUpdater%255cinclude</Filter>
+    </QtMoc>
+    <QtMoc Include="..\third-party\QSimpleUpdater\src\Updater.h">
+      <Filter>Header Files\..%255cthird-party%255cQSimpleUpdater%255csrc</Filter>
+    </QtMoc>
+    <QtMoc Include="..\third-party\QSimpleUpdater\src\Downloader.h">
+      <Filter>Header Files\..%255cthird-party%255cQSimpleUpdater%255csrc</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="Form\SomLauncherMainWindow.ui">
@@ -362,6 +413,9 @@
     </QtUic>
     <QtUic Include="Form\TopSlideFrameWidget.ui">
       <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="..\third-party\QSimpleUpdater\src\Downloader.ui">
+      <Filter>Form Files\..%255cthird-party%255cQSimpleUpdater%255csrc</Filter>
     </QtUic>
   </ItemGroup>
   <ItemGroup>

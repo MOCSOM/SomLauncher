@@ -8,7 +8,7 @@
 #include "../Callbacks/CallbackDict.h"
 #include "../Json/SomJson.h"
 #include "../Additionals/Additionals.h"
-#include "../Hashes/sha1.h"
+#include "../Encryption/Hashes/sha1.h"
 #include "../Exceptions/FileOutsideMinecraftDirectoryException.h"
 //#include "CommandBuilder.h"
 #include "MinecraftOptions.h"

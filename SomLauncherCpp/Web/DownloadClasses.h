@@ -25,7 +25,7 @@
 #include "../Callbacks/CallbackDict.h"
 #include "../Additionals/Additionals.h"
 #include "../Archives/Archives.h"
-#include "../Hashes/sha1.h"
+#include "../Encryption/Hashes/sha1.h"
 #include "../Encryption/LZMA/LzmaDecompress.h"
 #include "Download/Download.h"
 

@@ -21,7 +21,7 @@
 #include "../../Callbacks/CallbackDict.h"
 #include "../../QObjects/Threads/UIThread.h"
 #include "../../QObjects/Threads/LambdaTask.h"
-#include "../../Hashes/Crypto.h"
+#include "../../Encryption/Hashes/Crypto.h"
 #include "../Utils/WebUtils.h"
 
 #undef max

@@ -51,13 +51,21 @@
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
     <QtInstall>6.5.2</QtInstall>
-    <QtModules>core;gui;network;widgets;sql</QtModules>
+    <QtModules>core;gui;network;widgets</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
+    <QtLibrarySearchPath>
+    </QtLibrarySearchPath>
+    <QtPlugin>true</QtPlugin>
+    <QtHeaderSearchPath>$(SolutionDir)\third-party\QSimpleUpdater\include;$(QtHeaderSearchPath)</QtHeaderSearchPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
     <QtInstall>6.5.2</QtInstall>
-    <QtModules>core;gui;network;widgets;sql</QtModules>
+    <QtModules>core;gui;network;widgets</QtModules>
     <QtBuildConfig>release</QtBuildConfig>
+    <QtLibrarySearchPath>
+    </QtLibrarySearchPath>
+    <QtPlugin>true</QtPlugin>
+    <QtHeaderSearchPath>$(SolutionDir)\third-party\QSimpleUpdater\include;$(QtHeaderSearchPath)</QtHeaderSearchPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|Win32'" Label="QtSettings">
     <QtInstall>6.5.2</QtInstall>
@@ -117,7 +125,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProgramFiles)\MySQL\MySQL Connector C++ 8.2\include\jdbc;$(VcpkgRoot)\installed\x64-windows\include;$(Qt_INCLUDEPATH_)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\libraries\LocalPeer\include;$(ProgramFiles)\MySQL\MySQL Connector C++ 8.2\include\jdbc;$(VcpkgRoot)\installed\x64-windows\include;$(Qt_INCLUDEPATH_)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>$(Qt_DEFINES_);%(PreprocessorDefinitions);STATIC_CONCPP;CURL_STATICLIB</PreprocessorDefinitions>
       <LanguageStandard>$(Qt_STDCPP_)</LanguageStandard>
       <Optimization>Disabled</Optimization>
@@ -130,7 +138,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Link />
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProgramFiles)\MySQL\MySQL Connector C++ 8.2\include\jdbc;$(VcpkgRoot)\installed\x64-windows\include;$(Qt_INCLUDEPATH_)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\libraries\LocalPeer\include;$(ProgramFiles)\MySQL\MySQL Connector C++ 8.2\include\jdbc;$(VcpkgRoot)\installed\x64-windows\include;$(Qt_INCLUDEPATH_)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>STATIC_CONCPP;CURL_STATICLIB;$(Qt_DEFINES_)</PreprocessorDefinitions>
       <LanguageStandard>$(Qt_STDCPP_)</LanguageStandard>
       <RuntimeLibrary>$(Qt_RUNTIME_)</RuntimeLibrary>
@@ -185,6 +193,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\libraries\LocalPeer\src\LocalPeer.cpp" />
+    <ClCompile Include="..\libraries\LocalPeer\src\LockedFile.cpp" />
+    <ClCompile Include="..\libraries\LocalPeer\src\LockedFile_win.cpp" />
+    <ClCompile Include="..\third-party\QSimpleUpdater\src\Downloader.cpp" />
+    <ClCompile Include="..\third-party\QSimpleUpdater\src\QSimpleUpdater.cpp" />
+    <ClCompile Include="..\third-party\QSimpleUpdater\src\Updater.cpp" />
     <ClCompile Include="Additionals\Additionals.cpp" />
     <ClCompile Include="Archives\Archives.cpp" />
     <ClCompile Include="basic_xml.cpp" />
@@ -193,7 +207,7 @@
     <ClCompile Include="Client\Config\Config.cpp" />
     <ClCompile Include="Client\StartProcess.cpp" />
     <ClCompile Include="Encryption\LZMA\LzmaDecompress.cpp" />
-    <ClCompile Include="Encryption\PBKDF2SHA256.cpp" />
+    <ClCompile Include="Encryption\Hashes\PBKDF2SHA256.cpp" />
     <ClCompile Include="Exceptions\FileOutsideMinecraftDirectoryException.cpp" />
     <ClCompile Include="Form\LoginAccountForm.cpp" />
     <ClCompile Include="Form\MainWindowExtensions.cpp" />
@@ -204,7 +218,7 @@
     <ClCompile Include="Form\SingleNewsItemWidget.cpp" />
     <ClCompile Include="Form\SomLauncherMainWindow.cpp" />
     <ClCompile Include="Form\TopSlideFrameWidget.cpp" />
-    <ClCompile Include="Hashes\Crypto.cpp" />
+    <ClCompile Include="Encryption\Hashes\Crypto.cpp" />
     <ClCompile Include="Json\Json\Json.cpp" />
     <ClCompile Include="Json\Json\JsonParcer.cpp" />
     <ClCompile Include="main.cpp" />
@@ -222,13 +236,19 @@
     <ClCompile Include="QObjects\Threads\LambdaTask.cpp" />
     <ClCompile Include="QObjects\Threads\UIThread.cpp" />
     <ClCompile Include="Servers\ServerTypes.cpp" />
-    <ClCompile Include="Upgrader.cpp" />
+    <ClCompile Include="Updater\UpdateController.cpp" />
+    <ClCompile Include="Updater\Upgrader.cpp" />
     <ClCompile Include="Web\DownloadClasses.cpp" />
     <ClCompile Include="Web\Download\Download.cpp" />
     <ClCompile Include="Web\Minecraft\Status\MinecraftStatus.cpp" />
     <ClCompile Include="Web\Utils\WebUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="..\libraries\LocalPeer\include\LocalPeer.h" />
+    <ClInclude Include="..\libraries\LocalPeer\src\LockedFile.h" />
+    <QtMoc Include="..\third-party\QSimpleUpdater\include\QSimpleUpdater.h" />
+    <QtMoc Include="..\third-party\QSimpleUpdater\src\Updater.h" />
+    <QtMoc Include="..\third-party\QSimpleUpdater\src\Downloader.h" />
     <ClInclude Include="Additionals\Additionals.h" />
     <ClInclude Include="Archives\Archives.h" />
     <ClInclude Include="Archives\qzipreader_p.h" />
@@ -237,10 +257,11 @@
     <ClInclude Include="Callbacks\QCallback.h" />
     <ClInclude Include="Client\Config\Config.h" />
     <ClInclude Include="Client\StartProcess.h" />
+    <ClInclude Include="Updater\UpdateController.h" />
     <ClInclude Include="Web\Minecraft\Status\MinecraftStatus.h" />
     <ClInclude Include="Web\Utils\WebUtils.h" />
     <QtMoc Include="QObjects\Threads\UIThread.h" />
-    <ClInclude Include="Hashes\Crypto.h" />
+    <ClInclude Include="Encryption\Hashes\Crypto.h" />
     <ClInclude Include="Json\Json\Json.h" />
     <ClInclude Include="Json\Json\JsonParcer.h" />
     <ClInclude Include="Json\Json\JsonTypes.h" />
@@ -251,14 +272,14 @@
     <QtMoc Include="Form\ServerWidget.h" />
     <QtMoc Include="Form\SettingsDialog.h" />
     <ClInclude Include="Encryption\LZMA\LzmaDecompress.h" />
-    <ClInclude Include="Encryption\PBKDF2SHA256.h" />
+    <ClInclude Include="Encryption\Hashes\PBKDF2SHA256.h" />
     <ClInclude Include="Exceptions\FileOutsideMinecraftDirectoryException.h" />
     <ClInclude Include="Exceptions\TerminateProgrammException.h" />
     <QtMoc Include="Form\LoginAccountForm.h" />
     <QtMoc Include="Form\NewsViewWidget.h" />
     <QtMoc Include="Form\SingleNewsItemWidget.h" />
     <QtMoc Include="Form\TopSlideFrameWidget.h" />
-    <ClInclude Include="Hashes\sha1.h" />
+    <ClInclude Include="Encryption\Hashes\sha1.h" />
     <ClInclude Include="Minecraft\MinecraftOptions.h" />
     <ClInclude Include="Minecraft\Mods.h" />
     <ClInclude Include="Minecraft\NativesInstaller.h" />
@@ -270,7 +291,7 @@
     <ClInclude Include="QObjects\SomSlider.h" />
     <QtMoc Include="QObjects\Threads\FunThread.h" />
     <ClInclude Include="Servers\ServerTypes.h" />
-    <ClInclude Include="Upgrader.h" />
+    <ClInclude Include="Updater\Upgrader.h" />
     <ClInclude Include="Web\DownloadClasses.h" />
     <QtMoc Include="Form\SomLauncherMainWindow.h" />
     <ClInclude Include="Callbacks\CallbackDict.h" />
@@ -297,6 +318,7 @@
     <None Include="TODO_List.md" />
   </ItemGroup>
   <ItemGroup>
+    <QtUic Include="..\third-party\QSimpleUpdater\src\Downloader.ui" />
     <QtUic Include="Form\LoginAccountForm.ui" />
     <QtUic Include="Form\NewsViewWidget.ui" />
     <QtUic Include="Form\ServerChangerForm.ui" />
