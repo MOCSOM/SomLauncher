@@ -11,7 +11,9 @@ Config::Config(const std::filesystem::path& config_path)
 	catch (const std::exception&)
 	{
 		this->createConfig();
-		this->config_json = nlohmann::json::parse(ifstr);
+		std::ifstream nov_ifstr(config_path);
+		this->config_json = nlohmann::json::parse(nov_ifstr);
+		nov_ifstr.close();
 	}
 	ifstr.close();
 }
@@ -20,7 +22,7 @@ void Config::createConfig() const
 {
 	//{"user":{"name":"","password":"","memory":7168,"wight":854,"hight":480,"mcdir":"","isInstallMods":false,"server":0},"launcher":{"verison":""},"modpack":{}}
 	//std::filesystem::copy(this->template_config_path, this->config_path, std::filesystem::copy_options::overwrite_existing);
-	
+
 	nlohmann::json template_config = nlohmann::json::parse(
 		R"({"user":{"name":"","password":"","memory":7168,"wight":854,"hight":480,"mcdir":"","isInstallMods":false,"server":0},"launcher":{"verison":""},"modpack":{}})"
 	);

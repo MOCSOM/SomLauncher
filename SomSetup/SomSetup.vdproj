@@ -237,19 +237,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_92586AA95BFF4A82A86FD3BC79841A61"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_A99FACAD83A94AD3996DA25B64F7F19E"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_AD43599C30954D95B0CE9BAB923C96A3"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -297,20 +285,8 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_DE395569DBD64C60A4D0F23B6CB87279"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_E35F48D1F40B5AB5F874FDDB14DAA679"
         "OwnerKey" = "8:_34B24EA6487A4E298A1A1282EF6D025B"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_EC240AECAEC34E1C9F0CAC276DC93D2A"
-        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -1132,52 +1108,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_92586AA95BFF4A82A86FD3BC79841A61"
-            {
-            "SourcePath" = "8:..\\QtFiles\\Qt6Widgets.dll"
-            "TargetName" = "8:Qt6Widgets.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_05F01DAAB8364CA695ACCE8AFE368FB5"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A99FACAD83A94AD3996DA25B64F7F19E"
             {
             "SourcePath" = "8:..\\x64\\Release\\tls\\qcertonlybackend.dll"
             "TargetName" = "8:qcertonlybackend.dll"
             "Tag" = "8:"
             "Folder" = "8:_32A6D973803741A68E92394C84573D6B"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_AD43599C30954D95B0CE9BAB923C96A3"
-            {
-            "SourcePath" = "8:..\\QtFiles\\Qt6Network.dll"
-            "TargetName" = "8:Qt6Network.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_05F01DAAB8364CA695ACCE8AFE368FB5"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1332,26 +1268,6 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_DE395569DBD64C60A4D0F23B6CB87279"
-            {
-            "SourcePath" = "8:..\\QtFiles\\Qt6Gui.dll"
-            "TargetName" = "8:Qt6Gui.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_05F01DAAB8364CA695ACCE8AFE368FB5"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E35F48D1F40B5AB5F874FDDB14DAA679"
             {
             "SourcePath" = "8:api-ms-win-crt-convert-l1-1-0.dll"
@@ -1370,26 +1286,6 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_EC240AECAEC34E1C9F0CAC276DC93D2A"
-            {
-            "SourcePath" = "8:..\\QtFiles\\Qt6Core.dll"
-            "TargetName" = "8:Qt6Core.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_05F01DAAB8364CA695ACCE8AFE368FB5"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F5C8BB385B6ED67DD6C4C07425B3CFC6"
@@ -1587,15 +1483,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:SomLauncher"
-        "ProductCode" = "8:{6125767F-1B2A-459C-AAEC-D280EBA38239}"
-        "PackageCode" = "8:{F9DCFE1C-1AB1-444F-95A8-EDA47DB1F597}"
+        "ProductCode" = "8:{72B28AF8-A350-46AA-BFCA-4EB0C9D7802B}"
+        "PackageCode" = "8:{55A7D04E-55B7-42FA-8FA4-EE1E1A1D4D2B}"
         "UpgradeCode" = "8:{F9EAB7F5-9D61-49C2-85AA-8DAD4762EB34}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.5.1"
+        "ProductVersion" = "8:1.5.8"
         "Manufacturer" = "8:.SomSomSom"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"

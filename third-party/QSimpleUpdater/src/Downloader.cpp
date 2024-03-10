@@ -114,7 +114,7 @@ void Downloader::startDownload(const QUrl &url)
    QNetworkRequest request(url);
 
    request.setAttribute(QNetworkRequest::RedirectPolicyAttribute, QNetworkRequest::NoLessSafeRedirectPolicy);
-   
+
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
    /* 10s timeout */
    request.setTransferTimeout(10000);
@@ -356,7 +356,7 @@ void Downloader::metaDataChanged()
    if (variant.isValid())
    {
       QString contentDisposition = QByteArray::fromPercentEncoding(variant.toByteArray()).constData();
-      QRegularExpression regExp("filename=(\S+)");
+      QRegularExpression regExp("filename=([A-Za-z]+\.[A-Za-z]+)");
       QRegularExpressionMatch match = regExp.match(contentDisposition);
       if (match.hasMatch())
       {

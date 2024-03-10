@@ -1,0 +1,12 @@
+Task: MERGE_MAPPING
+Left:    C:\Users\alkor\AppData\Roaming\.SomSomSom\new-classic\libraries\de\oceanlabs\mcp\mcp_config\1.19.2-20220805.130853\mcp_config-1.19.2-20220805.130853-mappings.txt
+         Reversed=false
+         null
+Right:   C:\Users\alkor\AppData\Roaming\.SomSomSom\new-classic\libraries\net\minecraft\client\1.19.2-20220805.130853\client-1.19.2-20220805.130853-mappings.txt
+         Reversed=true
+         null
+Classes: true
+Fields:  false
+Methods: false
+Params:  false
+Output:  C:\Users\alkor\AppData\Roaming\.SomSomSom\new-classic\libraries\de\oceanlabs\mcp\mcp_config\1.19.2-20220805.130853\mcp_config-1.19.2-20220805.130853-mappings-merged.txt

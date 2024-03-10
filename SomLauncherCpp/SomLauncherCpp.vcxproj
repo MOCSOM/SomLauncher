@@ -193,9 +193,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\libraries\LocalPeer\src\LocalPeer.cpp" />
-    <ClCompile Include="..\libraries\LocalPeer\src\LockedFile.cpp" />
-    <ClCompile Include="..\libraries\LocalPeer\src\LockedFile_win.cpp" />
     <ClCompile Include="..\third-party\QSimpleUpdater\src\Downloader.cpp" />
     <ClCompile Include="..\third-party\QSimpleUpdater\src\QSimpleUpdater.cpp" />
     <ClCompile Include="..\third-party\QSimpleUpdater\src\Updater.cpp" />
@@ -236,7 +233,6 @@
     <ClCompile Include="QObjects\Threads\LambdaTask.cpp" />
     <ClCompile Include="QObjects\Threads\UIThread.cpp" />
     <ClCompile Include="Servers\ServerTypes.cpp" />
-    <ClCompile Include="Updater\UpdateController.cpp" />
     <ClCompile Include="Updater\Upgrader.cpp" />
     <ClCompile Include="Web\DownloadClasses.cpp" />
     <ClCompile Include="Web\Download\Download.cpp" />
@@ -244,8 +240,6 @@
     <ClCompile Include="Web\Utils\WebUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="..\libraries\LocalPeer\include\LocalPeer.h" />
-    <ClInclude Include="..\libraries\LocalPeer\src\LockedFile.h" />
     <QtMoc Include="..\third-party\QSimpleUpdater\include\QSimpleUpdater.h" />
     <QtMoc Include="..\third-party\QSimpleUpdater\src\Updater.h" />
     <QtMoc Include="..\third-party\QSimpleUpdater\src\Downloader.h" />
@@ -257,7 +251,6 @@
     <ClInclude Include="Callbacks\QCallback.h" />
     <ClInclude Include="Client\Config\Config.h" />
     <ClInclude Include="Client\StartProcess.h" />
-    <ClInclude Include="Updater\UpdateController.h" />
     <ClInclude Include="Web\Minecraft\Status\MinecraftStatus.h" />
     <ClInclude Include="Web\Utils\WebUtils.h" />
     <QtMoc Include="QObjects\Threads\UIThread.h" />
@@ -313,7 +306,6 @@
     <None Include="Form\StyleSheets\Wstartpage.qss" />
     <None Include="resources\StyleSheets\Wstartpage_modyfied.qss" />
     <None Include="SERVERS.json" />
-    <None Include="SOMCONFIG_template.json" />
     <None Include="SomLauncherCpp.pro" />
     <None Include="TODO_List.md" />
   </ItemGroup>

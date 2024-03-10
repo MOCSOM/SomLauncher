@@ -179,18 +179,6 @@
     <ClCompile Include="Client\Config\Config.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Updater\UpdateController.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\libraries\LocalPeer\src\LocalPeer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\libraries\LocalPeer\src\LockedFile.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\libraries\LocalPeer\src\LockedFile_win.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\third-party\QSimpleUpdater\src\Updater.cpp">
       <Filter>Source Files\..%255cthird-party%255cQSimpleUpdater%255csrc</Filter>
     </ClCompile>
@@ -310,12 +298,6 @@
     <ClInclude Include="Client\Config\Config.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Updater\UpdateController.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\libraries\LocalPeer\src\LockedFile.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="all.json" />
@@ -324,7 +306,6 @@
     <None Include="TODO_List.md" />
     <None Include="cpp.hint" />
     <None Include="SomLauncherCpp.pro" />
-    <None Include="SOMCONFIG_template.json" />
     <None Include="resources\StyleSheets\Wstartpage_modyfied.qss">
       <Filter>Resource Files</Filter>
     </None>
@@ -375,9 +356,6 @@
     </QtMoc>
     <QtMoc Include="QObjects\Threads\UIThread.h">
       <Filter>Custom Qt Files</Filter>
-    </QtMoc>
-    <QtMoc Include="..\libraries\LocalPeer\include\LocalPeer.h">
-      <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="..\third-party\QSimpleUpdater\include\QSimpleUpdater.h">
       <Filter>Header Files\..%255cthird-party%255cQSimpleUpdater%255cinclude</Filter>

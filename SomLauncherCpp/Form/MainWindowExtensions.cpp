@@ -132,7 +132,7 @@ void SomLauncherMainWindow::setupInstallMinecraft(const size_t& index)
 	{
 		server_version = this->config.json()["modpack"][name]["version"].template get<std::string>();
 	}
-	catch (const std::exception&) 
+	catch (const std::exception&)
 	{
 		this->config.json()["modpack"][name]["version"] = modpack_info["modpack_version"];
 		this->config.saveJsonToFile();
@@ -265,20 +265,27 @@ void SomLauncherMainWindow::installMods(const std::filesystem::path& install_pat
 			return;
 		}
 	}
-	
+
 	std::filesystem::create_directories(install_path);
 	std::filesystem::directory_iterator mods_in_dir(install_path);
 	for (auto& mod : mods_in_dir)
 	{
-		auto finder = modpack_info["mods"].find("https://mocsom.site/media/mods/" + mod.path().filename().u8string());
-		if (finder != modpack_info["mods"].end())
+		bool delete_modpack = true;
+		for (auto& mod_in_list : modpack_info["mods"])
 		{
-			/*for (const auto& entry : std::filesystem::directory_iterator(install_path))
-				std::filesystem::remove_all(entry.path());*/
+			if (mod_in_list["mod_link"] == "https://mocsom.site/media/mods/" + mod.path().filename().u8string())
+			{
+				delete_modpack = false;
+				break;
+			}
+		}
+		if (delete_modpack)
+		{
 			std::filesystem::remove_all(mod.path());
 			break;
 		}
 	}
+
 	for (auto& mod : modpack_info["mods"])
 	{
 		std::string url = mod["mod_link"].template get<std::string>();
@@ -317,7 +324,7 @@ bool SomLauncherMainWindow::isConfigExist() const
 
 void SomLauncherMainWindow::createConfig() const
 {
-	std::filesystem::copy(this->template_config_path, this->config_path, std::filesystem::copy_options::overwrite_existing);
+	//std::filesystem::copy(this->template_config_path, this->config_path, std::filesystem::copy_options::overwrite_existing);
 }
 
 void SomLauncherMainWindow::configureOptions()
@@ -419,7 +426,7 @@ size_t SomLauncherMainWindow::getMinecraftModsCount()
 	try
 	{
 		directory = std::filesystem::directory_iterator(
-			this->minecraft_core_dir_path / 
+			this->minecraft_core_dir_path /
 			this->servers_parce[this->config.json()["user"]["server"].template get<int>()]["server_slug"].template get<std::string>() /
 			"mods");
 	}
@@ -493,35 +500,38 @@ std::string SomLauncherMainWindow::getLatestVersionFromGithub()
 
 void SomLauncherMainWindow::checkUpdates()
 {
-	std::string version_url = this->mocsom_site_api + this->mocsom_site_api + this->mocsom_api_launcher;
+	this->updater = QSimpleUpdater::getInstance();
+	std::string version_url = this->mocsom_site_url + this->mocsom_site_api + this->mocsom_api_launcher + "?format=json";
 	QString ver_url_qstr = version_url.c_str();
-
+	//ver_url_qstr = "https://raw.githubusercontent.com/alex-spataru/QSimpleUpdater/master/tutorial/definitions/updates.json";
 	/* Get settings from the UI */
 	QString version = this->config.json()["launcher"]["verison"].template get<std::string>().c_str();
+	//version = "0.1";
 	/*bool customAppcast = m_ui->customAppcast->isChecked();
 	bool downloaderEnabled = m_ui->enableDownloader->isChecked();
 	bool notifyOnFinish = m_ui->showAllNotifcations->isChecked();
 	bool notifyOnUpdate = m_ui->showUpdateNotifications->isChecked();
 	bool mandatoryUpdate = m_ui->mandatoryUpdate->isChecked();*/
 
-	QObject::connect(this->updater, &QSimpleUpdater::downloadFinished, this, SomLauncherMainWindow::setNewVersionInConfig);
+	QObject::connect(this->updater, &QSimpleUpdater::checkingFinished, this, &SomLauncherMainWindow::setNewVersionInConfig);
 
 	/* Apply the settings */
 	this->updater->setModuleVersion(ver_url_qstr, version);
 	this->updater->setNotifyOnFinish(ver_url_qstr, true);
 	this->updater->setNotifyOnUpdate(ver_url_qstr, true);
-	this->updater->setUseCustomAppcast(ver_url_qstr, true);
-	this->updater->setDownloaderEnabled(ver_url_qstr, true);
-	this->updater->setMandatoryUpdate(ver_url_qstr, false);
 
-	this->launcher_version = this->updater->getLatestVersion(ver_url_qstr).toStdString();
+	this->updater->setUseCustomAppcast(ver_url_qstr, false);
+	this->updater->setDownloaderEnabled(ver_url_qstr, true);
+	this->updater->setMandatoryUpdate(ver_url_qstr, true);
 
 	/* Check for updates */
 	this->updater->checkForUpdates(ver_url_qstr);
 }
 
-void SomLauncherMainWindow::setNewVersionInConfig(const QString& url, const QString& file_path)
+void SomLauncherMainWindow::setNewVersionInConfig(const QString& url)
 {
+	this->launcher_version = this->updater->getLatestVersion(url).toStdString();
+
 	this->config.json()["launcher"]["verison"] = this->launcher_version;
 	this->config.saveJsonToFile();
 }

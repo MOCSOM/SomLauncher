@@ -6,27 +6,16 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget* parent)
 	ui.setupUi(this);
 	qInfo() << "ui setup completed" << std::endl;
 
-	UpdateController cont(this, "tedts", "test", GoUpdate::OperationList{ GoUpdate::Operation::OP_REPLACE });
-	cont.installUpdates();
-
 	this->progressBar_ahtung_geometry = ui.progressBar_ahtung->geometry();
 
 	qInfo() << "Setting mc standart path..." << std::endl;
 	_settingMinecraftStandartPath();
 
-	//Проверка и создание конфига
-	qInfo() << "Checking config..." << std::endl;
-	if (!isConfigExist())
-	{
-		createConfig();
-		qInfo() << "Config created" << std::endl;
-	}
+	qInfo() << "Parcing configs..." << std::endl;
+	_parcingConfigs();
 
 	qInfo() << "Setting memory..." << std::endl;
 	_settingMemory();
-
-	qInfo() << "Parcing configs..." << std::endl;
-	_parcingConfigs();
 
 	qInfo() << "Configure options..." << std::endl;
 	configureOptions();
@@ -67,7 +56,6 @@ void SomLauncherMainWindow::_settingMinecraftStandartPath()
 	_dupenv_s(&path_buffer, &path_buffer_size, "APPDATA");
 	this->minecraft_core_dir_path = Join({ path_buffer == nullptr ? "" : path_buffer, ".SomSomSom" });
 	this->config_path = "SOMCONFIG.json";
-	this->template_config_path = "SOMCONFIG_template.json";
 	this->servers_json = "SERVERS.json";
 }
 
@@ -76,7 +64,6 @@ void SomLauncherMainWindow::_parcingConfigs()
 	qDebug() << this->config_path << std::endl;
 
 	this->config = Config(this->config_path);
-	this->config.checkAndCreateConfig();
 }
 
 void SomLauncherMainWindow::_parcingServers()
@@ -253,7 +240,7 @@ void SomLauncherMainWindow::settingUserProfileImage()
 void SomLauncherMainWindow::disableServer()
 {
 	bool is_friend = this->account_data["is_friend"].template get<bool>();
-	
+
 	if (is_friend)
 	{
 		return;
@@ -362,13 +349,19 @@ void SomLauncherMainWindow::onClickpushButton_startgame()
 	qInfo() << "pushButton_startgame clicked" << std::endl;
 
 	setUiToDownload(true);
+	QThread* thread = new QThread;
 
-	UIThread::run(
+	connect(thread, &QThread::started, this, &SomLauncherMainWindow::start_minecraft_params);
+	connect(thread, &QThread::finished, thread, &QThread::deleteLater);
+
+	thread->start();
+
+	/*UIThread::run(
 		[&]()
 		{
 			start_minecraft_params();
 		}
-	);
+	);*/
 
 	/*std::function<void()> start_minecraft_thread_func =
 		[this]() -> void

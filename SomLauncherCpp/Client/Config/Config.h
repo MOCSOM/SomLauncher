@@ -27,7 +27,7 @@ public:
 public:
 	void reopenConfig();
 	void reopenConfig(const std::filesystem::path& config_path);
-	
+
 public:
 	nlohmann::json& json();
 

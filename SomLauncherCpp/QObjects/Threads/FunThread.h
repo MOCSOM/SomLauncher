@@ -11,7 +11,7 @@ class FunctionThread : public QThread
 public:
 	using FunctionType = std::function<void()>; // Определяем тип указателя на функцию
 
-	FunctionThread(FunctionType func);
+	FunctionThread(FunctionType func, QObject* parent = nullptr);
 
 protected:
 	void run() override;

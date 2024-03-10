@@ -1,7 +1,7 @@
 ﻿#include "FunThread.h"
 
-FunctionThread::FunctionThread(FunctionType func)
-	: m_function(func) {}
+FunctionThread::FunctionThread(FunctionType func, QObject* parent)
+	: QThread(parent), m_function(func) {}
 
 void FunctionThread::run()
 {

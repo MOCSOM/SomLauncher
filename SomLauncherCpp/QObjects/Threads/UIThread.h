@@ -6,7 +6,7 @@
 
 #include <functional>
 
-class UIThread : public QObject, public QThread
+class UIThread : public QObject
 {
 	Q_OBJECT
 

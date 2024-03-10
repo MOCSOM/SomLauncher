@@ -47,8 +47,6 @@
 #include "../Web/Utils/WebUtils.h"
 #include "../Client/Config/Config.h"
 
-#include "../Updater/UpdateController.h"
-
 #include "ui_SomLauncherMainWindow.h"
 
 #include "../QObjects/ClickableLabel.h"
@@ -73,7 +71,6 @@ class SomLauncherMainWindow : public QMainWindow
 private:
 	std::filesystem::path minecraft_core_dir_path = "";
 	std::filesystem::path config_path = "";
-	std::filesystem::path template_config_path = "";
 	std::string servers_json = "";
 	std::string launcher_name = "SomLauncher";
 	std::string launcher_version = "2.0";
@@ -143,7 +140,6 @@ public:
 
 	nlohmann::json getServersFromServer();
 
-	void start_minecraft_params();
 	void setupInstallMinecraft(const size_t& index);
 	std::string install_minecraft(
 		const std::filesystem::path& install_path,
@@ -155,7 +151,7 @@ public:
 		std::shared_ptr<CallbackNull> callback = std::make_shared<CallbackNull>()) const;
 
 	nlohmann::json getModpackInfoFromServer(const std::string& modpack_id);
-	void installMods(const std::filesystem::path& install_path, const nlohmann::json& modpack_info, 
+	void installMods(const std::filesystem::path& install_path, const nlohmann::json& modpack_info,
 		const std::string& modpack_old_version,
 		std::shared_ptr<CallbackNull> callback = std::make_shared<CallbackNull>()) const;
 
@@ -183,6 +179,8 @@ public:
 	const std::string& getStyleSheetPath();
 
 private slots:
+	void start_minecraft_params();
+
 	void onClickedpushButton_game();
 	void onClickedpushButton_servers();
 	void onClickedpushButton_news();
@@ -203,7 +201,7 @@ private slots:
 
 	void saveSettings();
 
-	void setNewVersionInConfig(const QString& url, const QString& file_path);
+	void setNewVersionInConfig(const QString& url);
 
 	void updateProgressBar(int value);
 	void updateProgressLabel(const QString& text);
