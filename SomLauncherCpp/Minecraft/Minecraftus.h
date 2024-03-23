@@ -22,6 +22,7 @@
 #include "NativesInstaller.h"
 #include "../Client/StartProcess.h"
 #include "../Callbacks/QCallback.h"
+#include "../Web/Utils/WebUtils2.h"
 
 #include <initializer_list>
 //#include <stdio.h>

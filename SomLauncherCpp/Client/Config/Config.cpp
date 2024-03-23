@@ -20,11 +20,11 @@ Config::Config(const std::filesystem::path& config_path)
 
 void Config::createConfig() const
 {
-	//{"user":{"name":"","password":"","memory":7168,"wight":854,"hight":480,"mcdir":"","isInstallMods":false,"server":0},"launcher":{"verison":""},"modpack":{}}
+	//{"user":{"name":"","password":"","memory":7168,"wight":854,"hight":480,"mcdir":"","isInstallMods":false,"server":0},"launcher":{"version":""},"modpack":{}}
 	//std::filesystem::copy(this->template_config_path, this->config_path, std::filesystem::copy_options::overwrite_existing);
 
 	nlohmann::json template_config = nlohmann::json::parse(
-		R"({"user":{"name":"","password":"","memory":7168,"wight":854,"hight":480,"mcdir":"","isInstallMods":false,"server":0},"launcher":{"verison":""},"modpack":{}})"
+		R"({"user":{"name":"","password":"","memory":7168,"wight":854,"hight":480,"mcdir":"","isInstallMods":false,"server":0},"launcher":{"version":"0.0.0"},"modpack":{}})"
 	);
 
 	std::ofstream ofstr(this->config_path);

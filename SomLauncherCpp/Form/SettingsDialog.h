@@ -4,6 +4,13 @@
 #include "ui_SettingsDialog.h"
 
 #include <string>
+#include <Windows.h>
+#include <winver.h>
+#include <sysinfoapi.h>
+#include <atlstr.h>
+
+#pragma comment(lib, "mincore.lib")
+#pragma comment(lib, "Version.lib")
 
 #include <nlohmann/json.hpp>
 
@@ -41,6 +48,10 @@ public:
 	void setToDefault(const MinecraftCpp::option::MinecraftOptions& option, int memory);
 
 	bool getReintsallModsState();
+
+	QLabel* getVersionLabel();
+
+	std::string getApplicationVersion();
 
 	std::filesystem::path getPathFromWindowSelector(
 		const QFileDialog::FileMode& type = QFileDialog::FileMode::AnyFile,

@@ -177,6 +177,8 @@ public:
 	std::unique_ptr<SettingsDialog>& getSettingsDialog();
 
 	const std::string& getStyleSheetPath();
+	
+	void disableElementsInDevelopment();
 
 private slots:
 	void start_minecraft_params();

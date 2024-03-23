@@ -141,12 +141,14 @@ bool MinecraftCpp::install_minecraft_version(const std::string& versionid, const
 		}
 	}
 
-	auto version_manifest_file = DownloadFile("https://launchermeta.mojang.com/mc/game/version_manifest.json",
+	/*auto version_manifest_file = DownloadFile("https://launchermeta.mojang.com/mc/game/version_manifest.json",
 		download_dir, callback);
 
 	std::ifstream ifstr(version_manifest_file);
 	nlohmann::json version_list = nlohmann::json::parse(ifstr);
-	ifstr.close();
+	ifstr.close();*/
+
+	nlohmann::json version_list = web::utils::getJsonFromUrl("https://launchermeta.mojang.com/mc/game/version_manifest.json");
 
 
 	if (version_list == nullptr)
@@ -1787,7 +1789,7 @@ bool MinecraftCpp::forge::install_forge_version(const std::string& versionid, co
 		if (var.filePath == "install_profile.json")
 		{
 			std::string json_str = zArchive.fileData(var.filePath).toStdString();
-
+			
 			version_data = nlohmann::json::parse(json_str);
 
 			break;
@@ -1797,22 +1799,27 @@ bool MinecraftCpp::forge::install_forge_version(const std::string& versionid, co
 	std::string forge_version_id = version_data.contains("version") ? version_data["version"].template get<std::string>() : version_data["install"]["version"].template get<std::string>();
 	std::string minecraft_version = version_data.contains("minecraft") ? version_data["minecraft"].template get<std::string>() : version_data["install"]["minecraft"].template get<std::string>();
 
+
 	// Make sure, the base version is installed
+	qInfo() << "Make sure, the base version is installed" << std::endl;
 	install_minecraft_version(minecraft_version, path, callback);
 
 	// Install all needed libs from install_profile.json
 	if (version_data.contains("libraries"))
 	{
+		qInfo() << "Install all needed libs from install_profile.json" << std::endl;
 		install_libraries(version_data, path, callback);
 	}
 
 	// Extract the version.json
+	qInfo() << "Extract the version.json" << std::endl;
 	std::filesystem::path version_json_path = path / "versions" / forge_version_id / (forge_version_id + ".json");
 	if (!extract_file(zArchive, "version.json", version_json_path))
 		if (version_data.contains("versionInfo"))
 		{
 			std::ofstream o(version_json_path);
 			o << version_data["versionInfo"].dump(4) << std::endl;
+			o.close();
 		}
 
 	// Extract forge libs from the installer
@@ -1823,10 +1830,10 @@ bool MinecraftCpp::forge::install_forge_version(const std::string& versionid, co
 
 	// Extract the client.lzma
 	std::filesystem::path lzma_path = std::filesystem::temp_directory_path() / ("lzma-" + std::to_string(random_num) + ".tmp");
-
 	extract_file(zArchive, "data/client.lzma", lzma_path);
 
 	// Install the rest with the vanilla function
+	qInfo() << "Install the rest with the vanilla function" << std::endl;
 	install_minecraft_version(forge_version_id, path, callback);
 
 	// Run the processors

@@ -161,9 +161,9 @@ void SomLauncherMainWindow::setupInstallMinecraft(const size_t& index)
 	hide();
 
 	auto work_dir = std::filesystem::current_path();
-	std::filesystem::current_path(instance_path);
+	//std::filesystem::current_path(instance_path);
 	client::startProcess(command);
-	std::filesystem::current_path(work_dir);
+	//std::filesystem::current_path(work_dir);
 
 	setWindowState(windowState()/* & ~Qt::WindowMinimized)*/ | Qt::WindowActive);
 	show();
@@ -503,17 +503,10 @@ void SomLauncherMainWindow::checkUpdates()
 	this->updater = QSimpleUpdater::getInstance();
 	std::string version_url = this->mocsom_site_url + this->mocsom_site_api + this->mocsom_api_launcher + "?format=json";
 	QString ver_url_qstr = version_url.c_str();
-	//ver_url_qstr = "https://raw.githubusercontent.com/alex-spataru/QSimpleUpdater/master/tutorial/definitions/updates.json";
 	/* Get settings from the UI */
-	QString version = this->config.json()["launcher"]["verison"].template get<std::string>().c_str();
-	//version = "0.1";
-	/*bool customAppcast = m_ui->customAppcast->isChecked();
-	bool downloaderEnabled = m_ui->enableDownloader->isChecked();
-	bool notifyOnFinish = m_ui->showAllNotifcations->isChecked();
-	bool notifyOnUpdate = m_ui->showUpdateNotifications->isChecked();
-	bool mandatoryUpdate = m_ui->mandatoryUpdate->isChecked();*/
+	QString version = this->config.json()["launcher"]["version"].template get<std::string>().c_str();
 
-	QObject::connect(this->updater, &QSimpleUpdater::checkingFinished, this, &SomLauncherMainWindow::setNewVersionInConfig);
+	QObject::connect(this->updater, &QSimpleUpdater::downloadFinished, this, &SomLauncherMainWindow::setNewVersionInConfig);
 
 	/* Apply the settings */
 	this->updater->setModuleVersion(ver_url_qstr, version);
@@ -522,7 +515,7 @@ void SomLauncherMainWindow::checkUpdates()
 
 	this->updater->setUseCustomAppcast(ver_url_qstr, false);
 	this->updater->setDownloaderEnabled(ver_url_qstr, true);
-	this->updater->setMandatoryUpdate(ver_url_qstr, true);
+	this->updater->setMandatoryUpdate(ver_url_qstr, false);
 
 	/* Check for updates */
 	this->updater->checkForUpdates(ver_url_qstr);
@@ -532,7 +525,7 @@ void SomLauncherMainWindow::setNewVersionInConfig(const QString& url)
 {
 	this->launcher_version = this->updater->getLatestVersion(url).toStdString();
 
-	this->config.json()["launcher"]["verison"] = this->launcher_version;
+	this->config.json()["launcher"]["version"] = this->launcher_version;
 	this->config.saveJsonToFile();
 }
 
@@ -543,14 +536,14 @@ nlohmann::json SomLauncherMainWindow::getLatestVersionFromSite()
 
 std::string SomLauncherMainWindow::getCurrentVersionFromConfig()
 {
-	return this->config.json()["launcher"]["verison"].template get<std::string>();
+	return this->config.json()["launcher"]["version"].template get<std::string>();
 }
 
 void SomLauncherMainWindow::setCurrentVersionFromGithub()
 {
 	if (getCurrentVersionFromConfig() == "")
 	{
-		this->config.json()["launcher"]["verison"] = getLatestVersionFromGithub();
+		this->config.json()["launcher"]["version"] = getLatestVersionFromGithub();
 
 		this->config.saveJsonToFile();
 	}
@@ -560,7 +553,7 @@ void SomLauncherMainWindow::setCurrentVersionFromSite()
 {
 	if (getCurrentVersionFromConfig().empty())
 	{
-		/*this->config_parce["launcher"]["verison"] = getLatestVersionFromSite()[getLatestVersionFromSite().size() - 1]["file"].template get<std::string>();
+		/*this->config_parce["launcher"]["version"] = getLatestVersionFromSite()[getLatestVersionFromSite().size() - 1]["file"].template get<std::string>();
 		std::ofstream o(this->config_path);
 		o << this->config_parce.dump(4) << std::endl;
 		o.close();*/
@@ -594,4 +587,9 @@ std::unique_ptr<SettingsDialog>& SomLauncherMainWindow::getSettingsDialog()
 const std::string& SomLauncherMainWindow::getStyleSheetPath()
 {
 	return this->style_sheet;
+}
+
+void SomLauncherMainWindow::disableElementsInDevelopment()
+{
+	this->settings_dialog->getVersionLabel()->setDisabled(true);
 }

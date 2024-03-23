@@ -32,7 +32,7 @@ SomLauncherMainWindow::SomLauncherMainWindow(QWidget* parent)
 	qInfo() << "Setting cyrrentversion..." << std::endl;
 	setCurrentVersionFromSite();
 
-	/*qInfo() << "Checking verison..." << std::endl;
+	/*qInfo() << "Checking version..." << std::endl;
 	if (isVersionOld())
 	{
 		qInfo() << "Start updater" << std::endl;
@@ -253,6 +253,8 @@ void SomLauncherMainWindow::disableServer()
 			elem->setDisabled(true);
 		}
 	}
+
+	ui.pushButton_changeserver->setDisabled(true);
 }
 
 void SomLauncherMainWindow::onClickedpushButton_game()
@@ -589,7 +591,7 @@ void SomLauncherMainWindow::onClickedPushButton_check_update()
 	/*if (isVersionOld())
 	{
 		qInfo() << "Start updater" << std::endl;
-		this->config.json()["launcher"]["verison"] = getLatestVersionFromSite()[getLatestVersionFromSite().size() - 1]["version"].template get<std::string>();
+		this->config.json()["launcher"]["version"] = getLatestVersionFromSite()[getLatestVersionFromSite().size() - 1]["version"].template get<std::string>();
 
 		this->config.saveJsonToFile();
 

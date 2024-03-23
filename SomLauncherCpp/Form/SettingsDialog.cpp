@@ -18,6 +18,8 @@ SettingsDialog::SettingsDialog(nlohmann::json data, MinecraftCpp::option::Minecr
 
 	ui.label_modreinstall_notifiy->setHidden(true);
 
+	ui.label_launcher_version->setText(getApplicationVersion().c_str());
+
 	QObject::connect(ui.horizontalSlider_memory, &QSlider::valueChanged, this, &SettingsDialog::setMemoryLableValue);
 
 	QObject::connect(ui.okButton, &QPushButton::clicked, this, &SettingsDialog::saveSettings);
@@ -103,6 +105,65 @@ void SettingsDialog::setToDefault(const MinecraftCpp::option::MinecraftOptions& 
 bool SettingsDialog::getReintsallModsState()
 {
 	return ui.checkBox_reinstall_modpack->isChecked();
+}
+
+QLabel* SettingsDialog::getVersionLabel()
+{
+	return ui.label_launcher_version;
+}
+
+std::string SettingsDialog::getApplicationVersion()
+{
+
+	// get the filename of the executable containing the version resource
+	TCHAR szFilename[MAX_PATH + 1] = { 0 };
+	if (GetModuleFileName(NULL, szFilename, MAX_PATH) == 0)
+	{
+		qWarning() << "GetModuleFileName failed with error" << GetLastError() << std::endl;
+		return "";
+	}
+
+	// allocate a block of memory for the version info
+	DWORD dummy;
+	DWORD dwSize = GetFileVersionInfoSize(szFilename, &dummy);
+	if (dwSize == 0)
+	{
+		qWarning() << "GetFileVersionInfoSize failed with error" << GetLastError() << std::endl;
+		return "";
+	}
+	std::vector<BYTE> data(dwSize);
+
+	// load the version info
+	if (!GetFileVersionInfo(szFilename, NULL, dwSize, &data[0]))
+	{
+		qWarning() << "GetFileVersionInfo failed with error" << GetLastError() << std::endl;
+		return "";
+	}
+
+	// get the name and version strings
+	LPVOID pvProductName = NULL;
+	unsigned int iProductNameLen = 0;
+	LPVOID pvProductVersion = NULL;
+	unsigned int iProductVersionLen = 0;
+
+	// replace "040904e4" with the language ID of your resources
+	if (!VerQueryValue(&data[0], _T("\\StringFileInfo\\041904b0\\ProductName"), &pvProductName, &iProductNameLen) ||
+		!VerQueryValue(&data[0], _T("\\StringFileInfo\\041904b0\\ProductVersion"), &pvProductVersion, &iProductVersionLen))
+	{
+		qWarning() << "Can't obtain ProductName and ProductVersion from resources" << std::endl;
+		return "";
+	}
+	
+	qInfo() << (LPCSTR)pvProductName << iProductNameLen << std::endl;
+	qInfo() << (LPCSTR)pvProductVersion << iProductVersionLen << std::endl;
+
+	CStringA strProductName;
+	CStringA strProductVersion;
+
+	strProductName.SetString((LPCSTR)pvProductName, iProductNameLen);
+	strProductVersion.SetString((LPCSTR)pvProductVersion, iProductVersionLen);
+	qInfo() << strProductVersion.GetString() << std::endl;
+	return "";
 }
 
 std::filesystem::path SettingsDialog::getPathFromWindowSelector(const QFileDialog::FileMode& type,
