@@ -4,7 +4,7 @@ int client::startProcess(const std::string& args)
 {
 	std::unique_ptr<wchar_t[]> buffer = Additionals::Convectors::ConvertStringToWcharUniqPtr(args);
 
-	return utils::doProcess(buffer, std::filesystem::path("somlogs") / "last_minecraft_log.txt");
+	return utils::doProcess(buffer, std::filesystem::path("somlogs") / "last_minecraft_log.txt", ".");
 }
 
 int client::startProcess(const std::vector<std::string>& args)
@@ -15,7 +15,7 @@ int client::startProcess(const std::vector<std::string>& args)
 
 	std::unique_ptr<wchar_t[]> buffer = Additionals::Convectors::ConvertStringToWcharUniqPtr(imploded.str());
 
-	return utils::doProcess(buffer, std::filesystem::path("somlogs") / "last_minecraft_log.txt");
+	return utils::doProcess(buffer, std::filesystem::path("somlogs") / "last_minecraft_log.txt", ".");
 }
 
 int client::startProcess(const std::vector<std::wstring>& args)
@@ -32,7 +32,7 @@ int client::startProcess(const std::vector<std::wstring>& args)
 	std::unique_ptr<wchar_t[]> ch_array = std::make_unique<wchar_t[]>(imploded.size() + 1);
 	wcsncpy(ch_array.get(), imploded.c_str(), imploded.size());
 
-	return utils::doProcess(ch_array, std::filesystem::path("somlogs") / "last_minecraft_log.txt");
+	return utils::doProcess(ch_array, std::filesystem::path("somlogs") / "last_minecraft_log.txt", ".");
 }
 
 int client::startProcess(const std::vector<std::wstring>& args, const std::filesystem::path& output_file)
@@ -49,10 +49,10 @@ int client::startProcess(const std::vector<std::wstring>& args, const std::files
 	std::unique_ptr<wchar_t[]> ch_array = std::make_unique<wchar_t[]>(imploded.size() + 1);
 	wcsncpy(ch_array.get(), imploded.c_str(), imploded.size());
 
-	return utils::doProcess(ch_array, output_file);
+	return utils::doProcess(ch_array, output_file, ".");
 }
 
-int client::startProcess(std::vector<std::variant<std::string, std::filesystem::path, std::wstring>>& args)
+int client::startProcess(std::vector<std::variant<std::string, std::filesystem::path, std::wstring>>& args, std::filesystem::path instance_path)
 {
 	std::variant<std::string> a;
 
@@ -89,10 +89,10 @@ int client::startProcess(std::vector<std::variant<std::string, std::filesystem::
 
 	qInfo() << "Command:" << imploded << std::endl;
 
-	return utils::doProcess(ch_array, std::filesystem::path("somlogs") / "last_minecraft_log.txt");
+	return utils::doProcess(ch_array, std::filesystem::path("somlogs") / "last_minecraft_log.txt", instance_path);
 }
 
-int client::utils::doProcess(std::unique_ptr<wchar_t[]>& buffer, const std::filesystem::path& output_file)
+int client::utils::doProcess(std::unique_ptr<wchar_t[]>& buffer, const std::filesystem::path& output_file, std::filesystem::path workdir_path)
 {
 	SECURITY_ATTRIBUTES sa{};
 	sa.nLength = sizeof(sa);
@@ -134,6 +134,9 @@ int client::utils::doProcess(std::unique_ptr<wchar_t[]>& buffer, const std::file
 	//PROCESS_INFORMATION pi;
 	//memset(&pi, 0, sizeof(pi));
 
+	auto work_dir = std::filesystem::current_path();
+	std::filesystem::current_path(workdir_path);
+
 	qInfo() << "Programm args setting complete" << std::endl;
 	if (CreateProcessW(NULL, buffer.get(), NULL, NULL, TRUE, NULL, NULL, NULL, &si, &pi))
 	{
@@ -143,6 +146,8 @@ int client::utils::doProcess(std::unique_ptr<wchar_t[]>& buffer, const std::file
 		if (dwWait == WAIT_OBJECT_0)
 		{
 			qInfo() << "Programm has been closed" << std::endl;
+			std::filesystem::current_path(work_dir);
+
 			WaitForSingleObject(pi.hProcess, INFINITE);
 			CloseHandle(pi.hProcess);
 			CloseHandle(pi.hThread);
@@ -152,6 +157,8 @@ int client::utils::doProcess(std::unique_ptr<wchar_t[]>& buffer, const std::file
 		else if (dwWait == WAIT_ABANDONED)
 		{
 			qInfo() << "Programm has been adadonde" << std::endl;
+			std::filesystem::current_path(work_dir);
+
 			WaitForSingleObject(pi.hProcess, INFINITE);
 			CloseHandle(pi.hProcess);
 			CloseHandle(pi.hThread);
@@ -159,6 +166,8 @@ int client::utils::doProcess(std::unique_ptr<wchar_t[]>& buffer, const std::file
 			return 1;
 		}
 		//  else ну и может быть другие варианты ожидания
+
+		std::filesystem::current_path(work_dir);
 
 		WaitForSingleObject(pi.hProcess, INFINITE);
 		CloseHandle(pi.hProcess);
@@ -168,7 +177,7 @@ int client::utils::doProcess(std::unique_ptr<wchar_t[]>& buffer, const std::file
 	{
 		qWarning() << "Programm isnt starting" << std::endl;
 	}
-
+	std::filesystem::current_path(work_dir);
 	CloseHandle(h);
 	return -1;
 }

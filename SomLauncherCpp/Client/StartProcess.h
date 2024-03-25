@@ -17,11 +17,11 @@ namespace client
 	int startProcess(const std::vector<std::string>& args);
 	int startProcess(const std::vector<std::wstring>& args);
 	int startProcess(const std::vector<std::wstring>& args, const std::filesystem::path& output_file);
-	int startProcess(std::vector<std::variant<std::string, std::filesystem::path, std::wstring>>& args);
+	int startProcess(std::vector<std::variant<std::string, std::filesystem::path, std::wstring>>& args, std::filesystem::path instance_path);
 
 	namespace utils
 	{
-		int doProcess(std::unique_ptr<wchar_t[]>& args, const std::filesystem::path& output_file);
+		int doProcess(std::unique_ptr<wchar_t[]>& args, const std::filesystem::path& output_file, std::filesystem::path workdir_path);
 	}
 }
 

@@ -22,7 +22,7 @@
 #include "NativesInstaller.h"
 #include "../Client/StartProcess.h"
 #include "../Callbacks/QCallback.h"
-#include "../Web/Utils/WebUtils2.h"
+#include "../Web/Utils/WebUtils.h"
 
 #include <initializer_list>
 //#include <stdio.h>
@@ -78,7 +78,7 @@ namespace MinecraftCpp
 			bool is_exist(const std::string& param);
 		};
 	}
-	
+
 	SJson::JsonValue get_version_list();
 
 	std::vector<std::string> generateCommandLine(const std::filesystem::path& nativeFolder, MinecraftCpp::option::LaunchOptions& options);

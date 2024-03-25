@@ -160,10 +160,7 @@ void SomLauncherMainWindow::setupInstallMinecraft(const size_t& index)
 	setUiToDownload(false);
 	hide();
 
-	auto work_dir = std::filesystem::current_path();
-	//std::filesystem::current_path(instance_path);
-	client::startProcess(command);
-	//std::filesystem::current_path(work_dir);
+	client::startProcess(command, instance_path);
 
 	setWindowState(windowState()/* & ~Qt::WindowMinimized)*/ | Qt::WindowActive);
 	show();
