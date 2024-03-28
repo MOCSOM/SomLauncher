@@ -134,11 +134,11 @@ int client::utils::doProcess(std::unique_ptr<wchar_t[]>& buffer, const std::file
 	//PROCESS_INFORMATION pi;
 	//memset(&pi, 0, sizeof(pi));
 
-	auto work_dir = std::filesystem::current_path();
-	std::filesystem::current_path(workdir_path);
+	/*auto work_dir = std::filesystem::current_path();
+	std::filesystem::current_path(workdir_path);*/
 
 	qInfo() << "Programm args setting complete" << std::endl;
-	if (CreateProcessW(NULL, buffer.get(), NULL, NULL, TRUE, NULL, NULL, NULL, &si, &pi))
+	if (CreateProcessW(NULL, buffer.get(), NULL, NULL, TRUE, NULL, NULL, workdir_path.wstring().c_str(), &si, &pi))
 	{
 		// программа запущена, ждем её завершения
 		qInfo() << "Programm has been started" << std::endl;
@@ -146,28 +146,29 @@ int client::utils::doProcess(std::unique_ptr<wchar_t[]>& buffer, const std::file
 		if (dwWait == WAIT_OBJECT_0)
 		{
 			qInfo() << "Programm has been closed" << std::endl;
-			std::filesystem::current_path(work_dir);
 
 			WaitForSingleObject(pi.hProcess, INFINITE);
 			CloseHandle(pi.hProcess);
 			CloseHandle(pi.hThread);
 			CloseHandle(h);
+
+			//std::filesystem::current_path(work_dir);
 			return 0;
 		}
 		else if (dwWait == WAIT_ABANDONED)
 		{
 			qInfo() << "Programm has been adadonde" << std::endl;
-			std::filesystem::current_path(work_dir);
 
 			WaitForSingleObject(pi.hProcess, INFINITE);
 			CloseHandle(pi.hProcess);
 			CloseHandle(pi.hThread);
 			CloseHandle(h);
+
+			//std::filesystem::current_path(work_dir);
 			return 1;
 		}
 		//  else ну и может быть другие варианты ожидания
 
-		std::filesystem::current_path(work_dir);
 
 		WaitForSingleObject(pi.hProcess, INFINITE);
 		CloseHandle(pi.hProcess);
@@ -177,7 +178,7 @@ int client::utils::doProcess(std::unique_ptr<wchar_t[]>& buffer, const std::file
 	{
 		qWarning() << "Programm isnt starting" << std::endl;
 	}
-	std::filesystem::current_path(work_dir);
 	CloseHandle(h);
+	//std::filesystem::current_path(work_dir);
 	return -1;
 }
