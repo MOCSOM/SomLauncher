@@ -39,7 +39,10 @@ ServerChanger::ServerChanger(QWidget* parent, const std::filesystem::path& confi
 
 ServerChanger::~ServerChanger()
 {
-	delete item;
+	if (this->item)
+	{
+		delete this->item;
+	}
 }
 
 void ServerChanger::onClickedpushButton_apply()
@@ -50,13 +53,14 @@ void ServerChanger::onClickedpushButton_apply()
 
 	config_parce["user"]["server"] = this->index;
 
-	std::cout << "Server is: " << config_parce["user"]["server"].template get<int>() << std::endl;
+	//std::cout << "Server is: " << config_parce["user"]["server"].template get<int>() << std::endl;
 
 	std::ofstream o(this->config_path);
 	o << config_parce.dump(4) << std::endl;
 	o.close();
 
-	std::cout << "Server saved" << std::endl;
+	qInfo() << "Server saved" << std::endl;
+	//std::cout << "Server saved" << std::endl;
 
 	this->close();
 

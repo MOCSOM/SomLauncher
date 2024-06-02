@@ -7,8 +7,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SomLauncherCpp", "SomLaunch
 EndProject
 Project("{840C416C-B8F3-42BC-B0DD-F6BB14C9F8CB}") = "SomSetup_advinst1", "SomSetup_advinst1\SomSetup_advinst1.aiproj", "{DD002037-3B65-4AE4-BA40-D71336A8AA3A}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnitTests", "UnitTests\UnitTests.vcxproj", "{BADA96C3-EFF1-4451-8A31-91C964252C14}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -43,18 +41,6 @@ Global
 		{DD002037-3B65-4AE4-BA40-D71336A8AA3A}.Release|x64.Build.0 = DefaultBuild
 		{DD002037-3B65-4AE4-BA40-D71336A8AA3A}.Release|x86.ActiveCfg = DefaultBuild
 		{DD002037-3B65-4AE4-BA40-D71336A8AA3A}.Release|x86.Build.0 = DefaultBuild
-		{BADA96C3-EFF1-4451-8A31-91C964252C14}.Debug|x64.ActiveCfg = Debug|x64
-		{BADA96C3-EFF1-4451-8A31-91C964252C14}.Debug|x64.Build.0 = Debug|x64
-		{BADA96C3-EFF1-4451-8A31-91C964252C14}.Debug|x86.ActiveCfg = Debug|x64
-		{BADA96C3-EFF1-4451-8A31-91C964252C14}.Debug|x86.Build.0 = Debug|x64
-		{BADA96C3-EFF1-4451-8A31-91C964252C14}.DefaultBuild|x64.ActiveCfg = Debug|x64
-		{BADA96C3-EFF1-4451-8A31-91C964252C14}.DefaultBuild|x64.Build.0 = Debug|x64
-		{BADA96C3-EFF1-4451-8A31-91C964252C14}.DefaultBuild|x86.ActiveCfg = Debug|x64
-		{BADA96C3-EFF1-4451-8A31-91C964252C14}.DefaultBuild|x86.Build.0 = Debug|x64
-		{BADA96C3-EFF1-4451-8A31-91C964252C14}.Release|x64.ActiveCfg = Release|x64
-		{BADA96C3-EFF1-4451-8A31-91C964252C14}.Release|x64.Build.0 = Release|x64
-		{BADA96C3-EFF1-4451-8A31-91C964252C14}.Release|x86.ActiveCfg = Release|x64
-		{BADA96C3-EFF1-4451-8A31-91C964252C14}.Release|x86.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

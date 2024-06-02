@@ -1,12 +1,12 @@
 ﻿#include "Mods.h"
 
-bool MinecraftCpp::modpacks::download::database::installModPack(const SJson::JsonValue& json_from_server,
+bool MinecraftCpp::modpacks::download::database::installModPack(const  nlohmann::json& json_from_server,
 	const std::filesystem::path& path_to_download, std::shared_ptr<CallbackNull> callback) noexcept
 {
-	SJson::JsonValue urls = json_from_server;
-	for (std::pair<const std::string, SJson::JsonValue> elem : urls.get_object())
+	nlohmann::json urls = json_from_server;
+	for (auto& elem : urls.items())
 	{
-		auto downloaded_path = DownloadFile(elem.second.to_string(),
+		auto downloaded_path = DownloadFile(elem.value().template get<std::string>(),
 			path_to_download.u8string(), callback);
 	}
 
@@ -23,7 +23,7 @@ bool MinecraftCpp::modpacks::deletemods::deleteSingleMod(const std::filesystem::
 	}
 	catch (const std::filesystem::filesystem_error& ex)
 	{
-		std::cerr
+		qWarning()
 			<< "what:  " << ex.what() << std::endl
 			<< "path1: " << ex.path1() << std::endl
 			<< "path2: " << ex.path2() << std::endl
@@ -53,7 +53,7 @@ bool MinecraftCpp::modpacks::deletemods::deleteAllMods(const std::filesystem::pa
 	}
 	else
 	{
-		std::cerr << "Не удалось открыть папку." << std::endl;
+		qWarning() << "Error in opening folder" << std::endl;
 
 		return false;
 	}

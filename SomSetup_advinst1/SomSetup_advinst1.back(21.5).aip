@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<DOCUMENT Type="Advanced Installer" CreateVersion="21.5" version="21.5.1" Modules="simple" RootPath="." Language="ru" Id="{F11F6F72-23A8-4F08-BC38-645F0A1CE4B5}">
+<DOCUMENT Type="Advanced Installer" CreateVersion="21.5" version="21.5" Modules="simple" RootPath="." Language="ru" Id="{F11F6F72-23A8-4F08-BC38-645F0A1CE4B5}">
   <COMPONENT cid="caphyon.advinst.msicomp.ProjectOptionsComponent">
     <ROW Name="HiddenItems" Value="AppXProductDetailsComponent;AppXDependenciesComponent;AppXAppDetailsComponent;AppXVisualAssetsComponent;AppXCapabilitiesComponent;AppXAppDeclarationsComponent;AppXUriRulesComponent;FixupComponent;MsiXDiffComponent;MsixManifestEditorComponent"/>
   </COMPONENT>
@@ -15,10 +15,10 @@
     <ROW Property="AspNetVersion" Value="4.0.30319.0"/>
     <ROW Property="CTRLS" Value="2"/>
     <ROW Property="Manufacturer" Value=".SomSomSom"/>
-    <ROW Property="ProductCode" Value="1049:{C16D7D02-FB02-48B7-954D-DC0F71FDA7F0} " Type="16"/>
+    <ROW Property="ProductCode" Value="1049:{70D08B44-8C5D-459E-A9E8-6A95339A7B24} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="SomLauncher"/>
-    <ROW Property="ProductVersion" Value="1.6.1" Options="4"/>
+    <ROW Property="ProductVersion" Value="1.5.12" Options="4"/>
     <ROW Property="RUNAPPLICATION" Value="1" Type="4"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{F9EAB7F5-9D61-49C2-85AA-8DAD4762EB34}"/>
@@ -36,8 +36,6 @@
   <COMPONENT cid="caphyon.advinst.msicomp.MsiDirsComponent">
     <ROW Directory="APPDIR" Directory_Parent="TARGETDIR" DefaultDir="APPDIR:." IsPseudoRoot="1"/>
     <ROW Directory="DesktopFolder" Directory_Parent="TARGETDIR" DefaultDir="DESKTO~1|DesktopFolder" IsPseudoRoot="1"/>
-    <ROW Directory="ProgramMenuFolder" Directory_Parent="TARGETDIR" DefaultDir="PROGRA~1|ProgramMenuFolder" IsPseudoRoot="1"/>
-    <ROW Directory="SHORTCUTDIR" Directory_Parent="TARGETDIR" DefaultDir="SHORTC~1|SHORTCUTDIR" IsPseudoRoot="1"/>
     <ROW Directory="TARGETDIR" DefaultDir="SourceDir"/>
     <ROW Directory="_11AA53327E344688B1363A47E43CB8EA" Directory_Parent="APPDIR" DefaultDir="RESOUR~1|resources"/>
     <ROW Directory="_1FF2E2410FA24AB0B2A9C232C24DD783" Directory_Parent="APPDIR" DefaultDir="NETWOR~1|networkinformation"/>
@@ -79,7 +77,6 @@
     <ROW Component="Qt6Gui.dll" ComponentId="{027DBBCD-FC98-4273-B835-F2E364631521}" Directory_="APPDIR" Attributes="256" KeyPath="Qt6Gui.dll"/>
     <ROW Component="Qt6Network.dll" ComponentId="{2FFCA992-9C35-42C9-8511-3543E490B213}" Directory_="APPDIR" Attributes="256" KeyPath="Qt6Network.dll"/>
     <ROW Component="Qt6Widgets.dll" ComponentId="{6AEAA9FE-AD3D-40E3-8584-1902FD91F88A}" Directory_="APPDIR" Attributes="256" KeyPath="Qt6Widgets.dll"/>
-    <ROW Component="SHORTCUTDIR" ComponentId="{595782A2-E5A4-4BC8-89BB-38B8C0D54370}" Directory_="SHORTCUTDIR" Attributes="0"/>
     <ROW Component="curlpp.dll" ComponentId="{CC953782-4C59-48D8-B999-A7CCEE1D4EC8}" Directory_="APPDIR" Attributes="256" KeyPath="curlpp.dll"/>
     <ROW Component="libcrypto3x64.dll" ComponentId="{96DD3161-9A7F-4933-A439-CEC6BD43855C}" Directory_="APPDIR" Attributes="256" KeyPath="libcrypto3x64.dll"/>
     <ROW Component="libcurl.dll" ComponentId="{1089885E-D91C-4149-B4F9-646F479534CF}" Directory_="APPDIR" Attributes="256" KeyPath="libcurl.dll"/>
@@ -183,7 +180,6 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCreateFolderComponent">
     <ROW Directory_="APPDIR" Component_="APPDIR" ManualDelete="true"/>
-    <ROW Directory_="SHORTCUTDIR" Component_="SHORTCUTDIR" ManualDelete="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCustActComponent">
     <ROW Action="AI_DOWNGRADE" Type="19" Target="4010"/>
@@ -236,7 +232,6 @@
     <ROW Feature_="MainFeature" Component_="qwindowsvistastyle.dll"/>
     <ROW Feature_="MainFeature" Component_="qwindows.dll"/>
     <ROW Feature_="MainFeature" Component_="libssl3x64.dll"/>
-    <ROW Feature_="MainFeature" Component_="SHORTCUTDIR"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
     <ROW Name="som.exe" SourcePath="..\SomLauncherCpp\resources\som.ico" Index="0"/>
@@ -269,8 +264,6 @@
     <ROW Registry="Version" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="Version" Value="[ProductVersion]" Component_="ProductInformation"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiShortsComponent">
-    <ROW Shortcut="SomLauncher" Directory_="ProgramMenuFolder" Name="SOMLAU~1|SomLauncher" Component_="C__34B24EA6487A4E298A1A1282EF6D025B" Target="[#_34B24EA6487A4E298A1A1282EF6D025B]" Hotkey="0" Icon_="som.exe" IconIndex="0" ShowCmd="1" WkDir="APPDIR" Advertised="true"/>
-    <ROW Shortcut="SomLauncher_1" Directory_="SHORTCUTDIR" Name="SOMLAU~1|SomLauncher" Component_="C__34B24EA6487A4E298A1A1282EF6D025B" Target="[#_34B24EA6487A4E298A1A1282EF6D025B]" Hotkey="0" Icon_="som.exe" IconIndex="0" ShowCmd="1" WkDir="APPDIR" Advertised="true"/>
     <ROW Shortcut="_66701F9A63CC408B8F3B866BA6136247" Directory_="DesktopFolder" Name="SOMLAU~1|SomLauncher" Component_="C__34B24EA6487A4E298A1A1282EF6D025B" Target="[#_34B24EA6487A4E298A1A1282EF6D025B]" Hotkey="0" Icon_="som.exe" IconIndex="0" ShowCmd="1" WkDir="APPDIR" Advertised="true"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiThemeComponent">

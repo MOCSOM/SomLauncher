@@ -12,6 +12,8 @@ ServerWidget::ServerWidget(QButtonGroup* group, nlohmann::json server_data, QWid
 
 	ui.textBrowser_serverdescription->setText(this->server_data["server_description"].template get<std::string>().c_str());
 
+	addNewPage(this->server_data["server_name"].template get<std::string>());
+
 	setServerDataFromApi();
 
 	QObject::connect(ui.pushButton_selectserver, &QPushButton::clicked, this, &ServerWidget::pushButtonSelectClicked);
@@ -20,6 +22,13 @@ ServerWidget::ServerWidget(QButtonGroup* group, nlohmann::json server_data, QWid
 
 ServerWidget::~ServerWidget()
 {
+}
+
+void ServerWidget::addNewPage(const std::string& name)
+{
+	auto prev_tab = new QWidget(ui.tab_server);
+	prev_tab;
+	//ui.tabWidget_server->addTab(QWidget::createWindowContainer(this, ui.tab_server), name.c_str());
 }
 
 void ServerWidget::setStatusServer(bool value)

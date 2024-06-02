@@ -1,14 +1,16 @@
 ﻿#ifndef MODS_H_
 #define MODS_H_
 
+#include <QDebug>
+
 #include <filesystem>
 #include <memory> // for shared_ptr and unique_ptr
 
 #include "../Web/DownloadClasses.h"
 #include "../Callbacks/CallbackDict.h"
-#include "../Json/SomJson.h"
 #include "../Additionals/Additionals.h"
 #include "../Archives/Archives.h"
+#include "../Moc/Logger/MocIOStream.h"
 
 namespace MinecraftCpp
 {
@@ -32,7 +34,7 @@ namespace MinecraftCpp
 			namespace database
 			{
 				bool installModPack(
-					const SJson::JsonValue& json_from_server, const std::filesystem::path& path_to_download,
+					const nlohmann::json& json_from_server, const std::filesystem::path& path_to_download,
 					std::shared_ptr<CallbackNull> callback = std::make_shared<CallbackNull>()) noexcept;
 			}
 		}

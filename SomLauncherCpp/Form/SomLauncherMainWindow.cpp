@@ -222,6 +222,7 @@ void SomLauncherMainWindow::_settingServerType()
 {
 	std::string type = getServerType();
 	ui.label_client_type->setText(type.c_str());
+	ui.label_server_status->setText(this->servers_parce[this->config.json()["user"]["server"].template get<int>()]["server_type"].template get<std::string>().c_str());
 }
 
 void SomLauncherMainWindow::_settingAccountDataInUi()

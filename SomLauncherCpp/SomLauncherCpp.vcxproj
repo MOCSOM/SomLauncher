@@ -278,7 +278,6 @@
     <ClCompile Include="..\third-party\QSimpleUpdater\src\Updater.cpp" />
     <ClCompile Include="Additionals\Additionals.cpp" />
     <ClCompile Include="Archives\Archives.cpp" />
-    <ClCompile Include="basic_xml.cpp" />
     <ClCompile Include="Callbacks\CallbackDict.cpp" />
     <ClCompile Include="Callbacks\QCallback.cpp" />
     <ClCompile Include="Client\Config\Config.cpp" />
@@ -296,8 +295,6 @@
     <ClCompile Include="Form\SomLauncherMainWindow.cpp" />
     <ClCompile Include="Form\TopSlideFrameWidget.cpp" />
     <ClCompile Include="Encryption\Hashes\Crypto.cpp" />
-    <ClCompile Include="Json\Json\Json.cpp" />
-    <ClCompile Include="Json\Json\JsonParcer.cpp" />
     <ClCompile Include="main.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug UnitTests|x64'">true</ExcludedFromBuild>
     </ClCompile>
@@ -329,7 +326,6 @@
     <ClInclude Include="Archives\Archives.h" />
     <ClInclude Include="Archives\qzipreader_p.h" />
     <ClInclude Include="Archives\qzipwriter_p.h" />
-    <ClInclude Include="basic_xml.h" />
     <ClInclude Include="Callbacks\QCallback.h" />
     <ClInclude Include="Client\Config\Config.h" />
     <ClInclude Include="Client\StartProcess.h" />
@@ -338,10 +334,6 @@
     <ClInclude Include="Web\Utils\WebUtils.h" />
     <QtMoc Include="QObjects\Threads\UIThread.h" />
     <ClInclude Include="Encryption\Hashes\Crypto.h" />
-    <ClInclude Include="Json\Json\Json.h" />
-    <ClInclude Include="Json\Json\JsonParcer.h" />
-    <ClInclude Include="Json\Json\JsonTypes.h" />
-    <ClInclude Include="Json\SomJson.h" />
     <ClInclude Include="QObjects\Threads\LambdaTask.h" />
     <ClInclude Include="Web\Download\Download.h" />
     <QtMoc Include="Form\ServerChangerForm.h" />

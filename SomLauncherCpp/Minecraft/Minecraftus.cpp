@@ -318,19 +318,18 @@ nlohmann::json MinecraftCpp::inherit_json(nlohmann::json original_data, const st
 	return new_data;
 }
 
-SJson::JsonValue MinecraftCpp::get_version_list()
+nlohmann::json MinecraftCpp::get_version_list()
 {
 	/*
 	Returns all versions that Mojang offers to download
 	*/
 	qInfo() << "getting version list" << std::endl;
-	SJson::JsonParcer parcer;
 
-	SJson::JsonValue vlist = parcer.ParseUrl("https://launchermeta.mojang.com/mc/game/version_manifest.json");
-	SJson::JsonValue returnlist = SJson::JsonValue(std::vector<SJson::JsonValue>());
+	//SJson::JsonValue vlist = parcer.ParseUrl("https://launchermeta.mojang.com/mc/game/version_manifest.json");
+	nlohmann::json returnlist;
 
 	int count = -1;
-	for (auto& i : vlist["versions"].get_array())
+	/*for (auto& i : vlist["versions"].get_array())
 	{
 		++count;
 		SJson::JsonValue object = SJson::JsonValue(std::unordered_map<std::string, SJson::JsonValue>());
@@ -343,7 +342,7 @@ SJson::JsonValue MinecraftCpp::get_version_list()
 		object.add_value(std::make_pair("releaseTime", SJson::JsonValue(seconds.count())));
 
 		returnlist.add_value(object);
-	}
+	}*/
 	return returnlist;
 }
 
@@ -672,7 +671,6 @@ std::vector<std::variant<std::string, std::filesystem::path, std::wstring>> Mine
 	{
 		options.nativesDirectory = "nativesDirectory";
 	}
-	//options.nativesDirectory = options.get("nativesDirectory", minecraft_directory / "versions" / data["id"].template get<std::string>() / "natives");
 
 	options.classpath = MinecraftCpp::get_libraries(data, minecraft_directory);
 
@@ -1519,13 +1517,12 @@ bool MinecraftCpp::install_jvm_runtime(const std::string& jvm_version, const std
 	*/
 	std::string _JVM_MANIFEST_URL = "https://launchermeta.mojang.com/v1/products/java-runtime/2ec0cc96c44e5a76b9c8b7c39df7210883d12871/all.json";
 
-	SJson::JsonParcer jsonParcer;
 	std::string platform_string = _get_jvm_platform_string();
 	auto download_path = DownloadFile(_JVM_MANIFEST_URL);
-	SJson::JsonValue manifest_data = jsonParcer.ParseFile(download_path);
+	nlohmann::json manifest_data; //= jsonParcer.ParseFile(download_path);
 
 	// Check if the jvm version exists
-	if (!manifest_data[platform_string].is_exist(jvm_version))
+	if (!manifest_data[platform_string].contains(jvm_version))
 	{
 		std::cout << "Version Not Found" << jvm_version << std::endl;
 
@@ -1533,41 +1530,43 @@ bool MinecraftCpp::install_jvm_runtime(const std::string& jvm_version, const std
 	}
 
 	// Check if there is a platform manifest
-	if (manifest_data[platform_string][jvm_version].get_count() == 0)
+	if (manifest_data[platform_string][jvm_version].size() == 0)
 	{
 		return false;
 	}
 
-	callback->setTotalDownloadSize(manifest_data[platform_string][jvm_version][0]["manifest"]["size"].to_int());
-	SJson::JsonValue platform_manifest = jsonParcer.ParseFile(DownloadFile(manifest_data[platform_string][jvm_version][0]["manifest"]["url"].to_string()));
+	callback->setTotalDownloadSize(manifest_data[platform_string][jvm_version][0]["manifest"]["size"].template get<int>());
+	std::ifstream ifstr(DownloadFile(manifest_data[platform_string][jvm_version][0]["manifest"]["url"].template get<std::string>()));
+	nlohmann::json platform_manifest = nlohmann::json::parse(ifstr);
+	ifstr.close();
 	std::string base_path = Join({ minecraft_directory, "runtime", jvm_version, platform_string, jvm_version });
 
 	// Download all files of the runtime
 	//callback.get("setMax", empty)(len(platform_manifest["files"]) - 1)
-	callback->OnProgress(NULL, platform_manifest["files"].get_count() - 1, NULL, NULL);
+	callback->OnProgress(NULL, platform_manifest["files"].size() - 1, NULL, NULL);
 	int count = 0;
 	std::vector<std::filesystem::path> file_list;
-	for (auto& var : platform_manifest["files"].get_object())
+	for (auto& var : platform_manifest["files"].items())
 	{
-		std::filesystem::path current_path = Join({ base_path, var.first });
+		std::filesystem::path current_path = Join({ base_path, var.key()});
 
-		if (var.second["type"].to_string() == "file")
+		if (var.value()["type"].template get<std::string>() == "file")
 		{
 			// Prefer downloading the compresses file
-			if (var.second["downloads"].is_exist("lzma"))
+			if (var.value()["downloads"].contains("lzma"))
 			{
-				callback->setTotalDownloadSize(var.second["downloads"]["lzma"]["size"].to_int());
+				callback->setTotalDownloadSize(var.value()["downloads"]["lzma"]["size"].template get<int>());
 				//TODO: сделать lzma
-				DownloadFile(var.second["downloads"]["lzma"]["url"].to_string(), current_path.u8string(), callback, var.second["downloads"]["raw"]["sha1"].to_string(), false);
+				DownloadFile(var.value()["downloads"]["lzma"]["url"].template get<std::string>(), current_path.u8string(), callback, var.value()["downloads"]["raw"]["sha1"].template get<std::string>(), false);
 			}
 			else
 			{
-				callback->setTotalDownloadSize(var.second["downloads"]["raw"]["size"].to_int());
-				DownloadFile(var.second["downloads"]["raw"]["url"].to_string(), current_path.u8string(), callback, var.second["downloads"]["raw"]["sha1"].to_string());
+				callback->setTotalDownloadSize(var.value()["downloads"]["raw"]["size"].template get<int>());
+				DownloadFile(var.value()["downloads"]["raw"]["url"].template get<std::string>(), current_path.u8string(), callback, var.value()["downloads"]["raw"]["sha1"].template get<std::string>());
 			}
 
 			// Make files executable on unix systems
-			if (var.second["executable"] != nullptr)
+			if (var.value()["executable"] != nullptr)
 			{
 				if (std::filesystem::exists(current_path) && OS == "linux")
 				{
@@ -1578,15 +1577,15 @@ bool MinecraftCpp::install_jvm_runtime(const std::string& jvm_version, const std
 				}
 			}
 
-			file_list.push_back(var.first);
+			file_list.push_back(var.key());
 		}
-		else if (var.second["type"].to_string() == "directory")
+		else if (var.value()["type"].template get<std::string>() == "directory")
 		{
 			int outp = std::filesystem::create_directories(current_path);
 		}
-		else if (var.second["type"].to_string() == "link")
+		else if (var.value()["type"].template get<std::string>() == "link")
 		{
-			check_path_inside_minecraft_directory(minecraft_directory, Join({ base_path, var.second["target"].to_string() }));
+			check_path_inside_minecraft_directory(minecraft_directory, Join({ base_path, var.value()["target"].template get<std::string>() }));
 
 			if (!std::filesystem::is_directory(current_path.parent_path()))
 			{
@@ -1595,7 +1594,7 @@ bool MinecraftCpp::install_jvm_runtime(const std::string& jvm_version, const std
 
 			try
 			{
-				std::filesystem::create_symlink(var.second["target"].to_string(), current_path);
+				std::filesystem::create_symlink(var.value()["target"].template get<std::string>(), current_path);
 			}
 			catch (const std::exception& exc)
 			{
@@ -1608,7 +1607,9 @@ bool MinecraftCpp::install_jvm_runtime(const std::string& jvm_version, const std
 
 	// Create the.version file
 	std::string path = Join({ minecraft_directory, "runtime", jvm_version, platform_string, ".version" });
-	manifest_data[platform_string][jvm_version][0]["version"]["name"].save_json_to_file(path, 4);
+	std::ofstream ofstr(path);
+	ofstr << manifest_data[platform_string][jvm_version][0]["version"]["name"].dump(4) << std::endl;
+	ofstr.close();
 
 	// Writes the .sha1 file
 	// It has the structure {path} /#// {sha1} {creation time in nanoseconds}
@@ -2286,10 +2287,10 @@ bool MinecraftCpp::fabric::_is_version_valid(const std::string& version, const s
 	{
 		return true;
 	}
-	SJson::JsonValue arr = get_version_list();
-	for (auto& i : arr.get_array())
+	nlohmann::json arr = get_version_list();
+	for (auto& i : arr)
 	{
-		if (i["id"].to_string() == version)
+		if (i["id"].template get<std::string>() == version)
 		{
 			return true;
 		}
@@ -2302,10 +2303,10 @@ bool MinecraftCpp::fabric::_is_minecraft_version_supported(const std::string& ve
 	/*
 	Checks if a Minecraft version supported by fabric
 	*/
-	SJson::JsonValue minecraft_versions = get_all_minecraft_versions();
-	for (auto& i : minecraft_versions.get_array())
+	nlohmann::json minecraft_versions = get_all_minecraft_versions();
+	for (auto& i : minecraft_versions)
 	{
-		if (i["version"].to_string() == version)
+		if (i["version"].template get<std::string>() == version)
 		{
 			return true;
 		}
@@ -2313,14 +2314,13 @@ bool MinecraftCpp::fabric::_is_minecraft_version_supported(const std::string& ve
 	return false;
 }
 
-SJson::JsonValue MinecraftCpp::fabric::get_all_minecraft_versions()
+nlohmann::json MinecraftCpp::fabric::get_all_minecraft_versions()
 {
 	/*
 	Returns all available Minecraft Versions for fabric
 	*/
 	std::string FABRIC_MINECARFT_VERSIONS_URL = "https://meta.fabricmc.net/v2/versions/game";
-	SJson::JsonParcer parcer;
-	return parcer.ParseUrl(FABRIC_MINECARFT_VERSIONS_URL);
+	return nlohmann::json(FABRIC_MINECARFT_VERSIONS_URL);
 }
 
 std::string MinecraftCpp::fabric::get_latest_loader_version()
@@ -2328,18 +2328,17 @@ std::string MinecraftCpp::fabric::get_latest_loader_version()
 	/*
 	Get the latest loader version
 	*/
-	SJson::JsonValue loader_versions = get_all_loader_versions();
-	return loader_versions[0]["version"].to_string();
+	nlohmann::json loader_versions = get_all_loader_versions();
+	return loader_versions[0]["version"].template get<std::string>();
 }
 
-SJson::JsonValue MinecraftCpp::fabric::get_all_loader_versions()
+nlohmann::json MinecraftCpp::fabric::get_all_loader_versions()
 {
 	/*
 	Returns all loader versions
 	*/
 	std::string FABRIC_LOADER_VERSIONS_URL = "https://meta.fabricmc.net/v2/versions/loader";
-	SJson::JsonParcer parcer;
-	return parcer.ParseUrl(FABRIC_LOADER_VERSIONS_URL);
+	return nlohmann::json(FABRIC_LOADER_VERSIONS_URL);
 }
 
 std::string MinecraftCpp::fabric::get_latest_installer_version()
@@ -2348,16 +2347,16 @@ std::string MinecraftCpp::fabric::get_latest_installer_version()
 	Returns the latest installer version
 	*/
 	std::string FABRIC_INSTALLER_MAVEN_URL = "https://maven.fabricmc.net/net/fabricmc/fabric-installer/maven-metadata.xml";
-	return parse_maven_metadata(FABRIC_INSTALLER_MAVEN_URL)["latest"].to_string();
+	return parse_maven_metadata(FABRIC_INSTALLER_MAVEN_URL)["latest"].template get<std::string>();
 }
 
-SJson::JsonValue MinecraftCpp::fabric::parse_maven_metadata(const std::string& url)
+nlohmann::json MinecraftCpp::fabric::parse_maven_metadata(const std::string& url)
 {
 	/*
 	Parses a maven metadata file
 	*/
 
-	SJson::JsonValue data = SJson::JsonValue(std::unordered_map<std::string, SJson::JsonValue>());
+	nlohmann::json data;
 	std::string text;
 
 	std::string destenation_file = Additionals::TempFile::get_tempdir_SYSTEM();
@@ -2416,7 +2415,7 @@ SJson::JsonValue MinecraftCpp::fabric::parse_maven_metadata(const std::string& u
 	{
 		// matches[0] содержит всю найденную строку, matches[1] содержит текст между тегами
 		std::string result = mathc[1];
-		data.add_value(std::make_pair("release", SJson::JsonValue(result)));
+		data.push_back(std::make_pair("release", result));
 	}
 
 	pattern = R"(<latest>(.*?)</latest>)";
@@ -2424,17 +2423,17 @@ SJson::JsonValue MinecraftCpp::fabric::parse_maven_metadata(const std::string& u
 	{
 		// matches[0] содержит всю найденную строку, matches[1] содержит текст между тегами
 		std::string result = mathc[1];
-		data.add_value(std::make_pair("latest", SJson::JsonValue(result)));
+		data.push_back(std::make_pair("latest", result));
 	}
 
-	data.add_value(std::make_pair("versions", SJson::JsonValue(std::vector<SJson::JsonValue>())));
+	data.push_back(std::make_pair("versions", nlohmann::json::array_t()));
 
 	pattern = R"(<version>(.*?)</version>)";
 	while (std::regex_search(text, mathc, pattern))
 	{
 		// matches[0] содержит всю найденную строку, matches[1] содержит текст между тегами
 		std::string result = mathc[1];
-		data["versions"].add_value(SJson::JsonValue(result));
+		data["versions"].push_back(result);
 
 		text = mathc.suffix();
 	}

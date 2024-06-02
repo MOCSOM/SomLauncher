@@ -65,9 +65,6 @@
     <ClCompile Include="Minecraft\Mods.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="basic_xml.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="QObjects\Threads\FunThread.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -164,12 +161,6 @@
     <ClCompile Include="Additionals\Additionals.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Json\Json\Json.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Json\Json\JsonParcer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Web\Utils\WebUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -197,9 +188,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Minecraft\Mods.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="basic_xml.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Archives\Archives.h">
@@ -275,18 +263,6 @@
       <Filter>Hashes</Filter>
     </ClInclude>
     <ClInclude Include="Additionals\Additionals.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Json\Json\Json.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Json\Json\JsonParcer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Json\Json\JsonTypes.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Json\SomJson.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Web\Utils\WebUtils.h">

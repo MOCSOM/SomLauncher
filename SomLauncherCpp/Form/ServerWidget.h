@@ -10,7 +10,6 @@
 #include <nlohmann/json.hpp>
 
 #include "../Moc/Logger/MocIOStream.h"
-#include "../Json/SomJson.h"
 #include "../Web/Minecraft/Status/MinecraftStatus.h"
 
 #define FRIENDS_SERVERS_TYPE std::string("FRIEND")
@@ -24,11 +23,15 @@ public:
 	explicit ServerWidget(QButtonGroup* group, nlohmann::json server_data, QWidget* parent = nullptr);
 	~ServerWidget();
 
+
 	void setStatusServer(bool value);
 
 	void setServerDataFromApi();
 
 	bool isToFriends();
+
+private:
+	void addNewPage(const std::string& name);
 
 signals:
 	void toggled();

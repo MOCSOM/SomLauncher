@@ -18,7 +18,7 @@ SettingsDialog::SettingsDialog(nlohmann::json data, MinecraftCpp::option::Minecr
 
 	ui.label_modreinstall_notifiy->setHidden(true);
 
-	ui.label_launcher_version->setText(getApplicationVersion().c_str());
+	ui.label_launcher_version->setText("1.6.1"/*getApplicationVersion().c_str()*/);
 
 	QObject::connect(ui.horizontalSlider_memory, &QSlider::valueChanged, this, &SettingsDialog::setMemoryLableValue);
 
@@ -236,10 +236,15 @@ void SettingsDialog::onClickToolBotton_getjava_path()
 
 void SettingsDialog::onClickPushButtonLogoutFromAccount()
 {
-	SJson::JsonValue parced_config = SJson::JsonParcer::ParseFile(this->config_path);
+	std::ifstream ifstr(this->config_path);
+	nlohmann::json parced_config = nlohmann::json::parse(ifstr);
+	ifstr.close();
 	parced_config["user"]["name"] = "";
 	parced_config["user"]["password"] = "";
-	parced_config.save_json_to_file(this->config_path.u8string(), 4);
+
+	std::ofstream ofstr(this->config_path);
+	ofstr << parced_config.dump(4) << std::endl;
+	ofstr.close();
 	this->close();
 	emit logoutSignal();
 }

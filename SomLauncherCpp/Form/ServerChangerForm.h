@@ -2,15 +2,17 @@
 #define SERVERCHANGERFORM_H_
 
 #include <QtWidgets/qdialog.h>
+#include <QDebug>
 
 #include <string>
 #include <memory>
+#include <fstream>
 
 #include <nlohmann/json.hpp>
 
-#include "../Json/SomJson.h"
-
 #include "ui_ServerChangerForm.h"
+
+#include "../Moc/Logger/MocIOStream.h"
 
 class ServerChanger : public QDialog
 {

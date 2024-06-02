@@ -6,7 +6,6 @@
 
 #include "../Web/DownloadClasses.h"
 #include "../Callbacks/CallbackDict.h"
-#include "../Json/SomJson.h"
 #include "../Additionals/Additionals.h"
 #include "../Encryption/Hashes/sha1.h"
 #include "../Exceptions/FileOutsideMinecraftDirectoryException.h"
@@ -79,7 +78,7 @@ namespace MinecraftCpp
 		};
 	}
 
-	SJson::JsonValue get_version_list();
+	nlohmann::json get_version_list();
 
 	std::vector<std::string> generateCommandLine(const std::filesystem::path& nativeFolder, MinecraftCpp::option::LaunchOptions& options);
 
@@ -158,11 +157,11 @@ namespace MinecraftCpp
 
 		bool _is_version_valid(const std::string& version, const std::string& minecraft_directory);
 		bool _is_minecraft_version_supported(const std::string& version);
-		SJson::JsonValue get_all_minecraft_versions();
+		nlohmann::json get_all_minecraft_versions();
 		std::string get_latest_loader_version();
-		SJson::JsonValue get_all_loader_versions();
+		nlohmann::json get_all_loader_versions();
 		std::string get_latest_installer_version();
-		SJson::JsonValue parse_maven_metadata(const std::string& url);
+		nlohmann::json parse_maven_metadata(const std::string& url);
 	}
 
 	std::vector<std::wstring> get_arguments(

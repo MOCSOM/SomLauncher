@@ -7,13 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>407</width>
-    <height>425</height>
+    <height>443</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Settings</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout" rowstretch="3,0,0,0">
+  <layout class="QGridLayout" name="gridLayout" rowstretch="3,0,0">
    <item row="0" column="0">
     <widget class="QFrame" name="frame_settings">
      <property name="frameShape">
@@ -33,7 +33,7 @@
       <item row="11" column="0" colspan="2">
        <widget class="QCheckBox" name="checkBox_reinstall_modpack">
         <property name="text">
-         <string>Переустоновить сборку</string>
+         <string>Переустановить сборку</string>
         </property>
        </widget>
       </item>
