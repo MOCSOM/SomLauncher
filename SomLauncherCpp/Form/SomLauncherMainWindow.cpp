@@ -149,12 +149,11 @@ void SomLauncherMainWindow::_settingServersWidgets()
 				}
 			}
 
-			disableServer();
 
 			int index = 0;
 			for (int i = 0; i < (this->servers_parce.size() - 1) / 2 + 1; ++i)
 			{
-				for (int j = 0; j < (this->servers_parce.size()) / 2 + 1; ++j)
+				for (int j = 0; (j < (this->servers_parce.size()) / 2 + 1) && (index < this->servers_parce.size()); ++j)
 				{
 					ui.gridLayout_scrollArea_servers->addWidget(this->widget_list[index].get(), i, j);
 
@@ -172,7 +171,7 @@ void SomLauncherMainWindow::_settingServersWidgets()
 	}
 	catch (const std::exception& exc)
 	{
-		qWarning() << exc.what();
+		QMessageBox::warning(this, "Warning", exc.what());
 	}
 }
 
@@ -202,6 +201,8 @@ void SomLauncherMainWindow::_settingConnections()
 	QObject::connect(ui.pushButton_checkupdates, &QPushButton::released, this, &SomLauncherMainWindow::onClickedPushButton_check_update);
 
 	QObject::connect(ui.pushButton_reportbug, &QPushButton::released, this, &SomLauncherMainWindow::onClickedPushButtonSendBugReport);
+
+	QObject::connect(ui.pushButtonRefreshServers, &QPushButton::released, this, &SomLauncherMainWindow::refreshServers);
 }
 
 void SomLauncherMainWindow::_settingMemory()
@@ -230,6 +231,44 @@ void SomLauncherMainWindow::_settingAccountDataInUi()
 	this->top_frame->getLabelProfile()->setText(this->account_data["username"].template get<std::string>().c_str());
 }
 
+void SomLauncherMainWindow::_settingFastServerChangerForm()
+{
+	fast_server_changer_form = std::make_unique<ServerChanger>(this, this->config_path, this->servers_parce);
+}
+
+void SomLauncherMainWindow::disablePlayButtonIfNeeded()
+{
+	bool is_friend = this->account_data["is_friend"].template get<bool>();
+	if (is_friend)
+	{
+		return;
+	}
+
+	bool is_disable_button = true;
+	for (auto& elem : this->widget_list)
+	{
+		if (elem->isToFriends() && elem->getServerName() == QString::fromStdString(getCurrentServerName()))
+		{
+			is_disable_button = true;
+			continue;
+		}
+		else if (!elem->isToFriends() && elem->getServerName() == QString::fromStdString(getCurrentServerName()))
+		{
+			is_disable_button = false;
+			continue;
+		}
+	}
+
+	if (is_disable_button)
+	{
+		ui.pushButton_startgame->setDisabled(true);
+	}
+	else
+	{
+		ui.pushButton_startgame->setDisabled(false);
+	}
+}
+
 void SomLauncherMainWindow::settingUserProfileImage()
 {
 	std::string user_icon_string = this->account_data["avatar"].template get<std::string>();
@@ -251,11 +290,12 @@ void SomLauncherMainWindow::disableServer()
 	{
 		if (elem->isToFriends())
 		{
+			fast_server_changer_form->disabeServerItem(elem->getServerName());
 			elem->setDisabled(true);
 		}
 	}
 
-	ui.pushButton_changeserver->setDisabled(true);
+	//ui.pushButton_changeserver->setDisabled(true);
 }
 
 void SomLauncherMainWindow::onClickedpushButton_game()
@@ -290,9 +330,8 @@ void SomLauncherMainWindow::onClickedpushButton_changeserver()
 {
 	qInfo() << "pushButton_changeserver clicked" << std::endl;
 
-	ServerChanger dialog(this, this->config_path, this->servers_parce);
 
-	QObject::connect(&dialog, &ServerChanger::accepted,
+	QObject::connect(fast_server_changer_form.get(), &ServerChanger::accepted,
 		this, [=]() -> void
 		{
 			_settingServerNameInChangeServerButton();
@@ -300,7 +339,7 @@ void SomLauncherMainWindow::onClickedpushButton_changeserver()
 			this->widget_list[this->config.json()["user"]["server"].template get<int>()]->setStatusServer(true);
 		});
 
-	dialog.exec(); //modal server changer
+	fast_server_changer_form->exec(); //modal server changer
 }
 
 void SomLauncherMainWindow::_settingServerNameInChangeServerButton()
@@ -457,6 +496,7 @@ void SomLauncherMainWindow::groupButtonsClicked(QAbstractButton* id, bool status
 		_settingCurrentServerName();
 		_settingModsCount();
 		_settingServerType();
+		disablePlayButtonIfNeeded();
 	}
 }
 

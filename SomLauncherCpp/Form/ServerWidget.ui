@@ -35,8 +35,35 @@
          <layout class="QGridLayout" name="gridLayout_3">
           <item row="1" column="0">
            <widget class="QLabel" name="label_servername">
+            <property name="minimumSize">
+             <size>
+              <width>141</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>141</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="sizeIncrement">
+             <size>
+              <width>141</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="baseSize">
+             <size>
+              <width>141</width>
+              <height>0</height>
+             </size>
+            </property>
             <property name="text">
              <string>server_name</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
             </property>
            </widget>
           </item>

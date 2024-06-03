@@ -24,7 +24,7 @@ void Config::createConfig() const
 	//std::filesystem::copy(this->template_config_path, this->config_path, std::filesystem::copy_options::overwrite_existing);
 
 	nlohmann::json template_config = nlohmann::json::parse(
-		R"({"user":{"name":"","password":"","memory":7168,"wight":854,"hight":480,"mcdir":"","isInstallMods":false,"server":0},"launcher":{"version":"0.0.0"},"modpack":{}})"
+		R"({"user":{"name":"","password":"","memory":7168,"wight":854,"hight":480,"mcdir":"","isInstallMods":false,"server":-1},"launcher":{"version":"0.0.0"},"modpack":{}})"
 	);
 
 	std::ofstream ofstr(this->config_path);

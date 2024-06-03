@@ -62,6 +62,11 @@ bool ServerWidget::isToFriends()
 		(this->server_data["server_type"].template get<std::string>() == CLOSE_SERVERS_TYPE);
 }
 
+const QString ServerWidget::getServerName()
+{
+	return this->server_data["server_name"].template get<std::string>().c_str();
+}
+
 void ServerWidget::pushButtonSelectClicked()
 {
 	ui.radioButton_selecterserver->setChecked(true);

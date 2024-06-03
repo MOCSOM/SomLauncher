@@ -20,9 +20,13 @@ nlohmann::json SomLauncherMainWindow::getServersFromServer()
 		if (http_code != 200)
 		{
 			qWarning() << "code not 200" << std::endl;
+			QMessageBox::warning(this, "Warning", QString::number(http_code) + ' ' + QString::fromStdString(response.str()));
+		}
+		else
+		{
+			result = nlohmann::json::parse(response.str());
 		}
 
-		result = nlohmann::json::parse(response.str());
 	}
 	catch (curlpp::LogicError& e)
 	{
@@ -589,4 +593,16 @@ const std::string& SomLauncherMainWindow::getStyleSheetPath()
 void SomLauncherMainWindow::disableElementsInDevelopment()
 {
 	this->settings_dialog->getVersionLabel()->setDisabled(true);
+}
+
+void SomLauncherMainWindow::refreshServers()
+{
+	this->servers_parce = getServersFromServer();
+	for (size_t i = 0; i < this->widget_list.count(); ++i)
+	{
+		this->widget_list[i].~QSharedPointer();
+	}
+	this->widget_list.clear();
+	_settingServersWidgets();
+	disableServer();
 }

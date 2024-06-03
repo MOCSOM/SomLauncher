@@ -60,12 +60,14 @@ int main(int argc, char* argv[])
 				main_window.setUuidFromAccount();
 				main_window._settingAccountDataInUi();
 				main_window.createSettingsForm();
-				//main_window.setConnectionWithDatabase();
 				main_window._parcingServers();
+				main_window._settingFastServerChangerForm();
 				main_window._settingServersWidgets();
 				main_window._settingServerType();
 				main_window._settingModsCount();
 				main_window._settingCurrentServerName();
+				main_window.disableServer();
+				main_window.disablePlayButtonIfNeeded();
 
 				QObject::connect(main_window.getSettingsDialog().get(), &SettingsDialog::logoutSignal,
 					[&main_window, &account_window]() -> void
@@ -110,7 +112,7 @@ int main(int argc, char* argv[])
 		}
 
 		//main_window.show();
-		
+
 		returned_id = application.exec();
 	}
 	catch (const std::exception& exc)

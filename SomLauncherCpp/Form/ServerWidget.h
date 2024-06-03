@@ -30,6 +30,9 @@ public:
 
 	bool isToFriends();
 
+public:
+	const QString getServerName();
+
 private:
 	void addNewPage(const std::string& name);
 

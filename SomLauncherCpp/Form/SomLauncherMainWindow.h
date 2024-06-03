@@ -87,6 +87,7 @@ private:
 	MinecraftCpp::option::MinecraftOptions options;
 	MinecraftCpp::option::MinecraftOptions default_options = options;
 	std::unique_ptr<SettingsDialog> settings_dialog;
+	std::unique_ptr<ServerChanger> fast_server_changer_form;
 
 	Config config;
 
@@ -128,6 +129,9 @@ public:
 	void _settingModsCount();
 	void _settingServerType();
 	void _settingAccountDataInUi();
+	void _settingFastServerChangerForm();
+
+	void disablePlayButtonIfNeeded();
 
 	void settingUserProfileImage();
 
@@ -176,8 +180,9 @@ public:
 	std::unique_ptr<SettingsDialog>& getSettingsDialog();
 
 	const std::string& getStyleSheetPath();
-	
+
 	void disableElementsInDevelopment();
+
 
 private slots:
 	void start_minecraft_params();
@@ -210,6 +215,7 @@ private slots:
 	void pageChangedSlidedWidget(int value);
 
 	void setReinstallMods(bool state);
+	void refreshServers();
 
 signals:
 	void updateSignal(const std::string& newl_laucher_url);

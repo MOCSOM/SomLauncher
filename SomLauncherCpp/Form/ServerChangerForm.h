@@ -30,6 +30,12 @@ public:
 	explicit ServerChanger(QWidget* parent = nullptr, const std::filesystem::path& config_path = "", nlohmann::json server_parce = nlohmann::json());
 	~ServerChanger();
 
+private:
+	void disableWidgetItem(QListWidgetItem* item);
+
+public:
+	void disabeServerItem(const QString& server_name);
+
 private slots:
 	void itemChangedlistWidget(QListWidgetItem* item);
 	void onClickedpushButton_apply();

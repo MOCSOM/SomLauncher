@@ -39,9 +39,32 @@ ServerChanger::ServerChanger(QWidget* parent, const std::filesystem::path& confi
 
 ServerChanger::~ServerChanger()
 {
-	if (this->item)
+	for (int i = 0; i < ui.listWidget_changeserver->count(); ++i)
 	{
-		delete this->item;
+		QListWidgetItem* item = ui.listWidget_changeserver->item(i);
+		if (item)
+		{
+			delete item;
+		}
+	}
+}
+
+void ServerChanger::disableWidgetItem(QListWidgetItem* item)
+{
+	//item->setHidden(true);
+	item->setFlags((item->flags() & ~Qt::ItemIsSelectable) & ~Qt::ItemIsEnabled);
+}
+
+void ServerChanger::disabeServerItem(const QString& server_name)
+{
+	for (int i = 0; i < ui.listWidget_changeserver->count(); ++i)
+	{
+		QListWidgetItem* item = ui.listWidget_changeserver->item(i);
+		QString item_string = item->text();
+		if (item_string == server_name)
+		{
+			disableWidgetItem(item);
+		}
 	}
 }
 
