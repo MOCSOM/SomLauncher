@@ -20,10 +20,12 @@ nlohmann::json SomLauncherMainWindow::getServersFromServer()
 		if (http_code != 200)
 		{
 			qWarning() << "code not 200" << std::endl;
+			emit(serverConnectSignal(false, "code not 200"));
 			QMessageBox::warning(this, "Warning", QString::number(http_code) + ' ' + QString::fromStdString(response.str()));
 		}
 		else
 		{
+			emit(serverConnectSignal(true, "succses"));
 			result = nlohmann::json::parse(response.str());
 		}
 
@@ -31,13 +33,20 @@ nlohmann::json SomLauncherMainWindow::getServersFromServer()
 	catch (curlpp::LogicError& e)
 	{
 		qWarning() << e.what() << std::endl;
+		emit(serverConnectSignal(false, e.what()));
 	}
 	catch (curlpp::RuntimeError& e)
 	{
 		qWarning() << e.what() << std::endl;
+		emit(serverConnectSignal(false, e.what()));
 	}
 
 	return result;
+}
+
+void SomLauncherMainWindow::getServersFromServerThread(nlohmann::json& json)
+{
+	//json = getServersFromServer();
 }
 
 void SomLauncherMainWindow::start_minecraft_params()
@@ -65,37 +74,7 @@ void SomLauncherMainWindow::start_minecraft_params()
 	this->configureOptions();
 	this->setUuidFromAccount();
 
-	switch (this->config.json()["user"]["server"].template get<int>())
-	{
-	case 0:
-	{
-		setupInstallMinecraft(0);
-
-		break;
-	}
-	case 1:
-	{
-		setupInstallMinecraft(1);
-
-		break;
-	}
-	case 2:
-	{
-		setupInstallMinecraft(2);
-
-		break;
-	}
-	case 3:
-	{
-		setupInstallMinecraft(3);
-
-		break;
-	}
-	default:
-	{
-		break;
-	}
-	}
+	setupInstallMinecraft(this->config.json()["user"]["server"].template get<int>());
 }
 
 void SomLauncherMainWindow::setupInstallMinecraft(const size_t& index)
@@ -120,15 +99,13 @@ void SomLauncherMainWindow::setupInstallMinecraft(const size_t& index)
 
 	qInfo() << "starting installing minecraft..." << std::endl;
 
-	std::string launch_version = install_minecraft(
-		instance_path,
-		version,
-		core,
-		this->servers_parce[index]["minimal_loader_version"].template get<std::string>(),
-		java,
-		this->options,
-		callback
-	);
+	std::string launch_version = install_minecraft(instance_path, version, core,
+		this->servers_parce[index]["minimal_loader_version"].template get<std::string>(), java, this->options, callback);
+
+	if (launch_version.empty())
+	{
+		return;
+	}
 
 	nlohmann::json modpack_info = getModpackInfoFromServer(modpack_id);
 	std::string server_version = "0";
@@ -142,6 +119,7 @@ void SomLauncherMainWindow::setupInstallMinecraft(const size_t& index)
 		this->config.saveJsonToFile();
 		this->is_install_mods = true;
 	}
+
 	installMods(instance_path / "mods", modpack_info, server_version, callback);
 
 	serversdat::createServersDat(instance_path / "servers.dat", name, ip_port);
@@ -170,17 +148,10 @@ void SomLauncherMainWindow::setupInstallMinecraft(const size_t& index)
 	show();
 }
 
-std::string SomLauncherMainWindow::install_minecraft(
-	const std::filesystem::path& install_path,
-	std::string version,
-	std::string loader_mame,
-	std::string loader_version,
-	std::string java,
-	MinecraftCpp::option::MinecraftOptions& options,
-	std::shared_ptr<CallbackNull> callback) const
+std::string SomLauncherMainWindow::install_minecraft(const std::filesystem::path& install_path, std::string version,
+	std::string loader_mame, std::string loader_version, std::string java,
+	MinecraftCpp::option::MinecraftOptions& options, std::shared_ptr<CallbackNull> callback) const
 {
-	//SJson::JsonValue data_modpack = parecer_modpack.ParseFile(this->minecraft_core_dir_path);
-
 	/* minecraft_version = 1.12.2 + "-" + forge_version = 14.23.5.2860 */
 	//wchar_t* launch_varsion = L"1.12.2-forge-14.23.5.2860";
 
@@ -217,7 +188,9 @@ std::string SomLauncherMainWindow::install_minecraft(
 		return launch_version;
 	}
 
+
 	qWarning() << "Unknow loader";
+	QMessageBox::warning(nullptr, "Unknow loader", "Failed to check loader, reinstall or update launcher");
 	return std::string();
 }
 
@@ -484,7 +457,8 @@ std::string SomLauncherMainWindow::getLatestVersionFromGithub()
 	while (!timeout)
 	{
 		qApp->processEvents();
-		if (reply->isFinished()) break;
+		if (reply->isFinished())
+			break;
 	}
 
 	if (reply->isFinished())
@@ -597,6 +571,18 @@ void SomLauncherMainWindow::disableElementsInDevelopment()
 
 void SomLauncherMainWindow::refreshServers()
 {
+	ui.pushButtonRefreshServers->setDisabled(true);
+	/*QThread* thread = new QThread;
+
+	connect(thread, &QThread::started, this, &SomLauncherMainWindow::getServersFromServerThread);
+	connect(thread, &QThread::finished, thread, &QThread::deleteLater);
+
+	thread->start();*/
+	/*std::thread thrd(&SomLauncherMainWindow::getServersFromServerThread, std::ref(this->servers_parce));
+
+	thrd.join();*/
+	QObject::disconnect(ui.pushButtonRefreshServers, &QPushButton::released, this, &SomLauncherMainWindow::refreshServers);
+
 	this->servers_parce = getServersFromServer();
 	for (size_t i = 0; i < this->widget_list.count(); ++i)
 	{
@@ -605,4 +591,11 @@ void SomLauncherMainWindow::refreshServers()
 	this->widget_list.clear();
 	_settingServersWidgets();
 	disableServer();
+
+}
+
+void SomLauncherMainWindow::handleServerResult(bool status, const std::string& text)
+{
+	ui.pushButtonRefreshServers->setDisabled(false);
+	QObject::connect(ui.pushButtonRefreshServers, &QPushButton::released, this, &SomLauncherMainWindow::refreshServers);
 }

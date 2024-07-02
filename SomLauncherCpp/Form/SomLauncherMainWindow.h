@@ -45,6 +45,7 @@
 #include "../Callbacks/QCallback.h"
 #include "../Web/Utils/WebUtils.h"
 #include "../Client/Config/Config.h"
+#include "../Encryption/Base64/Imaging.h"
 
 #include "ui_SomLauncherMainWindow.h"
 
@@ -130,6 +131,8 @@ public:
 	void _settingServerType();
 	void _settingAccountDataInUi();
 	void _settingFastServerChangerForm();
+	void _settingProfileImage();
+	void _settingServerStatus();
 
 	void disablePlayButtonIfNeeded();
 
@@ -142,6 +145,7 @@ public:
 	void setUiToDownload(bool status);
 
 	nlohmann::json getServersFromServer();
+	static void getServersFromServerThread(nlohmann::json& json);
 
 	void setupInstallMinecraft(const size_t& index);
 	std::string install_minecraft(
@@ -199,7 +203,6 @@ private slots:
 
 	void onClickpushButton_startgame();
 
-
 	void mouseEnterframe_topslidemenu();
 	void mouseLeaveframe_topslidemenu();
 
@@ -216,9 +219,14 @@ private slots:
 
 	void setReinstallMods(bool state);
 	void refreshServers();
+	void handleResults(const nlohmann::json& result) { this->servers_parce = result; }
+
+	void handleServerResult(bool status, const std::string& text);
 
 signals:
 	void updateSignal(const std::string& newl_laucher_url);
+signals:
+	void serverConnectSignal(bool status, const std::string& text);
 
 private:
 	Ui::SomLauncherMainWindowClass ui;

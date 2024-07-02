@@ -95,9 +95,6 @@
     <ClCompile Include="Form\SomLauncherMainWindow.cpp">
       <Filter>Custom Qt Files</Filter>
     </ClCompile>
-    <ClCompile Include="Form\MainWindowExtensions.cpp">
-      <Filter>Custom Qt Files</Filter>
-    </ClCompile>
     <ClCompile Include="Servers\ServerTypes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -178,6 +175,15 @@
     </ClCompile>
     <ClCompile Include="..\third-party\QSimpleUpdater\src\QSimpleUpdater.cpp">
       <Filter>Source Files\..%255cthird-party%255cQSimpleUpdater%255csrc</Filter>
+    </ClCompile>
+    <ClCompile Include="Encryption\Base64\Imaging.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Form\MainWindowExtensions.cpp">
+      <Filter>Custom Qt Files</Filter>
+    </ClCompile>
+    <ClCompile Include="QObjects\Threads\ThreadWorker.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -277,6 +283,9 @@
     <ClInclude Include="resource1.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Encryption\Base64\Imaging.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="all.json" />
@@ -344,6 +353,9 @@
     </QtMoc>
     <QtMoc Include="..\third-party\QSimpleUpdater\src\Downloader.h">
       <Filter>Header Files\..%255cthird-party%255cQSimpleUpdater%255csrc</Filter>
+    </QtMoc>
+    <QtMoc Include="QObjects\Threads\ThreadWorker.h">
+      <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>

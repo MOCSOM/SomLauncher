@@ -174,7 +174,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <AdditionalIncludeDirectories>$(SolutionDir)\libraries\LocalPeer\include;$(ProgramFiles)\MySQL\MySQL Connector C++ 8.2\include\jdbc;$(VcpkgRoot)\installed\x64-windows\include;$(Qt_INCLUDEPATH_)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>$(Qt_DEFINES_);%(PreprocessorDefinitions);STATIC_CONCPP;CURL_STATICLIB</PreprocessorDefinitions>
+      <PreprocessorDefinitions>$(Qt_DEFINES_);%(PreprocessorDefinitions);STATIC_CONCPP;CURL_STATICLIB;SOMDEBUG</PreprocessorDefinitions>
       <LanguageStandard>$(Qt_STDCPP_)</LanguageStandard>
       <Optimization>Disabled</Optimization>
     </ClCompile>
@@ -282,11 +282,25 @@
     <ClCompile Include="Callbacks\QCallback.cpp" />
     <ClCompile Include="Client\Config\Config.cpp" />
     <ClCompile Include="Client\StartProcess.cpp" />
+    <ClCompile Include="Encryption\Base64\Imaging.cpp" />
     <ClCompile Include="Encryption\LZMA\LzmaDecompress.cpp" />
     <ClCompile Include="Encryption\Hashes\PBKDF2SHA256.cpp" />
     <ClCompile Include="Exceptions\FileOutsideMinecraftDirectoryException.cpp" />
     <ClCompile Include="Form\LoginAccountForm.cpp" />
-    <ClCompile Include="Form\MainWindowExtensions.cpp" />
+    <ClCompile Include="Form\MainWindowExtensions.cpp">
+      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Debug UnitTests|Win32'">input</DynamicSource>
+      <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Debug UnitTests|Win32'">%(Filename).moc</QtMocFileName>
+      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Debug UnitTests|x64'">input</DynamicSource>
+      <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Debug UnitTests|x64'">%(Filename).moc</QtMocFileName>
+      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">input</DynamicSource>
+      <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(Filename).moc</QtMocFileName>
+      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">input</DynamicSource>
+      <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename).moc</QtMocFileName>
+      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">input</DynamicSource>
+      <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(Filename).moc</QtMocFileName>
+      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Release|x64'">input</DynamicSource>
+      <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename).moc</QtMocFileName>
+    </ClCompile>
     <ClCompile Include="Form\NewsViewWidget.cpp" />
     <ClCompile Include="Form\ServerChangerForm.cpp" />
     <ClCompile Include="Form\ServerWidget.cpp" />
@@ -310,6 +324,7 @@
     <ClCompile Include="QObjects\SomSlider.cpp" />
     <ClCompile Include="QObjects\Threads\FunThread.cpp" />
     <ClCompile Include="QObjects\Threads\LambdaTask.cpp" />
+    <ClCompile Include="QObjects\Threads\ThreadWorker.cpp" />
     <ClCompile Include="QObjects\Threads\UIThread.cpp" />
     <ClCompile Include="Servers\ServerTypes.cpp" />
     <ClCompile Include="Updater\Upgrader.cpp" />
@@ -329,6 +344,8 @@
     <ClInclude Include="Callbacks\QCallback.h" />
     <ClInclude Include="Client\Config\Config.h" />
     <ClInclude Include="Client\StartProcess.h" />
+    <ClInclude Include="Encryption\Base64\Imaging.h" />
+    <QtMoc Include="QObjects\Threads\ThreadWorker.h" />
     <ClInclude Include="resource1.h" />
     <ClInclude Include="Web\Minecraft\Status\MinecraftStatus.h" />
     <ClInclude Include="Web\Utils\WebUtils.h" />

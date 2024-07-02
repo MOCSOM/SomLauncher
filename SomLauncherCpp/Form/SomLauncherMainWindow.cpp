@@ -104,11 +104,11 @@ void SomLauncherMainWindow::_settingUiChanges()
 	background.fromImage(applyEffectToImage(background.toImage(), blur));*/
 	ui.scrollArea_servers->setStyleSheet("background-color: transparent;");
 
-	ui.labeltest->setPixmap(background);
+	ui.label_background->setPixmap(background);
 	//ui.centralWidget->setStyleSheet("background: linear-gradient(135deg, rgb(194, 183, 119), rgb(255, 143, 31));");
 
 	this->top_frame->setMainButtonsTextAlightButtom();
-	this->top_frame->changeLabelsCurrencyCountAndAccountName();
+	this->top_frame->swapLabelsCurrencyCountAndAccountName();
 
 	this->server_changer_button_text = ui.pushButton_changeserver->text().toStdString();
 
@@ -203,6 +203,7 @@ void SomLauncherMainWindow::_settingConnections()
 	QObject::connect(ui.pushButton_reportbug, &QPushButton::released, this, &SomLauncherMainWindow::onClickedPushButtonSendBugReport);
 
 	QObject::connect(ui.pushButtonRefreshServers, &QPushButton::released, this, &SomLauncherMainWindow::refreshServers);
+	QObject::connect(this, &SomLauncherMainWindow::serverConnectSignal, this, &SomLauncherMainWindow::handleServerResult);
 }
 
 void SomLauncherMainWindow::_settingMemory()
@@ -223,17 +224,38 @@ void SomLauncherMainWindow::_settingServerType()
 {
 	std::string type = getServerType();
 	ui.label_client_type->setText(type.c_str());
-	ui.label_server_status->setText(this->servers_parce[this->config.json()["user"]["server"].template get<int>()]["server_type"].template get<std::string>().c_str());
 }
 
 void SomLauncherMainWindow::_settingAccountDataInUi()
 {
 	this->top_frame->getLabelProfile()->setText(this->account_data["username"].template get<std::string>().c_str());
+	this->top_frame->getCurrencyLabel()->setText(QString::number(this->account_data["somus"].template get<int>()));
+	_settingProfileImage();
 }
 
 void SomLauncherMainWindow::_settingFastServerChangerForm()
 {
 	fast_server_changer_form = std::make_unique<ServerChanger>(this, this->config_path, this->servers_parce);
+}
+
+void SomLauncherMainWindow::_settingProfileImage()
+{
+	std::shared_ptr<QPixmap> image;
+	try
+	{
+		image = loadQPixmapFromBase64(this->account_data["avatar"].template get<std::string>().c_str());
+	}
+	catch (const std::exception&)
+	{
+		image = loadQPixmapFromBase64("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");
+	}
+	this->top_frame->getAccountIcon()->setPixmap(*image.get());
+	this->top_frame->getAccountIcon()->setScaledContents(true);
+}
+
+void SomLauncherMainWindow::_settingServerStatus()
+{
+	ui.label_server_status->setText(this->widget_list[this->config.json()["user"]["server"].template get<int>()]->getServerStatus());
 }
 
 void SomLauncherMainWindow::disablePlayButtonIfNeeded()
@@ -436,7 +458,7 @@ void SomLauncherMainWindow::setUiToDownload(bool status)
 
 void SomLauncherMainWindow::mouseEnterframe_topslidemenu()
 {
-	qInfo() << "frame_topslidemenu mouse enter" << std::endl;
+	qDebug() << "frame_topslidemenu mouse enter" << std::endl;
 
 	if (this->top_frame->geometry() != QRect(30, 0, 741, 131))
 	{
@@ -447,12 +469,12 @@ void SomLauncherMainWindow::mouseEnterframe_topslidemenu()
 	}
 
 	this->top_frame->setMainButtonsTextAlightCenter();
-	this->top_frame->changeLabelsCurrencyCountAndAccountName();
+	this->top_frame->swapLabelsCurrencyCountAndAccountName();
 }
 
 void SomLauncherMainWindow::mouseLeaveframe_topslidemenu()
 {
-	qInfo() << "frame_topslidemenu mouse leave" << std::endl;
+	qDebug() << "frame_topslidemenu mouse leave" << std::endl;
 
 	if (this->top_frame->geometry() != QRect(30, -90, 741, 131))
 	{
@@ -463,7 +485,7 @@ void SomLauncherMainWindow::mouseLeaveframe_topslidemenu()
 	}
 
 	this->top_frame->setMainButtonsTextAlightButtom();
-	this->top_frame->changeLabelsCurrencyCountAndAccountName();
+	this->top_frame->swapLabelsCurrencyCountAndAccountName();
 }
 
 void SomLauncherMainWindow::groupButtonsClicked(QAbstractButton* id, bool status)
@@ -497,41 +519,9 @@ void SomLauncherMainWindow::groupButtonsClicked(QAbstractButton* id, bool status
 		_settingModsCount();
 		_settingServerType();
 		disablePlayButtonIfNeeded();
+		_settingServerStatus();
 	}
 }
-
-//static std::string encodeUtf8(std::string str)
-//{
-//	std::stringstream resutl;
-//	size_t count = 0;
-//	for (auto elem = str.begin(); elem != str.end(); elem + 2)
-//	{
-//		if ((*elem & 0xC0) != 0x80)
-//		{
-//			resutl << std::dec << elem << (elem + 2);
-//		}
-//
-//		++count;
-//	}
-//	return resutl.str();
-//}
-//
-//static std::string decodeUtf8(std::string str)
-//{
-//	std::stringstream resutl;
-//	size_t count = 0;
-//	for (auto elem : str)
-//	{
-//		if ((elem & 0xC0) != 0x80)
-//		{
-//			resutl << std::hex << std::setprecision(2) << std::setw(2)
-//				<< static_cast<unsigned int>(static_cast<uint8_t>(elem));
-//		}
-//
-//		++count;
-//	}
-//	return resutl.str();
-//}
 
 void SomLauncherMainWindow::saveSettings()
 {

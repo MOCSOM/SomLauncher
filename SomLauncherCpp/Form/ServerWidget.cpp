@@ -40,20 +40,20 @@ void ServerWidget::setStatusServer(bool value)
 
 void ServerWidget::setServerDataFromApi()
 {
-	nlohmann::json status = web::minecraft::status::getMinecraftStatusServer(this->server_data["server_ip"].template get<std::string>());
+	this->status = web::minecraft::status::getMinecraftStatusServer(this->server_data["server_ip"].template get<std::string>());
 
 	try
 	{
-		ui.label_playerscount->setText(std::to_string(status["players"]["online"].template get<int>()).c_str());
-		ui.progressBar_capacityserver->setValue(status["players"]["online"].template get<int>());
-		ui.progressBar_capacityserver->setMaximum(status["players"]["max"].template get<int>());
+		ui.label_playerscount->setText(std::to_string(this->status["players"]["online"].template get<int>()).c_str());
+		ui.progressBar_capacityserver->setValue(this->status["players"]["online"].template get<int>());
+		ui.progressBar_capacityserver->setMaximum(this->status["players"]["max"].template get<int>());
 	}
 	catch (const std::exception&)
 	{
 		ui.label_playerscount->setHidden(true);
 		ui.progressBar_capacityserver->setHidden(true);
 	}
-	ui.label_onlinestatus->setText(status["online"].template get<bool>() ? tr("Online") : tr("Offline"));
+	ui.label_onlinestatus->setText(this->status["online"].template get<bool>() ? tr("Online") : tr("Offline"));
 }
 
 bool ServerWidget::isToFriends()
@@ -65,6 +65,11 @@ bool ServerWidget::isToFriends()
 const QString ServerWidget::getServerName()
 {
 	return this->server_data["server_name"].template get<std::string>().c_str();
+}
+
+const QString ServerWidget::getServerStatus()
+{
+	return this->status["online"].template get<bool>() ? tr("Online") : tr("Offline");
 }
 
 void ServerWidget::pushButtonSelectClicked()

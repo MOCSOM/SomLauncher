@@ -40,15 +40,19 @@
     <height>470</height>
    </size>
   </property>
+  <property name="palette">
+   <palette>
+    <active/>
+    <inactive/>
+    <disabled/>
+   </palette>
+  </property>
   <property name="windowTitle">
    <string>SomLauncher</string>
   </property>
   <property name="windowIcon">
    <iconset>
     <normaloff>../resources/som.ico</normaloff>../resources/som.ico</iconset>
-  </property>
-  <property name="styleSheet">
-   <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:0.0227273, x2:0.784091, y2:0.744, stop:0 rgba(235, 80, 109, 255), stop:1 rgba(149, 106, 133, 255));</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QStackedWidget" name="stackedWidget_bottommenu">
@@ -355,6 +359,9 @@
       </item>
       <item row="0" column="0" rowspan="2">
        <widget class="QScrollArea" name="scrollArea_servers">
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
         <property name="widgetResizable">
          <bool>true</bool>
         </property>
@@ -363,8 +370,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>737</width>
-           <height>397</height>
+           <width>100</width>
+           <height>30</height>
           </rect>
          </property>
          <layout class="QGridLayout" name="gridLayout_scrollArea_servers"/>
@@ -379,7 +386,11 @@
     <widget class="QWidget" name="page_aboutus">
      <layout class="QGridLayout" name="gridLayout_page_aboutus">
       <item row="0" column="0">
-       <widget class="QPlainTextEdit" name="plainTextEdit_aboutus"/>
+       <widget class="QPlainTextEdit" name="plainTextEdit_aboutus">
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -397,7 +408,7 @@
      <string>pasha lox</string>
     </property>
    </widget>
-   <widget class="QLabel" name="labeltest">
+   <widget class="QLabel" name="label_background">
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -413,7 +424,7 @@
      <bool>true</bool>
     </property>
    </widget>
-   <zorder>labeltest</zorder>
+   <zorder>label_background</zorder>
    <zorder>stackedWidget_bottommenu</zorder>
    <zorder>label_minecraft_directory</zorder>
   </widget>

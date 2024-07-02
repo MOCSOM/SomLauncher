@@ -32,6 +32,7 @@ public:
 
 public:
 	const QString getServerName();
+	const QString getServerStatus();
 
 private:
 	void addNewPage(const std::string& name);
@@ -48,6 +49,7 @@ private:
 	Ui::ServerWidgetClass ui;
 
 	nlohmann::json server_data;
+	nlohmann::json status;
 };
 
 #endif /*SERVERWIDGET_H_*/

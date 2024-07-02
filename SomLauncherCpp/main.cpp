@@ -15,7 +15,7 @@ int main(int argc, char* argv[])
 	int returned_id = -1;
 	QApplication application(argc, argv);
 	application.setApplicationName("SomLauncher");
-	//application.setApplicationDisplayName("SomLauncher");
+	application.setApplicationDisplayName("SomLauncher");
 
 	qInstallMessageHandler(customHandler);
 	try
@@ -37,6 +37,8 @@ int main(int argc, char* argv[])
 		qInfo() << "Configureate account window..." << std::endl;
 		account_window.setConfigPath(main_window.getConfigPath());
 		account_window._setPasswordAndLoginInUi();
+		account_window.show();
+		account_window.setDisabled(true);
 
 		//main_window.setConnectionWithDatabase();
 		//std::cout << main_window.getServersFromServer().to_string() << std::endl;
@@ -68,6 +70,7 @@ int main(int argc, char* argv[])
 				main_window._settingCurrentServerName();
 				main_window.disableServer();
 				main_window.disablePlayButtonIfNeeded();
+				main_window._settingServerStatus();
 
 				QObject::connect(main_window.getSettingsDialog().get(), &SettingsDialog::logoutSignal,
 					[&main_window, &account_window]() -> void
@@ -90,13 +93,13 @@ int main(int argc, char* argv[])
 		if (!json_data.contains("id"))
 		{
 			account_window.eraseAllData();
-			account_window.show();
+			account_window.setDisabled(false);
 		}
 		else
 		{
 			if (account_window.getUserPassword().empty())
 			{
-				account_window.show();
+				account_window.setDisabled(false);
 			}
 			else
 			{
@@ -106,12 +109,11 @@ int main(int argc, char* argv[])
 				}
 				else
 				{
-					account_window.show();
+					account_window.setDisabled(false);
 				}
 			}
 		}
 
-		//main_window.show();
 
 		returned_id = application.exec();
 	}
@@ -119,9 +121,6 @@ int main(int argc, char* argv[])
 	{
 		QMessageBox::critical(nullptr, QObject::tr("Error"), exc.what());
 		qFatal() << "Exception:" << exc.what();
-		/*QMessageBox messageBox;
-		messageBox.critical(nullptr, "Error", exc.what());
-		messageBox.setFixedSize(500, 200);*/
 	}
 
 	return returned_id;

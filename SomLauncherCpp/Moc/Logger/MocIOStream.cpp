@@ -94,7 +94,7 @@ void customHandler(QtMsgType type, const QMessageLogContext& context, const QStr
 	QFile outFile("somlogs\\last_log.txt");
 	outFile.open(QIODevice::WriteOnly | QIODevice::Append);
 
-	QTextStream textStream(&outFile);
+	QTextStream file_stream(&outFile);
 
 	std::time_t t = std::time(0);   // get time now
 	std::tm* now = std::localtime(&t);
@@ -102,30 +102,30 @@ void customHandler(QtMsgType type, const QMessageLogContext& context, const QStr
 	switch (type)
 	{
 	case QtDebugMsg:
-#ifdef DEBUG
+#ifdef SOMDEBUG
 		std::fstream(stdout) << "[Debug]: " << localMsg.constData();
-		textStream << "[" << now->tm_sec << ":" << now->tm_min << ":" << now->tm_hour << "]"
+		file_stream << "[" << now->tm_sec << ":" << now->tm_min << ":" << now->tm_hour << "]"
 			<< " " << "[" << function << "\\" << "DEBUG]: " << localMsg.constData();
-#endif // DEBUG
+#endif // SOMDEBUG
 		break;
 	case QtInfoMsg:
 		std::fstream(stdout) << "[Info]: " << localMsg.constData();
-		textStream << "[" << now->tm_sec << ":" << now->tm_min << ":" << now->tm_hour << "]"
-			<< " " << "[" << function << "\\" << "INFO]: " << localMsg.constData();
+		file_stream << "[" << now->tm_sec << ":" << now->tm_min << ":" << now->tm_hour << "]"
+			<< " " << "[" << "INFO]: " << localMsg.constData();
 		break;
 	case QtWarningMsg:
 		std::fstream(stdout) << "[Warning]: " << localMsg.constData() << std::endl;
-		textStream << "[" << now->tm_sec << ":" << now->tm_min << ":" << now->tm_hour << "]"
+		file_stream << "[" << now->tm_sec << ":" << now->tm_min << ":" << now->tm_hour << "]"
 			<< " " << "[" << function << "\\" << "WARNING]: " << localMsg.constData() << std::endl;
 		break;
 	case QtCriticalMsg:
 		std::fstream(stdout) << "[Critical]: " << localMsg.constData() << std::endl;
-		textStream << "[" << now->tm_sec << ":" << now->tm_min << ":" << now->tm_hour << "]"
+		file_stream << "[" << now->tm_sec << ":" << now->tm_min << ":" << now->tm_hour << "]"
 			<< " " << "[" << function << "\\" << "CRITICAL]: " << localMsg.constData() << std::endl;
 		break;
 	case QtFatalMsg:
 		std::fstream(stdout) << "[Fatal]: " << localMsg.constData() << std::endl;
-		textStream << "[" << now->tm_sec << ":" << now->tm_min << ":" << now->tm_hour << "]"
+		file_stream << "[" << now->tm_sec << ":" << now->tm_min << ":" << now->tm_hour << "]"
 			<< " " << "[" << function << "\\" << "FATAL]: " << localMsg.constData() << std::endl;
 		break;
 	}

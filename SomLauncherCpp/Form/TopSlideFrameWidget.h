@@ -26,11 +26,13 @@ public:
 	QPushButton* getPushButtonServers() const;
 	QPushButton* getPushButtonGame() const;
 	QLabel* getAccountIcon() const;
+	QLabel* getCurrencyLabel() const;
+	QLabel* getCurrencyIconLabel() const;
 
 	void setMainButtonsTextAlightButtom();
 	void setMainButtonsTextAlightCenter();
 
-	void changeLabelsCurrencyCountAndAccountName();
+	void swapLabelsCurrencyCountAndAccountName();
 
 private:
 	Ui::TopSlideFrameWidget ui;
