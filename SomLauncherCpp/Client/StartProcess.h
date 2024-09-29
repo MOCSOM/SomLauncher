@@ -2,6 +2,11 @@
 #define STARTPROCESS_H_
 
 #include <qdebug.h>
+#include <QProcess>
+#include <QVector>
+#include <QEventLoop>
+#include <QApplication>
+#include <QThread>
 
 #include <string>
 #include <vector>
@@ -22,6 +27,7 @@ namespace client
 	namespace utils
 	{
 		int doProcess(std::unique_ptr<wchar_t[]>& args, const std::filesystem::path& output_file, std::filesystem::path workdir_path);
+		int doProcess(QStringList& args, const std::filesystem::path& output_file, std::filesystem::path workdir_path);
 	}
 }
 

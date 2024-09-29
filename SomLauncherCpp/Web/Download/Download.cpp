@@ -33,7 +33,7 @@ std::filesystem::path web::download::downloadFile(const std::string& url, const 
 	QNetworkReply* reply = network.get(QNetworkRequest(QUrl::fromUserInput(url.c_str())));
 
 	QFile* file = new QFile(destanation_file, &network);
-		
+
 
 	QObject::connect(reply, &QNetworkReply::readyRead, dummy,
 		[&, reply, file]()
@@ -99,7 +99,8 @@ std::filesystem::path web::download::downloadFile(const std::string& url, const 
 				{
 					// it's time to show up the speed
 					float time = (mTotalDownloadSize - downloaded) / averangeDelta;
-					UIThread::run([&, time]()
+					UIThread::run(
+						[&, time]()
 						{
 							auto k = QDateTime::fromMSecsSinceEpoch(time * 1000).toUTC().toString("HH:mm:ss");
 							//mLauncher->ui.eta->setText(k);
@@ -145,7 +146,7 @@ QString web::download::utils::prettySize(quint64 size, bool isSpeed)
 	QVector<QString> strs;
 	if (isSpeed)
 	{
-		strs = 
+		strs =
 		{
 			QObject::tr("B/sec"),
 			QObject::tr("Kb/sec"),
@@ -157,7 +158,7 @@ QString web::download::utils::prettySize(quint64 size, bool isSpeed)
 	}
 	else
 	{
-		strs = 
+		strs =
 		{
 			QObject::tr("B"),
 			QObject::tr("Kb"),

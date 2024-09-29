@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SomLauncherCpp", "SomLaunch
 EndProject
 Project("{840C416C-B8F3-42BC-B0DD-F6BB14C9F8CB}") = "SomSetup_advinst1", "SomSetup_advinst1\SomSetup_advinst1.aiproj", "{DD002037-3B65-4AE4-BA40-D71336A8AA3A}"
 EndProject
+Project("{840C416C-B8F3-42BC-B0DD-F6BB14C9F8CB}") = "AdvSetup", "AdvSetup\AdvSetup.aiproj", "{8AECD63C-E0EB-43FA-A207-F0A79A2F2008}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -41,6 +43,18 @@ Global
 		{DD002037-3B65-4AE4-BA40-D71336A8AA3A}.Release|x64.Build.0 = DefaultBuild
 		{DD002037-3B65-4AE4-BA40-D71336A8AA3A}.Release|x86.ActiveCfg = DefaultBuild
 		{DD002037-3B65-4AE4-BA40-D71336A8AA3A}.Release|x86.Build.0 = DefaultBuild
+		{8AECD63C-E0EB-43FA-A207-F0A79A2F2008}.Debug|x64.ActiveCfg = DefaultBuild
+		{8AECD63C-E0EB-43FA-A207-F0A79A2F2008}.Debug|x64.Build.0 = DefaultBuild
+		{8AECD63C-E0EB-43FA-A207-F0A79A2F2008}.Debug|x86.ActiveCfg = DefaultBuild
+		{8AECD63C-E0EB-43FA-A207-F0A79A2F2008}.Debug|x86.Build.0 = DefaultBuild
+		{8AECD63C-E0EB-43FA-A207-F0A79A2F2008}.DefaultBuild|x64.ActiveCfg = DefaultBuild
+		{8AECD63C-E0EB-43FA-A207-F0A79A2F2008}.DefaultBuild|x64.Build.0 = DefaultBuild
+		{8AECD63C-E0EB-43FA-A207-F0A79A2F2008}.DefaultBuild|x86.ActiveCfg = DefaultBuild
+		{8AECD63C-E0EB-43FA-A207-F0A79A2F2008}.DefaultBuild|x86.Build.0 = DefaultBuild
+		{8AECD63C-E0EB-43FA-A207-F0A79A2F2008}.Release|x64.ActiveCfg = DefaultBuild
+		{8AECD63C-E0EB-43FA-A207-F0A79A2F2008}.Release|x64.Build.0 = DefaultBuild
+		{8AECD63C-E0EB-43FA-A207-F0A79A2F2008}.Release|x86.ActiveCfg = DefaultBuild
+		{8AECD63C-E0EB-43FA-A207-F0A79A2F2008}.Release|x86.Build.0 = DefaultBuild
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

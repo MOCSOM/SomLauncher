@@ -26,6 +26,7 @@ void Config::createConfig() const
 	nlohmann::json template_config = nlohmann::json::parse(
 		R"({"user":{"name":"","password":"","memory":7168,"wight":854,"hight":480,"mcdir":"","isInstallMods":false,"server":-1},"launcher":{"version":"0.0.0"},"modpack":{}})"
 	);
+	template_config["launcher"]["version"] = qApp->applicationVersion().toStdString();
 
 	std::ofstream ofstr(this->config_path);
 	ofstr << template_config.dump(4) << std::endl;

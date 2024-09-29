@@ -67,6 +67,9 @@ private slots:
 
 	void wrongPasswordOrLogin();
 
+public slots:
+	void checkLoggined();
+
 signals:
 	void accountDataReceivedSignal(const std::string& json_string_data);
 

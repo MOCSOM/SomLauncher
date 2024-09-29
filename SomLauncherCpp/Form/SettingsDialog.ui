@@ -214,9 +214,12 @@
        <widget class="QLineEdit" name="lineEdit_game_path"/>
       </item>
       <item row="12" column="2">
-       <widget class="QPushButton" name="pushButton">
+       <widget class="QPushButton" name="pushButton_delete_modpack">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="text">
-         <string>PushButton</string>
+         <string>Удалить Модпак</string>
         </property>
        </widget>
       </item>

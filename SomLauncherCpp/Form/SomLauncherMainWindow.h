@@ -68,53 +68,6 @@ class SomLauncherMainWindow : public QMainWindow
 {
 	Q_OBJECT
 
-private:
-	std::filesystem::path minecraft_core_dir_path = "";
-	std::filesystem::path config_path = "";
-	std::string servers_json = "";
-	std::string launcher_name = "SomLauncher";
-	std::string launcher_version = "2.0";
-	std::wstring username = L"Debug";
-	bool is_install_mods = true;
-
-	std::string server_changer_button_text = "";
-
-	std::string background = "resources\\background_normal2.png";
-	std::string mocsom_site_url = "https://mocsom.site/";
-	std::string mocsom_site_api = "api/";
-	std::string mocsom_api_launcher = "launcher/";
-	std::string style_sheet = "resources\\StyleSheets\\Wstartpage_modyfied.qss";
-
-	MinecraftCpp::option::MinecraftOptions options;
-	MinecraftCpp::option::MinecraftOptions default_options = options;
-	std::unique_ptr<SettingsDialog> settings_dialog;
-	std::unique_ptr<ServerChanger> fast_server_changer_form;
-
-	Config config;
-
-	nlohmann::json servers_parce;
-	nlohmann::json account_data;
-
-	QSimpleUpdater* updater;
-
-	int max_memory = 1024;
-	int recomended_memory = 1024;
-	int uses_memory = 1024;
-	int curret_memory = recomended_memory;
-
-	TopSlideFrameWidget* top_frame = nullptr;
-	QPropertyAnimation* top_frame_animation = nullptr;
-
-	QList<QSharedPointer<ServerWidget>> widget_list;
-
-	std::unique_ptr<QButtonGroup> server_radio_button_group;
-
-	FunctionThread* download_thread = nullptr;
-
-	QRect progressBar_ahtung_geometry;
-
-	short int connection_tries = 5;
-
 public:
 	explicit SomLauncherMainWindow(QWidget* parent = nullptr);
 	~SomLauncherMainWindow();
@@ -135,6 +88,7 @@ public:
 	void _settingServerStatus();
 
 	void disablePlayButtonIfNeeded();
+	void _disablePlayButtonForNoFriend();
 
 	void settingUserProfileImage();
 
@@ -187,6 +141,7 @@ public:
 
 	void disableElementsInDevelopment();
 
+	void initMainWindow();
 
 private slots:
 	void start_minecraft_params();
@@ -223,13 +178,63 @@ private slots:
 
 	void handleServerResult(bool status, const std::string& text);
 
+
+
 signals:
-	void updateSignal(const std::string& newl_laucher_url);
+	void updateSignal();
 signals:
 	void serverConnectSignal(bool status, const std::string& text);
+signals:
+	void mainFormInitCompleteSignal();
 
 private:
 	Ui::SomLauncherMainWindowClass ui;
+
+	std::filesystem::path minecraft_core_dir_path = "";
+	std::filesystem::path config_path = "";
+	std::string servers_json = "";
+	std::string launcher_name = "SomLauncher";
+	std::string launcher_version = "2.0";
+	std::wstring username = L"Debug";
+	bool is_install_mods = true;
+
+	std::string server_changer_button_text = "";
+
+	std::string background = "resources\\background_normal2.png";
+	std::string mocsom_site_url = "https://mocsom.site/";
+	std::string mocsom_site_api = "api/";
+	std::string mocsom_api_launcher = "launcher/";
+	std::string style_sheet = "resources\\StyleSheets\\Wstartpage_modyfied.qss";
+
+	MinecraftCpp::option::MinecraftOptions options;
+	MinecraftCpp::option::MinecraftOptions default_options = options;
+	std::unique_ptr<SettingsDialog> settings_dialog;
+	std::unique_ptr<ServerChanger> fast_server_changer_form;
+
+	Config config;
+
+	nlohmann::json servers_parce;
+	nlohmann::json account_data;
+
+	QSimpleUpdater* updater;
+
+	int max_memory = 1024;
+	int recomended_memory = 1024;
+	int uses_memory = 1024;
+	int curret_memory = recomended_memory;
+
+	TopSlideFrameWidget* top_frame = nullptr;
+	QPropertyAnimation* top_frame_animation = nullptr;
+
+	QList<QSharedPointer<ServerWidget>> widget_list;
+
+	std::unique_ptr<QButtonGroup> server_radio_button_group;
+
+	FunctionThread* download_thread = nullptr;
+
+	QRect progressBar_ahtung_geometry;
+
+	short int connection_tries = 5;
 };
 
 #endif /*MAINWINDOW_H_*/

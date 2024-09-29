@@ -19,7 +19,7 @@ nlohmann::json SomLauncherMainWindow::getServersFromServer()
 
 		if (http_code != 200)
 		{
-			qWarning() << "code not 200" << std::endl;
+			qWarning() << "code not 200";
 			emit(serverConnectSignal(false, "code not 200"));
 			QMessageBox::warning(this, "Warning", QString::number(http_code) + ' ' + QString::fromStdString(response.str()));
 		}
@@ -32,12 +32,12 @@ nlohmann::json SomLauncherMainWindow::getServersFromServer()
 	}
 	catch (curlpp::LogicError& e)
 	{
-		qWarning() << e.what() << std::endl;
+		qWarning() << e.what();
 		emit(serverConnectSignal(false, e.what()));
 	}
 	catch (curlpp::RuntimeError& e)
 	{
-		qWarning() << e.what() << std::endl;
+		qWarning() << e.what();
 		emit(serverConnectSignal(false, e.what()));
 	}
 
@@ -51,9 +51,9 @@ void SomLauncherMainWindow::getServersFromServerThread(nlohmann::json& json)
 
 void SomLauncherMainWindow::start_minecraft_params()
 {
-	qInfo() << "Config loaded" << std::endl;
-	qInfo() << this->config.json()["user"]["name"].template get<std::string>() << std::endl;
-	qInfo() << this->config.json()["user"]["memory"].template get<int>() << std::endl;
+	qInfo() << "Config loaded";
+	qDebug() << this->config.json()["user"]["name"].template get<std::string>();
+	qDebug() << this->config.json()["user"]["memory"].template get<int>();
 	if (this->config.json()["user"]["mcdir"].is_array())
 	{
 		std::filesystem::path pat = "";
@@ -61,16 +61,16 @@ void SomLauncherMainWindow::start_minecraft_params()
 		{
 			pat += static_cast<wchar_t>(symbol.template get<int>());
 		}
-		qInfo() << pat << std::endl;
+		qDebug() << pat;
 	}
 	else
 	{
-		qInfo() << this->config.json()["user"]["mcdir"].template get<std::filesystem::path>() << std::endl;
+		qDebug() << this->config.json()["user"]["mcdir"].template get<std::filesystem::path>();
 	}
-	qInfo() << this->config.json()["user"]["isInstallMods"].template get<bool>() << std::endl;
-	qInfo() << this->config.json()["user"]["server"].template get<int>() << std::endl;
+	qDebug() << this->config.json()["user"]["isInstallMods"].template get<bool>();
+	qDebug() << this->config.json()["user"]["server"].template get<int>();
 
-	qInfo() << "Configurate options..." << std::endl;
+	qInfo() << "Configurate options...";
 	this->configureOptions();
 	this->setUuidFromAccount();
 
@@ -97,10 +97,12 @@ void SomLauncherMainWindow::setupInstallMinecraft(const size_t& index)
 	callback->setQLabelDownloadSpeed(ui.label_download_speed);
 	callback->setQLabelDownloadTime(ui.label_download_time);
 
-	qInfo() << "starting installing minecraft..." << std::endl;
+	qInfo() << "starting installing minecraft...";
 
 	std::string launch_version = install_minecraft(instance_path, version, core,
 		this->servers_parce[index]["minimal_loader_version"].template get<std::string>(), java, this->options, callback);
+
+	qInfo() << "minecraft installed complete with version" << launch_version;
 
 	if (launch_version.empty())
 	{
@@ -127,7 +129,7 @@ void SomLauncherMainWindow::setupInstallMinecraft(const size_t& index)
 	options.gameDirectory = instance_path.wstring();
 	options.username = this->top_frame->getLabelProfile()->text().toStdWString();
 
-	std::vector<std::variant<std::string, std::filesystem::path, std::wstring>> command = MinecraftCpp::get_minecraft_command__(launch_version, instance_path, options);
+	std::vector<std::variant<std::string, std::filesystem::path, std::wstring>> command = MinecraftCpp::QMinecraft::get_minecraft_command__(launch_version, instance_path, options);
 	//qInfo() << command;
 
 	//MinecraftCpp::option::LaunchOptions _options;
@@ -158,18 +160,20 @@ std::string SomLauncherMainWindow::install_minecraft(const std::filesystem::path
 	std::string launch_version;
 	std::string install_version;
 
-	qInfo() << "Checking java..." << std::endl;
+	qInfo() << "Checking java...";
 	checkJava(options, java, callback.get());
 
-	qInfo() << "Starting download minecraft..." << std::endl;
+	qInfo() << "Starting download minecraft...";
 	if (loader_mame == "forge" || loader_mame == "Forge")
 	{
 		launch_version = version + "-" + loader_mame + "-" + loader_version;
 		install_version = version + "-" + loader_version;
 
-		qInfo() << "Starting download forge..." << std::endl;
+		qInfo() << "Starting download forge...";
 		MinecraftCpp::forge::install_forge_version(
 			install_version, install_path, callback, options.executablePath);
+
+		qInfo() << "launch version" << launch_version;
 
 		return launch_version;
 	}
@@ -177,13 +181,15 @@ std::string SomLauncherMainWindow::install_minecraft(const std::filesystem::path
 	{
 		launch_version = std::string("fabric") + "-" + "loader" + "-" + loader_version + "-" + version;
 
-		qInfo() << "Starting download fabric..." << std::endl;
+		qInfo() << "Starting download fabric...";
 		MinecraftCpp::fabric::install_fabric_version(
 			version, install_path, loader_version, callback, options.executablePath);
 
 		std::filesystem::copy_file(Join({ install_path.u8string(), "versions", version, version + ".jar" }),
 			Join({ install_path.u8string(), "versions", launch_version, launch_version + ".jar" }),
 			std::filesystem::copy_options::overwrite_existing);
+
+		qInfo() << "launch version" << launch_version;
 
 		return launch_version;
 	}
@@ -204,7 +210,7 @@ nlohmann::json SomLauncherMainWindow::getModpackInfoFromServer(const std::string
 		curlpp::Easy request;
 
 		request.setOpt(curlpp::options::Verbose(true));
-		request.setOpt(curlpp::options::Url("https://mocsom.site/api/modpacks/" + modpack_id + "/?format=json"));
+		request.setOpt(curlpp::options::Url(this->mocsom_site_url + this->mocsom_site_api + "modpacks/" + modpack_id + "/?format=json"));
 		request.setOpt(curlpp::options::WriteStream(&response));
 
 		request.perform();
@@ -214,16 +220,16 @@ nlohmann::json SomLauncherMainWindow::getModpackInfoFromServer(const std::string
 
 		if (http_code != 200)
 		{
-			qWarning() << "code not 200" << std::endl;
+			qWarning() << "code not 200";
 		}
 	}
 	catch (curlpp::LogicError& e)
 	{
-		qWarning() << e.what() << std::endl;
+		qWarning() << e.what();
 	}
 	catch (curlpp::RuntimeError& e)
 	{
-		qWarning() << e.what() << std::endl;
+		qWarning() << e.what();
 	}
 	return modpacks;
 }
@@ -311,7 +317,7 @@ void SomLauncherMainWindow::configureOptions()
 	//std::filesystem::temp_directory_path();
 
 	//std::string path_wch_java = DDIC::Download::Files::_get_java_path(Join({ appdata == nullptr ? "" : appdata, ".SomSomSom" }))[0].first + "\\" + "bin" + "\\" + "java.exe";
-	//qDebug() << this->config_parce.get_count() << std::endl;
+	//qDebug() << this->config_parce.get_count();
 
 	this->options.customResolution = false;
 	this->options.gameDirectory = this->minecraft_core_dir_path;
@@ -330,18 +336,18 @@ void SomLauncherMainWindow::configureOptions()
 
 void SomLauncherMainWindow::checkJava(MinecraftCpp::option::MinecraftOptions& options, std::string java_verison, CallbackNull* callback) const
 {
-	qInfo() << "Checking java..." << std::endl;
+	qInfo() << "Checking java...";
 	std::filesystem::path java_dir = "";
 
 	if (java_verison == "")
 	{
-		qInfo() << "Getting installed java in directory..." << std::endl;
+		qInfo() << "Getting installed java in directory...";
 		std::filesystem::path java_path =
 			DDIC::Download::Files::getInstalledJavaInDirectory(this->minecraft_core_dir_path);
 
 		if (java_path == "")
 		{
-			qInfo() << "Getting standart installed java in directory..." << std::endl;
+			qInfo() << "Getting standart installed java in directory...";
 			options.executablePath = DDIC::Download::Files::getInstalledJavaInDirectory();
 			return;
 		}
@@ -353,16 +359,16 @@ void SomLauncherMainWindow::checkJava(MinecraftCpp::option::MinecraftOptions& op
 
 	if (!DDIC::Download::Java::check_system_verison_java(java_verison))
 	{
-		qInfo() << "Checking installed java..." << std::endl;
+		qInfo() << "Checking installed java...";
 		if (!DDIC::Download::Java::check_downloaded_version_java(this->minecraft_core_dir_path, java_verison))
 		{
-			qInfo() << "Install java..." << std::endl;
+			qInfo() << "Install java...";
 			java_dir = DDIC::Download::Java::install(java_verison, this->minecraft_core_dir_path, callback);
 			options.executablePath = java_dir / "bin" / "javaw.exe";
 		}
 		else
 		{
-			qInfo() << "Getting java..." << std::endl;
+			qInfo() << "Getting java...";
 			for (auto& var : DDIC::Download::Files::_get_java_path(this->minecraft_core_dir_path))
 			{
 				if (var.second == java_verison)
@@ -375,7 +381,7 @@ void SomLauncherMainWindow::checkJava(MinecraftCpp::option::MinecraftOptions& op
 	else
 	{
 		//java_dir = DDIC::Download::Java::install(java_verison, this->minecraft_core_dir_path, callback);
-		qInfo() << "Getting java in programm files..." << std::endl;
+		qInfo() << "Getting java in programm files...";
 		char* program_files = nullptr;
 		size_t program_files_sz = 0;
 		_dupenv_s(&program_files, &program_files_sz, "ProgramFiles");
@@ -399,12 +405,17 @@ size_t SomLauncherMainWindow::getMinecraftModsCount()
 
 	try
 	{
+		if (this->config.json()["user"]["server"].template get<int>() < 0)
+		{
+			throw std::exception();
+		}
+
 		directory = std::filesystem::directory_iterator(
 			this->minecraft_core_dir_path /
 			this->servers_parce[this->config.json()["user"]["server"].template get<int>()]["server_slug"].template get<std::string>() /
 			"mods");
 	}
-	catch (const std::exception&)
+	catch (const std::exception& e)
 	{
 		return count;
 	}
@@ -423,6 +434,10 @@ size_t SomLauncherMainWindow::getMinecraftModsCount()
 
 std::string SomLauncherMainWindow::getServerType()
 {
+	if (this->config.json()["user"]["server"].template get<int>() < 0)
+	{
+		return std::string();
+	}
 	return this->servers_parce[this->config.json()["user"]["server"].template get<int>()]["server_type"].template get<std::string>();
 }
 
@@ -446,7 +461,8 @@ const std::filesystem::path SomLauncherMainWindow::getConfigPath()
 std::string SomLauncherMainWindow::getLatestVersionFromGithub()
 {
 	QUrl url("https://api.github.com/repos/MOCSOM/SomLauncher/tags");
-	qInfo() << url.toString().toStdString() << std::endl;
+	qInfo() << "Getting latest version from github";
+	qDebug() << url.toString().toStdString();
 	QNetworkRequest request(url);
 	request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 	QNetworkAccessManager nam;
@@ -483,6 +499,13 @@ void SomLauncherMainWindow::checkUpdates()
 
 	QObject::connect(this->updater, &QSimpleUpdater::downloadFinished, this, &SomLauncherMainWindow::setNewVersionInConfig);
 
+	QObject::connect(this, &SomLauncherMainWindow::updateSignal,
+		[=]() -> void
+		{
+			//QApplication::exit(0);
+		}
+	);
+
 	/* Apply the settings */
 	this->updater->setModuleVersion(ver_url_qstr, version);
 	this->updater->setNotifyOnFinish(ver_url_qstr, true);
@@ -502,6 +525,8 @@ void SomLauncherMainWindow::setNewVersionInConfig(const QString& url)
 
 	this->config.json()["launcher"]["version"] = this->launcher_version;
 	this->config.saveJsonToFile();
+
+	emit updateSignal();
 }
 
 nlohmann::json SomLauncherMainWindow::getLatestVersionFromSite()
@@ -569,18 +594,32 @@ void SomLauncherMainWindow::disableElementsInDevelopment()
 	this->settings_dialog->getVersionLabel()->setDisabled(true);
 }
 
+void SomLauncherMainWindow::initMainWindow()
+{
+	UIThread::run(
+		[&]()
+		{
+			this->setUuidFromAccount();
+			this->_settingAccountDataInUi();
+			this->createSettingsForm();
+			this->_parcingServers();
+			this->_settingFastServerChangerForm();
+			this->_settingServersWidgets();
+			this->_settingServerType();
+			this->_settingModsCount();
+			this->_settingCurrentServerName();
+			this->disableServer();
+			this->disablePlayButtonIfNeeded();
+			this->_settingServerStatus();
+
+			emit mainFormInitCompleteSignal();
+		});
+}
+
 void SomLauncherMainWindow::refreshServers()
 {
 	ui.pushButtonRefreshServers->setDisabled(true);
-	/*QThread* thread = new QThread;
 
-	connect(thread, &QThread::started, this, &SomLauncherMainWindow::getServersFromServerThread);
-	connect(thread, &QThread::finished, thread, &QThread::deleteLater);
-
-	thread->start();*/
-	/*std::thread thrd(&SomLauncherMainWindow::getServersFromServerThread, std::ref(this->servers_parce));
-
-	thrd.join();*/
 	QObject::disconnect(ui.pushButtonRefreshServers, &QPushButton::released, this, &SomLauncherMainWindow::refreshServers);
 
 	this->servers_parce = getServersFromServer();

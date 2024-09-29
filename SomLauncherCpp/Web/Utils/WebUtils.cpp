@@ -25,11 +25,11 @@ int64_t web::utils::getFileSizeFromUrl(const std::string& url)
 			{
 				// Получаем размер файла из заголовков ответа
 				file_size = reply->header(QNetworkRequest::ContentLengthHeader).toLongLong();
-				qDebug() << "File size:" << file_size << "bytes" << std::endl;
+				qDebug() << "File size:" << file_size << "bytes";
 			}
 			else
 			{
-				qDebug() << "Error:" << reply->errorString() << std::endl;
+				qDebug() << "Error:" << reply->errorString();
 			}
 
 			// Освобождаем ресурсы
@@ -59,18 +59,18 @@ nlohmann::json web::utils::getJsonFromUrl(const std::string& url)
 
 		if (http_code != 200)
 		{
-			qWarning() << "code not 200" << std::endl;
+			qWarning() << "code not 200";
 		}
 
 		result = nlohmann::json::parse(response.str());
 	}
 	catch (curlpp::LogicError& e)
 	{
-		qWarning() << e.what() << std::endl;
+		qWarning() << e.what();
 	}
 	catch (curlpp::RuntimeError& e)
 	{
-		qWarning() << e.what() << std::endl;
+		qWarning() << e.what();
 	}
 
 	return result;

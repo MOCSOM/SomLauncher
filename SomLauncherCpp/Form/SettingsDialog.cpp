@@ -18,7 +18,7 @@ SettingsDialog::SettingsDialog(nlohmann::json data, MinecraftCpp::option::Minecr
 
 	ui.label_modreinstall_notifiy->setHidden(true);
 
-	ui.label_launcher_version->setText("1.6.1"/*getApplicationVersion().c_str()*/);
+	ui.label_launcher_version->setText(qApp->applicationVersion());
 
 	QObject::connect(ui.horizontalSlider_memory, &QSlider::valueChanged, this, &SettingsDialog::setMemoryLableValue);
 
@@ -119,7 +119,7 @@ std::string SettingsDialog::getApplicationVersion()
 	TCHAR szFilename[MAX_PATH + 1] = { 0 };
 	if (GetModuleFileName(NULL, szFilename, MAX_PATH) == 0)
 	{
-		qWarning() << "GetModuleFileName failed with error" << GetLastError() << std::endl;
+		qWarning() << "GetModuleFileName failed with error" << GetLastError();
 		return "";
 	}
 
@@ -128,7 +128,7 @@ std::string SettingsDialog::getApplicationVersion()
 	DWORD dwSize = GetFileVersionInfoSize(szFilename, &dummy);
 	if (dwSize == 0)
 	{
-		qWarning() << "GetFileVersionInfoSize failed with error" << GetLastError() << std::endl;
+		qWarning() << "GetFileVersionInfoSize failed with error" << GetLastError();
 		return "";
 	}
 	std::vector<BYTE> data(dwSize);
@@ -136,7 +136,7 @@ std::string SettingsDialog::getApplicationVersion()
 	// load the version info
 	if (!GetFileVersionInfo(szFilename, NULL, dwSize, &data[0]))
 	{
-		qWarning() << "GetFileVersionInfo failed with error" << GetLastError() << std::endl;
+		qWarning() << "GetFileVersionInfo failed with error" << GetLastError();
 		return "";
 	}
 
@@ -150,19 +150,19 @@ std::string SettingsDialog::getApplicationVersion()
 	if (!VerQueryValue(&data[0], _T("\\StringFileInfo\\041904b0\\ProductName"), &pvProductName, &iProductNameLen) ||
 		!VerQueryValue(&data[0], _T("\\StringFileInfo\\041904b0\\ProductVersion"), &pvProductVersion, &iProductVersionLen))
 	{
-		qWarning() << "Can't obtain ProductName and ProductVersion from resources" << std::endl;
+		qWarning() << "Can't obtain ProductName and ProductVersion from resources";
 		return "";
 	}
-	
-	qInfo() << (LPCSTR)pvProductName << iProductNameLen << std::endl;
-	qInfo() << (LPCSTR)pvProductVersion << iProductVersionLen << std::endl;
+
+	qInfo() << (LPCSTR)pvProductName << iProductNameLen;
+	qInfo() << (LPCSTR)pvProductVersion << iProductVersionLen;
 
 	CStringA strProductName;
 	CStringA strProductVersion;
 
 	strProductName.SetString((LPCSTR)pvProductName, iProductNameLen);
 	strProductVersion.SetString((LPCSTR)pvProductVersion, iProductVersionLen);
-	qInfo() << strProductVersion.GetString() << std::endl;
+	qInfo() << strProductVersion.GetString();
 	return "";
 }
 
@@ -210,7 +210,7 @@ void SettingsDialog::reinstallModPackIsChecked()
 
 void SettingsDialog::onClickToolBotton_getminecraft_core()
 {
-	qInfo() << "onClickToolBotton_getminecraft_core" << std::endl;
+	qInfo() << "onClickToolBotton_getminecraft_core";
 	std::filesystem::path path = getPathFromWindowSelector(QFileDialog::Directory, QFileDialog::ShowDirsOnly);
 	if (path.empty())
 	{

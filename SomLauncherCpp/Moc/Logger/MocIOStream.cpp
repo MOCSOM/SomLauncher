@@ -103,15 +103,15 @@ void customHandler(QtMsgType type, const QMessageLogContext& context, const QStr
 	{
 	case QtDebugMsg:
 #ifdef SOMDEBUG
-		std::fstream(stdout) << "[Debug]: " << localMsg.constData();
+		std::fstream(stdout) << "[Debug]: " << localMsg.constData() << std::endl;
 		file_stream << "[" << now->tm_sec << ":" << now->tm_min << ":" << now->tm_hour << "]"
-			<< " " << "[" << function << "\\" << "DEBUG]: " << localMsg.constData();
+			<< " " << "[" << function << "\\" << "DEBUG]: " << localMsg.constData() << std::endl;
 #endif // SOMDEBUG
 		break;
 	case QtInfoMsg:
-		std::fstream(stdout) << "[Info]: " << localMsg.constData();
+		std::fstream(stdout) << "[Info]: " << localMsg.constData() << std::endl;
 		file_stream << "[" << now->tm_sec << ":" << now->tm_min << ":" << now->tm_hour << "]"
-			<< " " << "[" << "INFO]: " << localMsg.constData();
+			<< " " << "[" << "INFO]: " << localMsg.constData() << std::endl;
 		break;
 	case QtWarningMsg:
 		std::fstream(stdout) << "[Warning]: " << localMsg.constData() << std::endl;

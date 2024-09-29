@@ -37,7 +37,16 @@ int client::startProcess(const std::vector<std::wstring>& args)
 
 int client::startProcess(const std::vector<std::wstring>& args, const std::filesystem::path& output_file)
 {
-	std::wstring imploded;
+	QStringList args_list;
+
+	for (std::vector<std::wstring>::const_iterator ii = args.begin(); ii != args.end(); ++ii)
+	{
+		args_list.push_back(QString::fromStdWString(*ii));
+	}
+
+	return utils::doProcess(args_list, output_file, ".");
+
+	/*std::wstring imploded;
 	for (std::vector<std::wstring>::const_iterator ii = args.begin(); ii != args.end(); ++ii)
 	{
 		imploded += (*ii);
@@ -46,15 +55,48 @@ int client::startProcess(const std::vector<std::wstring>& args, const std::files
 			imploded += L" ";
 		}
 	}
+
+	qInfo() << "args" << imploded;
+
 	std::unique_ptr<wchar_t[]> ch_array = std::make_unique<wchar_t[]>(imploded.size() + 1);
 	wcsncpy(ch_array.get(), imploded.c_str(), imploded.size());
 
-	return utils::doProcess(ch_array, output_file, ".");
+	return utils::doProcess(ch_array, output_file, ".");*/
 }
 
 int client::startProcess(std::vector<std::variant<std::string, std::filesystem::path, std::wstring>>& args, std::filesystem::path instance_path)
 {
-	std::variant<std::string> a;
+	QStringList args_list;
+
+	for (auto& ii : args)
+	{
+		try
+		{
+			args_list.push_back(QString::fromStdWString(std::get<std::wstring>(ii)));
+		}
+		catch (const std::bad_variant_access& ex)
+		{
+			try
+			{
+				args_list.push_back(QString::fromStdWString(L"\"" + std::get<std::filesystem::path>(ii).wstring() + L"\""));
+			}
+			catch (const std::bad_variant_access& ex)
+			{
+				try
+				{
+					args_list.push_back(QString::fromStdString(std::get<std::string>(ii)));
+				}
+				catch (const std::bad_variant_access& ex)
+				{
+					qWarning() << ex.what() << '\n';
+				}
+			}
+		}
+	}
+
+	return utils::doProcess(args_list, std::filesystem::path("somlogs") / "last_minecraft_log.txt", instance_path);
+
+	/*std::variant<std::string> a;
 
 	std::wstring imploded;
 	for (auto& ii : args)
@@ -73,7 +115,7 @@ int client::startProcess(std::vector<std::variant<std::string, std::filesystem::
 			{
 				try
 				{
-					imploded += Additionals::Convectors::ConvertStringToWString(std::get<std::string>(ii));
+					imploded += QString::fromStdString(std::get<std::string>(ii)).toStdWString();
 				}
 				catch (const std::bad_variant_access& ex)
 				{
@@ -84,12 +126,13 @@ int client::startProcess(std::vector<std::variant<std::string, std::filesystem::
 
 		imploded += L" ";
 	}
+
 	std::unique_ptr<wchar_t[]> ch_array = std::make_unique<wchar_t[]>(imploded.size() + 1);
 	wcsncpy(ch_array.get(), imploded.c_str(), imploded.size());
 
-	qInfo() << "Command:" << imploded << std::endl;
+	qInfo() << "Command:" << QString::fromStdWString(imploded);
 
-	return utils::doProcess(ch_array, std::filesystem::path("somlogs") / "last_minecraft_log.txt", instance_path);
+	return utils::doProcess(ch_array, std::filesystem::path("somlogs") / "last_minecraft_log.txt", instance_path);*/
 }
 
 int client::utils::doProcess(std::unique_ptr<wchar_t[]>& buffer, const std::filesystem::path& output_file, std::filesystem::path workdir_path)
@@ -104,7 +147,7 @@ int client::utils::doProcess(std::unique_ptr<wchar_t[]>& buffer, const std::file
 
 	if (h == INVALID_HANDLE_VALUE)
 	{
-		qWarning() << "error create log file:" << output_file.wstring() << std::endl;
+		qWarning() << "error create log file:" << output_file.wstring();
 	}
 
 	PROCESS_INFORMATION pi;
@@ -137,15 +180,17 @@ int client::utils::doProcess(std::unique_ptr<wchar_t[]>& buffer, const std::file
 	/*auto work_dir = std::filesystem::current_path();
 	std::filesystem::current_path(workdir_path);*/
 
-	qInfo() << "Programm args setting complete" << std::endl;
+
+
+	qInfo() << "Programm args setting complete";
 	if (CreateProcessW(NULL, buffer.get(), NULL, NULL, TRUE, NULL, NULL, workdir_path.wstring().c_str(), &si, &pi))
 	{
 		// программа запущена, ждем её завершения
-		qInfo() << "Programm has been started" << std::endl;
+		qInfo() << "Programm has been started";
 		DWORD dwWait = WaitForSingleObject(pi.hProcess, INFINITE);
 		if (dwWait == WAIT_OBJECT_0)
 		{
-			qInfo() << "Programm has been closed" << std::endl;
+			qInfo() << "Programm has been closed";
 
 			WaitForSingleObject(pi.hProcess, INFINITE);
 			CloseHandle(pi.hProcess);
@@ -157,7 +202,7 @@ int client::utils::doProcess(std::unique_ptr<wchar_t[]>& buffer, const std::file
 		}
 		else if (dwWait == WAIT_ABANDONED)
 		{
-			qInfo() << "Programm has been adadonde" << std::endl;
+			qInfo() << "Programm has been adadonde";
 
 			WaitForSingleObject(pi.hProcess, INFINITE);
 			CloseHandle(pi.hProcess);
@@ -176,9 +221,39 @@ int client::utils::doProcess(std::unique_ptr<wchar_t[]>& buffer, const std::file
 	}
 	else
 	{
-		qWarning() << "Programm isnt starting" << std::endl;
+		qWarning() << "Programm isnt starting";
 	}
 	CloseHandle(h);
 	//std::filesystem::current_path(work_dir);
 	return -1;
+}
+
+int client::utils::doProcess(QStringList& args, const std::filesystem::path& output_file, std::filesystem::path workdir_path)
+{
+	QObject* par = new QObject;
+	QProcess* p = new QProcess(par);
+	QString programm = args[0];
+	args.pop_front();
+	qint64 pid = 0;
+
+
+	p->setNativeArguments(args.join(' '));
+	p->setWorkingDirectory(QString::fromStdU32String(workdir_path.u32string()));
+	p->setProgram("\"" + programm + "\"");
+
+	p->setStandardOutputFile(QString::fromStdU32String(output_file.u32string()), QIODeviceBase::Truncate);
+
+	bool result = p->startDetached(&pid);
+
+	p->waitForFinished();
+
+	//qApp->thread();
+
+	/*if ()
+	{
+		qDebug() << p->readAllStandardError();
+		qDebug() << p->readAllStandardOutput();
+	}*/
+
+	return 0;
 }

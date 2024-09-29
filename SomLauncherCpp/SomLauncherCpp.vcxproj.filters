@@ -235,9 +235,6 @@
     <ClInclude Include="Minecraft\Utils\StringUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Minecraft\Minecraftus.h">
-      <Filter>Minecraft</Filter>
-    </ClInclude>
     <ClInclude Include="Minecraft\MinecraftOptions.h">
       <Filter>Minecraft</Filter>
     </ClInclude>
@@ -356,6 +353,9 @@
     </QtMoc>
     <QtMoc Include="QObjects\Threads\ThreadWorker.h">
       <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="Minecraft\Minecraftus.h">
+      <Filter>Minecraft</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>

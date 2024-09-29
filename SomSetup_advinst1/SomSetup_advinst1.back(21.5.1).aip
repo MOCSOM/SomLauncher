@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<DOCUMENT Type="Advanced Installer" CreateVersion="21.5" version="21.9" Modules="simple" RootPath="." Language="ru" Id="{F11F6F72-23A8-4F08-BC38-645F0A1CE4B5}">
+<DOCUMENT Type="Advanced Installer" CreateVersion="21.5" version="21.5.1" Modules="simple" RootPath="." Language="ru" Id="{F11F6F72-23A8-4F08-BC38-645F0A1CE4B5}">
+  <COMPONENT cid="caphyon.advinst.msicomp.ProjectOptionsComponent">
+    <ROW Name="HiddenItems" Value="AppXProductDetailsComponent;AppXDependenciesComponent;AppXAppDetailsComponent;AppXVisualAssetsComponent;AppXCapabilitiesComponent;AppXAppDeclarationsComponent;AppXUriRulesComponent;FixupComponent;MsiXDiffComponent;MsixManifestEditorComponent"/>
+  </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiPropsComponent">
     <ROW Property="AI_APP_FILE" Value="[#_34B24EA6487A4E298A1A1282EF6D025B]"/>
     <ROW Property="AI_BITMAP_DISPLAY_MODE" Value="0"/>
     <ROW Property="ALLUSERS" Value="1" MultiBuildValue="DefaultBuild:"/>
     <ROW Property="ARPCOMMENTS" Value="Эта база данных установщика содержит логику и данные, необходимые для установки [|ProductName]." ValueLocId="*"/>
-    <ROW Property="ARPCONTACT" Value="MOCSOM1"/>
+    <ROW Property="ARPCONTACT" Value="MOCSOM"/>
     <ROW Property="ARPNOMODIFY" MultiBuildValue="DefaultBuild:1"/>
-    <ROW Property="ARPNOREMOVE" Value="1"/>
-    <ROW Property="ARPNOREPAIR" Value="1"/>
-    <ROW Property="ARPSYSTEMCOMPONENT" Value="1"/>
+    <ROW Property="ARPPRODUCTICON" Value="som.exe" Type="8"/>
     <ROW Property="ARPURLINFOABOUT" Value="https://mocsom.site"/>
     <ROW Property="AspNetVersion" Value="4.0.30319.0"/>
     <ROW Property="CTRLS" Value="2"/>
-    <ROW Property="Manufacturer" Value=".SomSomSom1"/>
-    <ROW Property="ProductCode" Value="1049:{23E1D333-666C-4CDA-81E7-15EDEBBF288C} " Type="16"/>
+    <ROW Property="Manufacturer" Value=".SomSomSom"/>
+    <ROW Property="ProductCode" Value="1049:{C16D7D02-FB02-48B7-954D-DC0F71FDA7F0} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
-    <ROW Property="ProductName" Value="SomLauncher1"/>
-    <ROW Property="ProductVersion" Value="1.7.21" Options="4"/>
+    <ROW Property="ProductName" Value="SomLauncher"/>
+    <ROW Property="ProductVersion" Value="1.6.1" Options="4"/>
     <ROW Property="RUNAPPLICATION" Value="1" Type="4"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{F9EAB7F5-9D61-49C2-85AA-8DAD4762EB34}"/>
@@ -47,80 +48,46 @@
     <ROW Directory="_E2989E2CA04C401EAAF5583C838F286A" Directory_Parent="_11AA53327E344688B1363A47E43CB8EA" DefaultDir="STYLES~1|StyleSheets"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.SideBySideGuidComponent">
-    <ROW Component="APPDIR" Value="{7501B72A-8C36-4C75-B816-8A1C14D9F6BC}"/>
-    <ROW Component="C__0505D52B565946F8ABAEC536EB829231" Value="{6A50671C-FC76-4B5D-B0CA-1660150CA056}"/>
-    <ROW Component="C__05C7426F82924A76A36456C5FF749A89" Value="{80EDFB1A-FD78-4BE8-8ED1-74FACE32F43A}"/>
-    <ROW Component="C__0BAE6EC5EBDB48E98EDFEB1FD77A5B51" Value="{4A53AA9C-47F4-4B2A-A438-B657B9CED6AE}"/>
-    <ROW Component="C__13266B43171D4A379239A9590990AC3E" Value="{CE23A960-1C62-4F36-94B3-FA57EF9A52BB}"/>
-    <ROW Component="C__1541B6E609084AAE9EB6FBC677C963C1" Value="{3E49399D-C7DD-4B49-97D9-1FFF11EE95EA}"/>
-    <ROW Component="C__18DC8ADA27AE47C38D7E25180D0399C3" Value="{57E7943E-2728-4529-BC88-4754B3B5ACC8}"/>
-    <ROW Component="C__34B24EA6487A4E298A1A1282EF6D025B" Value="{8F2E233C-4835-461B-90C4-6F8463B16CFD}"/>
-    <ROW Component="C__4073E0B3167343098D6E58FC85780DAA" Value="{92F12DAC-926F-4B57-B376-6EF71959B04F}"/>
-    <ROW Component="C__44967E4491B2423EA0345F20D2314335" Value="{8BF5587D-5DE7-45EE-8224-B99ED16D6DE5}"/>
-    <ROW Component="C__478006BA426A41618E62640A9E479B31" Value="{4E52AFE9-1D5E-4A05-BB73-7867597C6A75}"/>
-    <ROW Component="C__4FD1DF8C14B24A468AE08FBCA575B4D8" Value="{59EF9E3A-431D-4C6C-ACCE-FFF4D642B727}"/>
-    <ROW Component="C__6991BFCCBCF14809BFEB55C7369EE467" Value="{B23492AD-B692-4AF6-BFDB-0CC6AF10159D}"/>
-    <ROW Component="C__74A4AF18EE704432AC747ACD240D2371" Value="{DBC39EDC-C970-4FB6-A564-191CDC1D0E98}"/>
-    <ROW Component="C__754ED4D7B00C4B28B16BBCBAE2D7282A" Value="{26E562AC-4167-4CDC-BF39-FE20C3685BFA}"/>
-    <ROW Component="C__78469F33EA9C4A0E8BFFAB1440008177" Value="{F4A0CE35-0257-45D1-B72D-5003CA28C482}"/>
-    <ROW Component="C__8778C7744A7F441A868C197AC508488F" Value="{6F4B0F28-CB5A-4E41-AF4A-87441BBEBBBE}"/>
-    <ROW Component="C__878987AAFBF2454982C9D44F2BFC6946" Value="{005BDE3B-4F72-4243-83AD-382F00533166}"/>
-    <ROW Component="C__90BFFD72DD3D47B580FD6DF36D89CABB" Value="{0A70BCC4-CD71-4090-B029-89246CA6F7B1}"/>
-    <ROW Component="C__A99FACAD83A94AD3996DA25B64F7F19E" Value="{DC049F4A-F851-4AE6-8B44-945875238DDA}"/>
-    <ROW Component="C__AFE1775CD05F4F4D9BBC254916D21BB8" Value="{764B4222-A0CE-413A-AFBE-EBD6AF6B9AFF}"/>
-    <ROW Component="C__F5D3A6C3FAB04A7888A30288AF160C0A" Value="{586F366A-10AC-40A6-AC0F-A888C122F19D}"/>
-    <ROW Component="ProductInformation" Value="{677EAB87-96AC-4866-B344-7770C8B64369}"/>
-    <ROW Component="Qt6Core.dll" Value="{F6794652-1505-47D0-B053-F34782C2FC98}"/>
-    <ROW Component="Qt6Gui.dll" Value="{4A1AB986-A42F-455D-9548-B4C548910402}"/>
-    <ROW Component="Qt6Network.dll" Value="{1A000459-50C9-4571-B16D-D7C775A0B8BF}"/>
-    <ROW Component="Qt6Widgets.dll" Value="{1795ADDF-01D4-46CA-AB5E-994A0ACF3E59}"/>
-    <ROW Component="SHORTCUTDIR" Value="{3A2FDF42-3D3D-4F5B-9213-E0B57B331BC7}"/>
-    <ROW Component="curlpp.dll" Value="{D73FD715-9B9B-4B5E-88D0-614EED94708B}"/>
-    <ROW Component="libcrypto3x64.dll" Value="{2955E0A1-4CBC-490D-90CE-5AC5F4A592B8}"/>
-    <ROW Component="libcurl.dll" Value="{63F4A2A1-B1EF-4254-B3B2-18AA00608306}"/>
-    <ROW Component="liblzma.dll" Value="{2F73DF19-223B-40BB-BB2D-AC236899C8DA}"/>
-    <ROW Component="libssl3x64.dll" Value="{6C799C0F-F519-4037-9A02-7C4082AE18B1}"/>
-    <ROW Component="qwindows.dll" Value="{E13FCB3B-07AE-4626-8396-2A7BA0CEAB94}"/>
-    <ROW Component="qwindowsvistastyle.dll" Value="{FB4A17EC-3505-40B7-9998-04EBB4C21D47}"/>
-    <ROW Component="zlib1.dll" Value="{691F8048-CB24-4AFF-A076-C9DCED66E7F6}"/>
+    <ROW Component="APPDIR" Value="{886E7038-6F28-41E6-9955-7FBE7AB63456}"/>
+    <ROW Component="ProductInformation" Value="{96C2BF55-AFA4-48C2-B79F-D2D268E286B3}"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCompsComponent">
-    <ROW Component="APPDIR" ComponentId="{7501B72A-8C36-4C75-B816-8A1C14D9F6BC}" Directory_="APPDIR" Attributes="0"/>
-    <ROW Component="C__0505D52B565946F8ABAEC536EB829231" ComponentId="{6A50671C-FC76-4B5D-B0CA-1660150CA056}" Directory_="_11AA53327E344688B1363A47E43CB8EA" Attributes="0" KeyPath="_0505D52B565946F8ABAEC536EB829231"/>
-    <ROW Component="C__05C7426F82924A76A36456C5FF749A89" ComponentId="{80EDFB1A-FD78-4BE8-8ED1-74FACE32F43A}" Directory_="_11AA53327E344688B1363A47E43CB8EA" Attributes="0" KeyPath="_05C7426F82924A76A36456C5FF749A89"/>
-    <ROW Component="C__0BAE6EC5EBDB48E98EDFEB1FD77A5B51" ComponentId="{4A53AA9C-47F4-4B2A-A438-B657B9CED6AE}" Directory_="_E2989E2CA04C401EAAF5583C838F286A" Attributes="0" KeyPath="_0BAE6EC5EBDB48E98EDFEB1FD77A5B51"/>
-    <ROW Component="C__13266B43171D4A379239A9590990AC3E" ComponentId="{CE23A960-1C62-4F36-94B3-FA57EF9A52BB}" Directory_="_11AA53327E344688B1363A47E43CB8EA" Attributes="0" KeyPath="_13266B43171D4A379239A9590990AC3E"/>
-    <ROW Component="C__1541B6E609084AAE9EB6FBC677C963C1" ComponentId="{3E49399D-C7DD-4B49-97D9-1FFF11EE95EA}" Directory_="_11AA53327E344688B1363A47E43CB8EA" Attributes="0" KeyPath="_1541B6E609084AAE9EB6FBC677C963C1"/>
-    <ROW Component="C__18DC8ADA27AE47C38D7E25180D0399C3" ComponentId="{57E7943E-2728-4529-BC88-4754B3B5ACC8}" Directory_="_E2989E2CA04C401EAAF5583C838F286A" Attributes="0" KeyPath="_18DC8ADA27AE47C38D7E25180D0399C3"/>
-    <ROW Component="C__34B24EA6487A4E298A1A1282EF6D025B" ComponentId="{8F2E233C-4835-461B-90C4-6F8463B16CFD}" Directory_="APPDIR" Attributes="0" KeyPath="_34B24EA6487A4E298A1A1282EF6D025B"/>
-    <ROW Component="C__4073E0B3167343098D6E58FC85780DAA" ComponentId="{92F12DAC-926F-4B57-B376-6EF71959B04F}" Directory_="_4994645615CC4ACD997BAF3CF000906E" Attributes="0" KeyPath="_4073E0B3167343098D6E58FC85780DAA"/>
-    <ROW Component="C__44967E4491B2423EA0345F20D2314335" ComponentId="{8BF5587D-5DE7-45EE-8224-B99ED16D6DE5}" Directory_="_76D8C33235B14CC1B2AE5B7210C6F42E" Attributes="0" KeyPath="_44967E4491B2423EA0345F20D2314335"/>
-    <ROW Component="C__478006BA426A41618E62640A9E479B31" ComponentId="{4E52AFE9-1D5E-4A05-BB73-7867597C6A75}" Directory_="_E2989E2CA04C401EAAF5583C838F286A" Attributes="0" KeyPath="_478006BA426A41618E62640A9E479B31"/>
-    <ROW Component="C__4FD1DF8C14B24A468AE08FBCA575B4D8" ComponentId="{59EF9E3A-431D-4C6C-ACCE-FFF4D642B727}" Directory_="APPDIR" Attributes="0" KeyPath="_4FD1DF8C14B24A468AE08FBCA575B4D8"/>
-    <ROW Component="C__6991BFCCBCF14809BFEB55C7369EE467" ComponentId="{B23492AD-B692-4AF6-BFDB-0CC6AF10159D}" Directory_="_1FF2E2410FA24AB0B2A9C232C24DD783" Attributes="0" KeyPath="_6991BFCCBCF14809BFEB55C7369EE467"/>
-    <ROW Component="C__74A4AF18EE704432AC747ACD240D2371" ComponentId="{DBC39EDC-C970-4FB6-A564-191CDC1D0E98}" Directory_="_E2989E2CA04C401EAAF5583C838F286A" Attributes="0" KeyPath="_74A4AF18EE704432AC747ACD240D2371"/>
-    <ROW Component="C__754ED4D7B00C4B28B16BBCBAE2D7282A" ComponentId="{26E562AC-4167-4CDC-BF39-FE20C3685BFA}" Directory_="_E2989E2CA04C401EAAF5583C838F286A" Attributes="0" KeyPath="_754ED4D7B00C4B28B16BBCBAE2D7282A"/>
-    <ROW Component="C__78469F33EA9C4A0E8BFFAB1440008177" ComponentId="{F4A0CE35-0257-45D1-B72D-5003CA28C482}" Directory_="_76D8C33235B14CC1B2AE5B7210C6F42E" Attributes="0" KeyPath="_78469F33EA9C4A0E8BFFAB1440008177"/>
-    <ROW Component="C__8778C7744A7F441A868C197AC508488F" ComponentId="{6F4B0F28-CB5A-4E41-AF4A-87441BBEBBBE}" Directory_="_E2989E2CA04C401EAAF5583C838F286A" Attributes="0" KeyPath="_8778C7744A7F441A868C197AC508488F"/>
-    <ROW Component="C__878987AAFBF2454982C9D44F2BFC6946" ComponentId="{005BDE3B-4F72-4243-83AD-382F00533166}" Directory_="_E2989E2CA04C401EAAF5583C838F286A" Attributes="0" KeyPath="_878987AAFBF2454982C9D44F2BFC6946"/>
-    <ROW Component="C__90BFFD72DD3D47B580FD6DF36D89CABB" ComponentId="{0A70BCC4-CD71-4090-B029-89246CA6F7B1}" Directory_="_11AA53327E344688B1363A47E43CB8EA" Attributes="0" KeyPath="_90BFFD72DD3D47B580FD6DF36D89CABB"/>
-    <ROW Component="C__A99FACAD83A94AD3996DA25B64F7F19E" ComponentId="{DC049F4A-F851-4AE6-8B44-945875238DDA}" Directory_="_4994645615CC4ACD997BAF3CF000906E" Attributes="0" KeyPath="_A99FACAD83A94AD3996DA25B64F7F19E"/>
-    <ROW Component="C__AFE1775CD05F4F4D9BBC254916D21BB8" ComponentId="{764B4222-A0CE-413A-AFBE-EBD6AF6B9AFF}" Directory_="_76D8C33235B14CC1B2AE5B7210C6F42E" Attributes="0" KeyPath="_AFE1775CD05F4F4D9BBC254916D21BB8"/>
-    <ROW Component="C__F5D3A6C3FAB04A7888A30288AF160C0A" ComponentId="{586F366A-10AC-40A6-AC0F-A888C122F19D}" Directory_="_E2989E2CA04C401EAAF5583C838F286A" Attributes="0" KeyPath="_F5D3A6C3FAB04A7888A30288AF160C0A"/>
-    <ROW Component="ProductInformation" ComponentId="{677EAB87-96AC-4866-B344-7770C8B64369}" Directory_="APPDIR" Attributes="4" KeyPath="Version"/>
-    <ROW Component="Qt6Core.dll" ComponentId="{F6794652-1505-47D0-B053-F34782C2FC98}" Directory_="APPDIR" Attributes="256" KeyPath="Qt6Core.dll"/>
-    <ROW Component="Qt6Gui.dll" ComponentId="{4A1AB986-A42F-455D-9548-B4C548910402}" Directory_="APPDIR" Attributes="256" KeyPath="Qt6Gui.dll"/>
-    <ROW Component="Qt6Network.dll" ComponentId="{1A000459-50C9-4571-B16D-D7C775A0B8BF}" Directory_="APPDIR" Attributes="256" KeyPath="Qt6Network.dll"/>
-    <ROW Component="Qt6Widgets.dll" ComponentId="{1795ADDF-01D4-46CA-AB5E-994A0ACF3E59}" Directory_="APPDIR" Attributes="256" KeyPath="Qt6Widgets.dll"/>
-    <ROW Component="SHORTCUTDIR" ComponentId="{3A2FDF42-3D3D-4F5B-9213-E0B57B331BC7}" Directory_="SHORTCUTDIR" Attributes="0"/>
-    <ROW Component="curlpp.dll" ComponentId="{D73FD715-9B9B-4B5E-88D0-614EED94708B}" Directory_="APPDIR" Attributes="256" KeyPath="curlpp.dll"/>
-    <ROW Component="libcrypto3x64.dll" ComponentId="{2955E0A1-4CBC-490D-90CE-5AC5F4A592B8}" Directory_="APPDIR" Attributes="256" KeyPath="libcrypto3x64.dll"/>
-    <ROW Component="libcurl.dll" ComponentId="{63F4A2A1-B1EF-4254-B3B2-18AA00608306}" Directory_="APPDIR" Attributes="256" KeyPath="libcurl.dll"/>
-    <ROW Component="liblzma.dll" ComponentId="{2F73DF19-223B-40BB-BB2D-AC236899C8DA}" Directory_="APPDIR" Attributes="256" KeyPath="liblzma.dll"/>
-    <ROW Component="libssl3x64.dll" ComponentId="{6C799C0F-F519-4037-9A02-7C4082AE18B1}" Directory_="APPDIR" Attributes="256" KeyPath="libssl3x64.dll"/>
-    <ROW Component="qwindows.dll" ComponentId="{E13FCB3B-07AE-4626-8396-2A7BA0CEAB94}" Directory_="_6D99334FA692446B95C78193A607B704" Attributes="256" KeyPath="qwindows.dll"/>
-    <ROW Component="qwindowsvistastyle.dll" ComponentId="{FB4A17EC-3505-40B7-9998-04EBB4C21D47}" Directory_="_DAC39C132E5E4536B368386FDBF71126" Attributes="256" KeyPath="qwindowsvistastyle.dll"/>
-    <ROW Component="zlib1.dll" ComponentId="{691F8048-CB24-4AFF-A076-C9DCED66E7F6}" Directory_="APPDIR" Attributes="256" KeyPath="zlib1.dll"/>
+    <ROW Component="APPDIR" ComponentId="{886E7038-6F28-41E6-9955-7FBE7AB63456}" Directory_="APPDIR" Attributes="0"/>
+    <ROW Component="C__0505D52B565946F8ABAEC536EB829231" ComponentId="{1E9C6517-7025-4FAF-877A-3F101866FC42}" Directory_="_11AA53327E344688B1363A47E43CB8EA" Attributes="0" KeyPath="_0505D52B565946F8ABAEC536EB829231"/>
+    <ROW Component="C__05C7426F82924A76A36456C5FF749A89" ComponentId="{AEF98565-05F5-4C88-9DD4-8C4DA01A45B9}" Directory_="_11AA53327E344688B1363A47E43CB8EA" Attributes="0" KeyPath="_05C7426F82924A76A36456C5FF749A89"/>
+    <ROW Component="C__0BAE6EC5EBDB48E98EDFEB1FD77A5B51" ComponentId="{4091F09C-90B9-45A3-8BF2-0B39F6DDB461}" Directory_="_E2989E2CA04C401EAAF5583C838F286A" Attributes="0" KeyPath="_0BAE6EC5EBDB48E98EDFEB1FD77A5B51"/>
+    <ROW Component="C__13266B43171D4A379239A9590990AC3E" ComponentId="{19BD7A26-524B-474B-8079-829EE9D258AB}" Directory_="_11AA53327E344688B1363A47E43CB8EA" Attributes="0" KeyPath="_13266B43171D4A379239A9590990AC3E"/>
+    <ROW Component="C__1541B6E609084AAE9EB6FBC677C963C1" ComponentId="{1BF35377-DD94-4BE6-825A-1F38AC1248BB}" Directory_="_11AA53327E344688B1363A47E43CB8EA" Attributes="0" KeyPath="_1541B6E609084AAE9EB6FBC677C963C1"/>
+    <ROW Component="C__18DC8ADA27AE47C38D7E25180D0399C3" ComponentId="{46BB55C8-C36A-4D9A-9C16-5FDAF69C8839}" Directory_="_E2989E2CA04C401EAAF5583C838F286A" Attributes="0" KeyPath="_18DC8ADA27AE47C38D7E25180D0399C3"/>
+    <ROW Component="C__34B24EA6487A4E298A1A1282EF6D025B" ComponentId="{B7769363-2A1B-4F0B-8BE3-CBFFC743FBA4}" Directory_="APPDIR" Attributes="0" KeyPath="_34B24EA6487A4E298A1A1282EF6D025B"/>
+    <ROW Component="C__4073E0B3167343098D6E58FC85780DAA" ComponentId="{63488A74-7B3E-42B8-8603-3DD17EF63273}" Directory_="_4994645615CC4ACD997BAF3CF000906E" Attributes="0" KeyPath="_4073E0B3167343098D6E58FC85780DAA"/>
+    <ROW Component="C__44967E4491B2423EA0345F20D2314335" ComponentId="{B9C337D6-3B22-49AD-90FE-DBE3B769AEFA}" Directory_="_76D8C33235B14CC1B2AE5B7210C6F42E" Attributes="0" KeyPath="_44967E4491B2423EA0345F20D2314335"/>
+    <ROW Component="C__478006BA426A41618E62640A9E479B31" ComponentId="{CB0E63F0-4A67-4A7E-B7F5-365897C795E7}" Directory_="_E2989E2CA04C401EAAF5583C838F286A" Attributes="0" KeyPath="_478006BA426A41618E62640A9E479B31"/>
+    <ROW Component="C__4FD1DF8C14B24A468AE08FBCA575B4D8" ComponentId="{8197324C-CC6F-4CE5-8FCF-9CCA5453C4B5}" Directory_="APPDIR" Attributes="0" KeyPath="_4FD1DF8C14B24A468AE08FBCA575B4D8"/>
+    <ROW Component="C__6991BFCCBCF14809BFEB55C7369EE467" ComponentId="{50A5C50A-AE90-45F5-87BC-113969BA18C7}" Directory_="_1FF2E2410FA24AB0B2A9C232C24DD783" Attributes="0" KeyPath="_6991BFCCBCF14809BFEB55C7369EE467"/>
+    <ROW Component="C__74A4AF18EE704432AC747ACD240D2371" ComponentId="{432290ED-9B1C-42B0-AC59-86F8758EDF77}" Directory_="_E2989E2CA04C401EAAF5583C838F286A" Attributes="0" KeyPath="_74A4AF18EE704432AC747ACD240D2371"/>
+    <ROW Component="C__754ED4D7B00C4B28B16BBCBAE2D7282A" ComponentId="{BBDC33F0-AA70-4854-97BA-C27D09E44137}" Directory_="_E2989E2CA04C401EAAF5583C838F286A" Attributes="0" KeyPath="_754ED4D7B00C4B28B16BBCBAE2D7282A"/>
+    <ROW Component="C__78469F33EA9C4A0E8BFFAB1440008177" ComponentId="{4D8A1727-DE35-4C29-915B-24F27E629B00}" Directory_="_76D8C33235B14CC1B2AE5B7210C6F42E" Attributes="0" KeyPath="_78469F33EA9C4A0E8BFFAB1440008177"/>
+    <ROW Component="C__8778C7744A7F441A868C197AC508488F" ComponentId="{FBDA5B0A-DAC0-4D84-8D33-F005522FACB9}" Directory_="_E2989E2CA04C401EAAF5583C838F286A" Attributes="0" KeyPath="_8778C7744A7F441A868C197AC508488F"/>
+    <ROW Component="C__878987AAFBF2454982C9D44F2BFC6946" ComponentId="{4E1EC298-DACE-434D-835D-93FC1B868F7B}" Directory_="_E2989E2CA04C401EAAF5583C838F286A" Attributes="0" KeyPath="_878987AAFBF2454982C9D44F2BFC6946"/>
+    <ROW Component="C__90BFFD72DD3D47B580FD6DF36D89CABB" ComponentId="{E5046F6D-8501-4CF9-A7D1-CD97A1DF1BCD}" Directory_="_11AA53327E344688B1363A47E43CB8EA" Attributes="0" KeyPath="_90BFFD72DD3D47B580FD6DF36D89CABB"/>
+    <ROW Component="C__A99FACAD83A94AD3996DA25B64F7F19E" ComponentId="{152CAA6F-600F-4EBA-B1EC-666423707C94}" Directory_="_4994645615CC4ACD997BAF3CF000906E" Attributes="0" KeyPath="_A99FACAD83A94AD3996DA25B64F7F19E"/>
+    <ROW Component="C__AFE1775CD05F4F4D9BBC254916D21BB8" ComponentId="{5AEB93DB-8FC5-43B0-9FE4-15EE33651067}" Directory_="_76D8C33235B14CC1B2AE5B7210C6F42E" Attributes="0" KeyPath="_AFE1775CD05F4F4D9BBC254916D21BB8"/>
+    <ROW Component="C__F5D3A6C3FAB04A7888A30288AF160C0A" ComponentId="{E8BEA27F-E438-48F2-8C78-B26D622832C0}" Directory_="_E2989E2CA04C401EAAF5583C838F286A" Attributes="0" KeyPath="_F5D3A6C3FAB04A7888A30288AF160C0A"/>
+    <ROW Component="ProductInformation" ComponentId="{96C2BF55-AFA4-48C2-B79F-D2D268E286B3}" Directory_="APPDIR" Attributes="4" KeyPath="Version"/>
+    <ROW Component="Qt6Core.dll" ComponentId="{5E0C9E74-F5B6-4B78-A41E-DBDDFB3408D5}" Directory_="APPDIR" Attributes="256" KeyPath="Qt6Core.dll"/>
+    <ROW Component="Qt6Gui.dll" ComponentId="{027DBBCD-FC98-4273-B835-F2E364631521}" Directory_="APPDIR" Attributes="256" KeyPath="Qt6Gui.dll"/>
+    <ROW Component="Qt6Network.dll" ComponentId="{2FFCA992-9C35-42C9-8511-3543E490B213}" Directory_="APPDIR" Attributes="256" KeyPath="Qt6Network.dll"/>
+    <ROW Component="Qt6Widgets.dll" ComponentId="{6AEAA9FE-AD3D-40E3-8584-1902FD91F88A}" Directory_="APPDIR" Attributes="256" KeyPath="Qt6Widgets.dll"/>
+    <ROW Component="SHORTCUTDIR" ComponentId="{595782A2-E5A4-4BC8-89BB-38B8C0D54370}" Directory_="SHORTCUTDIR" Attributes="0"/>
+    <ROW Component="curlpp.dll" ComponentId="{CC953782-4C59-48D8-B999-A7CCEE1D4EC8}" Directory_="APPDIR" Attributes="256" KeyPath="curlpp.dll"/>
+    <ROW Component="libcrypto3x64.dll" ComponentId="{96DD3161-9A7F-4933-A439-CEC6BD43855C}" Directory_="APPDIR" Attributes="256" KeyPath="libcrypto3x64.dll"/>
+    <ROW Component="libcurl.dll" ComponentId="{1089885E-D91C-4149-B4F9-646F479534CF}" Directory_="APPDIR" Attributes="256" KeyPath="libcurl.dll"/>
+    <ROW Component="liblzma.dll" ComponentId="{EA1076F4-3F83-49CD-9757-61D2C9CCAB18}" Directory_="APPDIR" Attributes="256" KeyPath="liblzma.dll"/>
+    <ROW Component="libssl3x64.dll" ComponentId="{4F9C8654-C44C-4C13-94A2-AD9519F29F13}" Directory_="APPDIR" Attributes="256" KeyPath="libssl3x64.dll"/>
+    <ROW Component="qwindows.dll" ComponentId="{1E852B17-9E32-4034-A788-95E4196A4161}" Directory_="_6D99334FA692446B95C78193A607B704" Attributes="256" KeyPath="qwindows.dll"/>
+    <ROW Component="qwindowsvistastyle.dll" ComponentId="{9DEBD800-6D28-4EF5-944F-5AD3EDC413BC}" Directory_="_DAC39C132E5E4536B368386FDBF71126" Attributes="256" KeyPath="qwindowsvistastyle.dll"/>
+    <ROW Component="zlib1.dll" ComponentId="{F99ED16E-DBB5-490C-B16A-499043156486}" Directory_="APPDIR" Attributes="256" KeyPath="zlib1.dll"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatsComponent">
     <ROW Feature="DefaultFeature" Title="DefaultFeature" Display="2" Level="1" Directory_="APPDIR" Attributes="0"/>
@@ -160,7 +127,7 @@
     <ROW File="zlib1.dll" Component_="zlib1.dll" FileName="zlib1.dll" Attributes="0" SourcePath="..\x64\Release\zlib1.dll" SelfReg="false"/>
     <ROW File="qwindowsvistastyle.dll" Component_="qwindowsvistastyle.dll" FileName="QWINDO~1.DLL|qwindowsvistastyle.dll" Attributes="0" SourcePath="..\x64\Release\styles\qwindowsvistastyle.dll" SelfReg="false"/>
     <ROW File="qwindows.dll" Component_="qwindows.dll" FileName="qwindows.dll" Attributes="0" SourcePath="..\x64\Release\platforms\qwindows.dll" SelfReg="false"/>
-    <ROW File="libssl3x64.dll" Component_="libssl3x64.dll" FileName="LIBSSL~1.DLL|libssl-3-x64.dll" Attributes="0" SourcePath="..\QtFiles\libssl-3-x64.dll" SelfReg="false"/>
+    <ROW File="libssl3x64.dll" Component_="libssl3x64.dll" FileName="LIBSSL~1.DLL|libssl-3-x64.dll" Attributes="0" SourcePath="..\x64\Release\libssl-3-x64.dll" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
     <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>
@@ -268,8 +235,8 @@
     <ROW Feature_="MainFeature" Component_="zlib1.dll"/>
     <ROW Feature_="MainFeature" Component_="qwindowsvistastyle.dll"/>
     <ROW Feature_="MainFeature" Component_="qwindows.dll"/>
-    <ROW Feature_="MainFeature" Component_="SHORTCUTDIR"/>
     <ROW Feature_="MainFeature" Component_="libssl3x64.dll"/>
+    <ROW Feature_="MainFeature" Component_="SHORTCUTDIR"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
     <ROW Name="som.exe" SourcePath="..\SomLauncherCpp\resources\som.ico" Index="0"/>

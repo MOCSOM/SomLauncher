@@ -285,7 +285,7 @@ size_t DDIC::Download::Files::write_data(char* ptr, size_t size, size_t nmemb, v
 	out->write(ptr, nbytes);
 
 	//std::string str_out(ptr, nbytes);
-	//qInfo() << str_out << std::endl;
+	//qInfo() << str_out;
 
 	return nbytes;
 }
@@ -417,7 +417,7 @@ std::filesystem::path DDIC::Download::Java::_decompress_archive(const std::files
 	{
 		bool out_mkdir = std::filesystem::create_directories(destination_str_cstr);
 
-		qInfo() << "java dir is maked with status: " << out_mkdir << std::endl;
+		qInfo() << "java dir is maked with status: " << out_mkdir;
 	}
 
 	std::filesystem::path jdk_file = repo_root_str;

@@ -4,7 +4,7 @@ LoginAccountForm::LoginAccountForm(QWidget* parent)
 	: QDialog(parent)
 {
 	ui.setupUi(this);
-	
+
 	QObject::connect(ui.pushButton_login, &QPushButton::pressed, this, &LoginAccountForm::onClickPushButtonLogin);
 	QObject::connect(ui.pushButton_registration, &QPushButton::pressed, this, &LoginAccountForm::onClickPushButtonRegistrate);
 
@@ -67,7 +67,7 @@ const std::string LoginAccountForm::getUserDataFromServer()
 			break;
 		default:
 			//response.str(std::string());
-			qWarning() << "code not 200" << std::endl;
+			qWarning() << "code not 200";
 			QMessageBox::critical(this, tr("Server Connection error"), tr("Unable to connect to mocsom server"));
 			QApplication::exit(1);
 			break;
@@ -75,12 +75,12 @@ const std::string LoginAccountForm::getUserDataFromServer()
 	}
 	catch (curlpp::LogicError& e)
 	{
-		qWarning() << e.what() << std::endl;
+		qWarning() << e.what();
 	}
-	catch (curlpp::RuntimeError& e)
+	/*catch (curlpp::RuntimeError& e)
 	{
-		qWarning() << e.what() << std::endl;
-	}
+		qWarning() << e.what();
+	}*/
 
 	return response.str();
 }
@@ -244,4 +244,35 @@ void LoginAccountForm::wrongPasswordOrLogin()
 	zaloop.exec();
 
 	ui.label_wrong_password->setStyleSheet(R"(QLabel {color: white;})");
+}
+
+void LoginAccountForm::checkLoggined()
+{
+	qInfo() << "Checking user data";
+	std::string json_data_string = getUserDataFromServer();
+	nlohmann::json json_data = nlohmann::json::parse(json_data_string);
+
+	if (!json_data.contains("id"))
+	{
+		eraseAllData();
+		setDisabled(false);
+	}
+	else
+	{
+		if (getUserPassword().empty())
+		{
+			setDisabled(false);
+		}
+		else
+		{
+			if (checkPassword(json_data) == true && checkLogin(json_data) == true)
+			{
+				emit accountDataReceivedSignal(json_data_string);
+			}
+			else
+			{
+				setDisabled(false);
+			}
+		}
+	}
 }

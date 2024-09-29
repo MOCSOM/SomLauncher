@@ -380,7 +380,7 @@
     <ClInclude Include="Web\DownloadClasses.h" />
     <QtMoc Include="Form\SomLauncherMainWindow.h" />
     <ClInclude Include="Callbacks\CallbackDict.h" />
-    <ClInclude Include="Minecraft\Minecraftus.h" />
+    <QtMoc Include="Minecraft\Minecraftus.h" />
     <QtMoc Include="QObjects\ClickableLabel.h" />
     <QtMoc Include="QObjects\HoveredFrame.h" />
     <ClInclude Include="resource.h" />

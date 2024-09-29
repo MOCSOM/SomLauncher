@@ -5,6 +5,8 @@
 #include <string>
 #include <fstream>
 
+#include <QApplication>
+
 #include <nlohmann/json.hpp>
 
 class Config

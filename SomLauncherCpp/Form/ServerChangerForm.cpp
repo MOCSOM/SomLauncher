@@ -25,16 +25,20 @@ ServerChanger::ServerChanger(QWidget* parent, const std::filesystem::path& confi
 		this->item->setCheckState(Qt::Unchecked);
 	}
 
-	if (ui.listWidget_changeserver->item(parce_config["user"]["server"].template get<int>())->text() == "")
+	if (parce_config["user"]["server"].template get<int>() >= 0)
 	{
-		ui.pushButton_apply->setEnabled(false);
-	}
-	else
-	{
-		ui.pushButton_apply->setEnabled(true);
+		if (ui.listWidget_changeserver->item(parce_config["user"]["server"].template get<int>())->text() == "")
+		{
+			ui.pushButton_apply->setEnabled(false);
+		}
+		else
+		{
+			ui.pushButton_apply->setEnabled(true);
+		}
+
+		ui.listWidget_changeserver->item(parce_config["user"]["server"].template get<int>())->setCheckState(Qt::Checked);
 	}
 
-	ui.listWidget_changeserver->item(parce_config["user"]["server"].template get<int>())->setCheckState(Qt::Checked);
 }
 
 ServerChanger::~ServerChanger()
@@ -76,14 +80,14 @@ void ServerChanger::onClickedpushButton_apply()
 
 	config_parce["user"]["server"] = this->index;
 
-	//std::cout << "Server is: " << config_parce["user"]["server"].template get<int>() << std::endl;
+	//qDebug() << "Server is: " << config_parce["user"]["server"].template get<int>();
 
 	std::ofstream o(this->config_path);
 	o << config_parce.dump(4) << std::endl;
 	o.close();
 
-	qInfo() << "Server saved" << std::endl;
-	//std::cout << "Server saved" << std::endl;
+	qInfo() << "Server saved";
+	//qDebug()t << "Server saved";
 
 	this->close();
 
@@ -119,7 +123,7 @@ void ServerChanger::itemChangedlistWidget(QListWidgetItem* item)
 
 	if (count_selected_items != 0)
 	{
-		std::cout << ui.listWidget_changeserver->item(this->index)->text().toStdString() << std::endl;
+		qDebug() << ui.listWidget_changeserver->item(this->index)->text().toStdString();
 		server = ui.listWidget_changeserver->item(this->index)->text().toStdString();
 		ui.pushButton_apply->setEnabled(true);
 	}

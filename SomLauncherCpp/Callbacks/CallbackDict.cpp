@@ -109,7 +109,7 @@ void CallbackDict::setProgress(size_t progress, size_t progress_max, size_t code
 {
 	if (progress == -1 && progress_max == -1 && code == -1)
 	{
-		qInfo() << message << std::endl;
+		qInfo() << message;
 		if (this->proggress_label != nullptr)
 		{
 			emit this->proggress_label->textChanged(message.c_str());
@@ -186,7 +186,7 @@ STDMETHODIMP_(HRESULT __stdcall) CallbackDict::OnProgress(ULONG ulProgress, ULON
 		if (ulStatusCode == BINDSTATUS_ENDDOWNLOADDATA)
 		{
 			qInfo() << " End download "
-				<< Additionals::Convectors::ConvertLPCWSTRToString(wszStatusText) << std::endl;
+				<< Additionals::Convectors::ConvertLPCWSTRToString(wszStatusText);
 			if (this->proggress_label != nullptr)
 			{
 				emit this->proggress_label->textChanged(Additionals::Convectors::ConvertLPCWSTRToString(wszStatusText).c_str());
@@ -199,7 +199,7 @@ STDMETHODIMP_(HRESULT __stdcall) CallbackDict::OnProgress(ULONG ulProgress, ULON
 
 	default:
 	{
-		//qInfo << "Status code : " << ulStatusCode << std::endl << std::endl;
+		//qInfo << "Status code : " << ulStatusCode;
 		break;
 	}
 	}
@@ -213,7 +213,7 @@ HRESULT CallbackDict::setConsoleBar(ULONG& ulProgress, ULONG& ulProgressMax, ULO
 {
 	if (ulProgress == NULL && ulProgressMax == NULL && ulStatusCode == NULL)
 	{
-		qInfo() << Additionals::Convectors::ConvertLPCWSTRToString(wszStatusText) << std::endl;
+		qInfo() << Additionals::Convectors::ConvertLPCWSTRToString(wszStatusText);
 		if (this->proggress_label != nullptr)
 		{
 			emit this->proggress_label->textChanged(Additionals::Convectors::ConvertLPCWSTRToString(wszStatusText).c_str());

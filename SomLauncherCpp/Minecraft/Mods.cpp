@@ -29,7 +29,7 @@ bool MinecraftCpp::modpacks::deletemods::deleteSingleMod(const std::filesystem::
 			<< "path2: " << ex.path2() << std::endl
 			<< "code.value:    " << ex.code().value() << std::endl
 			<< "code.message:  " << ex.code().message() << std::endl
-			<< "code.category: " << ex.code().category().name() << std::endl;
+			<< "code.category: " << ex.code().category().name();
 
 		return false;
 	}
@@ -53,7 +53,7 @@ bool MinecraftCpp::modpacks::deletemods::deleteAllMods(const std::filesystem::pa
 	}
 	else
 	{
-		qWarning() << "Error in opening folder" << std::endl;
+		qWarning() << "Error in opening folder";
 
 		return false;
 	}
